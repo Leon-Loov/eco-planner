@@ -1,0 +1,258 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Action {
+  // UUID of the action
+  id        String   @id @default(uuid())
+  // Timestamp of when action was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when action was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Name of action, preferably a short summary
+  name            String
+  // Longer description of action
+  description     String @db.Text
+  // Cost efficiency, dunno what more to say, it's a text field
+  costEfficiency  String @map("cost_efficiency") @db.Text
+  // Expected outcome, describe what you expect to happen
+  expectedOutcome String @map("expected_outcome") @db.Text
+  // The person responsible for the action
+  // ONLY show to the author, because of GDPR
+  projectManager  String @map("project_manager")
+  // Currently a text field, but might change to a many-to-many relationship with an actor table instead
+  // Might be an organisation, group, company, region, etc.
+  // relevantActors actor[]
+  relevantActors  String @map("relevant_actors") @db.Text
+
+  // UUID of the action this action is inherited from, if any
+  parentId   String?     @map("parent_id")
+  // Reference to parent action
+  parent     Action?     @relation("action_inheritance", fields: [parentId], references: [id])
+  // Reference to children actions
+  children   Action[]    @relation("action_inheritance")
+  // Goals related to this action
+  goals      Goal[]      @relation("action_goal")
+  // The person who created this action (implicitly allowed to edit)
+  authorId   String      @map("author_id")
+  author     User        @relation("action_author", fields: [authorId], references: [id])
+  // Specific users who are allowed to edit this action
+  editors    User[]      @relation("action_editors")
+  // Groups of users who are allowed to edit this action
+  editGroups UserGroup[] @relation("action_edit_groups")
+  // Specific users who are allowed to view this action
+  viewers    User[]      @relation("action_viewers")
+  // Groups of users who are allowed to view this action
+  viewGroups UserGroup[] @relation("action_view_groups")
+
+  @@map("action")
+}
+
+model Goal {
+  // UUID of the goal
+  id        String   @id @default(uuid())
+  // Timestamp of when goal was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when goal was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Name of goal, preferably a short summary
+  name               String
+  // The "owner" of the goal, an organisation, region, kommun, etc.
+  goalObject         String  @map("goal_object")
+  // The ID of the national roadmap this goal is related to
+  // TODO: check where these are hosted or if we need to host them ourselves
+  nationalRoadmapId  String? @map("national_roadmap_id")
+  // A link to dataportal.se for the specific parameter this goal is related to
+  // This parameter is in realation to the indicated national roadmap; it should be one of the parameters indicated in the roadmap
+  indicatorParameter String  @map("indicator_parameter") @db.Text
+  // Whether the goal is part of a national roadmap (true) or just related to it (false)
+  isNationalGoal     Boolean @map("is_national_goal")
+
+  // A series of datapoints for the goal
+  dataSeriesId String?     @map("data_series_id")
+  dataSeries   DataSeries? @relation("data_series", fields: [dataSeriesId], references: [id])
+  // The person who created this goal (implicitly allowed to edit)
+  authorId     String      @map("author_id")
+  author       User        @relation("goal_author", fields: [authorId], references: [id])
+  // Specific users who are allowed to edit this goal
+  editors      User[]      @relation("goal_editors")
+  // Groups of users who are allowed to edit this goal
+  editGroups   UserGroup[] @relation("goal_edit_groups")
+  // Specific users who are allowed to view this goal
+  viewers      User[]      @relation("goal_viewers")
+  // Groups of users who are allowed to view this goal
+  viewGroups   UserGroup[] @relation("goal_view_groups")
+  // Actions which use this goal
+  actions      Action[]    @relation("action_goal")
+  // Roadmaps which use this goal
+  roadmaps     Roadmap[]   @relation("roadmap_goal")
+
+  @@map("goal")
+}
+
+model Roadmap {
+  // UUID of the roadmap
+  id        String   @id @default(uuid())
+  // Timestamp of when roadmap was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when roadmap was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
+  // Name of roadmap
+  name      String
+
+  // Goals related to this roadmap
+  goals      Goal[]      @relation("roadmap_goal")
+  // Author of this roadmap
+  authorId   String      @map("author_id")
+  author     User        @relation("roadmap_author", fields: [authorId], references: [id])
+  // Specific users who are allowed to edit this roadmap
+  editors    User[]      @relation("roadmap_editors")
+  // Groups of users who are allowed to edit this roadmap
+  editGroups UserGroup[] @relation("roadmap_edit_groups")
+  // Specific users who are allowed to view this roadmap
+  viewers    User[]      @relation("roadmap_viewers")
+  // Groups of users who are allowed to view this roadmap
+  viewGroups UserGroup[] @relation("roadmap_view_groups")
+}
+
+model User {
+  // UUID of the user
+  id String @id @default(uuid())
+
+  // Username of the user
+  username String @unique
+  // Email of the user
+  email    String
+  // User's password, should be hashed, salted and peppered
+  // TODO: Choose and implement hashing algorithm *BEFORE* going into production
+  password String
+
+  // Actions the user created
+  authoredActions  Action[]     @relation("action_author")
+  // Goals the user created
+  authoredGoals    Goal[]       @relation("goal_author")
+  // Roadmaps the user created
+  authoredRoadmaps Roadmap[]    @relation("roadmap_author")
+  // Data series the user created
+  authoredData     DataSeries[] @relation("data_series_author")
+  // Actions the user is explicitly allowed to edit
+  editActions      Action[]     @relation("action_editors")
+  // Actions the user is explicitly allowed to view
+  viewActions      Action[]     @relation("action_viewers")
+  // Goals the user is explicitly allowed to edit
+  editGoals        Goal[]       @relation("goal_editors")
+  // Goals the user is explicitly allowed to view
+  viewGoals        Goal[]       @relation("goal_viewers")
+  // Roadmaps the user is explicitly allowed to edit
+  editRoadmaps     Roadmap[]    @relation("roadmap_editors")
+  // Roadmaps the user is explicitly allowed to view
+  viewRoadmaps     Roadmap[]    @relation("roadmap_viewers")
+  // Data series the user is explicitly allowed to edit
+  editData         DataSeries[] @relation("data_series_editors")
+  // Data series the user is explicitly allowed to view
+  viewData         DataSeries[] @relation("data_series_viewers")
+  // Groups the user is a member of
+  userGroups       UserGroup[]  @relation("user_group")
+
+  @@map("user")
+}
+
+model UserGroup {
+  // UUID of the user group
+  id   String @id @default(uuid())
+  // Name of the user group
+  name String
+
+  // Users in the group
+  users       User[]       @relation("user_group")
+  // Actions all users in the group are allowed to edit
+  editActions Action[]     @relation("action_edit_groups")
+  // Actions all users in the group are allowed to view
+  viewActions Action[]     @relation("action_view_groups")
+  // Goals all users in the group are allowed to edit
+  editGoals   Goal[]       @relation("goal_edit_groups")
+  // Goals all users in the group are allowed to view
+  viewGoals   Goal[]       @relation("goal_view_groups")
+  // Roadmaps all users in the group are allowed to edit
+  editRoadmap Roadmap[]    @relation("roadmap_edit_groups")
+  // Roadmaps all users in the group are allowed to view
+  viewRoadmap Roadmap[]    @relation("roadmap_view_groups")
+  // Data series all users in the group are allowed to edit
+  editData    DataSeries[] @relation("data_series_edit_groups")
+  // Data series all users in the group are allowed to view
+  viewData    DataSeries[] @relation("data_series_view_groups")
+
+  @@map("user_group")
+}
+
+model DataSeries {
+  // UUID of the data series
+  id        String   @id @default(uuid())
+  // Timestamp of when data series was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when data series was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
+  // Unit used for the yearly fields
+  unit      String
+  // Following is a series values for each year from 2020 to 2050
+  // These are the goals for each year
+  // TODO: check what would be a reasonable range for the Decimal precision and scale, currently set to highest possible
+  // TODO: Also check if we need to use Decimal precision or if some Float/Double would be enough
+  val2020   Decimal? @map("val_2020") @db.Decimal(65, 30)
+  val2021   Decimal? @map("val_2021") @db.Decimal(65, 30)
+  val2022   Decimal? @map("val_2022") @db.Decimal(65, 30)
+  val2023   Decimal? @map("val_2023") @db.Decimal(65, 30)
+  val2024   Decimal? @map("val_2024") @db.Decimal(65, 30)
+  val2025   Decimal? @map("val_2025") @db.Decimal(65, 30)
+  val2026   Decimal? @map("val_2026") @db.Decimal(65, 30)
+  val2027   Decimal? @map("val_2027") @db.Decimal(65, 30)
+  val2028   Decimal? @map("val_2028") @db.Decimal(65, 30)
+  val2029   Decimal? @map("val_2029") @db.Decimal(65, 30)
+  val2030   Decimal? @map("val_2030") @db.Decimal(65, 30)
+  val2031   Decimal? @map("val_2031") @db.Decimal(65, 30)
+  val2032   Decimal? @map("val_2032") @db.Decimal(65, 30)
+  val2033   Decimal? @map("val_2033") @db.Decimal(65, 30)
+  val2034   Decimal? @map("val_2034") @db.Decimal(65, 30)
+  val2035   Decimal? @map("val_2035") @db.Decimal(65, 30)
+  val2036   Decimal? @map("val_2036") @db.Decimal(65, 30)
+  val2037   Decimal? @map("val_2037") @db.Decimal(65, 30)
+  val2038   Decimal? @map("val_2038") @db.Decimal(65, 30)
+  val2039   Decimal? @map("val_2039") @db.Decimal(65, 30)
+  val2040   Decimal? @map("val_2040") @db.Decimal(65, 30)
+  val2041   Decimal? @map("val_2041") @db.Decimal(65, 30)
+  val2042   Decimal? @map("val_2042") @db.Decimal(65, 30)
+  val2043   Decimal? @map("val_2043") @db.Decimal(65, 30)
+  val2044   Decimal? @map("val_2044") @db.Decimal(65, 30)
+  val2045   Decimal? @map("val_2045") @db.Decimal(65, 30)
+  val2046   Decimal? @map("val_2046") @db.Decimal(65, 30)
+  val2047   Decimal? @map("val_2047") @db.Decimal(65, 30)
+  val2048   Decimal? @map("val_2048") @db.Decimal(65, 30)
+  val2049   Decimal? @map("val_2049") @db.Decimal(65, 30)
+  val2050   Decimal? @map("val_2050") @db.Decimal(65, 30)
+
+  // Golas that use this data series
+  goals      Goal[]      @relation("data_series")
+  // Author of the data series
+  authorId   String      @map("author_id")
+  author     User        @relation("data_series_author", fields: [authorId], references: [id])
+  // Users allowed to edit the data series
+  editors    User[]      @relation("data_series_editors")
+  // Users allowed to view the data series
+  viewers    User[]      @relation("data_series_viewers")
+  // User groups allowed to edit the data series
+  editGroups UserGroup[] @relation("data_series_edit_groups")
+  // User groups allowed to view the data series
+  viewGroups UserGroup[] @relation("data_series_view_groups")
+
+  @@map("data_series")
+}
