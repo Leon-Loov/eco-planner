@@ -65,15 +65,15 @@ model Goal {
   // Timestamp of when goal was last updated
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  // Name of goal, preferably a short summary
+  // Name of goal
   name               String
   // The "owner" of the goal, an organisation, region, kommun, etc.
   goalObject         String  @map("goal_object")
   // The ID of the national roadmap this goal is related to
   // TODO: check where these are hosted or if we need to host them ourselves
   nationalRoadmapId  String? @map("national_roadmap_id")
-  // A link to dataportal.se for the specific parameter this goal is related to
   // This parameter is in realation to the indicated national roadmap; it should be one of the parameters indicated in the roadmap
+  // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas"
   indicatorParameter String  @map("indicator_parameter") @db.Text
   // Whether the goal is part of a national roadmap (true) or just related to it (false)
   isNationalGoal     Boolean @map("is_national_goal")
@@ -98,6 +98,67 @@ model Goal {
   roadmaps     Roadmap[]   @relation("roadmap_goal")
 
   @@map("goal")
+}
+
+model DataSeries {
+  // UUID of the data series
+  id        String   @id @default(uuid())
+  // Timestamp of when data series was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when data series was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Unit used for the yearly fields
+  unit    String
+  // Following is a series values for each year from 2020 to 2050
+  // These are the goals for each year
+  val2020 Float? @map("val_2020")
+  val2021 Float? @map("val_2021")
+  val2022 Float? @map("val_2022")
+  val2023 Float? @map("val_2023")
+  val2024 Float? @map("val_2024")
+  val2025 Float? @map("val_2025")
+  val2026 Float? @map("val_2026")
+  val2027 Float? @map("val_2027")
+  val2028 Float? @map("val_2028")
+  val2029 Float? @map("val_2029")
+  val2030 Float? @map("val_2030")
+  val2031 Float? @map("val_2031")
+  val2032 Float? @map("val_2032")
+  val2033 Float? @map("val_2033")
+  val2034 Float? @map("val_2034")
+  val2035 Float? @map("val_2035")
+  val2036 Float? @map("val_2036")
+  val2037 Float? @map("val_2037")
+  val2038 Float? @map("val_2038")
+  val2039 Float? @map("val_2039")
+  val2040 Float? @map("val_2040")
+  val2041 Float? @map("val_2041")
+  val2042 Float? @map("val_2042")
+  val2043 Float? @map("val_2043")
+  val2044 Float? @map("val_2044")
+  val2045 Float? @map("val_2045")
+  val2046 Float? @map("val_2046")
+  val2047 Float? @map("val_2047")
+  val2048 Float? @map("val_2048")
+  val2049 Float? @map("val_2049")
+  val2050 Float? @map("val_2050")
+
+  // Golas that use this data series
+  goals      Goal[]      @relation("data_series")
+  // Author of the data series
+  authorId   String      @map("author_id")
+  author     User        @relation("data_series_author", fields: [authorId], references: [id])
+  // Users allowed to edit the data series
+  editors    User[]      @relation("data_series_editors")
+  // Users allowed to view the data series
+  viewers    User[]      @relation("data_series_viewers")
+  // User groups allowed to edit the data series
+  editGroups UserGroup[] @relation("data_series_edit_groups")
+  // User groups allowed to view the data series
+  viewGroups UserGroup[] @relation("data_series_view_groups")
+
+  @@map("data_series")
 }
 
 model Roadmap {
@@ -132,8 +193,8 @@ model User {
   // Username of the user
   username String @unique
   // Email of the user
-  email    String
-  // User's password, should be hashed, salted and peppered
+  email    String @unique
+  // User's password, should be hashed, salted, and peppered
   // TODO: Choose and implement hashing algorithm *BEFORE* going into production
   password String
 
@@ -167,11 +228,14 @@ model User {
   @@map("user")
 }
 
+// There should be a default user group that all users are a member of, in addition to user-defined groups
+// The default group should be used when a user wants to make their goal/action/roadmap/data series public
+// There should also be a restriction in place to prevent giving edit permissions to the default group
 model UserGroup {
   // UUID of the user group
   id   String @id @default(uuid())
   // Name of the user group
-  name String
+  name String @unique
 
   // Users in the group
   users       User[]       @relation("user_group")
@@ -193,66 +257,4 @@ model UserGroup {
   viewData    DataSeries[] @relation("data_series_view_groups")
 
   @@map("user_group")
-}
-
-model DataSeries {
-  // UUID of the data series
-  id        String   @id @default(uuid())
-  // Timestamp of when data series was created
-  createdAt DateTime @default(now()) @map("created_at")
-  // Timestamp of when data series was last updated
-  updatedAt DateTime @updatedAt @map("updated_at")
-  // Unit used for the yearly fields
-  unit      String
-  // Following is a series values for each year from 2020 to 2050
-  // These are the goals for each year
-  // TODO: check what would be a reasonable range for the Decimal precision and scale, currently set to highest possible
-  // TODO: Also check if we need to use Decimal precision or if some Float/Double would be enough
-  val2020   Decimal? @map("val_2020") @db.Decimal(65, 30)
-  val2021   Decimal? @map("val_2021") @db.Decimal(65, 30)
-  val2022   Decimal? @map("val_2022") @db.Decimal(65, 30)
-  val2023   Decimal? @map("val_2023") @db.Decimal(65, 30)
-  val2024   Decimal? @map("val_2024") @db.Decimal(65, 30)
-  val2025   Decimal? @map("val_2025") @db.Decimal(65, 30)
-  val2026   Decimal? @map("val_2026") @db.Decimal(65, 30)
-  val2027   Decimal? @map("val_2027") @db.Decimal(65, 30)
-  val2028   Decimal? @map("val_2028") @db.Decimal(65, 30)
-  val2029   Decimal? @map("val_2029") @db.Decimal(65, 30)
-  val2030   Decimal? @map("val_2030") @db.Decimal(65, 30)
-  val2031   Decimal? @map("val_2031") @db.Decimal(65, 30)
-  val2032   Decimal? @map("val_2032") @db.Decimal(65, 30)
-  val2033   Decimal? @map("val_2033") @db.Decimal(65, 30)
-  val2034   Decimal? @map("val_2034") @db.Decimal(65, 30)
-  val2035   Decimal? @map("val_2035") @db.Decimal(65, 30)
-  val2036   Decimal? @map("val_2036") @db.Decimal(65, 30)
-  val2037   Decimal? @map("val_2037") @db.Decimal(65, 30)
-  val2038   Decimal? @map("val_2038") @db.Decimal(65, 30)
-  val2039   Decimal? @map("val_2039") @db.Decimal(65, 30)
-  val2040   Decimal? @map("val_2040") @db.Decimal(65, 30)
-  val2041   Decimal? @map("val_2041") @db.Decimal(65, 30)
-  val2042   Decimal? @map("val_2042") @db.Decimal(65, 30)
-  val2043   Decimal? @map("val_2043") @db.Decimal(65, 30)
-  val2044   Decimal? @map("val_2044") @db.Decimal(65, 30)
-  val2045   Decimal? @map("val_2045") @db.Decimal(65, 30)
-  val2046   Decimal? @map("val_2046") @db.Decimal(65, 30)
-  val2047   Decimal? @map("val_2047") @db.Decimal(65, 30)
-  val2048   Decimal? @map("val_2048") @db.Decimal(65, 30)
-  val2049   Decimal? @map("val_2049") @db.Decimal(65, 30)
-  val2050   Decimal? @map("val_2050") @db.Decimal(65, 30)
-
-  // Golas that use this data series
-  goals      Goal[]      @relation("data_series")
-  // Author of the data series
-  authorId   String      @map("author_id")
-  author     User        @relation("data_series_author", fields: [authorId], references: [id])
-  // Users allowed to edit the data series
-  editors    User[]      @relation("data_series_editors")
-  // Users allowed to view the data series
-  viewers    User[]      @relation("data_series_viewers")
-  // User groups allowed to edit the data series
-  editGroups UserGroup[] @relation("data_series_edit_groups")
-  // User groups allowed to view the data series
-  viewGroups UserGroup[] @relation("data_series_view_groups")
-
-  @@map("data_series")
 }

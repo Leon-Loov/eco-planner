@@ -32,6 +32,48 @@ CREATE TABLE `goal` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `data_series` (
+    `id` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+    `unit` VARCHAR(191) NOT NULL,
+    `val_2020` DOUBLE NULL,
+    `val_2021` DOUBLE NULL,
+    `val_2022` DOUBLE NULL,
+    `val_2023` DOUBLE NULL,
+    `val_2024` DOUBLE NULL,
+    `val_2025` DOUBLE NULL,
+    `val_2026` DOUBLE NULL,
+    `val_2027` DOUBLE NULL,
+    `val_2028` DOUBLE NULL,
+    `val_2029` DOUBLE NULL,
+    `val_2030` DOUBLE NULL,
+    `val_2031` DOUBLE NULL,
+    `val_2032` DOUBLE NULL,
+    `val_2033` DOUBLE NULL,
+    `val_2034` DOUBLE NULL,
+    `val_2035` DOUBLE NULL,
+    `val_2036` DOUBLE NULL,
+    `val_2037` DOUBLE NULL,
+    `val_2038` DOUBLE NULL,
+    `val_2039` DOUBLE NULL,
+    `val_2040` DOUBLE NULL,
+    `val_2041` DOUBLE NULL,
+    `val_2042` DOUBLE NULL,
+    `val_2043` DOUBLE NULL,
+    `val_2044` DOUBLE NULL,
+    `val_2045` DOUBLE NULL,
+    `val_2046` DOUBLE NULL,
+    `val_2047` DOUBLE NULL,
+    `val_2048` DOUBLE NULL,
+    `val_2049` DOUBLE NULL,
+    `val_2050` DOUBLE NULL,
+    `author_id` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Roadmap` (
     `id` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -50,6 +92,7 @@ CREATE TABLE `user` (
     `password` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `user_username_key`(`username`),
+    UNIQUE INDEX `user_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -58,48 +101,7 @@ CREATE TABLE `user_group` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
 
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `data_series` (
-    `id` VARCHAR(191) NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL,
-    `unit` VARCHAR(191) NOT NULL,
-    `val_2020` DECIMAL(65, 30) NULL,
-    `val_2021` DECIMAL(65, 30) NULL,
-    `val_2022` DECIMAL(65, 30) NULL,
-    `val_2023` DECIMAL(65, 30) NULL,
-    `val_2024` DECIMAL(65, 30) NULL,
-    `val_2025` DECIMAL(65, 30) NULL,
-    `val_2026` DECIMAL(65, 30) NULL,
-    `val_2027` DECIMAL(65, 30) NULL,
-    `val_2028` DECIMAL(65, 30) NULL,
-    `val_2029` DECIMAL(65, 30) NULL,
-    `val_2030` DECIMAL(65, 30) NULL,
-    `val_2031` DECIMAL(65, 30) NULL,
-    `val_2032` DECIMAL(65, 30) NULL,
-    `val_2033` DECIMAL(65, 30) NULL,
-    `val_2034` DECIMAL(65, 30) NULL,
-    `val_2035` DECIMAL(65, 30) NULL,
-    `val_2036` DECIMAL(65, 30) NULL,
-    `val_2037` DECIMAL(65, 30) NULL,
-    `val_2038` DECIMAL(65, 30) NULL,
-    `val_2039` DECIMAL(65, 30) NULL,
-    `val_2040` DECIMAL(65, 30) NULL,
-    `val_2041` DECIMAL(65, 30) NULL,
-    `val_2042` DECIMAL(65, 30) NULL,
-    `val_2043` DECIMAL(65, 30) NULL,
-    `val_2044` DECIMAL(65, 30) NULL,
-    `val_2045` DECIMAL(65, 30) NULL,
-    `val_2046` DECIMAL(65, 30) NULL,
-    `val_2047` DECIMAL(65, 30) NULL,
-    `val_2048` DECIMAL(65, 30) NULL,
-    `val_2049` DECIMAL(65, 30) NULL,
-    `val_2050` DECIMAL(65, 30) NULL,
-    `author_id` VARCHAR(191) NOT NULL,
-
+    UNIQUE INDEX `user_group_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -194,6 +196,42 @@ CREATE TABLE `_roadmap_goal` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `_data_series_editors` (
+    `A` VARCHAR(191) NOT NULL,
+    `B` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `_data_series_editors_AB_unique`(`A`, `B`),
+    INDEX `_data_series_editors_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_data_series_viewers` (
+    `A` VARCHAR(191) NOT NULL,
+    `B` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `_data_series_viewers_AB_unique`(`A`, `B`),
+    INDEX `_data_series_viewers_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_data_series_edit_groups` (
+    `A` VARCHAR(191) NOT NULL,
+    `B` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `_data_series_edit_groups_AB_unique`(`A`, `B`),
+    INDEX `_data_series_edit_groups_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_data_series_view_groups` (
+    `A` VARCHAR(191) NOT NULL,
+    `B` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `_data_series_view_groups_AB_unique`(`A`, `B`),
+    INDEX `_data_series_view_groups_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_roadmap_editors` (
     `A` VARCHAR(191) NOT NULL,
     `B` VARCHAR(191) NOT NULL,
@@ -238,42 +276,6 @@ CREATE TABLE `_user_group` (
     INDEX `_user_group_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `_data_series_editors` (
-    `A` VARCHAR(191) NOT NULL,
-    `B` VARCHAR(191) NOT NULL,
-
-    UNIQUE INDEX `_data_series_editors_AB_unique`(`A`, `B`),
-    INDEX `_data_series_editors_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `_data_series_viewers` (
-    `A` VARCHAR(191) NOT NULL,
-    `B` VARCHAR(191) NOT NULL,
-
-    UNIQUE INDEX `_data_series_viewers_AB_unique`(`A`, `B`),
-    INDEX `_data_series_viewers_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `_data_series_edit_groups` (
-    `A` VARCHAR(191) NOT NULL,
-    `B` VARCHAR(191) NOT NULL,
-
-    UNIQUE INDEX `_data_series_edit_groups_AB_unique`(`A`, `B`),
-    INDEX `_data_series_edit_groups_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `_data_series_view_groups` (
-    `A` VARCHAR(191) NOT NULL,
-    `B` VARCHAR(191) NOT NULL,
-
-    UNIQUE INDEX `_data_series_view_groups_AB_unique`(`A`, `B`),
-    INDEX `_data_series_view_groups_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 -- AddForeignKey
 ALTER TABLE `action` ADD CONSTRAINT `action_parent_id_fkey` FOREIGN KEY (`parent_id`) REFERENCES `action`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -287,10 +289,10 @@ ALTER TABLE `goal` ADD CONSTRAINT `goal_data_series_id_fkey` FOREIGN KEY (`data_
 ALTER TABLE `goal` ADD CONSTRAINT `goal_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Roadmap` ADD CONSTRAINT `Roadmap_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `data_series` ADD CONSTRAINT `data_series_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `data_series` ADD CONSTRAINT `data_series_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Roadmap` ADD CONSTRAINT `Roadmap_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_action_goal` ADD CONSTRAINT `_action_goal_A_fkey` FOREIGN KEY (`A`) REFERENCES `action`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -353,6 +355,30 @@ ALTER TABLE `_roadmap_goal` ADD CONSTRAINT `_roadmap_goal_A_fkey` FOREIGN KEY (`
 ALTER TABLE `_roadmap_goal` ADD CONSTRAINT `_roadmap_goal_B_fkey` FOREIGN KEY (`B`) REFERENCES `Roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `_data_series_editors` ADD CONSTRAINT `_data_series_editors_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_data_series_editors` ADD CONSTRAINT `_data_series_editors_B_fkey` FOREIGN KEY (`B`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_data_series_viewers` ADD CONSTRAINT `_data_series_viewers_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_data_series_viewers` ADD CONSTRAINT `_data_series_viewers_B_fkey` FOREIGN KEY (`B`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_data_series_edit_groups` ADD CONSTRAINT `_data_series_edit_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_data_series_edit_groups` ADD CONSTRAINT `_data_series_edit_groups_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_data_series_view_groups` ADD CONSTRAINT `_data_series_view_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_data_series_view_groups` ADD CONSTRAINT `_data_series_view_groups_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `_roadmap_editors` ADD CONSTRAINT `_roadmap_editors_A_fkey` FOREIGN KEY (`A`) REFERENCES `Roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -381,27 +407,3 @@ ALTER TABLE `_user_group` ADD CONSTRAINT `_user_group_A_fkey` FOREIGN KEY (`A`) 
 
 -- AddForeignKey
 ALTER TABLE `_user_group` ADD CONSTRAINT `_user_group_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_editors` ADD CONSTRAINT `_data_series_editors_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_editors` ADD CONSTRAINT `_data_series_editors_B_fkey` FOREIGN KEY (`B`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_viewers` ADD CONSTRAINT `_data_series_viewers_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_viewers` ADD CONSTRAINT `_data_series_viewers_B_fkey` FOREIGN KEY (`B`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_edit_groups` ADD CONSTRAINT `_data_series_edit_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_edit_groups` ADD CONSTRAINT `_data_series_edit_groups_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_view_groups` ADD CONSTRAINT `_data_series_view_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_data_series_view_groups` ADD CONSTRAINT `_data_series_view_groups_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
