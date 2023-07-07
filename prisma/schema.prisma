@@ -75,8 +75,8 @@ model Goal {
   // This parameter is in realation to the indicated national roadmap; it should be one of the parameters indicated in the roadmap
   // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas"
   indicatorParameter String  @map("indicator_parameter") @db.Text
-  // Whether the goal is part of a national roadmap (true) or just related to it (false)
-  isNationalGoal     Boolean @map("is_national_goal")
+  // There was an idea to use an ´isNationalGoal´ field to indicate if the goal is part of a national roadmap or not,
+  // but it's probably better to just check if it has a relation to any national roadmap if we want to know that
 
   // A series of datapoints for the goal
   dataSeriesId String?     @map("data_series_id")
@@ -170,6 +170,9 @@ model Roadmap {
   updatedAt DateTime @updatedAt @map("updated_at")
   // Name of roadmap
   name      String
+  // Whether the roadmap is a national roadmap (true) or a local roadmap (false)
+  // National roadmaps should be uploaded through the admin interface (not implemented yet)
+  isNational Boolean @map("is_national") @default(false)
 
   // Goals related to this roadmap
   goals      Goal[]      @relation("roadmap_goal")
@@ -194,8 +197,8 @@ model User {
   username String @unique
   // Email of the user
   email    String @unique
-  // User's password, should be hashed, salted, and peppered
-  // TODO: Choose and implement hashing algorithm *BEFORE* going into production
+  // User's password in hashed form
+  // In this implementation, the password is hashed using bcrypt
   password String
 
   // Actions the user created

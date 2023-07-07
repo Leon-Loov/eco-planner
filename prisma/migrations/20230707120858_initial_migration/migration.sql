@@ -24,7 +24,6 @@ CREATE TABLE `goal` (
     `goal_object` VARCHAR(191) NOT NULL,
     `national_roadmap_id` VARCHAR(191) NULL,
     `indicator_parameter` TEXT NOT NULL,
-    `is_national_goal` BOOLEAN NOT NULL,
     `data_series_id` VARCHAR(191) NULL,
     `author_id` VARCHAR(191) NOT NULL,
 
@@ -79,6 +78,7 @@ CREATE TABLE `Roadmap` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
+    `is_national` BOOLEAN NOT NULL DEFAULT false,
     `author_id` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
