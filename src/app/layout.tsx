@@ -15,13 +15,6 @@ export default async function RootLayout({
         {children}
         <br />
         <HomeButton />
-        { // Link to admin page if logged in
-          user?.isLoggedIn &&
-          <>
-            <br />
-            <AdminButton />
-          </>
-        }
         { // Link to login and signup if not logged in
           !user?.isLoggedIn &&
           <>
@@ -31,9 +24,11 @@ export default async function RootLayout({
             <SignupButton />
           </>
         }
-        { // Button to logout if logged in
+        { // Link to admin page and a logout button if logged in
           user?.isLoggedIn &&
           <>
+            <br />
+            <AdminButton />
             <br />
             <LogoutButton />
           </>
