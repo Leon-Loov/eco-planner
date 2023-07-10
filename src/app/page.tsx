@@ -1,5 +1,3 @@
-import LoginButton from "@/components/loginButton"
-
 export default async function Page() {
 
   return <>

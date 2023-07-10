@@ -10,10 +10,17 @@ function handleSubmit(event: any) {
     password: form.password.value,
   })
 
+  // Try to signup, redirect to the home page if successful.
   fetch('/api/signup', {
     method: 'POST',
     body: formJSON,
     headers: { 'Content-Type': 'application/json' },
+  }).then((res) => {
+    if (res.ok) {
+      window.location.href = '/'
+    } else {
+      alert('Signup failed.')
+    }
   })
 }
 

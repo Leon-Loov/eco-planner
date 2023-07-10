@@ -5,12 +5,22 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const session = await getSession(req, res)
 
-  if (!session.user) return new NextResponse(null, { status: 401 })
-  if (session.user.isLoggedIn !== true) return new NextResponse(null, { status: 403 })
+  if (req.nextUrl.pathname.startsWith('/admin')) {
+    if (!session.user) return new NextResponse(null, { status: 401 })
+    if (session.user.isLoggedIn !== true) return new NextResponse(null, { status: 403 })
+  }
+
+  if (req.nextUrl.pathname.startsWith('/login')) {
+    if (session.user?.isLoggedIn === true) {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+  }
+
+  if (req.nextUrl.pathname.startsWith('/signup')) {
+    if (session.user?.isLoggedIn === true) {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+  }
 
   return res
-}
-
-export const config = {
-  matcher: '/admin'
 }

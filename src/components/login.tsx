@@ -9,10 +9,17 @@ function handleSubmit(event: any) {
     password: form.password.value,
   })
 
+  // Try to login, redirect to the home page if successful.
   fetch('/api/login', {
     method: 'POST',
     body: formJSON,
     headers: { 'Content-Type': 'application/json' },
+  }).then((res) => {
+    if (res.ok) {
+      window.location.href = '/'
+    } else {
+      alert('Login failed.')
+    }
   })
 }
 

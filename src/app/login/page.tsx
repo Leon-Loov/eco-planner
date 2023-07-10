@@ -1,6 +1,6 @@
 import Login from "@/components/login";
 
-export default async function Page() {
+export default async function Page() {  
   return (
     <>
       <Login />
