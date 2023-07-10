@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
+import bcrypt from "bcrypt";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -18,25 +19,35 @@ export async function POST(request: NextRequest) {
   }
 
   // Validate credentials
-  let user: { id: string; username: string; };
+  let user: { id: string; username: string; password: string; };
 
   try {
-    user = await prisma.user.findFirstOrThrow({
+    user = await prisma.user.findUniqueOrThrow({
       where: {
         username: username,
-        // TODO: Hash password
-        password: password,
       },
       select: {
         id: true,
         username: true,
+        password: true,
       }
     });
   } catch (e) {
     console.log(e);
     return createResponse(
       response,
-      JSON.stringify({ message: 'Invalid username or password' }),
+      JSON.stringify({ message: 'User not found' }),
+      { status: 400 }
+    );
+  }
+
+  // Check password
+  const passwordMatches = await bcrypt.compare(password, user.password);
+
+  if (!passwordMatches) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Incorrect password' }),
       { status: 400 }
     );
   }

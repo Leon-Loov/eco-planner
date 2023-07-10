@@ -24,6 +24,7 @@
   "author": "Leon Lööv",
   "license": "MIT",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/react": "18.2.14"
   }
 }
