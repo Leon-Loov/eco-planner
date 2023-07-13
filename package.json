@@ -17,7 +17,7 @@
     "typescript": "^5.1.5"
   },
   "name": "eco-planner",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A tool intended to help planning actions to achieve local environmental goals",
   "repository": "https://github.com/Leon-Loov/eco-planner.git",
   "author": "Leon Lööv",
