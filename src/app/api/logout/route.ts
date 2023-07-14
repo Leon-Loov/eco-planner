@@ -5,6 +5,7 @@ export async function POST(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
+  // Remove session to log out
   session.destroy();
 
   return createResponse(
