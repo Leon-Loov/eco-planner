@@ -163,16 +163,16 @@ model DataSeries {
 
 model Roadmap {
   // UUID of the roadmap
-  id        String   @id @default(uuid())
+  id         String   @id @default(uuid())
   // Timestamp of when roadmap was created
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt  DateTime @default(now()) @map("created_at")
   // Timestamp of when roadmap was last updated
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
   // Name of roadmap
-  name      String
+  name       String
   // Whether the roadmap is a national roadmap (true) or a local roadmap (false)
   // National roadmaps should be uploaded through the admin interface (not implemented yet)
-  isNational Boolean @map("is_national") @default(false)
+  isNational Boolean  @default(false) @map("is_national")
 
   // Goals related to this roadmap
   goals      Goal[]      @relation("roadmap_goal")
