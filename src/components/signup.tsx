@@ -21,6 +21,8 @@ function handleSubmit(event: any) {
     } else {
       alert('Signup failed.')
     }
+  }).catch((err) => {
+    alert('Signup failed.')
   })
 }
 

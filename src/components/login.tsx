@@ -20,6 +20,8 @@ function handleSubmit(event: any) {
     } else {
       alert('Login failed.')
     }
+  }).catch((err) => {
+    alert('Login failed.')
   })
 }
 

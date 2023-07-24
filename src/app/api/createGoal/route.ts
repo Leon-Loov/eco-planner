@@ -75,7 +75,8 @@ export async function POST(request: NextRequest) {
     keys.filter(key => /\d/.test(key)).sort().forEach((key, index) => {
       // This godawful mess assures TypeScript that we are not trying to assign numbers to any of the
       // other fields in the dataSeries object.
-      dataValues[key as keyof Omit<Prisma.DataSeriesCreateWithoutGoalsInput,
+      dataValues[key as keyof Omit<
+        Prisma.DataSeriesCreateWithoutGoalsInput,
         'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' |
         'editors' | 'viewers' | 'editGroups' | 'viewGroups'
       >] = parseFloat(goal.dataSeries![index]);
