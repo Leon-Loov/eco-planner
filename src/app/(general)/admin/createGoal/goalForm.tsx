@@ -1,7 +1,29 @@
 'use client'
 
 function handleSubmit(event: any) {
-  return
+  event.preventDefault()
+
+  const form = event.target
+  const formJSON = JSON.stringify({
+    goalName: form.goalName.value,
+    goalObject: form.goalObject.value,
+    nationalRoadmapId: form.nationalRoadmapId.value,
+    indicatorParameter: form.indicatorParameter.value,
+  })
+
+  fetch('/api/createGoal', {
+    method: 'POST',
+    body: formJSON,
+    headers: { 'Content-Type': 'application/json' },
+  }).then((res) => {
+    if (res.ok) {
+      window.location.href = '/admin'
+    } else {
+      alert('Målbana kunde inte skapas.')
+    }
+  }).catch((err) => {
+    alert('Målbana kunde inte skapas.')
+  })
 }
 
 export default function CreateGoal() {
