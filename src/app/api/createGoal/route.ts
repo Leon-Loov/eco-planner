@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
   // Prepare for creating data series
   let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
     author: { connect: { id: session.user.id } },
-    unit: goal.dataUnit!,
+    unit: goal.indicatorParameter!,
   };
 
   if (goal.dataSeries?.length) {

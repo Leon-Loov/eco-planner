@@ -5,7 +5,7 @@ function handleSubmit(event: any) {
 
   const form = event.target
   const formJSON = JSON.stringify({
-    goalName: form.goalName.value,
+    name: form.name.value,
     goalObject: form.goalObject.value,
     nationalRoadmapId: form.nationalRoadmapId.value,
     indicatorParameter: form.indicatorParameter.value,
@@ -32,8 +32,8 @@ export default function CreateGoal() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="goalName">Namn på målbanan: </label>
-        <input type="text" name="goalName" required={true} />
+        <label htmlFor="name">Namn på målbanan: </label>
+        <input type="text" name="name" required={true} />
         <br />
         <label htmlFor="goalObject">Den som &quot;äger&quot; målet (t.ex en region eller organisation): </label>
         <input type="text" name="goalObject" required={true} />
@@ -41,7 +41,7 @@ export default function CreateGoal() {
         <label htmlFor="nationalRoadmapId">Nationell målbana denna är baserad på (om någon): </label>
         {/* TODO: Make this a dropdown with options from the database and proper IDs as values */}
         <select name="nationalRoadmapId" required={false}>
-          <option value="0">Ingen nationell målbana</option>
+          <option value={0}>Ingen nationell målbana</option>
           <option value="1">Nationell målbana 1</option>
           <option value="2">Nationell målbana 2</option>
           <option value="3">Nationell målbana 3</option>
@@ -57,12 +57,15 @@ export default function CreateGoal() {
         <label htmlFor="dataSeriesId">Alternativt, välj en dataserie från listan: </label>
         {/* TODO: Make this a dropdown with options from the database and proper IDs as values */}
         <select name="dataSeriesId" required={false}>
-          <option value="0">Ingen dataserie</option>
+          <option value={0}>Ingen dataserie</option>
           <option value="1">Dataserie 1</option>
           <option value="2">Dataserie 2</option>
           <option value="3">Dataserie 3</option>
         </select>
         <br />
+        <p>
+          Här ska det finnas möjlighet att välja vilka som kan se och/eller redigera målbana.
+        </p>
         {/*
           TODO: Add a way to choose who can see and/or edit, something like
           Public, Internal, Private, Custom (with a list of groups to choose from).
@@ -70,6 +73,8 @@ export default function CreateGoal() {
           This should probably be done as a component that is reused
           in all forms that include editing/viewing permissions.
         */}
+        <br />
+        <input type="submit" value="Skapa målbana" />
       </form>
     </>
   )
