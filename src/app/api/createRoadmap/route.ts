@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { RoadmapInput } from "@/types";
-import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
