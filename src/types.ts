@@ -9,6 +9,16 @@ function exclude<Model, Key extends keyof Model>(
   ) as Omit<Model, Key>;
 }
 
+export type RoadmapInput = {
+  name: string;
+  isNational: boolean | undefined;
+  // Accepts lists of UUIDs for all of the following, to link them to the roadmap (optional)
+  editors: string[] | undefined;
+  viewers: string[] | undefined;
+  editGroups: string[] | undefined;
+  viewGroups: string[] | undefined;
+}
+
 export type GoalInput = {
   name: string;
   goalObject: string;

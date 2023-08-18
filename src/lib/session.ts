@@ -7,6 +7,7 @@ export interface Data {
     id: string;
     username: string;
     isLoggedIn?: boolean;
+    isAdmin?: boolean;
   };
 }
 

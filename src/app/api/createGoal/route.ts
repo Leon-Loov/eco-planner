@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   const session = await getSession(request, response);
 
   let goal: GoalInput = await request.json();
-  goal.dataSeries
 
   // Validate request body
   if (!goal.name || !goal.goalObject || !goal.indicatorParameter) {

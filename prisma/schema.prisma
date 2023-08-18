@@ -200,6 +200,8 @@ model User {
   // User's password in hashed form
   // In this implementation, the password is hashed using bcrypt
   password String
+  // Whether or not the user is an admin
+  isAdmin  Boolean @default(false) @map("is_admin")
 
   // Actions the user created
   authoredActions  Action[]     @relation("action_author")

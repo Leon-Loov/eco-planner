@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Validate credentials
-  let user: { id: string; username: string; password: string; };
+  let user: { id: string; username: string; password: string; isAdmin: boolean };
 
   try {
     user = await prisma.user.findUniqueOrThrow({
@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
         id: true,
         username: true,
         password: true,
+        isAdmin: true,
       }
     });
   } catch (e) {
@@ -57,6 +58,7 @@ export async function POST(request: NextRequest) {
     id: user.id,
     username: user.username,
     isLoggedIn: true,
+    isAdmin: user.isAdmin,
   };
 
   await session.save();
