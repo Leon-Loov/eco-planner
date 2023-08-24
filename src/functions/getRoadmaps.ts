@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 export default async function getRoadmaps() {
   const session = await getSessionData(cookies());
 
-  let roadmaps: (Roadmap & {goals: Goal[]})[] = [];
+  let roadmaps: (Roadmap & { goals: Goal[] })[] = [];
 
   // If user is admin, get all roadmaps
   if (session.user?.isAdmin) {
@@ -18,8 +18,8 @@ export default async function getRoadmaps() {
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
-          editGroups: true,
-          viewGroups: true,
+          editGroups: { include: { users: { select: { id: true, username: true } } } },
+          viewGroups: { include: { users: { select: { id: true, username: true } } } },
         }
       });
     } catch (error) {
@@ -38,84 +38,58 @@ export default async function getRoadmaps() {
   if (session.user?.isLoggedIn) {
     try {
       // Get all roadmaps authored by the user
-      let authoredRoadmaps = await prisma.roadmap.findMany({
+      roadmaps = await prisma.roadmap.findMany({
         where: {
-          authorId: session.user.id
+          OR: [
+            { authorId: session.user.id },
+            { editors: { some: { id: session.user.id } } },
+            { viewers: { some: { id: session.user.id } } },
+            { editGroups: { some: { users: { some: { id: session.user.id } } } } },
+            { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
+            { viewGroups: { some: { name: 'Public' } } }
+          ]
         },
         include: {
           goals: true,
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
-          editGroups: true,
-          viewGroups: true,
+          editGroups: { include: { users: { select: { id: true, username: true } } } },
+          viewGroups: { include: { users: { select: { id: true, username: true } } } },
         }
       });
-
-      // Get all roadmaps the user has edit access to
-      let editableRoadmaps = await prisma.roadmap.findMany({
-        where: {
-          OR: [
-            { editors: { some: { id: session.user.id } } },
-            { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-          ]
-        },
-        include: {
-          goals: true,
-          author: { select: { id: true, username: true } },
-          editors: { select: { id: true, username: true } },
-        }
-      });
-
-      // Get all roadmaps the user has view access to
-      let visibleRoadmaps = await prisma.roadmap.findMany({
-        where: {
-          OR: [
-            { viewers: { some: { id: session.user.id } } },
-            { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-          ]
-        },
-        include: {
-          goals: true,
-          author: { select: { id: true, username: true } },
-        }
-      });
-
-      // Join roadmaps into one array, but don't return yet; it's done after fetching public roadmaps
-      roadmaps = [...authoredRoadmaps, ...editableRoadmaps, ...visibleRoadmaps]
     } catch (error) {
       console.error(error);
       console.log('Error fetching user roadmaps');
       return []
     }
+
+    // Sort roadmaps
+    roadmaps.sort(roadmapSorter);
+
+    return roadmaps;
   }
 
   // Get all public roadmaps
   try {
-    let publicRoadmaps = await prisma.roadmap.findMany({
+    roadmaps = await prisma.roadmap.findMany({
       where: {
         viewGroups: { some: { name: 'Public' } }
       },
       include: {
         goals: true,
         author: { select: { id: true, username: true } },
+        editors: { select: { id: true, username: true } },
+        viewers: { select: { id: true, username: true } },
+        editGroups: { include: { users: { select: { id: true, username: true } } } },
+        viewGroups: { include: { users: { select: { id: true, username: true } } } },
       }
     });
-
-    // Join roadmaps into one array
-    roadmaps = [...roadmaps, ...publicRoadmaps]
   } catch (error) {
     console.error(error);
     console.log('Error fetching public roadmaps');
     return []
   }
-
-  // Remove duplicate roadmaps
-  roadmaps = roadmaps.filter((roadmap, index, self) =>
-    index === self.findIndex((t) => (
-      t.id === roadmap.id
-    ))
-  );
 
   // Sort roadmaps
   roadmaps.sort(roadmapSorter);

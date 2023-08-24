@@ -1,4 +1,4 @@
-import { Roadmap } from "@prisma/client";
+import { Goal, Roadmap } from "@prisma/client";
 
 // Used for alphabetical sorting, we use Swedish locale and ignore case, but it can be changed here
 const collator = new Intl.Collator('se', { numeric: true, sensitivity: 'accent' });
@@ -12,4 +12,11 @@ export function roadmapSorter(a: Roadmap, b: Roadmap) {
   }
 
   return a.isNational ? -1 : 1;
+}
+
+/**
+ * Sorts goals alphabetically by name
+ */
+export function goalSorter(a: Goal, b: Goal) {
+  return collator.compare(a.name, b.name);
 }
