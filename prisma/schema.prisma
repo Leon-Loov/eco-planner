@@ -53,8 +53,30 @@ model Action {
   viewers    User[]      @relation("action_viewers")
   // Groups of users who are allowed to view this action
   viewGroups UserGroup[] @relation("action_view_groups")
+  // Notes related to this action
+  notes      Notes[]     @relation("action_notes")
 
   @@map("action")
+}
+
+model Notes {
+  // UUID of the note
+  id        String   @id @default(uuid())
+  // Timestamp of when note was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when note was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // The note itself
+  note     String @db.Text
+  // The action this note is related to
+  actionId String @map("action_id")
+  action   Action @relation("action_notes", fields: [actionId], references: [id])
+  // The user who created this note
+  authorId String @map("author_id")
+  author   User   @relation("note_author", fields: [authorId], references: [id])
+
+  @@map("notes")
 }
 
 model Goal {
@@ -194,9 +216,9 @@ model User {
   id String @id @default(uuid())
 
   // Username of the user
-  username String @unique
+  username String  @unique
   // Email of the user
-  email    String @unique
+  email    String  @unique
   // User's password in hashed form
   // In this implementation, the password is hashed using bcrypt
   password String
@@ -211,6 +233,8 @@ model User {
   authoredRoadmaps Roadmap[]    @relation("roadmap_author")
   // Data series the user created
   authoredData     DataSeries[] @relation("data_series_author")
+  // Notes the user created
+  authoredNotes    Notes[]      @relation("note_author")
   // Actions the user is explicitly allowed to edit
   editActions      Action[]     @relation("action_editors")
   // Actions the user is explicitly allowed to view
