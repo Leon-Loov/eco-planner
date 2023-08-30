@@ -94,8 +94,8 @@ model Goal {
   // The ID of the national roadmap this goal is related to
   // TODO: check where these are hosted or if we need to host them ourselves
   nationalRoadmapId  String? @map("national_roadmap_id")
-  // This parameter is in realation to the indicated national roadmap; it should be one of the parameters indicated in the roadmap
-  // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas"
+  // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas", as defined by LEAP
+  // TODO: Add a list of predefined categories to choose from, in addition to allowing custom categories
   indicatorParameter String  @map("indicator_parameter") @db.Text
   // There was an idea to use an ´isNationalGoal´ field to indicate if the goal is part of a national roadmap or not,
   // but it's probably better to just check if it has a relation to any national roadmap if we want to know that
@@ -287,3 +287,20 @@ model UserGroup {
 
   @@map("user_group")
 }
+
+// model Organization {
+//   // UUID of the organization
+//   id        String   @id @default(uuid())
+//   // Timestamp of when organization was created
+//   createdAt DateTime @default(now()) @map("created_at")
+//   // Timestamp of when organization was last updated
+//   updatedAt DateTime @updatedAt @map("updated_at")
+
+//   // Name of the organization
+//   name String @unique
+//   // Organization number
+//   orgNumber String @map("org_number") @unique
+//   // NUTS 2021 code for the organization's county, equivelent to NUTS level 3
+//   // For example, SE110 for Stockholms län or SE121 for Uppsala län
+//   nutsCode String @map("nuts_code")
+// }

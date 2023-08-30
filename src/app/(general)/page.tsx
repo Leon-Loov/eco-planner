@@ -2,7 +2,7 @@ import getRoadmaps from "@/functions/getRoadmaps";
 import { Goal, Roadmap } from "@prisma/client"
 
 export default async function Page() {
-  let roadmaps: (Roadmap & {goals: Goal[]})[] = [];
+  let roadmaps: (Roadmap & { goals: Goal[] })[] = [];
   roadmaps = await getRoadmaps();
 
   let nationalRoadmaps = roadmaps.filter(roadmap => roadmap.isNational)

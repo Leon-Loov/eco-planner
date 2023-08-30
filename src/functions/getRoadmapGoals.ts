@@ -15,7 +15,17 @@ import { cookies } from "next/headers";
 export default async function getRoadmapGoals(roadmapId: string) {
   const session = await getSessionData(cookies());
 
-  let goals: (Goal & { actions: Action[], dataSeries: DataSeries | null })[] = [];
+  let goals: (
+    Goal & {
+      actions: Action[],
+      dataSeries: DataSeries | null,
+      author: { id: string, username: string },
+      editors: { id: string, username: string }[],
+      viewers: { id: string, username: string }[],
+      editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+      viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+    }
+  )[] = [];
 
   // If user is admin, fetch regardless of access
   if (session.user?.isAdmin) {

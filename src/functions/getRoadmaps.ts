@@ -7,7 +7,15 @@ import { cookies } from "next/headers";
 export default async function getRoadmaps() {
   const session = await getSessionData(cookies());
 
-  let roadmaps: (Roadmap & { goals: Goal[] })[] = [];
+  let roadmaps: (
+    Roadmap & {
+      goals: Goal[],
+      author: { id: string, username: string },
+      editors: { id: string, username: string }[],
+      viewers: { id: string, username: string }[],
+      editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+      viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+    })[] = [];
 
   // If user is admin, get all roadmaps
   if (session.user?.isAdmin) {
