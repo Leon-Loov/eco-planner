@@ -70,6 +70,12 @@ export async function POST(request: NextRequest) {
         viewGroups: { connect: viewGroups },
       },
     });
+    // Return the new roadmap's ID if successful
+    return createResponse(
+      response,
+      JSON.stringify({ message: "Roadmap created", id: newRoadmap.id }),
+      { status: 200 }
+    );
   } catch (e) {
     console.log(e);
     return createResponse(
@@ -79,9 +85,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // If we get here, something went wrong
   return createResponse(
     response,
-    JSON.stringify({ message: "Roadmap created" }),
-    { status: 200 }
+    JSON.stringify({ message: "Internal server error" }),
+    { status: 500 }
   );
 }
