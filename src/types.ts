@@ -33,6 +33,8 @@ export type GoalInput = {
   // In case the user wants to reference an existing data series instead of creating a new one
   // TODO: Add a check to not allow both dataSeries and dataSeriesId to be set
   dataSeriesId: string | null;
+  // UUID for the roadmap this goal belongs to
+  roadmapId: string | null;
   // Accepts lists of UUIDs for all of the following, to link them to the goal (optional)
   editors: string[] | null;
   viewers: string[] | null;

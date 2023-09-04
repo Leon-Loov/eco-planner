@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 
   // Create goal
   try {
-    await prisma.goal.create({
+    let newGoal = await prisma.goal.create({
       data: {
         name: goal.name,
         goalObject: goal.goalObject,
@@ -107,6 +107,11 @@ export async function POST(request: NextRequest) {
         viewGroups: {
           connect: viewGroups,
         },
+        roadmaps: {
+          connect: {
+            id: goal.roadmapId ? goal.roadmapId : undefined,
+          },
+        },
         dataSeries: {
           connectOrCreate: {
             where: {
@@ -117,6 +122,12 @@ export async function POST(request: NextRequest) {
         },
       }
     });
+    // Return the new goal's ID if successful
+    return createResponse(
+      response,
+      JSON.stringify({ message: "Goal created", id: newGoal.id }),
+      { status: 200 }
+    );
   } catch (e) {
     console.log(e);
     return createResponse(
@@ -126,9 +137,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // If we get here, something went wrong
   return createResponse(
     response,
-    JSON.stringify({ message: "Goal created successfully" }),
-    { status: 200 }
+    JSON.stringify({ message: "Internal server error" }),
+    { status: 500 }
   );
 }

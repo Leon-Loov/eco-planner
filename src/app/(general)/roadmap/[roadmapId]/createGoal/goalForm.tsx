@@ -1,35 +1,39 @@
 'use client'
 
-function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-  event.preventDefault()
-
-  const form = event.target as HTMLFormElement
-  const formJSON = JSON.stringify({
-    name: form.goalName.value,
-    goalObject: form.goalObject.value,
-    nationalRoadmapId: form.nationalRoadmapId.value,
-    indicatorParameter: form.indicatorParameter.value,
-    dataUnit: form.dataUnit.value,
-    dataSeries: form.dataSeries.value,
-    dataSeriesId: form.dataSeriesId.value,
-  })
-
-  fetch('/api/createGoal', {
-    method: 'POST',
-    body: formJSON,
-    headers: { 'Content-Type': 'application/json' },
-  }).then((res) => {
-    if (res.ok) {
-      window.location.href = '/admin'
-    } else {
+export default function CreateGoal({ roadmapId }: { roadmapId: string }) {
+  // Submit the form to the API
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+  
+    const form = event.target as HTMLFormElement
+    const formJSON = JSON.stringify({
+      name: form.goalName.value,
+      goalObject: form.goalObject.value,
+      nationalRoadmapId: form.nationalRoadmapId.value,
+      indicatorParameter: form.indicatorParameter.value,
+      dataUnit: form.dataUnit.value,
+      dataSeries: form.dataSeries.value,
+      dataSeriesId: form.dataSeriesId.value,
+      roadmapId: roadmapId,
+    })
+  
+    fetch('/api/createGoal', {
+      method: 'POST',
+      body: formJSON,
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => {
+      if (res.ok) {
+        return res.json()
+      } else {
+        throw new Error('Goal could not be created.')
+      }
+    }).then(data => {
+      window.location.href = `/roadmap/${roadmapId}/goal/${data.id}`
+    }).catch((err) => {
       alert('Målbana kunde inte skapas.')
-    }
-  }).catch((err) => {
-    alert('Målbana kunde inte skapas.')
-  })
-}
+    })
+  }
 
-export default function CreateGoal() {
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -53,7 +57,7 @@ export default function CreateGoal() {
         <select name="indicatorParameter" required={true} id="indicatorParameter">
           <option value="Test">Indikatorparameter 1</option>
           <option value="Thing">Indikatorparameter 2</option>
-          <option value="A\\B">Indikatorparameter 3</option>
+          <option value="A\B">Indikatorparameter 3</option>
         </select>
         <br />
         <label htmlFor="dataUnit">Enhet för dataserie: </label>
