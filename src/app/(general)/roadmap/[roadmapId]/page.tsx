@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
       <tbody>
         {goals.map(goal => (
           <tr key={goal.id}>
-            <td><a href={`/goal/${currentRoadmap?.id}/${goal.id}`}>{goal.name}</a></td>
+            <td><a href={`/roadmap/${currentRoadmap?.id}/goal/${goal.id}`}>{goal.name}</a></td>
             <td>{goal.goalObject}</td>
             <td>{goal.indicatorParameter}</td>
             <td>{goal.dataSeries?.unit}</td>
