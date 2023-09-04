@@ -3,6 +3,7 @@ import { getSessionData } from "@/lib/session";
 import { cookies } from 'next/headers'
 import { notFound } from "next/navigation"
 import getRoadmapGoals from "@/functions/getRoadmapGoals";
+import Tooltip from "@/lib/tooltipWrapper";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   let session = await getSessionData(cookies());
@@ -36,13 +37,14 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return <>
     <h1>{currentRoadmap.name}</h1>
-    <table>
+    <label htmlFor="goal-table"><h2>Målbanor</h2></label>
+    <table id="goal-table">
       <thead>
         <tr>
-          <th>Målbane-namn</th>
-          {/* TODO: Add tooltip with explanation */}
-          <th>Målobjekt</th>
-          <th>LEAP parameter</th>
+          <th>Namn</th>
+          {/* TODO: Add indicators to headers with tooltips */}
+          <th id="goal-object">Målobjekt</th>
+          <th id="leap-parameter">LEAP parameter</th>
           <th>Enhet för dataserie</th>
           <th>Antal åtgärder</th>
         </tr>
@@ -59,5 +61,11 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         ))}
       </tbody>
     </table>
+    <Tooltip anchorSelect="#goal-object">
+      Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
+    </Tooltip>
+    <Tooltip anchorSelect="#leap-parameter">
+      LEAP parametern beskriver vad som mäts, exempelvis energianvändning eller utsläpp av växthusgaser.
+    </Tooltip>
   </>
 }
