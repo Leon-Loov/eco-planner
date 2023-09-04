@@ -31,7 +31,7 @@ export type GoalInput = {
   // The unit of measurement for the data series, used when creating a new data series
   dataUnit: string | null;
   // In case the user wants to reference an existing data series instead of creating a new one
-  // TODO: Add a check to not allow both dataSeries and dataSeriesId to be set
+  // If both dataSeries and dataSeriesId are provided, dataSeriesId takes precedence
   dataSeriesId: string | null;
   // UUID for the roadmap this goal belongs to
   roadmapId: string | null;

@@ -1,21 +1,24 @@
 import { getSessionData } from "@/lib/session"
-import { actionSorter } from "@/lib/sorters";
+import { goalSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
-import { Action, Goal } from "@prisma/client";
+import { Action, DataSeries, Goal, Roadmap } from "@prisma/client";
 import { cookies } from "next/headers";
 
 /**
- * Gets specified goal and all actions for that goal.
+ * Gets specified roadmap and all goals for that roadmap.
  * 
- * Returns null if goal is not found or user does not have access to it. Also returns null on error.
- * @param id ID of the goal to get
- * @returns Goal object with actions
+ * Returns null if roadmap is not found or user does not have access to it. Also returns null on error.
+ * @param id ID of the roadmap to get
+ * @returns Roadmap object with goals
  */
-export default async function getOneGoal(id: string) {
+export default async function getOneRoadmap(id: string) {
   const session = await getSessionData(cookies());
 
-  let goal: Goal & {
-    actions: Action[],
+  let roadmap: Roadmap & {
+    goals: (Goal & {
+      actions: Action[],
+      dataSeries: DataSeries | null,
+    })[],
     author: { id: string, username: string },
     editors: { id: string, username: string }[],
     viewers: { id: string, username: string }[],
@@ -23,13 +26,18 @@ export default async function getOneGoal(id: string) {
     viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
   } | null = null;
 
-  // If user is admin, always get the goal
+  // If user is admin, always get the roadmap
   if (session.user?.isAdmin) {
     try {
-      goal = await prisma.goal.findUnique({
+      roadmap = await prisma.roadmap.findUnique({
         where: { id },
         include: {
-          actions: true,
+          goals: {
+            include: {
+              actions: true,
+              dataSeries: true,
+            }
+          },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
@@ -39,19 +47,19 @@ export default async function getOneGoal(id: string) {
       });
     } catch (error) {
       console.error(error);
-      console.log('Error fetching admin goal');
+      console.log('Error fetching admin roadmap');
       return null
     }
 
-    goal?.actions.sort(actionSorter)
+    roadmap?.goals.sort(goalSorter);
 
-    return goal;
+    return roadmap;
   }
 
-  // If user is logged in, get the goal if they have access to it
+  // If user is logged in, get the roadmap if they have access to it
   if (session.user?.isLoggedIn) {
     try {
-      goal = await prisma.goal.findUnique({
+      roadmap = await prisma.roadmap.findUnique({
         where: {
           id,
           OR: [
@@ -64,7 +72,12 @@ export default async function getOneGoal(id: string) {
           ]
         },
         include: {
-          actions: true,
+          goals: {
+            include: {
+              actions: true,
+              dataSeries: true,
+            }
+          },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
@@ -74,18 +87,18 @@ export default async function getOneGoal(id: string) {
       });
     } catch (error) {
       console.error(error);
-      console.log('Error fetching user goal');
+      console.log('Error fetching user roadmap');
       return null
     }
 
-    goal?.actions.sort(actionSorter)
+    roadmap?.goals.sort(goalSorter);
 
-    return goal;
+    return roadmap;
   }
 
-  // If user is not logged in, get the goal if it is public
+  // If user is not logged in, get the roadmap if it is public
   try {
-    goal = await prisma.goal.findUnique({
+    roadmap = await prisma.roadmap.findUnique({
       where: {
         id,
         OR: [
@@ -93,7 +106,12 @@ export default async function getOneGoal(id: string) {
         ]
       },
       include: {
-        actions: true,
+        goals: {
+          include: {
+            actions: true,
+            dataSeries: true,
+          }
+        },
         author: { select: { id: true, username: true } },
         editors: { select: { id: true, username: true } },
         viewers: { select: { id: true, username: true } },
@@ -103,11 +121,11 @@ export default async function getOneGoal(id: string) {
     });
   } catch (error) {
     console.error(error);
-    console.log('Error fetching public goal');
+    console.log('Error fetching public roadmap');
     return null
   }
 
-  goal?.actions.sort(actionSorter)
+  roadmap?.goals.sort(goalSorter);
 
-  return goal;
+  return roadmap;
 }

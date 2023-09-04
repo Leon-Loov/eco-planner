@@ -1,42 +1,17 @@
-import getRoadmaps from "@/functions/getRoadmaps";
-import { getSessionData } from "@/lib/session";
-import { cookies } from 'next/headers'
 import { notFound } from "next/navigation"
-import getRoadmapGoals from "@/functions/getRoadmapGoals";
 import Tooltip from "@/lib/tooltipWrapper";
+import getOneRoadmap from "@/functions/getOneRoadmap";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
-  let session = await getSessionData(cookies());
+  let roadmap = await getOneRoadmap(params.roadmapId);
 
-  // TODO: Make a  function to get the specific roadmap from the start instead of getting all roadmaps
-  // and then filtering them
-  let roadmaps = await getRoadmaps();
-
-  let currentRoadmap = roadmaps.find(roadmap => roadmap.id === params.roadmapId)
-
-  // 404 if the roadmap doesn't exist
-  if (!currentRoadmap) {
-    return notFound()
+  // 404 if the roadmap doesn't exist or if the user doesn't have access to it
+  if (!roadmap) {
+    return notFound();
   }
-
-  // 404 if the user doesn't have access to the roadmap
-  let hasAccess = (
-    session.user?.isAdmin ||
-    currentRoadmap.author.id === session.user?.id ||
-    currentRoadmap.editors.some(user => user.id === session.user?.id) ||
-    currentRoadmap.viewers.some(user => user.id === session.user?.id) ||
-    currentRoadmap.editGroups.some(group => group.users.some(user => user.id === session.user?.id)) ||
-    currentRoadmap.viewGroups.some(group => group.users.some(user => user.id === session.user?.id)) ||
-    currentRoadmap.viewGroups.some(group => group.name === "Public")
-  )
-  if (!hasAccess) {
-    return notFound()
-  }
-
-  let goals = await getRoadmapGoals(currentRoadmap.id)
 
   return <>
-    <h1>{currentRoadmap.name}</h1>
+    <h1>{roadmap.name}</h1>
     <label htmlFor="goal-table"><h2>Målbanor</h2></label>
     <table id="goal-table">
       <thead>
@@ -50,9 +25,9 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         </tr>
       </thead>
       <tbody>
-        {goals.map(goal => (
+        {roadmap.goals.map(goal => (
           <tr key={goal.id}>
-            <td><a href={`/roadmap/${currentRoadmap?.id}/goal/${goal.id}`}>{goal.name}</a></td>
+            <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name}</a></td>
             <td>{goal.goalObject}</td>
             <td>{goal.indicatorParameter}</td>
             <td>{goal.dataSeries?.unit}</td>

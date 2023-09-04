@@ -1,16 +1,12 @@
-import { getSessionData } from "@/lib/session";
-import { cookies } from 'next/headers'
 import { notFound } from "next/navigation"
 import getOneGoal from "@/functions/getOneGoal";
-import { actionSorter } from "@/lib/sorters";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
-  let session = await getSessionData(cookies());
+  let goal = await getOneGoal(params.goalId);
 
-  let goal = await getOneGoal(params.goalId)
-
+  // 404 if the goal doesn't exist or if the user doesn't have access to it
   if (!goal) {
-    return notFound()
+    return notFound();
   }
 
   return (
@@ -28,7 +24,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           </tr>
         </thead>
         <tbody>
-          {goal.actions.sort(actionSorter).map(action => (
+          {goal.actions.map(action => (
             <tr key={action.id}>
               <td>{action.name}</td>
               <td>{action.description}</td>
