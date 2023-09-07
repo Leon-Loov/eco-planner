@@ -42,6 +42,22 @@ export type GoalInput = {
   viewGroups: string[] | null;
 };
 
+export type ActionInput = {
+  name: string;
+  description: string;
+  costEfficiency: string;
+  expectedOutcome: string;
+  projectManager: string;
+  relevantActors: string;
+  // UUID for the goal this goal belongs to
+  goalId: string | null;
+  // Accepts lists of UUIDs for all of the following, to link them to the action (optional)
+  editors: string[] | null;
+  viewers: string[] | null;
+  editGroups: string[] | null;
+  viewGroups: string[] | null;
+}
+
 const goalWithRelations = Prisma.validator<Prisma.GoalArgs>()({
   include: {
     dataSeries: true,
