@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import getOneGoal from "@/functions/getOneGoal";
+import { NewActionButton } from "@/components/redirectButtons";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   let goal = await getOneGoal(params.goalId);
@@ -35,6 +36,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           ))}
         </tbody>
       </table>
+      <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
     </>
   )
 }

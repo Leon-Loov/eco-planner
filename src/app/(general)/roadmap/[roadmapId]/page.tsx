@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import Tooltip from "@/lib/tooltipWrapper";
 import getOneRoadmap from "@/functions/getOneRoadmap";
+import { NewGoalButton } from "@/components/redirectButtons";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   let roadmap = await getOneRoadmap(params.roadmapId);
@@ -36,6 +37,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         ))}
       </tbody>
     </table>
+    <NewGoalButton roadmapId={roadmap.id} />
     <Tooltip anchorSelect="#goal-object">
       Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
     </Tooltip>

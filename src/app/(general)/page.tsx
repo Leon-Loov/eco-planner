@@ -1,3 +1,4 @@
+import { NewRoadmapButton } from "@/components/redirectButtons";
 import getRoadmaps from "@/functions/getRoadmaps";
 import { Goal, Roadmap } from "@prisma/client"
 
@@ -43,5 +44,6 @@ export default async function Page() {
         ))}
       </tbody>
     </table>
+    <NewRoadmapButton />
   </>
 }
