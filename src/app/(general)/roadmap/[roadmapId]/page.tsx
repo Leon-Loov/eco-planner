@@ -37,7 +37,9 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         ))}
       </tbody>
     </table>
+    <br />
     <NewGoalButton roadmapId={roadmap.id} />
+    <br />
     <Tooltip anchorSelect="#goal-object">
       Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
     </Tooltip>

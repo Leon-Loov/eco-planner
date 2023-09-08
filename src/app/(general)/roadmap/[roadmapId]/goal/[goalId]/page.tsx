@@ -36,7 +36,9 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           ))}
         </tbody>
       </table>
+      <br />
       <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
+      <br />
     </>
   )
 }
