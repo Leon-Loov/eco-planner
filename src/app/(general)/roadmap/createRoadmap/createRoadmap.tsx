@@ -1,12 +1,31 @@
 'use client'
 
-function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+import AccessSelector, { getAccessData } from "@/components/accessSelector"
+
+function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   event.preventDefault()
 
-  const form = event.target as HTMLFormElement
+  const form = event.target.elements
+
+  const { editUsers, viewUsers, editGroups, viewGroups } = getAccessData(
+    form.namedItem("editUsers") as RadioNodeList,
+    form.namedItem("viewUsers") as RadioNodeList,
+    form.namedItem("editGroups") as RadioNodeList,
+    form.namedItem("viewGroups") as RadioNodeList
+  )
+
+  console.log(editUsers)
+
+  console.log((form.namedItem("roadmapName") as HTMLInputElement).value)
+
   const formJSON = JSON.stringify({
-    name: form.roadmapName.value,
-    isNational: !!form.isNational?.value,
+    name: (form.namedItem("roadmapName") as HTMLInputElement).value,
+    // Converts the value to a boolean
+    isNational: !!(form.namedItem("isNational") as HTMLInputElement).value,
+    editors: editUsers,
+    viewers: viewUsers,
+    editGroups,
+    viewGroups,
   })
 
   fetch('/api/createRoadmap', {
@@ -30,21 +49,16 @@ export default function CreateRoadmap({ children }: { children?: React.ReactNode
   return (
     <>
       <form onSubmit={handleSubmit}>
+        {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
+        <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="name">Namn på färdplanen: </label>
         <input type="text" name="roadmapName" required={true} id="roadmapName" />
         <br />
         {/* The 'children' prop contains a toggle to make the roadmap a national roadmap and should only be visible to admins */}
         {children}
-        <p>
-          Här ska det finnas möjlighet att välja vilka som kan se och/eller redigera färdplan.
-        </p>
-        {/*
-          TODO: Add a way to choose who can see and/or edit, something like
-          Public, Internal, Private, Custom (with a list of groups to choose from).
-          Also allow adding specific people individually, by email address.
-          This should probably be done as a component that is reused
-          in all forms that include editing/viewing permissions.
-        */}
+        <br />
+        {/* TODO: Remove placeholders */}
+        <AccessSelector groupOptions={['a', 'b', 'c']} />
         <br />
         <input type="submit" value="Skapa färdplan" />
       </form>

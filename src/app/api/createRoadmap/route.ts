@@ -37,24 +37,24 @@ export async function POST(request: NextRequest) {
   }
 
   // Create lists of UUIDs for linking
-  let editors: { id: string }[] = [];
-  for (let id of Roadmap.editors || []) {
-    editors.push({ id: id });
+  let editors: { username: string }[] = [];
+  for (let name of Roadmap.editors || []) {
+    editors.push({ username: name });
   }
 
-  let viewers: { id: string }[] = [];
-  for (let id of Roadmap.viewers || []) {
-    viewers.push({ id: id });
+  let viewers: { username: string }[] = [];
+  for (let name of Roadmap.viewers || []) {
+    viewers.push({ username: name });
   }
 
-  let editGroups: { id: string }[] = [];
-  for (let id of Roadmap.editGroups || []) {
-    editGroups.push({ id: id });
+  let editGroups: { name: string }[] = [];
+  for (let name of Roadmap.editGroups || []) {
+    editGroups.push({ name: name });
   }
 
-  let viewGroups: { id: string }[] = [];
-  for (let id of Roadmap.viewGroups || []) {
-    viewGroups.push({ id: id });
+  let viewGroups: { name: string }[] = [];
+  for (let name of Roadmap.viewGroups || []) {
+    viewGroups.push({ name: name });
   }
 
   // Create the roadmap

@@ -37,6 +37,7 @@ export default function CreateGoal({ roadmapId }: { roadmapId: string }) {
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
         <input type="text" name="goalName" required={true} id="goalName" />
         <br />
