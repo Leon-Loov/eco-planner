@@ -27,33 +27,41 @@ export default function AccessSelector({ groupOptions }: { groupOptions: string[
  * Converts the form data to a JSON object that can be sent to the API.
  * @param formElements The form elements to convert to JSON.
  */
-export function getAccessData(editUsers: RadioNodeList, viewUsers: RadioNodeList, editGroups: RadioNodeList, viewGroups: RadioNodeList) {
+export function getAccessData(editUsers: RadioNodeList | null, viewUsers: RadioNodeList | null, editGroups: RadioNodeList | null, viewGroups: RadioNodeList | null) {
   let editUsersValue: string[] = [];
   let viewUsersValue: string[] = [];
   let editGroupsValue: string[] = [];
   let viewGroupsValue: string[] = [];
 
-  for (let i of editUsers) {
-    if (i instanceof HTMLInputElement && i.checked) {
-      editUsersValue.push(i.value);
+  if (editUsers) {
+    for (let i of editUsers) {
+      if (i instanceof HTMLInputElement && i.checked) {
+        editUsersValue.push(i.value);
+      }
     }
   }
 
-  for (let i of viewUsers) {
-    if (i instanceof HTMLInputElement && i.checked) {
-      viewUsersValue.push(i.value);
+  if (viewUsers) {
+    for (let i of viewUsers) {
+      if (i instanceof HTMLInputElement && i.checked) {
+        viewUsersValue.push(i.value);
+      }
     }
   }
 
-  for (let i of editGroups) {
-    if (i instanceof HTMLInputElement && i.checked) {
-      editGroupsValue.push(i.value);
+  if (editGroups) {
+    for (let i of editGroups) {
+      if (i instanceof HTMLInputElement && i.checked) {
+        editGroupsValue.push(i.value);
+      }
     }
   }
 
-  for (let i of viewGroups) {
-    if (i instanceof HTMLInputElement && i.checked) {
-      viewGroupsValue.push(i.value);
+  if (viewGroups) {
+    for (let i of viewGroups) {
+      if (i instanceof HTMLInputElement && i.checked) {
+        viewGroupsValue.push(i.value);
+      }
     }
   }
 
