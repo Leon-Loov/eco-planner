@@ -28,24 +28,24 @@ export async function POST(request: NextRequest) {
   }
 
   // Create lists of UUIDs for linking
-  let editors: { id: string }[] = [];
-  for (let id of action.editors || []) {
-    editors.push({ id: id });
+  let editors: { username: string }[] = [];
+  for (let name of action.editors || []) {
+    editors.push({ username: name });
   }
 
-  let viewers: { id: string }[] = [];
-  for (let id of action.viewers || []) {
-    viewers.push({ id: id });
+  let viewers: { username: string }[] = [];
+  for (let name of action.viewers || []) {
+    viewers.push({ username: name });
   }
 
-  let editGroups: { id: string }[] = [];
-  for (let id of action.editGroups || []) {
-    editGroups.push({ id: id });
+  let editGroups: { name: string }[] = [];
+  for (let name of action.editGroups || []) {
+    editGroups.push({ name: name });
   }
 
-  let viewGroups: { id: string }[] = [];
-  for (let id of action.viewGroups || []) {
-    viewGroups.push({ id: id });
+  let viewGroups: { name: string }[] = [];
+  for (let name of action.viewGroups || []) {
+    viewGroups.push({ name: name });
   }
 
   // Create the action

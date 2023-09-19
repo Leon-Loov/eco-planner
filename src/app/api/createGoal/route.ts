@@ -41,24 +41,24 @@ export async function POST(request: NextRequest) {
   }
 
   // Create lists of UUIDs for linking
-  let editors: { id: string }[] = [];
-  for (let id of goal.editors || []) {
-    editors.push({ id: id });
+  let editors: { username: string }[] = [];
+  for (let name of goal.editors || []) {
+    editors.push({ username: name });
   }
 
-  let viewers: { id: string }[] = [];
-  for (let id of goal.viewers || []) {
-    viewers.push({ id: id });
+  let viewers: { username: string }[] = [];
+  for (let name of goal.viewers || []) {
+    viewers.push({ username: name });
   }
 
-  let editGroups: { id: string }[] = [];
-  for (let id of goal.editGroups || []) {
-    editGroups.push({ id: id });
+  let editGroups: { name: string }[] = [];
+  for (let name of goal.editGroups || []) {
+    editGroups.push({ name: name });
   }
 
-  let viewGroups: { id: string }[] = [];
-  for (let id of goal.viewGroups || []) {
-    viewGroups.push({ id: id });
+  let viewGroups: { name: string }[] = [];
+  for (let name of goal.viewGroups || []) {
+    viewGroups.push({ name: name });
   }
 
   // Prepare for creating data series

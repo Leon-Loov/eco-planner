@@ -7,10 +7,10 @@ export async function POST(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let Roadmap: RoadmapInput = await request.json();
+  let roadmap: RoadmapInput = await request.json();
 
   // Validate request body
-  if (!Roadmap.name) {
+  if (!roadmap.name) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Only admins can create national roadmaps
-  if (Roadmap.isNational && !session.user?.isAdmin) {
+  if (roadmap.isNational && !session.user?.isAdmin) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Forbidden; only admins can create national roadmaps' }),
@@ -38,22 +38,22 @@ export async function POST(request: NextRequest) {
 
   // Create lists of UUIDs for linking
   let editors: { username: string }[] = [];
-  for (let name of Roadmap.editors || []) {
+  for (let name of roadmap.editors || []) {
     editors.push({ username: name });
   }
 
   let viewers: { username: string }[] = [];
-  for (let name of Roadmap.viewers || []) {
+  for (let name of roadmap.viewers || []) {
     viewers.push({ username: name });
   }
 
   let editGroups: { name: string }[] = [];
-  for (let name of Roadmap.editGroups || []) {
+  for (let name of roadmap.editGroups || []) {
     editGroups.push({ name: name });
   }
 
   let viewGroups: { name: string }[] = [];
-  for (let name of Roadmap.viewGroups || []) {
+  for (let name of roadmap.viewGroups || []) {
     viewGroups.push({ name: name });
   }
 
@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
   try {
     let newRoadmap = await prisma.roadmap.create({
       data: {
-        name: Roadmap.name,
-        isNational: Roadmap.isNational,
+        name: roadmap.name,
+        isNational: roadmap.isNational,
         author: { connect: { id: session.user.id } },
         editors: { connect: editors },
         viewers: { connect: viewers },
