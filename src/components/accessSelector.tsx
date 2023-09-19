@@ -27,42 +27,50 @@ export default function AccessSelector({ groupOptions }: { groupOptions: string[
  * Converts the form data to a JSON object that can be sent to the API.
  * @param formElements The form elements to convert to JSON.
  */
-export function getAccessData(editUsers: RadioNodeList | null, viewUsers: RadioNodeList | null, editGroups: RadioNodeList | null, viewGroups: RadioNodeList | null) {
+export function getAccessData(editUsers: RadioNodeList | Element | null, viewUsers: RadioNodeList | Element | null, editGroups: RadioNodeList | Element | null, viewGroups: RadioNodeList | Element | null) {
   let editUsersValue: string[] = [];
   let viewUsersValue: string[] = [];
   let editGroupsValue: string[] = [];
   let viewGroupsValue: string[] = [];
 
-  if (editUsers) {
+  if (editUsers instanceof RadioNodeList) {
     for (let i of editUsers) {
       if (i instanceof HTMLInputElement && i.checked) {
         editUsersValue.push(i.value);
       }
     }
+  } else if (editUsers instanceof HTMLInputElement && editUsers.checked) {
+    editUsersValue.push(editUsers.value);
   }
 
-  if (viewUsers) {
+  if (viewUsers instanceof RadioNodeList) {
     for (let i of viewUsers) {
       if (i instanceof HTMLInputElement && i.checked) {
         viewUsersValue.push(i.value);
       }
     }
+  } else if (viewUsers instanceof HTMLInputElement && viewUsers.checked) {
+    viewUsersValue.push(viewUsers.value);
   }
 
-  if (editGroups) {
+  if (editGroups instanceof RadioNodeList) {
     for (let i of editGroups) {
       if (i instanceof HTMLInputElement && i.checked) {
         editGroupsValue.push(i.value);
       }
     }
+  } else if (editGroups instanceof HTMLInputElement && editGroups.checked) {
+    editGroupsValue.push(editGroups.value);
   }
 
-  if (viewGroups) {
+  if (viewGroups instanceof RadioNodeList) {
     for (let i of viewGroups) {
       if (i instanceof HTMLInputElement && i.checked) {
         viewGroupsValue.push(i.value);
       }
     }
+  } else if (viewGroups instanceof HTMLInputElement && viewGroups.checked) {
+    viewGroupsValue.push(viewGroups.value);
   }
 
   return {
@@ -146,7 +154,8 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
 }
 
 function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], existingGroups?: string[] }) {
-  let groups = groupOptions
+  // The 'Public' group should never have editing access to an item
+  let groups = groupOptions.filter((group) => group !== 'Public')
 
   const [editGroups, setEditGroups] = useState<string[]>(existingGroups ?? []); // The groups that have editing access to the item
 

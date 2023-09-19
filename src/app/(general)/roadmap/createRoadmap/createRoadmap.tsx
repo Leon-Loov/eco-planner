@@ -1,6 +1,7 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import { Data } from "@/lib/session"
 
 function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   event.preventDefault()
@@ -45,7 +46,7 @@ function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   })
 }
 
-export default function CreateRoadmap({ children }: { children?: React.ReactNode }) {
+export default function CreateRoadmap({ user, userGroups }: { user: Data['user'], userGroups: string[] }) {
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -54,11 +55,16 @@ export default function CreateRoadmap({ children }: { children?: React.ReactNode
         <label htmlFor="name">Namn på färdplanen: </label>
         <input type="text" name="roadmapName" required={true} id="roadmapName" />
         <br />
-        {/* The 'children' prop contains a toggle to make the roadmap a national roadmap and should only be visible to admins */}
-        {children}
+        { // This is a toggle to make the roadmap a national roadmap and should only be visible to admins
+          user?.isAdmin &&
+          <>
+            <label htmlFor="isNational">Är färdplanen en nationell färdplan?</label>
+            <input type="checkbox" name="isNational" id="isNational" />
+          </>
+        }
         <br />
         {/* TODO: Remove placeholders */}
-        <AccessSelector groupOptions={['a', 'b', 'c']} />
+        <AccessSelector groupOptions={userGroups} />
         <br />
         <input type="submit" value="Skapa färdplan" />
       </form>
