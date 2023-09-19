@@ -9,20 +9,16 @@ function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   const form = event.target.elements
 
   const { editUsers, viewUsers, editGroups, viewGroups } = getAccessData(
-    form.namedItem("editUsers") as RadioNodeList,
-    form.namedItem("viewUsers") as RadioNodeList,
-    form.namedItem("editGroups") as RadioNodeList,
-    form.namedItem("viewGroups") as RadioNodeList
+    form.namedItem("editUsers"),
+    form.namedItem("viewUsers"),
+    form.namedItem("editGroups"),
+    form.namedItem("viewGroups")
   )
 
-  console.log(editUsers)
-
-  console.log((form.namedItem("roadmapName") as HTMLInputElement).value)
-
   const formJSON = JSON.stringify({
-    name: (form.namedItem("roadmapName") as HTMLInputElement).value,
+    name: (form.namedItem("roadmapName") as HTMLInputElement)?.value,
     // Converts the value to a boolean
-    isNational: !!(form.namedItem("isNational") as HTMLInputElement).value,
+    isNational: !!(form.namedItem("isNational") as HTMLInputElement)?.value,
     editors: editUsers,
     viewers: viewUsers,
     editGroups,
