@@ -12,17 +12,17 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   }
 
   return <>
-    <h1>{roadmap.name}</h1>
-    <label htmlFor="goal-table"><h2>Målbanor</h2></label>
-    <table id="goal-table">
+    <h1>Färdplan &quot;{roadmap.name}&quot;</h1>
+    <label htmlFor="goalTable"><h2>Målbanor</h2></label>
+    <table id="goalTable">
       <thead>
         <tr>
-          <th>Namn</th>
+          <th id="goalName">Målbanenamn</th>
           {/* TODO: Add indicators to headers with tooltips */}
-          <th id="goal-object">Målobjekt</th>
-          <th id="leap-parameter">LEAP parameter</th>
-          <th>Enhet för dataserie</th>
-          <th>Antal åtgärder</th>
+          <th id="goalObject">Målobjekt</th>
+          <th id="leapParameter">LEAP parameter</th>
+          <th id="dataUnit">Enhet för dataserie</th>
+          <th id="goalActions">Antal åtgärder</th>
         </tr>
       </thead>
       <tbody>
@@ -40,11 +40,20 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     <br />
     <NewGoalButton roadmapId={roadmap.id} />
     <br />
-    <Tooltip anchorSelect="#goal-object">
+    <Tooltip anchorSelect="#goalName">
+      Beskrivning av vad målbanan beskriver, tex. antal bilar.
+    </Tooltip>
+    <Tooltip anchorSelect="#goalObject">
       Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
     </Tooltip>
-    <Tooltip anchorSelect="#leap-parameter">
+    <Tooltip anchorSelect="#leapParameter">
       LEAP parametern beskriver vad som mäts, exempelvis energianvändning eller utsläpp av växthusgaser.
+    </Tooltip>
+    <Tooltip anchorSelect="#dataUnit">
+      Beskriver vilken enhet värdena i dataserien är i.
+    </Tooltip>
+    <Tooltip anchorSelect="#goalActions">
+      Antal åtgärder som finns definierade och kopplade till målbanan.
     </Tooltip>
   </>
 }
