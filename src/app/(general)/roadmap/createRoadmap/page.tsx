@@ -9,7 +9,7 @@ export default async function Page() {
 
   return (
     <>
-      <h1>Skapa färdplan</h1>
+      <h1>Skapa en ny färdplan</h1>
       <CreateRoadmap user={session.user} userGroups={userGroups} />
     </>
   )

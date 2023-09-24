@@ -2,6 +2,7 @@
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
 import { Data } from "@/lib/session"
+import Tooltip from "@/lib/tooltipWrapper"
 
 function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   event.preventDefault()
@@ -56,6 +57,9 @@ export default function CreateRoadmap({ user, userGroups }: { user: Data['user']
           <>
             <label htmlFor="isNational">Är färdplanen en nationell färdplan?</label>
             <input type="checkbox" name="isNational" id="isNational" />
+            <Tooltip anchorSelect="label[for=isNational], #isNational">
+              Nationella färdplaner hamnar i en separat lista från regionala färdplaner.
+            </Tooltip>
           </>
         }
         <br />
