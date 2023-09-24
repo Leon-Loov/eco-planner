@@ -1,6 +1,8 @@
 'use client'
 
-export default function ActionForm({ roadmapId, goalId }: { roadmapId: string, goalId: string }) {
+import AccessSelector from "@/components/accessSelector"
+
+export default function ActionForm({ roadmapId, goalId, userGroups }: { roadmapId: string, goalId: string, userGroups: string[] }) {
   // Submit the form to the API
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -54,7 +56,10 @@ export default function ActionForm({ roadmapId, goalId }: { roadmapId: string, g
         <label htmlFor="relevantActors">Relevanta aktörer: </label>
         <input type="text" name="relevantActors" required={true} id="relevantActors" />
         <br />
+        <AccessSelector groupOptions={userGroups} />
+        <br />
         <input type="submit" value="Skapa åtgärd" />
+        <br />
       </form>
     </>
   )

@@ -1,10 +1,12 @@
 'use client'
 
-export default function CreateGoal({ roadmapId }: { roadmapId: string }) {
+import AccessSelector from "@/components/accessSelector"
+
+export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: string, userGroups: string[] }) {
   // Submit the form to the API
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-  
+
     const form = event.target as HTMLFormElement
     const formJSON = JSON.stringify({
       name: form.goalName.value,
@@ -16,7 +18,7 @@ export default function CreateGoal({ roadmapId }: { roadmapId: string }) {
       dataSeriesId: form.dataSeriesId.value,
       roadmapId: roadmapId,
     })
-  
+
     fetch('/api/createGoal', {
       method: 'POST',
       body: formJSON,
@@ -68,25 +70,17 @@ export default function CreateGoal({ roadmapId }: { roadmapId: string }) {
         {/* TODO: Make this allow .csv files, and do parsing stuff and forced format if text */}
         <input type="text" name="dataSeries" required={false} id="dataSeries" />
         <br />
-        <label htmlFor="dataSeriesId">Alternativt, välj en dataserie från listan: </label>
+        {/* This functionality is temporarily or permanently disabled */}
+        {/* <label htmlFor="dataSeriesId">Alternativt, välj en dataserie från listan: </label> */}
         {/* TODO: Make this a dropdown with options from the database and proper IDs as values */}
-        <select name="dataSeriesId" required={false} id="dataSeriesId">
+        {/* <select name="dataSeriesId" required={false} id="dataSeriesId">
           <option value={0}>Ingen dataserie</option>
           <option value="1">Dataserie 1</option>
           <option value="2">Dataserie 2</option>
           <option value="3">Dataserie 3</option>
         </select>
-        <br />
-        <p>
-          Här ska det finnas möjlighet att välja vilka som kan se och/eller redigera målbana.
-        </p>
-        {/*
-          TODO: Add a way to choose who can see and/or edit, something like
-          Public, Internal, Private, Custom (with a list of groups to choose from).
-          Also allow adding specific people individually, by email address.
-          This should probably be done as a component that is reused
-          in all forms that include editing/viewing permissions.
-        */}
+        <br /> */}
+        <AccessSelector groupOptions={userGroups} />
         <br />
         <input type="submit" value="Skapa målbana" />
       </form>
