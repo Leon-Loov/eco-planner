@@ -1,6 +1,7 @@
 'use client'
 
 import AccessSelector from "@/components/accessSelector"
+import Tooltip from "@/lib/tooltipWrapper"
 
 export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: string, userGroups: string[] }) {
   // Submit the form to the API
@@ -43,7 +44,7 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
         <label htmlFor="goalName">Namn på målbanan: </label>
         <input type="text" name="goalName" required={true} id="goalName" />
         <br />
-        <label htmlFor="goalObject">Den som &quot;äger&quot; målet (t.ex en region eller organisation): </label>
+        <label htmlFor="goalObject">Målobjekt: </label>
         <input type="text" name="goalObject" required={true} />
         <br />
         <label htmlFor="nationalRoadmapId">Nationell målbana denna är baserad på (om någon): </label>
@@ -56,7 +57,7 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
         </select>
         <br />
         {/* TODO: Make this a dropdown with actual indicator parameters, plus a 'custom' option that allows typing in a custom parameter */}
-        <label htmlFor="indicatorParameter">Indikatorparameter: </label>
+        <label htmlFor="indicatorParameter">LEAP parameter: </label>
         <select name="indicatorParameter" required={true} id="indicatorParameter">
           <option value="Test">Indikatorparameter 1</option>
           <option value="Thing">Indikatorparameter 2</option>
@@ -83,6 +84,16 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
         <AccessSelector groupOptions={userGroups} />
         <br />
         <input type="submit" value="Skapa målbana" />
+        <Tooltip anchorSelect="#goalObject, label[for=goalObject]">
+          Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
+        </Tooltip>
+        <Tooltip anchorSelect="#dataSeries, label[for=dataSeries]">
+          Du kan klistra in en serie värden separerade med mellanslag (&quot; &quot;), semikolon (&quot;;&quot;) eller tab (&quot;&emsp;&quot;).<br />
+          <strong>OBS: Inklistrade värden får inte vara separerade med komma (&quot;,&quot;).</strong><br />
+          Decimaltal kan använda antingen decimalpunkt eller decimalkomma.<br />
+          Det första värdet representerar år 2020 och serien kan fortsätta maximalt till år 2050 (totalt 31 värden).<br />
+          Om värden saknas för ett år kan du lämna det tomt, exempelvis kan &quot;;1;;;;5&quot; användas för att ange värdena 1 och 5 för år 2021 och 2025.
+        </Tooltip>
       </form>
     </>
   )
