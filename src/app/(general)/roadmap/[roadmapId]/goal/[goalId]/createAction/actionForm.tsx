@@ -39,22 +39,22 @@ export default function ActionForm({ roadmapId, goalId, userGroups }: { roadmapI
     <>
       <form onSubmit={handleSubmit}>
         <label htmlFor="actionName">Namn på åtgärden: </label>
-        <input type="text" name="actionName" required={true} id="actionName" />
+        <input type="text" name="actionName" required id="actionName" />
         <br />
         <label htmlFor="actionDescription">Beskrivning av åtgärden: </label>
-        <input type="text" name="actionDescription" required={true} id="actionDescription" />
+        <input type="text" name="actionDescription" required id="actionDescription" />
         <br />
         <label htmlFor="costEfficiency">Kostnadseffektivitet: </label>
-        <input type="text" name="costEfficiency" required={true} id="costEfficiency" />
+        <input type="text" name="costEfficiency" required id="costEfficiency" />
         <br />
         <label htmlFor="expectedOutcome">Förväntat resultat: </label>
-        <input type="text" name="expectedOutcome" required={true} id="expectedOutcome" />
+        <input type="text" name="expectedOutcome" required id="expectedOutcome" />
         <br />
         <label htmlFor="projectManager">Projektansvarig: </label>
-        <input type="text" name="projectManager" required={true} id="projectManager" />
+        <input type="text" name="projectManager" required id="projectManager" />
         <br />
         <label htmlFor="relevantActors">Relevanta aktörer: </label>
-        <input type="text" name="relevantActors" required={true} id="relevantActors" />
+        <input type="text" name="relevantActors" required id="relevantActors" />
         <br />
         <AccessSelector groupOptions={userGroups} />
         <br />

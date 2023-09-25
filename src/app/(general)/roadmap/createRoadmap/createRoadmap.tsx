@@ -50,7 +50,7 @@ export default function CreateRoadmap({ user, userGroups }: { user: Data['user']
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="name">Namn på färdplanen: </label>
-        <input type="text" name="roadmapName" required={true} id="roadmapName" />
+        <input type="text" name="roadmapName" required id="roadmapName" />
         <br />
         { // This is a toggle to make the roadmap a national roadmap and should only be visible to admins
           user?.isAdmin &&

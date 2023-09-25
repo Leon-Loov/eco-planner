@@ -30,10 +30,10 @@ export default function Login() {
     <>
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username: </label>
-        <input type="text" name="username" required={true} id="username" autoComplete="username" />
+        <input type="text" name="username" required id="username" autoComplete="username" />
         <br />
         <label htmlFor="password">Password: </label>
-        <input type="password" name="password" required={true} id="password" autoComplete="current-password" />
+        <input type="password" name="password" required id="password" autoComplete="current-password" />
         <br />
         <input type="submit" />
       </form>

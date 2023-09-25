@@ -31,13 +31,13 @@ export default function Signup() {
     <>
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username: </label>
-        <input type="text" name="username" required={true} id="username" autoComplete="username" />
+        <input type="text" name="username" required id="username" autoComplete="username" />
         <br />
         <label htmlFor="email">Email: </label>
-        <input type="email" name="email" required={true} id="email" autoComplete="email" />
+        <input type="email" name="email" required id="email" autoComplete="email" />
         <br />
         <label htmlFor="password">Password: </label>
-        <input type="password" name="password" required={true} id="password" autoComplete="new-password" />
+        <input type="password" name="password" required id="password" autoComplete="new-password" />
         <br />
         <input type="submit" />
       </form>
