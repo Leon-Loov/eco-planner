@@ -1,23 +1,35 @@
 'use client'
 
-import AccessSelector from "@/components/accessSelector"
+import AccessSelector, { getAccessData } from "@/components/accessSelector"
 
 export default function ActionForm({ roadmapId, goalId, userGroups }: { roadmapId: string, goalId: string, userGroups: string[] }) {
   // Submit the form to the API
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
-  
-    const form = event.target as HTMLFormElement
+
+    const form = event.target.elements
+
+    const { editUsers, viewUsers, editGroups, viewGroups } = getAccessData(
+      form.namedItem("editUsers"),
+      form.namedItem("viewUsers"),
+      form.namedItem("editGroups"),
+      form.namedItem("viewGroups")
+    )
+
     const formJSON = JSON.stringify({
-      name: form.actionName.value,
-      description: form.actionDescription.value,
-      costEfficiency: form.costEfficiency.value,
-      expectedOutcome: form.expectedOutcome.value,
-      projectManager: form.projectManager.value,
-      relevantActors: form.relevantActors.value,
+      name: (form.namedItem("actionName") as HTMLInputElement)?.value,
+      description: (form.namedItem("actionDescription") as HTMLInputElement)?.value,
+      costEfficiency: (form.namedItem("costEfficiency") as HTMLInputElement)?.value,
+      expectedOutcome: (form.namedItem("expectedOutcome") as HTMLInputElement)?.value,
+      projectManager: (form.namedItem("projectManager") as HTMLInputElement)?.value,
+      relevantActors: (form.namedItem("relevantActors") as HTMLInputElement)?.value,
       goalId: goalId,
+      editors: editUsers,
+      viewers: viewUsers,
+      editGroups,
+      viewGroups,
     })
-  
+
     fetch('/api/createAction', {
       method: 'POST',
       body: formJSON,

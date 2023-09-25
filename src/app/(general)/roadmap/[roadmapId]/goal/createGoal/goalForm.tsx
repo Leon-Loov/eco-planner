@@ -1,27 +1,37 @@
 'use client'
 
-import AccessSelector from "@/components/accessSelector"
+import AccessSelector, { getAccessData } from "@/components/accessSelector"
 import Tooltip from "@/lib/tooltipWrapper"
 
 export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: string, userGroups: string[] }) {
   // Submit the form to the API
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const form = event.target as HTMLFormElement
-    console.log(form.dataSeries.value)
+    const form = event.target.elements
+
+    const { editUsers, viewUsers, editGroups, viewGroups } = getAccessData(
+      form.namedItem("editUsers"),
+      form.namedItem("viewUsers"),
+      form.namedItem("editGroups"),
+      form.namedItem("viewGroups")
+    )
+
     const formJSON = JSON.stringify({
-      name: form.goalName.value,
-      goalObject: form.goalObject.value,
-      nationalRoadmapId: form.nationalRoadmapId.value,
-      indicatorParameter: form.indicatorParameter.value,
-      dataUnit: form.dataUnit.value,
-      dataSeries: form.dataSeries.value,
+      name: (form.namedItem("goalName") as HTMLInputElement)?.value,
+      goalObject: (form.namedItem("goalObject") as HTMLInputElement)?.value,
+      nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value,
+      indicatorParameter: (form.namedItem("indicatorParameter") as HTMLInputElement)?.value,
+      dataUnit: (form.namedItem("dataUnit") as HTMLInputElement)?.value,
+      dataSeries: (form.namedItem("dataSeries") as HTMLInputElement)?.value,
       // This functionality is temporarily or permanently disabled
-      // dataSeriesId: form.dataSeriesId.value,
+      // dataSeriesId: (form.namedItem("dataSeriesId") as HTMLInputElement)?.value,
       roadmapId: roadmapId,
+      editors: editUsers,
+      viewers: viewUsers,
+      editGroups,
+      viewGroups,
     })
-    console.log(formJSON)
 
     fetch('/api/createGoal', {
       method: 'POST',
