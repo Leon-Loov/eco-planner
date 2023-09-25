@@ -67,19 +67,32 @@ export async function POST(request: NextRequest) {
     unit: goal.dataUnit!,
   };
 
-  if (goal.dataSeries?.length) {
-    let keys = Object.keys(dataValues);
-    // By selecting the keys containing numbers, we can assign data values to the correct fields in
-    // the database.
-    keys.filter(key => /\d/.test(key)).sort().forEach((key, index) => {
-      // This godawful mess assures TypeScript that we are not trying to assign numbers to any of the
-      // other fields in the dataSeries object.
-      dataValues[key as keyof Omit<
-        Prisma.DataSeriesCreateWithoutGoalsInput,
-        'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' |
-        'editors' | 'viewers' | 'editGroups' | 'viewGroups'
-      >] = parseFloat(goal.dataSeries![index]);
+  if (goal.dataSeries?.length && goal.dataSeries.length <= 31) {
+    // The keys for the data values are `val2020`, `val2021`, etc. up to `val2050
+    let keys = goal.dataSeries.map((_, index) => `val${index + 2020}`);
+    keys.forEach((key, index) => {
+      let value = parseFloat(goal.dataSeries![index]);
+      // If the value is a number, add it to the dataValues object
+      if (!isNaN(value)) {
+        // This mess assures TypeScript that we are not trying to assign numbers to any of the
+        // other fields in the dataSeries object.
+        dataValues[key as keyof Omit<
+          Prisma.DataSeriesCreateWithoutGoalsInput,
+          'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' |
+          'editors' | 'viewers' | 'editGroups' | 'viewGroups'
+        >] = value;
+      }
     });
+  }
+  // If the data series is invalid, return an error
+  else if ((!goal.dataSeries?.length && !goal.dataSeriesId) || goal.dataSeries!.length > 31) {
+    return createResponse(
+      response,
+      JSON.stringify({
+        message: 'Invalid data series'
+      }),
+      { status: 400 }
+    );
   }
 
   // Create goal
@@ -113,12 +126,13 @@ export async function POST(request: NextRequest) {
           },
         },
         dataSeries: {
-          connectOrCreate: {
-            where: {
-              id: goal.dataSeriesId,
-            },
-            create: dataValues,
-          }
+          // The ability to connect to an existing data series is currently disabled
+          // connectOrCreate: {
+          //   where: {
+          //     id: goal.dataSeriesId,
+          //   },
+          create: dataValues,
+          // }
         },
       }
     });

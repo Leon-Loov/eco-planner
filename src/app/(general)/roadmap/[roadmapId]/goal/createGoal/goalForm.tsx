@@ -17,13 +17,19 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
       form.namedItem("viewGroups")
     )
 
+    // Convert the data series to an array of numbers, the actual parsing is done by the API
+    const dataSeriesInput = (form.namedItem("dataSeries") as HTMLInputElement)?.value
+    const dataSeries = dataSeriesInput.replaceAll(',', '.').split(/[\t;]/).map((value) => {
+      return value
+    })
+
     const formJSON = JSON.stringify({
       name: (form.namedItem("goalName") as HTMLInputElement)?.value,
       goalObject: (form.namedItem("goalObject") as HTMLInputElement)?.value,
       nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value,
       indicatorParameter: (form.namedItem("indicatorParameter") as HTMLInputElement)?.value,
       dataUnit: (form.namedItem("dataUnit") as HTMLInputElement)?.value,
-      dataSeries: (form.namedItem("dataSeries") as HTMLInputElement)?.value,
+      dataSeries: dataSeries,
       // This functionality is temporarily or permanently disabled
       // dataSeriesId: (form.namedItem("dataSeriesId") as HTMLInputElement)?.value,
       roadmapId: roadmapId,
@@ -64,6 +70,7 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
   return (
     <>
       <form onSubmit={handleSubmit}>
+        {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
         <input type="text" name="goalName" required id="goalName" />

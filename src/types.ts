@@ -23,23 +23,23 @@ export type GoalInput = {
   name: string;
   goalObject: string;
   // External IDs are UUIDs and thus strings, not numbers
-  nationalRoadmapId: string | null;
+  nationalRoadmapId: string | undefined;
   indicatorParameter: string;
   // This will be turned into an actual dataSeries object by the API
   // The expected input is a stringified array of floats
-  dataSeries: string[] | null;
+  dataSeries: string[] | undefined;
   // The unit of measurement for the data series, used when creating a new data series
-  dataUnit: string | null;
+  dataUnit: string | undefined;
   // In case the user wants to reference an existing data series instead of creating a new one
   // If both dataSeries and dataSeriesId are provided, dataSeriesId takes precedence
-  dataSeriesId: string | null;
+  dataSeriesId: string | undefined;
   // UUID for the roadmap this goal belongs to
-  roadmapId: string | null;
+  roadmapId: string | undefined;
   // Accepts lists of UUIDs for all of the following, to link them to the goal (optional)
-  editors: string[] | null;
-  viewers: string[] | null;
-  editGroups: string[] | null;
-  viewGroups: string[] | null;
+  editors: string[] | undefined;
+  viewers: string[] | undefined;
+  editGroups: string[] | undefined;
+  viewGroups: string[] | undefined;
 };
 
 export type ActionInput = {
