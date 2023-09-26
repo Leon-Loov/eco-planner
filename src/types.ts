@@ -1,14 +1,4 @@
-import { Prisma } from "@prisma/client";
-
-function exclude<Model, Key extends keyof Model>(
-  model: Model,
-  keys: Key[]
-): Omit<Model, Key> {
-  return Object.fromEntries(
-    Object.entries(model!).filter(([key]) => !keys.includes(key as Key))
-  ) as Omit<Model, Key>;
-}
-
+/** An object that implements the AccessControlled interface can be checked with the accessChecker function. */
 export interface AccessControlled {
   author: { id: string, username: string },
   editors: { id: string, username: string }[],
@@ -17,6 +7,7 @@ export interface AccessControlled {
   viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
 }
 
+/** Enum for the different access levels returned by the accessChecker function. */
 export enum AccessLevel {
   None = "",
   View = "VIEW",
@@ -24,6 +15,7 @@ export enum AccessLevel {
   Admin = "ADMIN",
 }
 
+/** The format of the data needed to create a new roadmap. */
 export type RoadmapInput = {
   name: string;
   isNational: boolean | undefined;
@@ -34,10 +26,11 @@ export type RoadmapInput = {
   viewGroups: string[] | undefined;
 }
 
+/** The format of the data needed to create a new goal. */
 export type GoalInput = {
   name: string;
   goalObject: string;
-  // External IDs are UUIDs and thus strings, not numbers
+  // IDs are UUIDs and thus strings, not numbers
   nationalRoadmapId: string | undefined;
   indicatorParameter: string;
   // This will be turned into an actual dataSeries object by the API
@@ -47,7 +40,8 @@ export type GoalInput = {
   dataUnit: string | undefined;
   // In case the user wants to reference an existing data series instead of creating a new one
   // If both dataSeries and dataSeriesId are provided, dataSeriesId takes precedence
-  dataSeriesId: string | undefined;
+  // Currently disabled
+  // dataSeriesId: string | undefined;
   // UUID for the roadmap this goal belongs to
   roadmapId: string | undefined;
   // Accepts lists of UUIDs for all of the following, to link them to the goal (optional)
@@ -57,6 +51,7 @@ export type GoalInput = {
   viewGroups: string[] | undefined;
 };
 
+/** The format of the data needed to create a new action. */
 export type ActionInput = {
   name: string;
   description: string;
@@ -72,17 +67,3 @@ export type ActionInput = {
   editGroups: string[] | null;
   viewGroups: string[] | null;
 }
-
-const goalWithRelations = Prisma.validator<Prisma.GoalArgs>()({
-  include: {
-    dataSeries: true,
-    author: true,
-    editors: true,
-    viewers: true,
-    editGroups: true,
-    viewGroups: true,
-    actions: true,
-    roadmaps: true,
-  },
-});
-export type GoalWithRelations = Prisma.GoalGetPayload<typeof goalWithRelations>;
