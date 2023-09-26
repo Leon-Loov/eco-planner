@@ -2,10 +2,10 @@ import { AccessControlled, AccessLevel } from "@/types";
 import { Data } from "./session";
 
 /**
- * 
- * @param item An object that implements the AccessControlled interface
+ * Checks if the user has access to an item and returns their access level. An empty string means no access.
+ * @param item An object that implements the `AccessControlled` interface
  * @param user The user object from the session
- * @returns A string representing the user's access level to the item; "", "VIEW", "EDIT", or "ADMIN"
+ * @returns A string representing the user's access level to the item; "", "VIEW", "EDIT", or "ADMIN", based on the `AccessLevel` enum
  */
 export default function accessChecker(item: AccessControlled, user: Data["user"]): AccessLevel {
   // User is not signed in
