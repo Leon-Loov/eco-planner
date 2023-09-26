@@ -1,18 +1,25 @@
-import getUserGroups from "@/functions/getUserGroups";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import CreateGoal from "./goalForm";
 import getOneRoadmap from "@/functions/getOneRoadmap";
+import accessChecker from "@/lib/accessChecker";
+import { notFound } from "next/navigation";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
-  let session = await getSessionData(cookies())
-  let userGroups: string[] = [...(await getUserGroups(session.user?.id!)), 'Public']
-  let roadmap = await getOneRoadmap(params.roadmapId)
+  const [session, roadmap] = await Promise.all([
+    getSessionData(cookies()),
+    getOneRoadmap(params.roadmapId)
+  ]);
+
+  // User must be signed in and have edit access to the roadmap, and the roadmap must exist
+  if (!roadmap || !session.user || !accessChecker(roadmap, session.user) || accessChecker(roadmap, session.user) === 'VIEW') {
+    return notFound();
+  }
 
   return (
     <>
       <h1>Skapa ny målbana {roadmap?.name ? `under "${roadmap.name}"` : ""}</h1>
-      <CreateGoal roadmapId={params.roadmapId} userGroups={userGroups} />
+      <CreateGoal roadmapId={params.roadmapId} userGroups={session.user.userGroups} />
     </>
   )
 }

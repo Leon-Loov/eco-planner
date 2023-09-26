@@ -1,18 +1,26 @@
-import { notFound } from "next/navigation"
-import getOneGoal from "@/functions/getOneGoal";
+import { notFound } from "next/navigation";
 import { NewActionButton } from "@/components/redirectButtons";
+import getOneRoadmap from "@/functions/getOneRoadmap";
+import { cookies } from "next/headers";
+import { getSessionData } from "@/lib/session";
+import accessChecker from "@/lib/accessChecker";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
-  let goal = await getOneGoal(params.goalId);
+  const [session, roadmap] = await Promise.all([
+    getSessionData(cookies()),
+    getOneRoadmap(params.roadmapId)
+  ]);
+
+  const goal = roadmap?.goals.find(goal => goal.id === params.goalId);
 
   // 404 if the goal doesn't exist or if the user doesn't have access to it
-  if (!goal) {
+  if (!goal || !accessChecker(goal, session.user)) {
     return notFound();
   }
 
   return (
     <>
-      <h1>{goal.name}</h1>
+      <h1>Målbana &quot;{goal.name}&quot;{roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
       <label htmlFor="action-table"><h2>Åtgärder</h2></label>
       <table id="action-table">
         <thead>
@@ -37,7 +45,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         </tbody>
       </table>
       <br />
-      <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
+      { // Only show the button if the user has edit access to the goal
+        (accessChecker(goal, session.user) === 'EDIT' || accessChecker(goal, session.user) === 'ADMIN') &&
+        <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
+      }
       <br />
     </>
   )

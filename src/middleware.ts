@@ -25,5 +25,18 @@ export async function middleware(req: NextRequest) {
     }
   }
 
+  if (
+    req.nextUrl.pathname.endsWith('/createRoadmap') ||
+    req.nextUrl.pathname.endsWith('/createRoadmap/') ||
+    req.nextUrl.pathname.endsWith('/createGoal') ||
+    req.nextUrl.pathname.endsWith('/createGoal/') ||
+    req.nextUrl.pathname.endsWith('/createAction') ||
+    req.nextUrl.pathname.endsWith('/createAction/')
+  ) {
+    if (!session.user?.isLoggedIn) {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+  }
+
   return res
 }

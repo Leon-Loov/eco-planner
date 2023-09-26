@@ -1,10 +1,13 @@
 import { NewRoadmapButton } from "@/components/redirectButtons";
 import getRoadmaps from "@/functions/getRoadmaps";
-import { Goal, Roadmap } from "@prisma/client"
+import { getSessionData } from "@/lib/session";
+import { cookies } from "next/headers";
 
 export default async function Page() {
-  let roadmaps: (Roadmap & { goals: Goal[] })[] = [];
-  roadmaps = await getRoadmaps();
+  const [session, roadmaps] = await Promise.all([
+    getSessionData(cookies()),
+    getRoadmaps()
+  ]);
 
   let nationalRoadmaps = roadmaps.filter(roadmap => roadmap.isNational)
   let regionalRoadmaps = roadmaps.filter(roadmap => !roadmap.isNational)
@@ -45,7 +48,10 @@ export default async function Page() {
       </tbody>
     </table>
     <br />
-    <NewRoadmapButton />
+    { // Only show the new roadmap button if the user is logged in
+      session.user &&
+      <NewRoadmapButton />
+    }
     <br />
   </>
 }

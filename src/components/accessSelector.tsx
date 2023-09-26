@@ -18,7 +18,7 @@ export default function AccessSelector({ groupOptions }: { groupOptions: string[
       <br />
       <EditGroups groupOptions={groupOptions} />
       <br />
-      <ViewGroups groupOptions={groupOptions} />
+      <ViewGroups groupOptions={[...groupOptions, 'Public']} />
     </>
   )
 }
