@@ -18,6 +18,11 @@ export default async function getOneRoadmap(id: string) {
     goals: (Goal & {
       actions: Action[],
       dataSeries: DataSeries | null,
+      author: { id: string, username: string },
+      editors: { id: string, username: string }[],
+      viewers: { id: string, username: string }[],
+      editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+      viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
     })[],
     author: { id: string, username: string },
     editors: { id: string, username: string }[],
@@ -36,6 +41,11 @@ export default async function getOneRoadmap(id: string) {
             include: {
               actions: true,
               dataSeries: true,
+              author: { select: { id: true, username: true } },
+              editors: { select: { id: true, username: true } },
+              viewers: { select: { id: true, username: true } },
+              editGroups: { include: { users: { select: { id: true, username: true } } } },
+              viewGroups: { include: { users: { select: { id: true, username: true } } } },
             }
           },
           author: { select: { id: true, username: true } },
@@ -76,6 +86,11 @@ export default async function getOneRoadmap(id: string) {
             include: {
               actions: true,
               dataSeries: true,
+              author: { select: { id: true, username: true } },
+              editors: { select: { id: true, username: true } },
+              viewers: { select: { id: true, username: true } },
+              editGroups: { include: { users: { select: { id: true, username: true } } } },
+              viewGroups: { include: { users: { select: { id: true, username: true } } } },
             }
           },
           author: { select: { id: true, username: true } },
@@ -110,6 +125,11 @@ export default async function getOneRoadmap(id: string) {
           include: {
             actions: true,
             dataSeries: true,
+            author: { select: { id: true, username: true } },
+            editors: { select: { id: true, username: true } },
+            viewers: { select: { id: true, username: true } },
+            editGroups: { include: { users: { select: { id: true, username: true } } } },
+            viewGroups: { include: { users: { select: { id: true, username: true } } } },
           }
         },
         author: { select: { id: true, username: true } },
