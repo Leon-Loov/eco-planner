@@ -22,8 +22,8 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return (
     <>
-      <h1>Skapa ny målbana {roadmap?.name ? `under "${roadmap.name}"` : ""}</h1>
-      <GoalForm roadmapId={params.roadmapId} userGroups={session.user.userGroups} nationalRoadmaps={nationalRoadmaps} />
+      <h1>Skapa ny målbana{roadmap?.name ? ` under "${roadmap.name}"` : null}</h1>
+      <GoalForm roadmapId={params.roadmapId} user={session.user} nationalRoadmaps={nationalRoadmaps} />
     </>
   )
 }

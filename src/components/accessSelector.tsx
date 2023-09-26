@@ -1,8 +1,9 @@
 'use client'
 
+import { AccessControlled } from "@/types";
 import { Fragment, useState } from "react";
 
-export default function AccessSelector({ groupOptions }: { groupOptions: string[] }) {
+export default function AccessSelector({ groupOptions, currentAccess }: { groupOptions: string[], currentAccess?: AccessControlled | undefined }) {
   return (
     <>
       <details open>

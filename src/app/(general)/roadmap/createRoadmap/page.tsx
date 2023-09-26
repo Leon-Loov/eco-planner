@@ -1,5 +1,5 @@
 import { getSessionData } from '@/lib/session';
-import CreateRoadmap from './createRoadmap';
+import RoadmapForm from './roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
@@ -14,7 +14,7 @@ export default async function Page() {
   return (
     <>
       <h1>Skapa en ny färdplan</h1>
-      <CreateRoadmap user={session.user} userGroups={session.user?.userGroups} />
+      <RoadmapForm user={session.user} userGroups={session.user?.userGroups} />
     </>
   )
 }

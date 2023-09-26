@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   return (
     <>
       <h1>Skapa ny åtgärd {roadmap ? `under målbanan "${goal?.name || "namn saknas"}" i "${roadmap.name}"` : ""}</h1>
-      <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} userGroups={session.user.userGroups} />
+      <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} user={session.user} />
     </>
   )
 }

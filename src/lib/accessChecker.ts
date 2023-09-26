@@ -18,7 +18,7 @@ export default function accessChecker(item: AccessControlled, user: Data["user"]
   if (user?.isAdmin) return AccessLevel.Admin;
 
   // User is editor
-  if (item.author.id === user.id) return AccessLevel.Edit;
+  if (item.author?.id === user.id) return AccessLevel.Edit;
   if (item.editors?.map(editor => editor.id).includes(user.id)) return AccessLevel.Edit;
   if (item.editGroups?.map(group => group.name).some(name => user.userGroups?.includes(name))) return AccessLevel.Edit;
 

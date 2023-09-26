@@ -1,6 +1,7 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import { Data } from "@/lib/session"
 import Tooltip from "@/lib/tooltipWrapper"
 import { AccessControlled } from "@/types"
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
@@ -8,12 +9,12 @@ import { useState } from "react"
 
 export default function GoalForm({
   roadmapId,
-  userGroups,
+  user,
   nationalRoadmaps,
   currentGoal,
 }: {
   roadmapId: string,
-  userGroups: string[],
+  user: Data['user'],
   nationalRoadmaps: (Roadmap & { goals: Goal[] })[],
   currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries },
 }) {
@@ -37,12 +38,12 @@ export default function GoalForm({
     })
 
     const formJSON = JSON.stringify({
-      name: (form.namedItem("goalName") as HTMLInputElement)?.value,
-      goalObject: (form.namedItem("goalObject") as HTMLInputElement)?.value,
-      nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value || undefined,
-      nationalGoalId: (form.namedItem("nationalGoalId") as HTMLInputElement)?.value || undefined,
-      indicatorParameter: (form.namedItem("indicatorParameter") as HTMLInputElement)?.value,
-      dataUnit: (form.namedItem("dataUnit") as HTMLInputElement)?.value,
+      name: (form.namedItem("goalName") as HTMLInputElement)?.value || null,
+      goalObject: (form.namedItem("goalObject") as HTMLInputElement)?.value || null,
+      nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value || null,
+      nationalGoalId: (form.namedItem("nationalGoalId") as HTMLInputElement)?.value || null,
+      indicatorParameter: (form.namedItem("indicatorParameter") as HTMLInputElement)?.value || null,
+      dataUnit: (form.namedItem("dataUnit") as HTMLInputElement)?.value || null,
       dataSeries: dataSeries,
       // This functionality is temporarily or permanently disabled
       // dataSeriesId: (form.namedItem("dataSeriesId") as HTMLInputElement)?.value,
@@ -56,7 +57,8 @@ export default function GoalForm({
     console.log(formJSON)
 
     fetch('/api/createGoal', {
-      method: 'POST',
+      // If a goal is being edited, use PUT instead of POST
+      method: currentGoal ? 'PUT' : 'POST',
       body: formJSON,
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => {
@@ -85,20 +87,43 @@ export default function GoalForm({
 
   const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(null)
 
+  let dataArray: (number | null)[] = []
+  if (currentGoal?.dataSeries) {
+    for (let i in currentGoal.dataSeries) {
+      // All keys in dataSeries containing numbers are part of the data series itself and should be fine to push to the array
+      if (i.match(/[0-9]+/)) {
+        // This line *should* start complaining if we add any keys to DataSeries that are not part of the data series, unless the value is a number
+        dataArray.push(currentGoal.dataSeries[i as keyof Omit<DataSeries, 'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' | 'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId'>])
+      }
+    }
+  }
+  const dataSeriesString = dataArray.join(';')
+
+  let currentAccess: AccessControlled | undefined = undefined;
+  if (currentGoal) {
+    currentAccess = {
+      author: currentGoal.author,
+      editors: currentGoal.editors,
+      viewers: currentGoal.viewers,
+      editGroups: currentGoal.editGroups,
+      viewGroups: currentGoal.viewGroups,
+    }
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
-        <input type="text" name="goalName" required id="goalName" />
+        <input type="text" name="goalName" required id="goalName" defaultValue={currentGoal?.name} />
         <br />
         <label htmlFor="goalObject">Målobjekt: </label>
-        <input type="text" name="goalObject" required title="Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation." id="goalObject" />
+        <input type="text" name="goalObject" required title="Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation." id="goalObject" defaultValue={currentGoal?.goalObject} />
         <br />
         <label htmlFor="nationalRoadmapId">Nationell färdplan denna är baserad på (om någon): </label>
         {/* TODO: Make this a dropdown with options from the database and proper IDs as values */}
-        <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)}>
+        <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)} defaultValue={currentGoal?.nationalRoadmapId || undefined}>
           <option value="">Ingen nationell målbana</option>
           {nationalRoadmaps.map((roadmap) => {
             return (
@@ -111,7 +136,7 @@ export default function GoalForm({
           selectedRoadmap &&
           <>
             <label htmlFor="nationalGoalId">Målbana i den nationella färdplanen denna är baserad på (om någon): </label>
-            <select name="nationalGoalId" id="nationalGoalId">
+            <select name="nationalGoalId" id="nationalGoalId" defaultValue={currentGoal?.nationalGoalId || undefined}>
               <option value="">Inget mål</option>
               { // Allows choosing the goals from the selected national roadmap
                 nationalRoadmaps.find((roadmap) => roadmap.id === selectedRoadmap)?.goals.map((goal) => {
@@ -125,7 +150,7 @@ export default function GoalForm({
         }
         {/* TODO: Make this a dropdown with actual indicator parameters, plus a 'custom' option that allows typing in a custom parameter */}
         <label htmlFor="indicatorParameter">LEAP parameter: </label>
-        <select name="indicatorParameter" required id="indicatorParameter">
+        <select name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined}>
           <option value="">Välj indikatorparameter</option>
           <option value="Test">Indikatorparameter 1</option>
           <option value="Thing">Indikatorparameter 2</option>
@@ -133,7 +158,7 @@ export default function GoalForm({
         </select>
         <br />
         <label htmlFor="dataUnit">Enhet för dataserie: </label>
-        <input type="text" name="dataUnit" required id="dataUnit" />
+        <input type="text" name="dataUnit" required id="dataUnit" defaultValue={currentGoal?.dataSeries.unit} />
         <br />
         <details>
           <summary>
@@ -152,7 +177,7 @@ export default function GoalForm({
         <input type="text" name="dataSeries" required id="dataSeries"
           pattern={dataSeriesPattern}
           title="Använd numeriska värden separerade med semikolon eller tab. Decimaltal kan använda antingen punkt eller komma."
-          style={{ width: 'auto' }}
+          defaultValue={dataSeriesString}
         />
         <br />
         {/* This functionality is temporarily or permanently disabled */}
@@ -165,8 +190,13 @@ export default function GoalForm({
           <option value="3">Dataserie 3</option>
         </select>
         <br /> */}
-        <AccessSelector groupOptions={userGroups} />
-        <br />
+        { // Only show the access selector if a new goal is being created, the user is an admin, or the user is the author of the goal.
+          (!currentGoal || user?.isAdmin || currentGoal.authorId === user?.id) &&
+          <>
+            <AccessSelector groupOptions={user?.userGroups || []} currentAccess={currentAccess} />
+            <br />
+          </>
+        }
         <input type="submit" value="Skapa målbana" />
         <Tooltip anchorSelect="#goalObject">
           Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
