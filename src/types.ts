@@ -32,6 +32,7 @@ export type GoalInput = {
   goalObject: string;
   // IDs are UUIDs and thus strings, not numbers
   nationalRoadmapId: string | undefined;
+  nationalGoalId: string | undefined;
   indicatorParameter: string;
   // This will be turned into an actual dataSeries object by the API
   // The expected input is a stringified array of floats

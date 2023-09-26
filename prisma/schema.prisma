@@ -22,6 +22,10 @@ model Action {
   name            String
   // Longer description of action
   description     String @db.Text
+  // // The year the action is planned to start
+  // startYear       Int?   @map("start_year")
+  // // The year the action is planned to end
+  // endYear         Int?   @map("end_year")
   // Cost efficiency, dunno what more to say, it's a text field
   costEfficiency  String @map("cost_efficiency") @db.Text
   // Expected outcome, describe what you expect to happen
@@ -94,6 +98,8 @@ model Goal {
   // The ID of the national roadmap this goal is related to
   // TODO: check where these are hosted or if we need to host them ourselves
   nationalRoadmapId  String? @map("national_roadmap_id")
+  // The ID of the national goal this goal is related to
+  nationalGoalId     String? @map("national_goal_id")
   // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas", as defined by LEAP
   // TODO: Add a list of predefined categories to choose from, in addition to allowing custom categories
   indicatorParameter String  @map("indicator_parameter") @db.Text

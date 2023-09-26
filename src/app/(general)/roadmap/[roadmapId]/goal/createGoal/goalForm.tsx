@@ -2,8 +2,21 @@
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
 import Tooltip from "@/lib/tooltipWrapper"
+import { AccessControlled } from "@/types"
+import { DataSeries, Goal, Roadmap } from "@prisma/client"
+import { useState } from "react"
 
-export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: string, userGroups: string[] }) {
+export default function GoalForm({
+  roadmapId,
+  userGroups,
+  nationalRoadmaps,
+  currentGoal,
+}: {
+  roadmapId: string,
+  userGroups: string[],
+  nationalRoadmaps: (Roadmap & { goals: Goal[] })[],
+  currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries },
+}) {
   // Submit the form to the API
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -26,7 +39,8 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
     const formJSON = JSON.stringify({
       name: (form.namedItem("goalName") as HTMLInputElement)?.value,
       goalObject: (form.namedItem("goalObject") as HTMLInputElement)?.value,
-      nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value,
+      nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value || undefined,
+      nationalGoalId: (form.namedItem("nationalGoalId") as HTMLInputElement)?.value || undefined,
       indicatorParameter: (form.namedItem("indicatorParameter") as HTMLInputElement)?.value,
       dataUnit: (form.namedItem("dataUnit") as HTMLInputElement)?.value,
       dataSeries: dataSeries,
@@ -38,6 +52,8 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
       editGroups,
       viewGroups,
     })
+
+    console.log(formJSON)
 
     fetch('/api/createGoal', {
       method: 'POST',
@@ -67,6 +83,8 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
    */
   const dataSeriesPattern = "(([0-9]+([.,][0-9]+)?)?[\t;]){0,30}([0-9]+([.,][0-9]+)?)?"
 
+  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(null)
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -78,15 +96,33 @@ export default function CreateGoal({ roadmapId, userGroups }: { roadmapId: strin
         <label htmlFor="goalObject">Målobjekt: </label>
         <input type="text" name="goalObject" required title="Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation." id="goalObject" />
         <br />
-        <label htmlFor="nationalRoadmapId">Nationell målbana denna är baserad på (om någon): </label>
+        <label htmlFor="nationalRoadmapId">Nationell färdplan denna är baserad på (om någon): </label>
         {/* TODO: Make this a dropdown with options from the database and proper IDs as values */}
-        <select name="nationalRoadmapId" required={false} id="nationalRoadmapId">
-          <option value={0}>Ingen nationell målbana</option>
-          <option value="1">Nationell målbana 1</option>
-          <option value="2">Nationell målbana 2</option>
-          <option value="3">Nationell målbana 3</option>
+        <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)}>
+          <option value="">Ingen nationell målbana</option>
+          {nationalRoadmaps.map((roadmap) => {
+            return (
+              <option key={roadmap.id} value={roadmap.id}>{roadmap.name}</option>
+            )
+          })}
         </select>
         <br />
+        { // If a national roadmap is selected, allow the user to choose a goal from that roadmap to base this goal on
+          selectedRoadmap &&
+          <>
+            <label htmlFor="nationalGoalId">Målbana i den nationella färdplanen denna är baserad på (om någon): </label>
+            <select name="nationalGoalId" id="nationalGoalId">
+              <option value="">Inget mål</option>
+              { // Allows choosing the goals from the selected national roadmap
+                nationalRoadmaps.find((roadmap) => roadmap.id === selectedRoadmap)?.goals.map((goal) => {
+                  return (
+                    <option key={goal.id} value={goal.id}>{goal.name}</option>
+                  )
+                })}
+            </select>
+            <br />
+          </>
+        }
         {/* TODO: Make this a dropdown with actual indicator parameters, plus a 'custom' option that allows typing in a custom parameter */}
         <label htmlFor="indicatorParameter">LEAP parameter: </label>
         <select name="indicatorParameter" required id="indicatorParameter">

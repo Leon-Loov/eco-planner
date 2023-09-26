@@ -29,7 +29,8 @@ export async function POST(request: NextRequest) {
     );
   }
   */
-  goal.dataSeriesId = goal.dataSeriesId || "";
+  // dataSeriesId is currently disabled
+  // goal.dataSeriesId = goal.dataSeriesId || "";
 
   // Validate session
   if (!session.user?.isLoggedIn) {
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
     });
   }
   // If the data series is invalid, return an error
-  else if ((!goal.dataSeries?.length && !goal.dataSeriesId) || goal.dataSeries!.length > 31) {
+  else if (!goal.dataSeries?.length || goal.dataSeries!.length > 31) {
     return createResponse(
       response,
       JSON.stringify({
@@ -101,7 +102,8 @@ export async function POST(request: NextRequest) {
       data: {
         name: goal.name,
         goalObject: goal.goalObject,
-        nationalRoadmapId: goal.nationalRoadmapId || null,
+        nationalRoadmapId: goal.nationalRoadmapId || undefined,
+        nationalGoalId: goal.nationalGoalId || undefined,
         indicatorParameter: goal.indicatorParameter,
         author: {
           connect: {

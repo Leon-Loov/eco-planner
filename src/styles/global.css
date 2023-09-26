@@ -3,3 +3,15 @@ td {
   border: 1px solid #000;
   padding: 8px;
 }
+
+input:invalid,
+select:invalid {
+  border: 1px solid red;
+  background-color: #ffdddd;
+}
+
+/* Adds a red asterisk to required fields on supported browsers (not firefox, as of 2023-09-26) */
+label:has(+input:required, +select:required)::after {
+  content: '*';
+  color: red;
+}
