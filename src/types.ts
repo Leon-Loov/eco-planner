@@ -9,6 +9,21 @@ function exclude<Model, Key extends keyof Model>(
   ) as Omit<Model, Key>;
 }
 
+export interface AccessControlled {
+  author: { id: string, username: string },
+  editors: { id: string, username: string }[],
+  viewers: { id: string, username: string }[],
+  editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+  viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+}
+
+export enum AccessLevel {
+  None = "",
+  View = "VIEW",
+  Edit = "EDIT",
+  Admin = "ADMIN",
+}
+
 export type RoadmapInput = {
   name: string;
   isNational: boolean | undefined;

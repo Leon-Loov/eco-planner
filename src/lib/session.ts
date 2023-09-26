@@ -8,6 +8,7 @@ export interface Data {
     username: string;
     isLoggedIn?: boolean;
     isAdmin?: boolean;
+    userGroups: string[];
   };
 }
 
