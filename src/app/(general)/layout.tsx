@@ -28,8 +28,9 @@ export default async function RootLayout({
         { // Link to admin page and a logout button if logged in
           user?.isLoggedIn &&
           <>
-            <br />
-            <AdminButton />
+            {/* Admin pages don't currently exist */}
+            {/* <br />
+            <AdminButton /> */}
             <br />
             <LogoutButton />
           </>
