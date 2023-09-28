@@ -4,6 +4,9 @@ import { AccessControlled } from "@/types";
 import { Fragment, useState } from "react";
 
 export default function AccessSelector({ groupOptions, currentAccess }: { groupOptions: string[], currentAccess?: AccessControlled | undefined }) {
+  // In case the groupOptions prop includes 'Public', remove it; it should never have editing access to an item
+  groupOptions = groupOptions.filter((group) => group !== 'Public')
+
   return (
     <>
       <details open>
