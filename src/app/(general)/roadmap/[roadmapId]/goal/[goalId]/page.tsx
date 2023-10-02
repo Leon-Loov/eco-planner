@@ -91,6 +91,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       { // Only show the chart if there are data points to show
         dataPoints.length > 0 &&
         <>
+          <h2>Dataserie</h2>
           <Chart
             options={chartOptions}
             series={[
