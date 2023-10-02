@@ -1,3 +1,5 @@
+import { DataSeries } from "@prisma/client";
+
 /** An object that implements the AccessControlled interface can be checked with the accessChecker function. */
 export interface AccessControlled {
   author: { id: string, username: string },
@@ -68,3 +70,17 @@ export type ActionInput = {
   editGroups: string[] | null;
   viewGroups: string[] | null;
 }
+
+/** A type with only the data fields of the data series object. Not dynamic, so might need to be updated if the data series object changes. */
+export type DataSeriesDataFields = Omit<
+  DataSeries,
+  'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' |
+  'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId'
+>;
+
+let dataFields: (keyof DataSeriesDataFields)[] = []
+for (let i = 2020; i <= 2050; i++) {
+  dataFields.push(`val${i}` as keyof DataSeriesDataFields)
+}
+/** An array containing the keys of the actual data fields in the data series object. Not dynamic, so might need to be updated if the data series object changes. */
+export const dataSeriesDataFieldNames = dataFields;
