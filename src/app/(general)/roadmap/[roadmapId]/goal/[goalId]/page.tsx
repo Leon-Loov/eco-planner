@@ -4,7 +4,7 @@ import getOneRoadmap from "@/functions/getOneRoadmap";
 import { cookies } from "next/headers";
 import { getSessionData } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
-import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
+import { AccessLevel, DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import Chart from "@/lib/chartWrapper";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
@@ -15,8 +15,13 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   const goal = roadmap?.goals.find(goal => goal.id === params.goalId);
 
+  let accessLevel: AccessLevel = AccessLevel.None;
+  if (goal) {
+    accessLevel = accessChecker(goal, session.user);
+  }
+
   // 404 if the goal doesn't exist or if the user doesn't have access to it
-  if (!goal || !accessChecker(goal, session.user)) {
+  if (!goal || !accessLevel) {
     return notFound();
   }
 
@@ -60,6 +65,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             <th>Kostnadseffektivitet</th>
             <th>Förväntat utfall</th>
             <th>Relevanta aktörer</th>
+            { // Only show project manager if the user has edit access to the goal
+              (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+              <th>Projektansvarig</th>
+            }
           </tr>
         </thead>
         <tbody>
@@ -70,6 +79,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
               <td>{action.costEfficiency}</td>
               <td>{action.expectedOutcome}</td>
               <td>{action.relevantActors}</td>
+              { // Only show project manager if the user has edit access to the goal
+                (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+                <td>{action.projectManager}</td>
+              }
             </tr>
           ))}
         </tbody>
