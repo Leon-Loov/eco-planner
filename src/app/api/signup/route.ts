@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Set user session
-  let user: { id: string; username: string; };
+  let user: { id: string; username: string; isAdmin: boolean; userGroups: { name: string; }[]; };
   try {
     user = await prisma.user.findUniqueOrThrow({
       where: {
@@ -80,6 +80,12 @@ export async function POST(request: NextRequest) {
       select: {
         id: true,
         username: true,
+        isAdmin: true,
+        userGroups: {
+          select: {
+            name: true,
+          }
+        },
       }
     });
   } catch (e) {
@@ -94,6 +100,8 @@ export async function POST(request: NextRequest) {
     id: user.id,
     username: user.username,
     isLoggedIn: true,
+    isAdmin: user.isAdmin,
+    userGroups: user.userGroups.map(group => group.name),
   };
 
   await session.save();
