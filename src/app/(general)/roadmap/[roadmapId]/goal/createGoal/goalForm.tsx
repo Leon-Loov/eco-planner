@@ -122,7 +122,6 @@ export default function GoalForm({
         <input type="text" name="goalObject" required title="Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation." id="goalObject" defaultValue={currentGoal?.goalObject} />
         <br />
         <label htmlFor="nationalRoadmapId">Nationell färdplan denna är baserad på (om någon): </label>
-        {/* TODO: Make this a dropdown with options from the database and proper IDs as values */}
         <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)} defaultValue={currentGoal?.nationalRoadmapId || undefined}>
           <option value="">Ingen nationell målbana</option>
           {nationalRoadmaps.map((roadmap) => {
@@ -173,7 +172,7 @@ export default function GoalForm({
           </p>
         </details>
         <label htmlFor="dataSeries">Dataserie: </label>
-        {/* TODO: Make this allow .csv files, and do parsing stuff and forced format if text */}
+        {/* TODO: Make this allow .csv files and possibly excel files */}
         <input type="text" name="dataSeries" required id="dataSeries"
           pattern={dataSeriesPattern}
           title="Använd numeriska värden separerade med semikolon eller tab. Decimaltal kan använda antingen punkt eller komma."
