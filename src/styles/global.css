@@ -1,11 +1,23 @@
-th,
-td {
+:root {
+  --background-color: white;
+  --accent-color: cornflowerblue;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: system-ui, 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+th, td {
   border: 1px solid #000;
   padding: 8px;
 }
 
-input:invalid,
-select:invalid {
+input:invalid, select:invalid {
   border: 1px solid red;
   background-color: #ffdddd;
 }
@@ -14,4 +26,24 @@ select:invalid {
 label:has(+input:required, +select:required)::after {
   content: '*';
   color: red;
+}
+
+/* Responsive Layout */
+.layout-main {
+  position: relative;
+  width: 1250px;
+  max-width: 100%;
+  margin: auto;
+  padding: 0 1em;
+  box-sizing: border-box;
+}
+
+/* Header */
+
+header {
+  position: sticky;
+  top: 0;
+  padding: 1em 0;
+  background-color: var(--background-color);
+  z-index: 9;
 }

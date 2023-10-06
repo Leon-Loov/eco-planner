@@ -1,4 +1,5 @@
 import { HomeButton, LoginButton } from '@/components/redirectButtons'
+import '@/styles/global.css'
 
 export default async function RootLayout({
   children,
@@ -8,11 +9,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
-        <br />
-        <HomeButton />
-        <br />
-        <LoginButton />
+        <header>
+          <div className='layout-main'>
+            <HomeButton />
+            <LoginButton />
+          </div>
+        </header>
+        <div className='layout-main'>
+          {children}
+        </div>
       </body>
     </html>
   )
