@@ -20,29 +20,31 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   return <>
     <h1>Färdplan &quot;{roadmap.name}&quot;{roadmap.isNational ? ", en nationell färdplan" : null}</h1>
     <label htmlFor="goalTable"><h2>Målbanor</h2></label>
-    <table id="goalTable">
-      <thead>
-        <tr>
-          <th id="goalName">Målbanenamn</th>
-          {/* TODO: Add indicators to headers with tooltips */}
-          <th id="goalObject">Målobjekt</th>
-          <th id="leapParameter">LEAP parameter</th>
-          <th id="dataUnit">Enhet för dataserie</th>
-          <th id="goalActions">Antal åtgärder</th>
-        </tr>
-      </thead>
-      <tbody>
-        {roadmap.goals.map(goal => (
-          <tr key={goal.id}>
-            <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name}</a></td>
-            <td>{goal.goalObject}</td>
-            <td>{goal.indicatorParameter}</td>
-            <td>{goal.dataSeries?.unit}</td>
-            <td>{goal.actions.length}</td>
+    <div className="overflow-x-scroll">
+      <table id="goalTable">
+        <thead>
+          <tr>
+            <th id="goalName">Målbanenamn</th>
+            {/* TODO: Add indicators to headers with tooltips */}
+            <th id="goalObject">Målobjekt</th>
+            <th id="leapParameter">LEAP parameter</th>
+            <th id="dataUnit">Enhet för dataserie</th>
+            <th id="goalActions">Antal åtgärder</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {roadmap.goals.map(goal => (
+            <tr key={goal.id}>
+              <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name}</a></td>
+              <td>{goal.goalObject}</td>
+              <td>{goal.indicatorParameter}</td>
+              <td>{goal.dataSeries?.unit}</td>
+              <td>{goal.actions.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
     <br />
     { // Only show the button if the user has edit access to the roadmap
       (accessChecker(roadmap, session.user) === 'EDIT' || accessChecker(roadmap, session.user) === 'ADMIN') &&

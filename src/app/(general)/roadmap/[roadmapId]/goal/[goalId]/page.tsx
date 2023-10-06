@@ -57,36 +57,38 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     <>
       <h1>Målbana &quot;{goal.name}&quot;{roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
       <label htmlFor="action-table"><h2>Åtgärder</h2></label>
-      <table id="action-table">
-        <thead>
-          <tr>
-            <th>Namn</th>
-            <th>Beskrivning</th>
-            <th>Kostnadseffektivitet</th>
-            <th>Förväntat utfall</th>
-            <th>Relevanta aktörer</th>
-            { // Only show project manager if the user has edit access to the goal
-              (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
-              <th>Projektansvarig</th>
-            }
-          </tr>
-        </thead>
-        <tbody>
-          {goal.actions.map(action => (
-            <tr key={action.id}>
-              <td>{action.name}</td>
-              <td>{action.description}</td>
-              <td>{action.costEfficiency}</td>
-              <td>{action.expectedOutcome}</td>
-              <td>{action.relevantActors}</td>
+      <div className="overflow-x-scroll">
+        <table id="action-table">
+          <thead>
+            <tr>
+              <th>Namn</th>
+              <th>Beskrivning</th>
+              <th>Kostnadseffektivitet</th>
+              <th>Förväntat utfall</th>
+              <th>Relevanta aktörer</th>
               { // Only show project manager if the user has edit access to the goal
                 (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
-                <td>{action.projectManager}</td>
+                <th>Projektansvarig</th>
               }
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {goal.actions.map(action => (
+              <tr key={action.id}>
+                <td>{action.name}</td>
+                <td>{action.description}</td>
+                <td>{action.costEfficiency}</td>
+                <td>{action.expectedOutcome}</td>
+                <td>{action.relevantActors}</td>
+                { // Only show project manager if the user has edit access to the goal
+                  (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+                  <td>{action.projectManager}</td>
+                }
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <br />
       { // Only show the chart if there are data points to show
         dataPoints.length > 0 &&

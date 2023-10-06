@@ -1,6 +1,8 @@
+/* General */
 :root {
   --background-color: white;
-  --accent-color: cornflowerblue;
+  --accent-color: #4a6741;
+  --accent-text: white;
 }
 
 body {
@@ -12,9 +14,37 @@ h1, h2, h3, h4, h5, h6 {
   font-family: system-ui, 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+.overflow-x-scroll { 
+  overflow-x: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.overflow-x-scroll::-webkit-scrollbar { /* Hide scrollbar for Chrome, Safari and Opera */
+  display: none;
+}
+
+/* Table styling*/
+table {
+  min-width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 3px;
+} 
+
+thead {
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+}
+
 th, td {
-  border: 1px solid #000;
-  padding: 8px;
+  padding: 1em;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #b8d8be;
 }
 
 input:invalid, select:invalid {

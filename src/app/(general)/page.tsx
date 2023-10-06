@@ -13,40 +13,44 @@ export default async function Page() {
   let regionalRoadmaps = roadmaps.filter(roadmap => !roadmap.isNational)
 
   return <>
-    <h1>Nationella färdplaner</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Namn</th>
-          <th>Antal mål</th>
-        </tr>
-      </thead>
-      <tbody>
-        {nationalRoadmaps.map(roadmap => (
-          <tr key={roadmap.id}>
-            <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
-            <td>{roadmap.goals.length}</td>
+    <h2>Nationella färdplaner</h2>
+    <div className="overflow-x-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Namn</th>
+            <th>Antal mål</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-    <h1>Regionala färdplaner</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Namn</th>
-          <th>Antal mål</th>
-        </tr>
-      </thead>
-      <tbody>
-        {regionalRoadmaps.map(roadmap => (
-          <tr key={roadmap.id}>
-            <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
-            <td>{roadmap.goals.length}</td>
+        </thead>
+        <tbody>
+          {nationalRoadmaps.map(roadmap => (
+            <tr key={roadmap.id}>
+              <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
+              <td>{roadmap.goals.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <h2>Regionala färdplaner</h2>
+    <div className="overflow-x-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Namn</th>
+            <th>Antal mål</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {regionalRoadmaps.map(roadmap => (
+            <tr key={roadmap.id}>
+              <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
+              <td>{roadmap.goals.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
     <br />
     { // Only show the new roadmap button if the user is logged in
       session.user &&
