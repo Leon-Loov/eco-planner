@@ -80,7 +80,7 @@ export default function RoadmapForm({
             <label htmlFor="isNational">Är färdplanen en nationell färdplan?</label>
             <input type="checkbox" name="isNational" id="isNational" defaultChecked={currentRoadmap?.isNational} />
             <Tooltip anchorSelect="label[for=isNational], #isNational">
-              Nationella färdplaner hamnar i en separat lista från regionala färdplaner.
+              En nationell färdplan är de som de regionala och kommunala färdplanerna utgår och förhåller sig till.
             </Tooltip>
           </>
         }
