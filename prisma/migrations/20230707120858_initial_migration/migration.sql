@@ -73,7 +73,7 @@ CREATE TABLE `data_series` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Roadmap` (
+CREATE TABLE `roadmap` (
     `id` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -292,7 +292,7 @@ ALTER TABLE `goal` ADD CONSTRAINT `goal_author_id_fkey` FOREIGN KEY (`author_id`
 ALTER TABLE `data_series` ADD CONSTRAINT `data_series_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Roadmap` ADD CONSTRAINT `Roadmap_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `roadmap` ADD CONSTRAINT `roadmap_author_id_fkey` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_action_goal` ADD CONSTRAINT `_action_goal_A_fkey` FOREIGN KEY (`A`) REFERENCES `action`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -352,7 +352,7 @@ ALTER TABLE `_goal_view_groups` ADD CONSTRAINT `_goal_view_groups_B_fkey` FOREIG
 ALTER TABLE `_roadmap_goal` ADD CONSTRAINT `_roadmap_goal_A_fkey` FOREIGN KEY (`A`) REFERENCES `goal`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_roadmap_goal` ADD CONSTRAINT `_roadmap_goal_B_fkey` FOREIGN KEY (`B`) REFERENCES `Roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_roadmap_goal` ADD CONSTRAINT `_roadmap_goal_B_fkey` FOREIGN KEY (`B`) REFERENCES `roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_data_series_editors` ADD CONSTRAINT `_data_series_editors_A_fkey` FOREIGN KEY (`A`) REFERENCES `data_series`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -379,25 +379,25 @@ ALTER TABLE `_data_series_view_groups` ADD CONSTRAINT `_data_series_view_groups_
 ALTER TABLE `_data_series_view_groups` ADD CONSTRAINT `_data_series_view_groups_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_roadmap_editors` ADD CONSTRAINT `_roadmap_editors_A_fkey` FOREIGN KEY (`A`) REFERENCES `Roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_roadmap_editors` ADD CONSTRAINT `_roadmap_editors_A_fkey` FOREIGN KEY (`A`) REFERENCES `roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_roadmap_editors` ADD CONSTRAINT `_roadmap_editors_B_fkey` FOREIGN KEY (`B`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_roadmap_edit_groups` ADD CONSTRAINT `_roadmap_edit_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `Roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_roadmap_edit_groups` ADD CONSTRAINT `_roadmap_edit_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_roadmap_edit_groups` ADD CONSTRAINT `_roadmap_edit_groups_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_roadmap_viewers` ADD CONSTRAINT `_roadmap_viewers_A_fkey` FOREIGN KEY (`A`) REFERENCES `Roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_roadmap_viewers` ADD CONSTRAINT `_roadmap_viewers_A_fkey` FOREIGN KEY (`A`) REFERENCES `roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_roadmap_viewers` ADD CONSTRAINT `_roadmap_viewers_B_fkey` FOREIGN KEY (`B`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_roadmap_view_groups` ADD CONSTRAINT `_roadmap_view_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `Roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_roadmap_view_groups` ADD CONSTRAINT `_roadmap_view_groups_A_fkey` FOREIGN KEY (`A`) REFERENCES `roadmap`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_roadmap_view_groups` ADD CONSTRAINT `_roadmap_view_groups_B_fkey` FOREIGN KEY (`B`) REFERENCES `user_group`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

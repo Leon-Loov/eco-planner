@@ -219,6 +219,8 @@ model Roadmap {
   viewers    User[]      @relation("roadmap_viewers")
   // Groups of users who are allowed to view this roadmap
   viewGroups UserGroup[] @relation("roadmap_view_groups")
+
+  @@map("roadmap")
 }
 
 model User {
