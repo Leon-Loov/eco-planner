@@ -47,17 +47,6 @@ tbody tr:nth-child(odd) {
   background-color: #b8d8be;
 }
 
-input:invalid, select:invalid {
-  border: 1px solid red;
-  background-color: #ffdddd;
-}
-
-/* Adds a red asterisk to required fields on supported browsers (not firefox, as of 2023-09-26) */
-label:has(+input:required, +select:required)::after {
-  content: '*';
-  color: red;
-}
-
 /* Responsive Layout */
 .layout-main {
   position: relative;
@@ -76,4 +65,60 @@ header {
   padding: 1em 0;
   background-color: var(--background-color);
   z-index: 9;
+}
+
+/* Forms */
+
+.user-info-form { /* Login / signup */
+  margin: 5em 0;
+  padding: 2em;
+  box-sizing: border-box;
+  box-shadow: 0 0 1em #ececec;
+  border-radius: .5em;
+}
+
+.user-info-form > form > input[type="text"], .user-info-form > form > input[type="password"], .user-info-form > form > input[type="email"] {
+  display: block;
+  margin: 1em 0;
+  padding: 1em;
+  width: 100%;
+  border-radius: 3px;
+  border: unset;
+  background-color: #ececec;
+  box-sizing: border-box;
+}
+
+.user-info-form > form > input[type="submit"] {
+  margin: .5em 0;
+  display: block;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  padding: .75em 5em;
+  border: unset;
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+  border-radius: 3px;
+}
+
+/* Adds a red asterisk to required fields on supported browsers (not firefox, as of 2023-09-26) */
+label:has(+input:required, +select:required)::after {
+  content: '*';
+  color: red;
+}
+
+/**/
+.image {
+  background-color: lightgray;
+  border-radius: .25em 0 0 .25em;
+  width: 4em;
+  height: 3em;
+  display: grid;
+  place-items: center;
+}
+
+.image > img  {
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
 }

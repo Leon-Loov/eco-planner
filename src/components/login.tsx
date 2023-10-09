@@ -1,4 +1,6 @@
 'use client'
+import {  SignupButton } from '@/components/redirectButtons'
+
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -28,15 +30,19 @@ function handleSubmit(event: any) {
 export default function Login() {
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username: </label>
-        <input type="text" name="username" required id="username" autoComplete="username" />
-        <br />
-        <label htmlFor="password">Password: </label>
-        <input type="password" name="password" required id="password" autoComplete="current-password" />
-        <br />
-        <input type="submit" />
-      </form>
+      <main className="user-info-form">
+        <h1>Logga In</h1>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="username">Username </label>
+          <input type="text" name="username" required id="username" autoComplete="username" />
+          <br />
+          <label htmlFor="password">Password </label>
+          <input type="password" name="password" required id="password" autoComplete="current-password" />
+          <br />
+          <input type="submit" value={'Logga In'}/>
+          <a href='/signup'>Skapa Konto</a>
+        </form>
+      </main>
     </>
   )
 }

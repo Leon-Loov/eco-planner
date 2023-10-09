@@ -29,18 +29,21 @@ function handleSubmit(event: any) {
 export default function Signup() {
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username: </label>
-        <input type="text" name="username" required id="username" autoComplete="username" />
-        <br />
-        <label htmlFor="email">Email: </label>
-        <input type="email" name="email" required id="email" autoComplete="email" />
-        <br />
-        <label htmlFor="password">Password: </label>
-        <input type="password" name="password" required id="password" autoComplete="new-password" />
-        <br />
-        <input type="submit" />
-      </form>
+      <main className="user-info-form">
+        <h1>Skapa Konto</h1>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="username">Username: </label>
+          <input type="text" name="username" required id="username" autoComplete="username" />
+          <br />
+          <label htmlFor="email">Email: </label>
+          <input type="email" name="email" required id="email" autoComplete="email" />
+          <br />
+          <label htmlFor="password">Password: </label>
+          <input type="password" name="password" required id="password" autoComplete="new-password" />
+          <br />
+          <input type="submit" value={'Skapa Konto'}/>
+        </form>
+      </main>
     </>
   )
 }
