@@ -85,7 +85,7 @@ export default function GoalForm({
    */
   const dataSeriesPattern = "(([0-9]+([.,][0-9]+)?)?[\t;]){0,30}([0-9]+([.,][0-9]+)?)?"
 
-  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(null)
+  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(currentGoal?.nationalRoadmapId || null)
 
   let dataArray: (number | null)[] = []
   if (currentGoal?.dataSeries) {
