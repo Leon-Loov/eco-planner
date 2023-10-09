@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   let roadmap: RoadmapInput = await request.json();
 
   // Validate request body
-  if (!roadmap.name) {
+  if (!roadmap.name || (!roadmap.county && !roadmap.isNational)) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -63,6 +63,8 @@ export async function POST(request: NextRequest) {
       data: {
         name: roadmap.name,
         isNational: roadmap.isNational,
+        county: roadmap.county,
+        municipality: roadmap.municipality,
         author: { connect: { id: session.user.id } },
         editors: { connect: editors },
         viewers: { connect: viewers },

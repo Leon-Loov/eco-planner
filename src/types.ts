@@ -21,6 +21,8 @@ export enum AccessLevel {
 export type RoadmapInput = {
   name: string;
   isNational: boolean | undefined;
+  county: string | undefined;
+  municipality: string | undefined;
   // Accepts lists of UUIDs for all of the following, to link them to the roadmap (optional)
   editors: string[] | undefined;
   viewers: string[] | undefined;

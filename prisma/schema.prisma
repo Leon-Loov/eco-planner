@@ -199,8 +199,12 @@ model Roadmap {
   // Name of roadmap
   name       String
   // Whether the roadmap is a national roadmap (true) or a local roadmap (false)
-  // National roadmaps should be uploaded through the admin interface (not implemented yet)
   isNational Boolean  @default(false) @map("is_national")
+
+  // The county the roadmap targets (if local)
+  county       String? @map("county")
+  // The municipality the roadmap targets (if local)
+  municipality String? @map("municipality")
 
   // Goals related to this roadmap
   goals      Goal[]      @relation("roadmap_goal")

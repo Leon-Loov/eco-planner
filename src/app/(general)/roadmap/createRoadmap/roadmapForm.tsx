@@ -1,10 +1,12 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import { countiesAndMunicipalities } from "@/lib/countiesAndMunicipalities"
 import { Data } from "@/lib/session"
 import Tooltip from "@/lib/tooltipWrapper"
 import { AccessControlled } from "@/types"
 import { Roadmap } from "@prisma/client"
+import { useState } from "react"
 
 export default function RoadmapForm({
   user,
@@ -29,8 +31,9 @@ export default function RoadmapForm({
 
     const formJSON = JSON.stringify({
       name: (form.namedItem("roadmapName") as HTMLInputElement)?.value,
-      // Converts the value to a boolean
-      isNational: !!(form.namedItem("isNational") as HTMLInputElement)?.value,
+      county: (form.namedItem("county") as HTMLInputElement)?.value == "National" ? undefined : (form.namedItem("county") as HTMLInputElement)?.value || undefined,
+      municipality: (form.namedItem("municipality") as HTMLInputElement)?.value == "Regional" ? undefined : (form.namedItem("municipality") as HTMLInputElement)?.value || undefined,
+      isNational: (form.namedItem("county") as HTMLInputElement)?.value == "National",
       editors: editUsers,
       viewers: viewUsers,
       editGroups,
@@ -55,6 +58,8 @@ export default function RoadmapForm({
     })
   }
 
+  const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.county || null)
+
   let currentAccess: AccessControlled | undefined = undefined;
   if (currentRoadmap) {
     currentAccess = {
@@ -74,18 +79,53 @@ export default function RoadmapForm({
         <label htmlFor="name">Namn på färdplanen: </label>
         <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
         <br />
-        { // This is a toggle to make the roadmap a national roadmap and should only be visible to admins
-          user?.isAdmin &&
+        <label htmlFor="county">Vilket län gäller färdplanen? </label>
+        <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)}>
+          <option value="">Välj län</option>
+          { // If the user is an admin, they can select the entire country to make a national roadmap
+            user?.isAdmin &&
+            <option value="National">Hela landet (nationell färdplan)</option>
+          }
+          {
+            Object.keys(countiesAndMunicipalities).map((county) => {
+              return (
+                <option key={county} value={county}>{county}</option>
+              )
+            })
+          }
+        </select>
+        <br />
+        { // If a county is selected, show a dropdown for municipalities in that county
+          selectedCounty && selectedCounty !== "National" &&
           <>
-            <label htmlFor="isNational">Är färdplanen en nationell färdplan?</label>
-            <input type="checkbox" name="isNational" id="isNational" defaultChecked={currentRoadmap?.isNational} />
-            <Tooltip anchorSelect="label[for=isNational], #isNational">
-              En nationell färdplan är de som de regionala och kommunala färdplanerna utgår och förhåller sig till.
-            </Tooltip>
+            <label htmlFor="municipality">Vilken kommun gäller färdplanen? </label>
+            <select name="municipality" id="municipality">
+              <option value="">Välj kommun</option>
+              <option value="Regional">Hela länet</option>
+              {
+                countiesAndMunicipalities[selectedCounty as keyof typeof countiesAndMunicipalities].map((municipality) => {
+                  return (
+                    <option key={municipality} value={municipality}>{municipality}</option>
+                  )
+                })
+              }
+            </select>
+            <br />
           </>
         }
+        { // This option is now incorporated into the county and municipality dropdowns
+          // This is a toggle to make the roadmap a national roadmap and should only be visible to admins
+          // user?.isAdmin &&
+          // <>
+          //   <label htmlFor="isNational">Är färdplanen en nationell färdplan?</label>
+          //   <input type="checkbox" name="isNational" id="isNational" defaultChecked={currentRoadmap?.isNational} />
+          //   <Tooltip anchorSelect="label[for=isNational], #isNational">
+          //     En nationell färdplan är de som de regionala och kommunala färdplanerna utgår och förhåller sig till.
+          //   </Tooltip>
+          // </>
+        }
         <br />
-        {// Only show the access selector if a new roadmap is being created, the user is an admin, or the user has edit access to the roadmap
+        { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user has edit access to the roadmap
           (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
           <>
             <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
