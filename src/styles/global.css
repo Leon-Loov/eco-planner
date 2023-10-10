@@ -85,6 +85,12 @@ header {
   border-radius: .5em;
 }
 
+@media (max-width: 500px) {
+  .user-info-form {
+    box-shadow: unset;
+  }
+}
+
 .user-info-form > form > input[type="text"], .user-info-form > form > input[type="password"], .user-info-form > form > input[type="email"] {
   display: block;
   margin: 1em 0;
@@ -102,11 +108,14 @@ header {
   cursor: pointer;
   font-size: 1em;
   font-weight: bold;
-  padding: .75em 5em;
+  padding: .75em 0;
   border: unset;
   background-color: var(--accent-color);
   color: var(--accent-text);
   border-radius: 3px;
+  display: block;
+  width: 100%;
+  max-width: 10em;
 }
 
 /* Adds a red asterisk to required fields on supported browsers (not firefox, as of 2023-09-26) */
