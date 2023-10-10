@@ -25,17 +25,46 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     return notFound();
   }
 
-  let dataPoints = [];
+  let dataPoints: ApexAxisChartSeries = [];
+  let mainSeries = []
   if (goal.dataSeries) {
     for (let i of dataSeriesDataFieldNames) {
       if (goal.dataSeries[i as keyof DataSeriesDataFields]) {
-        dataPoints.push({
+        mainSeries.push({
           x: new Date(i.replace('val', '')).getTime(),
           y: goal.dataSeries[i as keyof DataSeriesDataFields]
         })
       }
     }
+    dataPoints.push({
+      name: 'Data',
+      data: mainSeries,
+      type: 'line',
+    })
   }
+
+  let actionDurations = []
+  for (let i in goal.actions) {
+    if (goal.actions[i].startYear || goal.actions[i].endYear) {
+      actionDurations.push({
+        x: new Date(goal.actions[i].startYear ?? 2020).getTime(),
+        y: null,
+      })
+      actionDurations.push({
+        x: new Date(goal.actions[i].startYear ?? 2020).getTime(),
+        y: i,
+      })
+      actionDurations.push({
+        x: new Date(goal.actions[i].endYear ?? 2050).getTime(),
+        y: i,
+      })
+    }
+  }
+  dataPoints.push({
+    name: 'Åtgärder',
+    data: actionDurations,
+    type: 'line',
+  })
 
   let chartOptions: ApexCharts.ApexOptions = {
     chart: { type: 'line' },
@@ -48,6 +77,18 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
       // categories: dataSeriesDataFieldNames.map(name => name.replace('val', ''))
     },
+    yaxis: [
+      {
+        seriesName: 'data',
+      },
+      {
+        seriesName: 'Åtgärder',
+        opposite: true,
+        max: goal.actions.length,
+        min: -1,
+        tickAmount: goal.actions.length + 1,
+      }
+    ],
     tooltip: {
       x: { format: 'yyyy' }
     },
@@ -96,12 +137,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           <h2>Dataserie</h2>
           <Chart
             options={chartOptions}
-            series={[
-              {
-                name: 'Data',
-                data: dataPoints,
-              }
-            ]}
+            series={dataPoints}
             type="line"
             width="90%"
             height="500"

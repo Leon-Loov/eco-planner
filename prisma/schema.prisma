@@ -22,10 +22,10 @@ model Action {
   name            String
   // Longer description of action
   description     String @db.Text
-  // // The year the action is planned to start
-  // startYear       Int?   @map("start_year")
-  // // The year the action is planned to end
-  // endYear         Int?   @map("end_year")
+  // The year the action is planned to start
+  startYear       Int?   @map("start_year")
+  // The year the action is planned to end
+  endYear         Int?   @map("end_year")
   // Cost efficiency, dunno what more to say, it's a text field
   costEfficiency  String @map("cost_efficiency") @db.Text
   // Expected outcome, describe what you expect to happen

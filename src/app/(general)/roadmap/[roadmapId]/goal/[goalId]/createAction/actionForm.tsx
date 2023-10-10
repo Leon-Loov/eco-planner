@@ -34,6 +34,8 @@ export default function ActionForm({
       description: (form.namedItem("actionDescription") as HTMLInputElement)?.value,
       costEfficiency: (form.namedItem("costEfficiency") as HTMLInputElement)?.value,
       expectedOutcome: (form.namedItem("expectedOutcome") as HTMLInputElement)?.value,
+      startYear: (form.namedItem("startYear") as HTMLInputElement)?.value ? parseInt((form.namedItem("startYear") as HTMLInputElement)?.value) : undefined,
+      endYear: (form.namedItem("endYear") as HTMLInputElement)?.value ? parseInt((form.namedItem("endYear") as HTMLInputElement)?.value) : undefined,
       projectManager: (form.namedItem("projectManager") as HTMLInputElement)?.value,
       relevantActors: (form.namedItem("relevantActors") as HTMLInputElement)?.value,
       goalId: goalId,
@@ -44,7 +46,8 @@ export default function ActionForm({
     })
 
     fetch('/api/createAction', {
-      method: 'POST',
+      // PUT if editing, POST if creating
+      method: currentAction ? 'PUT' : 'POST',
       body: formJSON,
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => {
@@ -85,6 +88,12 @@ export default function ActionForm({
         <br />
         <label htmlFor="expectedOutcome">Förväntat resultat: </label>
         <input type="text" name="expectedOutcome" required id="expectedOutcome" defaultValue={currentAction?.expectedOutcome} />
+        <br />
+        <label htmlFor="startYear">Planerat startår: </label>
+        <input type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} />
+        <br />
+        <label htmlFor="endYear">Planerat slutår: </label>
+        <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} />
         <br />
         <label htmlFor="projectManager">Projektansvarig: </label>
         <input type="text" name="projectManager" required id="projectManager" defaultValue={currentAction?.projectManager} />
