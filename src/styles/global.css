@@ -65,6 +65,12 @@ tbody a {
   box-sizing: border-box;
 }
 
+.flex-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* Header */
 
 header {
@@ -79,6 +85,17 @@ header nav {
   display: flex;
   gap: 1em;
   align-items: center;
+}
+
+.header-link{
+  text-decoration: unset;
+  color: black;
+  font-weight: bold;
+}
+
+.header-link:hover {
+  border-bottom: 3px solid var(--accent-color);
+  margin-bottom: -3px;
 }
 
 /* Forms */
@@ -131,7 +148,7 @@ label:has(+input:required, +select:required)::after {
   color: red;
 }
 
-/**/
+/* Change names, icons for input fields */
 .image {
   background-color: lightgray;
   border-radius: .25em 0 0 .25em;
@@ -145,4 +162,22 @@ label:has(+input:required, +select:required)::after {
   width: 50%;
   height: 50%;
   object-fit: contain;
+}
+
+/* Call to action links */
+
+.call-to-action-primary, .call-to-action-secondary {
+  border: 3px solid var(--accent-color);
+  text-decoration: unset;
+  color: black;
+  border-radius: 3px;
+  padding: .5em 2em;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.call-to-action-primary {
+  background-color: var(--accent-color);
+  color: var(--accent-text);
 }

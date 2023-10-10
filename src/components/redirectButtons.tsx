@@ -11,7 +11,7 @@ export function AdminButton() {
 export function HomeButton() {
   return (
     <>
-      <Link href="/"> Home </Link>
+      <Link href="/" className="header-link"> Home </Link>
     </>
   )
 }
@@ -19,7 +19,7 @@ export function HomeButton() {
 export function LoginButton() {
   return (
     <>
-      <Link href="/login"> Login </Link>
+      <Link href="/login" className="call-to-action-primary"> Login </Link>
     </>
   )
 }
@@ -27,7 +27,7 @@ export function LoginButton() {
 export function SignupButton() {
   return (
     <>
-      <Link href="/signup"> Sign up </Link>
+      <Link href="/signup" className="call-to-action-secondary"> Sign up </Link>
     </>
   )
 }
