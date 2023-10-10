@@ -1,6 +1,5 @@
 'use client'
-import {  SignupButton } from '@/components/redirectButtons'
-
+import Link from "next/link";
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -40,7 +39,7 @@ export default function Login() {
           <input type="password" name="password" required id="password" autoComplete="current-password" />
           <br />
           <input type="submit" value={'Logga In'}/>
-          <a href='/signup'>Skapa Konto</a>
+          <Link href='/signup'>Skapa Konto</Link>
         </form>
       </main>
     </>

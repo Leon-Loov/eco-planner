@@ -75,6 +75,12 @@ header {
   z-index: 9;
 }
 
+header nav {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+
 /* Forms */
 
 .user-info-form { /* Login / signup */
@@ -88,6 +94,7 @@ header {
 @media (max-width: 500px) {
   .user-info-form {
     box-shadow: unset;
+    padding: 2em 0;
   }
 }
 

@@ -15,23 +15,25 @@ export default async function RootLayout({
       <body>
         <header>
           <div className='layout-main'>
-            <HomeButton />
-            { // Link to login and signup if not logged in
-              !user?.isLoggedIn &&
-              <>
-                <LoginButton />
-                <SignupButton />
-              </>
-            }
-            { // Link to admin page and a logout button if logged in
-              user?.isLoggedIn &&
-              <>
-                {/* Admin pages don't currently exist */}
-                {/* <br />
-                <AdminButton /> */}
-                <LogoutButton />
-              </>
-            }
+            <nav>
+              <HomeButton />
+              { // Link to login and signup if not logged in
+                !user?.isLoggedIn &&
+                <>
+                  <LoginButton />
+                  <SignupButton />
+                </>
+              }
+              { // Link to admin page and a logout button if logged in
+                user?.isLoggedIn &&
+                <>
+                  {/* Admin pages don't currently exist */}
+                  {/* <br />
+                  <AdminButton /> */}
+                  <LogoutButton />
+                </>
+              }
+            </nav>
           </div>
         </header>
         <div className='layout-main'>

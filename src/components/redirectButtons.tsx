@@ -3,9 +3,7 @@ import Link from "next/link";
 export function AdminButton() {
   return (
     <>
-      <Link href="/admin">
-        <button>To Admin Page</button>
-      </Link>
+      <Link href="/admin"> To Admin Page </Link>
     </>
   )
 }
@@ -13,9 +11,7 @@ export function AdminButton() {
 export function HomeButton() {
   return (
     <>
-      <Link href="/">
-        <button>Home</button>
-      </Link>
+      <Link href="/"> Home </Link>
     </>
   )
 }
@@ -23,9 +19,7 @@ export function HomeButton() {
 export function LoginButton() {
   return (
     <>
-      <Link href="/login">
-        <button>Login</button>
-      </Link>
+      <Link href="/login"> Login </Link>
     </>
   )
 }
@@ -33,9 +27,7 @@ export function LoginButton() {
 export function SignupButton() {
   return (
     <>
-      <Link href="/signup">
-        <button>Sign up</button>
-      </Link>
+      <Link href="/signup"> Sign up </Link>
     </>
   )
 }

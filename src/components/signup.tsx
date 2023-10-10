@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link";
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -42,6 +43,7 @@ export default function Signup() {
           <input type="password" name="password" required id="password" autoComplete="new-password" />
           <br />
           <input type="submit" value={'Skapa Konto'}/>
+          <Link href='/login'>Logga in</Link>
         </form>
       </main>
     </>

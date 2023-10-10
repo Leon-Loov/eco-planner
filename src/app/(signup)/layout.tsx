@@ -1,4 +1,4 @@
-import { HomeButton, LoginButton } from '@/components/redirectButtons'
+import { HomeButton, LoginButton, SignupButton } from '@/components/redirectButtons'
 import '@/styles/global.css'
 
 export default async function RootLayout({
@@ -11,8 +11,11 @@ export default async function RootLayout({
       <body>
         <header>
           <div className='layout-main'>
-            <HomeButton />
-            <LoginButton />
+            <nav>
+              <HomeButton />
+              <LoginButton />
+              <SignupButton />
+            </nav>
           </div>
         </header>
         <div className='layout-main'>
