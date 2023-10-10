@@ -51,7 +51,7 @@ tbody tr:nth-child(even) {
   background-color: #eff9f1;
 }
 
-tbody > a {
+tbody a {
   color: black;
 }
 
