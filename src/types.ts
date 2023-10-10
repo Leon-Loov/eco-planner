@@ -62,6 +62,8 @@ export type ActionInput = {
   description: string;
   costEfficiency: string;
   expectedOutcome: string;
+  startYear: number;
+  endYear: number;
   projectManager: string;
   relevantActors: string;
   // UUID for the goal this goal belongs to

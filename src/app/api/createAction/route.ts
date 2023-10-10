@@ -56,6 +56,8 @@ export async function POST(request: NextRequest) {
         description: action.description,
         costEfficiency: action.costEfficiency,
         expectedOutcome: action.expectedOutcome,
+        startYear: action.startYear,
+        endYear: action.endYear,
         projectManager: action.projectManager,
         relevantActors: action.relevantActors,
         goals: {
