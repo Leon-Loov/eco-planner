@@ -34,10 +34,20 @@ export default function Login() {
           <h1>Logga In</h1>
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Användarnamn </label>
-            <input type="text" name="username" required id="username" autoComplete="username" />
+            <div className="flex-row">
+              <div className="image">
+                <img src="/icons/user.svg" alt="Användarnamn"/>
+              </div>
+              <input type="text" name="username" required id="username" autoComplete="username" />
+            </div>
             <br />
             <label htmlFor="password">Lösenord</label>
-            <input type="password" name="password" required id="password" autoComplete="current-password" />
+            <div className="flex-row">
+              <div className="image">
+                <img src="/icons/password.svg" alt="Lösenord"/>
+              </div>
+              <input type="password" name="password" required id="password" autoComplete="current-password" />
+            </div>
             <br />
             <input type="submit" value={'Logga In'}/>
             <Link href='/signup'>Skapa Konto</Link>

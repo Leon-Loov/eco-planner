@@ -35,13 +35,28 @@ export default function Signup() {
           <h1>Skapa Konto</h1>
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Användarnam </label>
-            <input type="text" name="username" required id="username" autoComplete="username" />
+            <div className="flex-row">
+              <div className="image">
+                <img src="/icons/user.svg" alt="Användarnamn"/>
+              </div>
+              <input type="text" name="username" required id="username" autoComplete="username" />
+            </div>
             <br />
             <label htmlFor="email">E-post </label>
-            <input type="email" name="email" required id="email" autoComplete="email" />
+            <div className="flex-row">
+              <div className="image">
+                <img src="/icons/email.svg" alt="Email Adress"/>
+              </div>
+              <input type="email" name="email" required id="email" autoComplete="email" />
+            </div>
             <br />
             <label htmlFor="password">Lösenord </label>
-            <input type="password" name="password" required id="password" autoComplete="new-password" />
+            <div className="flex-row">
+              <div className="image">
+                <img src="/icons/password.svg" alt="Lösenord"/>
+              </div>
+              <input type="password" name="password" required id="password" autoComplete="new-password" />
+            </div>
             <br />
             <input type="submit" value={'Skapa Konto'}/>
             <Link href='/login'>Logga in</Link>
