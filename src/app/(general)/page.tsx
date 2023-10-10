@@ -51,7 +51,7 @@ export default async function Page() {
         </tbody>
       </table>
     </div>
-    <br />
+    <br /><br />
     { // Only show the new roadmap button if the user is logged in
       session.user &&
       <NewRoadmapButton />

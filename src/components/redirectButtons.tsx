@@ -35,9 +35,7 @@ export function SignupButton() {
 export function NewActionButton({ roadmapId, goalId }: { roadmapId: string, goalId: string}) {
   return (
     <>
-      <Link href={`/roadmap/${roadmapId}/goal/${goalId}/createAction`}>
-        <button>Skapa ny åtgärd</button>
-      </Link>
+      <Link href={`/roadmap/${roadmapId}/goal/${goalId}/createAction`} className="call-to-action-primary"> Skapa ny åtgärd </Link>
     </>
   )
 }
@@ -45,9 +43,7 @@ export function NewActionButton({ roadmapId, goalId }: { roadmapId: string, goal
 export function NewGoalButton({ roadmapId }: { roadmapId: string }) {
   return (
     <>
-      <Link href={`/roadmap/${roadmapId}/goal/createGoal`}>
-        <button>Skapa ny målbana</button>
-      </Link>
+      <Link href={`/roadmap/${roadmapId}/goal/createGoal`} className="call-to-action-primary"> Skapa ny målbana </Link>
     </>
   )
 }
@@ -55,9 +51,7 @@ export function NewGoalButton({ roadmapId }: { roadmapId: string }) {
 export function NewRoadmapButton() {
   return (
     <>
-      <Link href="/roadmap/createRoadmap">
-        <button>Skapa ny färdplan</button>
-      </Link>
+      <Link href="/roadmap/createRoadmap" className="call-to-action-primary"> Skapa ny färdplan </Link>
     </>
   )
 }

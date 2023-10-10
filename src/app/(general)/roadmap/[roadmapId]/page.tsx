@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         </tbody>
       </table>
     </div>
-    <br />
+    <br /><br />
     { // Only show the button if the user has edit access to the roadmap
       (accessChecker(roadmap, session.user) === 'EDIT' || accessChecker(roadmap, session.user) === 'ADMIN') &&
       <NewGoalButton roadmapId={roadmap.id} />
