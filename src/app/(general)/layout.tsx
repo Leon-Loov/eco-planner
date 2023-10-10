@@ -3,6 +3,7 @@ import { AdminButton, HomeButton, LoginButton, SignupButton } from '@/components
 import { getSessionData } from '@/lib/session'
 import { cookies } from 'next/headers'
 import '@/styles/global.css'
+import Link from 'next/link'
 
 export default async function RootLayout({
   children,
@@ -15,7 +16,9 @@ export default async function RootLayout({
       <body>
         <header>
           <div className='layout-main flex-row flex-between'>
-            <strong></strong> {/* Add title if there is one in the future */}
+          <Link href='/' className='flex-row'>
+            <img src='/icons/leaf.svg' /> 
+          </Link>
             <nav>
               <HomeButton />
               { // Link to login and signup if not logged in
