@@ -134,7 +134,7 @@ header nav {
 @media (max-width: 500px) {
   .card {
     box-shadow: unset;
-    margin: 3em 0;
+    margin: 0;
   }
   .user-info-form {
     padding: 0;
