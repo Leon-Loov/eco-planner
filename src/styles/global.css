@@ -47,6 +47,14 @@ tbody tr:nth-child(odd) {
   background-color: #b8d8be;
 }
 
+tbody tr:nth-child(even) {
+  background-color: #eff9f1;
+}
+
+tbody > a {
+  color: black;
+}
+
 /* Responsive Layout */
 .layout-main {
   position: relative;
