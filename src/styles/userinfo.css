@@ -1,0 +1,82 @@
+/* For login and signup page */ 
+
+.card {
+    margin: 5em 0;
+    border-radius: .5em 0 0 .5em;
+    box-shadow: 0 0 1em #ececec;
+    box-sizing: border-box;
+}
+
+.user-info-form { /* Login / signup */
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+@media (max-width: 500px) {
+    .card {
+        box-shadow: unset;
+        margin: 0;
+    }
+    .user-info-form {
+        padding: 0;
+    }
+}
+
+.user-info-form > *, .user-info-form > form > * {
+    margin: 1em 0;
+}
+
+.user-info-form input[type="text"], .user-info-form input[type="password"], .user-info-form input[type="email"] {
+    display: block;
+    padding: 1em;
+    width: 100%;
+    border-radius: 0 3px 3px 0;
+    border: unset;
+    background-color: #ececec;
+    box-sizing: border-box;
+}
+
+.user-info-form input[type="submit"] {
+    display: block;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    padding: .75em 0;
+    border: unset;
+    background-color: var(--accent-color);
+    color: var(--accent-text);
+    border-radius: 3px;
+    display: block;
+    width: 100%;
+    max-width: 10em;
+}
+
+  /* Change names, icons for input fields, decorative image for login */
+.image {
+    background-color: lightgray;
+    border-radius: .25em 0 0 .25em;
+    width: 4em;
+    height: 3em;
+    display: grid;
+    place-items: center;
+}
+
+.image > img  {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+}
+
+.login-image {
+    width: 100%;
+    min-height: 100%;
+    height: 550px;
+    object-fit: cover;
+    border-radius: 0 .5em .5em 0;
+}
+
+@media (max-width: 750px) {
+    aside {
+        display: none;
+    }
+}

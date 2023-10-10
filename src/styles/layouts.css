@@ -1,0 +1,35 @@
+/* Main responsive layout */
+.layout-main { 
+    position: relative;
+    width: 1250px;
+    max-width: 100%;
+    margin: auto;
+    padding: 0 1em;
+    box-sizing: border-box;
+}
+
+/* Flex layouts */
+
+.flex-row {
+    display: flex;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+.flex-grow-100 {
+    flex-grow: 1;
+}
+
+.flex-grow-75 {
+    flex-grow: .75;
+}
+
+.flex-grow-50 {
+    flex-grow: .5;
+}
+
+.flex-grow-25 {
+    flex-grow: .25;
+}
