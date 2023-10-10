@@ -30,22 +30,27 @@ function handleSubmit(event: any) {
 export default function Signup() {
   return (
     <>
-      <main className="user-info-form">
-        <h1>Skapa Konto</h1>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username: </label>
-          <input type="text" name="username" required id="username" autoComplete="username" />
-          <br />
-          <label htmlFor="email">Email: </label>
-          <input type="email" name="email" required id="email" autoComplete="email" />
-          <br />
-          <label htmlFor="password">Password: </label>
-          <input type="password" name="password" required id="password" autoComplete="new-password" />
-          <br />
-          <input type="submit" value={'Skapa Konto'}/>
-          <Link href='/login'>Logga in</Link>
-        </form>
-      </main>
+      <div className="card flex-row">
+        <main className="user-info-form flex-grow-100">
+          <h1>Skapa Konto</h1>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="username">Användarnam </label>
+            <input type="text" name="username" required id="username" autoComplete="username" />
+            <br />
+            <label htmlFor="email">E-post </label>
+            <input type="email" name="email" required id="email" autoComplete="email" />
+            <br />
+            <label htmlFor="password">Lösenord </label>
+            <input type="password" name="password" required id="password" autoComplete="new-password" />
+            <br />
+            <input type="submit" value={'Skapa Konto'}/>
+            <Link href='/login'>Logga in</Link>
+          </form>
+        </main>
+        <aside className="flex-grow-25">
+          <img src="/images/login-background.jpg" alt="Decorative Leaf" className="login-image"/>
+        </aside>
+      </div>
     </>
   )
 }

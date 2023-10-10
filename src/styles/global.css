@@ -65,10 +65,28 @@ tbody a {
   box-sizing: border-box;
 }
 
-.flex-row-between {
+.flex-row {
   display: flex;
+}
+
+.flex-between {
   justify-content: space-between;
-  align-items: center;
+}
+
+.flex-grow-100 {
+  flex-grow: 1;
+}
+
+.flex-grow-75 {
+  flex-grow: .75;
+}
+
+.flex-grow-50 {
+  flex-grow: .5;
+}
+
+.flex-grow-25 {
+  flex-grow: .25;
 }
 
 /* Header */
@@ -100,24 +118,35 @@ header nav {
 
 /* Forms */
 
-.user-info-form { /* Login / signup */
+.card {
   margin: 5em 0;
+  border-radius: .5em 0 0 .5em;
+  box-shadow: 0 0 1em #ececec;
+  box-sizing: border-box;
+
+}
+
+.user-info-form { /* Login / signup */
   padding: 2em;
   box-sizing: border-box;
-  box-shadow: 0 0 1em #ececec;
-  border-radius: .5em;
 }
 
 @media (max-width: 500px) {
-  .user-info-form {
+  .card {
     box-shadow: unset;
-    padding: 2em 0;
+    margin: 3em 0;
   }
+  .user-info-form {
+    padding: 0;
+  }
+}
+
+.user-info-form > *, .user-info-form > form > * {
+  margin: 1em 0;
 }
 
 .user-info-form > form > input[type="text"], .user-info-form > form > input[type="password"], .user-info-form > form > input[type="email"] {
   display: block;
-  margin: 1em 0;
   padding: 1em;
   width: 100%;
   border-radius: 3px;
@@ -127,7 +156,6 @@ header nav {
 }
 
 .user-info-form > form > input[type="submit"] {
-  margin: .5em 0;
   display: block;
   cursor: pointer;
   font-size: 1em;
@@ -148,7 +176,7 @@ label:has(+input:required, +select:required)::after {
   color: red;
 }
 
-/* Change names, icons for input fields */
+/* Change names, icons for input fields, decorative image for login */
 .image {
   background-color: lightgray;
   border-radius: .25em 0 0 .25em;
@@ -162,6 +190,20 @@ label:has(+input:required, +select:required)::after {
   width: 50%;
   height: 50%;
   object-fit: contain;
+}
+
+.login-image {
+  width: 100%;
+  min-height: 100%;
+  height: 550px;
+  object-fit: cover;
+  border-radius: 0 .5em .5em 0;
+}
+
+@media (max-width: 750px) {
+  aside {
+    display: none;
+  }
 }
 
 /* Call to action links */

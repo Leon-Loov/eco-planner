@@ -29,19 +29,24 @@ function handleSubmit(event: any) {
 export default function Login() {
   return (
     <>
-      <main className="user-info-form">
-        <h1>Logga In</h1>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username </label>
-          <input type="text" name="username" required id="username" autoComplete="username" />
-          <br />
-          <label htmlFor="password">Password </label>
-          <input type="password" name="password" required id="password" autoComplete="current-password" />
-          <br />
-          <input type="submit" value={'Logga In'}/>
-          <Link href='/signup'>Skapa Konto</Link>
-        </form>
-      </main>
+      <div className="card flex-row">
+        <main className="user-info-form flex-grow-100">
+          <h1>Logga In</h1>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="username">Användarnamn </label>
+            <input type="text" name="username" required id="username" autoComplete="username" />
+            <br />
+            <label htmlFor="password">Lösenord</label>
+            <input type="password" name="password" required id="password" autoComplete="current-password" />
+            <br />
+            <input type="submit" value={'Logga In'}/>
+            <Link href='/signup'>Skapa Konto</Link>
+          </form>
+        </main>
+        <aside className="flex-grow-25">
+          <img src="/images/login-background.jpg" alt="Decorative Leaf" className="login-image"/>
+        </aside>
+      </div>
     </>
   )
 }

@@ -10,7 +10,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <header>
-          <div className='layout-main flex-row-between'>
+          <div className='layout-main flex-row flex-between'>
             <strong></strong> {/* Add title if there is one in the future */}
             <nav >
               <HomeButton />
