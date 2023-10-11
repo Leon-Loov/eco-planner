@@ -29,6 +29,5 @@ tbody tr:nth-child(even) {
 }
   
 tbody a {
-    color: black;
+    font-weight: bold;
 }
-  

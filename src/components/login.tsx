@@ -38,7 +38,7 @@ export default function Login() {
               <div className="image">
                 <img src="/icons/user.svg" alt="Användarnamn"/>
               </div>
-              <input type="text" name="username" required id="username" autoComplete="username" />
+              <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <br />
             <label htmlFor="password">Lösenord</label>
@@ -46,7 +46,7 @@ export default function Login() {
               <div className="image">
                 <img src="/icons/password.svg" alt="Lösenord"/>
               </div>
-              <input type="password" name="password" required id="password" autoComplete="current-password" />
+              <input type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
             </div>
             <br />
             <input type="submit" value={'Logga In'}/>

@@ -16,6 +16,12 @@ export default async function Page() {
     <img src="/images/moose.webp" alt="" style={{width: '100%', height: '300px', borderRadius: '.5em', marginTop: '1.5em', objectFit: 'cover' }} />
     <h1>Färdplaner</h1>
     <p>Beskrivning, vad är en färdplan?</p>
+    <br />
+    { // Only show the new roadmap button if the user is logged in
+      session.user &&
+      <NewRoadmapButton />
+    }
+    <br /><br />
     <section className="grid-auto-rows">
       <div>
         <h2>Nationella färdplaner</h2>
@@ -60,11 +66,5 @@ export default async function Page() {
         </div>
       </div>
     </section>
-    <br /><br />
-    { // Only show the new roadmap button if the user is logged in
-      session.user &&
-      <NewRoadmapButton />
-    }
-    <br />
   </>
 }

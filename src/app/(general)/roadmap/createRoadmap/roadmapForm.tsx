@@ -73,7 +73,7 @@ export default function RoadmapForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="roadmap-form">
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="name">Namn på färdplanen: </label>
@@ -132,7 +132,7 @@ export default function RoadmapForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa färdplan" />
+        <input type="submit" value="Skapa färdplan" className="call-to-action-primary" />
       </form>
     </>
   )

@@ -39,7 +39,7 @@ export default function Signup() {
               <div className="image">
                 <img src="/icons/user.svg" alt="Användarnamn"/>
               </div>
-              <input type="text" name="username" required id="username" autoComplete="username" />
+              <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <br />
             <label htmlFor="email">E-post </label>
@@ -47,7 +47,7 @@ export default function Signup() {
               <div className="image">
                 <img src="/icons/email.svg" alt="Email Adress"/>
               </div>
-              <input type="email" name="email" required id="email" autoComplete="email" />
+              <input type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
             </div>
             <br />
             <label htmlFor="password">Lösenord </label>
@@ -55,7 +55,7 @@ export default function Signup() {
               <div className="image">
                 <img src="/icons/password.svg" alt="Lösenord"/>
               </div>
-              <input type="password" name="password" required id="password" autoComplete="new-password" />
+              <input type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
             </div>
             <br />
             <input type="submit" value={'Skapa Konto'}/>
