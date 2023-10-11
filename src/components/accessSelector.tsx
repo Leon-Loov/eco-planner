@@ -15,14 +15,14 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
           För att lägga till en användare/grupp, skriv in namnet och tryck på enter.<br />
           För att ta bort en användare/grupp, checka ur rutan bredvid namnet.<br />
         </p>
+      
+        <div className="grid-auto-rows">
+          <EditUsers />
+          <ViewUsers />
+          <EditGroups groupOptions={groupOptions} />
+          <ViewGroups groupOptions={[...groupOptions, 'Public']} />
+        </div>
       </details>
-      <EditUsers />
-      <br />
-      <ViewUsers />
-      <br />
-      <EditGroups groupOptions={groupOptions} />
-      <br />
-      <ViewGroups groupOptions={[...groupOptions, 'Public']} />
     </>
   )
 }

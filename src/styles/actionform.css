@@ -5,16 +5,16 @@
     margin: 1em 0;
 }
 
-input[type="text"], input[type="number"] {
+.action-form input[type="text"], .action-form > input[type="number"] {
     width: 100%;
     padding: 1em;
     border: unset;
-    background-color: #ececec;
+    background-color: lightgray;
     border-radius: 3px;
     box-sizing: border-box;
 }
 
-select {
+.action-form select {
     width: 100%;
     padding: 1em;
     cursor: pointer;
@@ -25,28 +25,28 @@ select {
     border-radius: 3px;
     appearance: unset;
     font-family: Arial, Helvetica, sans-serif;    
-    background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat #ececec; 
+    background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat lightgray; 
     background-position: calc(100% - 0.75rem) center !important;
 }
 
-fieldset {
-    border: 3px solid #ececec;
+.action-form fieldset {
+    border: 3px solid lightgray;
     border-radius: 3px;
 }
 
-fieldset > *:not(input[type="checkbox"], label) {
+.action-form fieldset > *:not(input[type="checkbox"], .action-form label) {
     display: block;
 }
 
-fieldset > legend {
+.action-form fieldset > legend {
     margin: 1em;
     padding: 0 .5em;
 }
 
-fieldset > label, fieldset > input {
+.action-form fieldset > label, fieldset > input {
     margin: 1em 0;
 }
 
-fieldset > input[type="checkbox"] {
+.action-form fieldset > input[type="checkbox"] {
     margin: .5em .5em .5em 0;
 }
