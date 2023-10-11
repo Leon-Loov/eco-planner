@@ -3,10 +3,10 @@
 @import url('header.css');
 @import url('userinfo.css');
 
-/* General */
+/* General  --accent-color: #A17BAC; */
 :root {
   --background-color: white;
-  --accent-color: #A17BAC;
+  --accent-color: #4a6741;
   --accent-text: white;
 }
 

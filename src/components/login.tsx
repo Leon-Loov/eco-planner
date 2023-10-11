@@ -54,7 +54,7 @@ export default function Login() {
           </form>
         </main>
         <aside className="flex-grow-25">
-          <img src="/images/login-background.jpg" alt="Decorative Leaf" className="login-image"/>
+          <img src="/images/bee.webp" alt="" className="login-image"/>
         </aside>
       </div>
     </>
