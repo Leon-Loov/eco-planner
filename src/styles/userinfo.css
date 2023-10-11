@@ -35,7 +35,6 @@
     border: unset;
     background-color: #ececec;
     box-sizing: border-box;
-    font-size: 1em;
 }
 
 .user-info-form input[type="submit"] {

@@ -3,7 +3,6 @@
 .action-form > input, .action-form > fieldset, .action-form > select{
     display: block;
     margin: 1em 0;
-    font-size: 1em;
 }
 
 input[type="text"], input[type="number"] {
