@@ -16,7 +16,7 @@
     grid-auto-rows: auto;
 }
 
-@media (max-width: 400px) {
+@media (max-width: calc(400px + 2em)) {
     .grid-auto-rows {
         grid-template-columns: 1fr;
     }
