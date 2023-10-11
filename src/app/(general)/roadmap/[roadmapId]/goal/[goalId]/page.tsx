@@ -95,7 +95,13 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   return (
     <>
       <h1>Målbana &quot;{goal.name}&quot;{roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
-      <label htmlFor="action-table"><h2>Åtgärder</h2></label>
+      <label htmlFor="action-table" className="flex-row flex-between align-center">
+        <h2>Åtgärder</h2>
+        { // Only show the button if the user has edit access to the goal
+          (accessChecker(goal, session.user) === 'EDIT' || accessChecker(goal, session.user) === 'ADMIN') &&
+          <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
+        }
+      </label>
       <div className="overflow-x-scroll">
         <table id="action-table">
           <thead>
@@ -142,10 +148,6 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           />
           <br />
         </>
-      }
-      { // Only show the button if the user has edit access to the goal
-        (accessChecker(goal, session.user) === 'EDIT' || accessChecker(goal, session.user) === 'ADMIN') &&
-        <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
       }
       <br />
     </>

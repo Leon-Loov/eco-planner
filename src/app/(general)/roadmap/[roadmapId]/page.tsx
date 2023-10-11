@@ -19,7 +19,14 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return <>
     <h1>Färdplan &quot;{roadmap.name}&quot;{roadmap.isNational ? ", en nationell färdplan" : null}</h1>
-    <label htmlFor="goalTable"><h2>Målbanor</h2></label>
+
+    <label htmlFor="goalTable" className="flex-row flex-between align-center">
+      <h2>Målbanor</h2>
+      { // Only show the button if the user has edit access to the roadmap
+        (accessChecker(roadmap, session.user) === 'EDIT' || accessChecker(roadmap, session.user) === 'ADMIN') &&
+        <NewGoalButton roadmapId={roadmap.id} />
+      }  
+    </label>
     <div className="overflow-x-scroll">
       <table id="goalTable">
         <thead>
@@ -46,10 +53,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
       </table>
     </div>
     <br /><br />
-    { // Only show the button if the user has edit access to the roadmap
-      (accessChecker(roadmap, session.user) === 'EDIT' || accessChecker(roadmap, session.user) === 'ADMIN') &&
-      <NewGoalButton roadmapId={roadmap.id} />
-    }
+
     <br />
     <Tooltip anchorSelect="#goalName">
       Beskrivning av vad målbanan beskriver, tex. antal bilar.

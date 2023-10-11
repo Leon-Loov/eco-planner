@@ -5,6 +5,7 @@ import getOneRoadmap from "@/functions/getOneRoadmap";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
 import getRoadmaps from "@/functions/getRoadmaps";
+import Link from "next/link";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap, allRoadmaps] = await Promise.all([
@@ -22,6 +23,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return (
     <>
+      <p><Link href="../">🠘 Gå tillbaka</Link></p>
       <h1>Skapa ny målbana{roadmap?.name ? ` under "${roadmap.name}"` : null}</h1>
       <GoalForm roadmapId={params.roadmapId} user={session.user} nationalRoadmaps={nationalRoadmaps} />
     </>

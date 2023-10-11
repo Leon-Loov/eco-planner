@@ -2,7 +2,7 @@
 
 export default function LogoutButton() {
   return (
-    <button className="call-to-action-primary" onClick={async () => {
+    <button className="call-to-action-secondary" onClick={async () => {
       fetch('/api/logout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
