@@ -43,13 +43,9 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     })
   }
 
-  let actionDurations = []
   for (let i in goal.actions) {
+    let actionDurations = []
     if (goal.actions[i].startYear || goal.actions[i].endYear) {
-      actionDurations.push({
-        x: new Date(goal.actions[i].startYear ?? 2020).getTime(),
-        y: null,
-      })
       actionDurations.push({
         x: new Date(goal.actions[i].startYear ?? 2020).getTime(),
         y: i,
@@ -58,13 +54,26 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         x: new Date(goal.actions[i].endYear ?? 2050).getTime(),
         y: i,
       })
+      dataPoints.push({
+        name: `${goal.actions[i].name}'s  aktiva period`,
+        data: actionDurations,
+        type: 'line',
+      })
     }
   }
-  dataPoints.push({
-    name: 'Åtgärder',
-    data: actionDurations,
-    type: 'line',
-  })
+
+  let yaxisData: ApexYAxis[] = [{ seriesName: 'data', title: { text: goal.dataSeries?.unit } }]
+  for (let i = 1; i < dataPoints.length; i++) {
+    yaxisData.push({
+      seriesName: dataPoints[1].name,
+      opposite: true,
+      max: goal.actions.length,
+      min: -1,
+      tickAmount: goal.actions.length + 1,
+      show: i === 1 ? true : false,
+      labels: { show: false },
+    })
+  }
 
   let chartOptions: ApexCharts.ApexOptions = {
     chart: { type: 'line' },
@@ -77,18 +86,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
       // categories: dataSeriesDataFieldNames.map(name => name.replace('val', ''))
     },
-    yaxis: [
-      {
-        seriesName: 'data',
-      },
-      {
-        seriesName: 'Åtgärder',
-        opposite: true,
-        max: goal.actions.length,
-        min: -1,
-        tickAmount: goal.actions.length + 1,
-      }
-    ],
+    yaxis: yaxisData,
     tooltip: {
       x: { format: 'yyyy' }
     },
