@@ -112,7 +112,7 @@ export default function GoalForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="action-form">
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
@@ -196,7 +196,7 @@ export default function GoalForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa målbana" />
+        <input type="submit" value="Skapa målbana" className="call-to-action-primary"/>
         <Tooltip anchorSelect="#goalObject">
           Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
         </Tooltip>

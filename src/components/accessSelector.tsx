@@ -110,8 +110,8 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
   const [editUsers, setEditUsers] = useState<string[]>(existingUsers ?? []);
 
   return (
-    <fieldset style={{ display: 'inline', margin: '10px' }}>
-      <legend style={{ outline: '1px solid grey', padding: '3px 6px' }}>Användare med redigeringsbehörighet</legend>
+    <fieldset>
+      <legend>Användare med redigeringsbehörighet</legend>
       {editUsers.map((user) => (
         <Fragment key={'editUser' + user}>
           <input type="checkbox" name="editUsers" id={'editUser' + user} value={user} checked={editUsers.includes(user)} onChange={
@@ -125,8 +125,8 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
         </Fragment>
       ))}
       {/* A text field whose contents get appended to editUsers upon pressing enter */}
-      <label htmlFor="newEditUser">Ny användare: </label>
-      <input type="text" name="newEditUser" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} style={{ backgroundColor: '#F5D5274A' }} />
+      <label className="block" htmlFor="newEditUser">Ny användare: </label>
+      <input type="text" name="newEditUser" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
     </fieldset>
   )
 }
@@ -136,8 +136,8 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
   const [viewUsers, setViewUsers] = useState<string[]>(existingUsers ?? []);
 
   return (
-    <fieldset style={{ display: 'inline', margin: '10px' }}>
-      <legend style={{ outline: '1px solid grey', padding: '3px 6px' }}>Användare med läsbehörighet</legend>
+    <fieldset>
+      <legend>Användare med läsbehörighet</legend>
       {viewUsers.map((user) => (
         <Fragment key={'viewUser' + user}>
           <input type="checkbox" name="viewUsers" id={'viewUser' + user} value={user} checked={viewUsers.includes(user)} onChange={
@@ -151,8 +151,8 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
         </Fragment>
       ))}
       {/* A text field whose contents get appended to viewUsers upon pressing enter */}
-      <label htmlFor="newViewUser">Ny användare: </label>
-      <input type="text" name="newViewUser" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} style={{ backgroundColor: '#F5D5274A' }} />
+      <label className="block" htmlFor="newViewUser">Ny användare: </label>
+      <input type="text" name="newViewUser" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
     </fieldset>
   )
 }
@@ -164,12 +164,12 @@ function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
   const [editGroups, setEditGroups] = useState<string[]>(existingGroups ?? []); // The groups that have editing access to the item
 
   return (
-    <fieldset style={{ display: 'inline', margin: '10px' }}>
-      <legend style={{ outline: '1px solid grey', padding: '3px 6px' }}>Grupper med redigeringsbehörighet</legend>
+    <fieldset>
+      <legend>Grupper med redigeringsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'editGroup' + group}>
           <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} />
-          <label htmlFor={'editGroup' + group}>{group}</label>
+          <label className="block" htmlFor={'editGroup' + group}>{group}</label>
           <br />
         </Fragment>
       ))}
@@ -186,8 +186,8 @@ function ViewGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
   const [viewGroups, setViewGroups] = useState<string[]>(existingGroups ?? []); // The groups that have viewing access to the item
 
   return (
-    <fieldset style={{ display: 'inline', margin: '10px' }}>
-      <legend style={{ outline: '1px solid grey', padding: '3px 6px' }}>Grupper med läsbehörighet</legend>
+    <fieldset>
+      <legend>Grupper med läsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
           <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} />

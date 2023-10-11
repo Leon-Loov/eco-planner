@@ -76,7 +76,7 @@ export default function ActionForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="action-form">
         <label htmlFor="actionName">Namn på åtgärden: </label>
         <input type="text" name="actionName" required id="actionName" defaultValue={currentAction?.name} />
         <br />
@@ -108,7 +108,7 @@ export default function ActionForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa åtgärd" />
+        <input type="submit" value="Skapa åtgärd" className="call-to-action-primary"/>
         <br />
       </form>
     </>

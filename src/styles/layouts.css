@@ -8,6 +8,11 @@
     box-sizing: border-box;
 }
 
+/* block */
+.block {
+    display: block;
+}
+
 /* Grid layouts */
 .grid-auto-rows {
     display: grid;
