@@ -81,13 +81,13 @@ export default function ActionForm({
         <input type="text" name="actionName" required id="actionName" defaultValue={currentAction?.name} />
         <br />
         <label htmlFor="actionDescription">Beskrivning av åtgärden: </label>
-        <input type="text" name="actionDescription" required id="actionDescription" defaultValue={currentAction?.description} />
+        <input type="text" name="actionDescription" id="actionDescription" defaultValue={currentAction?.description ?? undefined} />
         <br />
         <label htmlFor="costEfficiency">Kostnadseffektivitet: </label>
-        <input type="text" name="costEfficiency" required id="costEfficiency" defaultValue={currentAction?.costEfficiency} />
+        <input type="text" name="costEfficiency" id="costEfficiency" defaultValue={currentAction?.costEfficiency ?? undefined} />
         <br />
         <label htmlFor="expectedOutcome">Förväntat resultat: </label>
-        <input type="text" name="expectedOutcome" required id="expectedOutcome" defaultValue={currentAction?.expectedOutcome} />
+        <input type="text" name="expectedOutcome" id="expectedOutcome" defaultValue={currentAction?.expectedOutcome ?? undefined} />
         <br />
         <label htmlFor="startYear">Planerat startår: </label>
         <input type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} />
@@ -96,10 +96,10 @@ export default function ActionForm({
         <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} />
         <br />
         <label htmlFor="projectManager">Projektansvarig: </label>
-        <input type="text" name="projectManager" required id="projectManager" defaultValue={currentAction?.projectManager} />
+        <input type="text" name="projectManager" id="projectManager" defaultValue={currentAction?.projectManager ?? undefined} />
         <br />
         <label htmlFor="relevantActors">Relevanta aktörer: </label>
-        <input type="text" name="relevantActors" required id="relevantActors" defaultValue={currentAction?.relevantActors} />
+        <input type="text" name="relevantActors" id="relevantActors" defaultValue={currentAction?.relevantActors ?? undefined} />
         <br />
         { // Only show the access selector if a new action is being created, the useris an admin, or the user is the author of the action
           (!currentAction || user?.isAdmin || user?.id === currentAction.authorId) &&
@@ -108,7 +108,7 @@ export default function ActionForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa åtgärd" className="call-to-action-primary"/>
+        <input type="submit" value="Skapa åtgärd" className="call-to-action-primary" />
         <br />
       </form>
     </>

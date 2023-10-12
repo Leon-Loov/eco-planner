@@ -10,10 +10,18 @@ export async function POST(request: NextRequest) {
   let action: ActionInput = await request.json();
 
   // Validate request body
-  if (!action.name || !action.description || !action.costEfficiency || !action.expectedOutcome || !action.projectManager || !action.relevantActors) {
+  if (!action.name) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
+      { status: 400 }
+    );
+  }
+
+  if (!action.goalId) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Missing parent. Please report this problem unless you are sending custom requests.' }),
       { status: 400 }
     );
   }
@@ -61,9 +69,7 @@ export async function POST(request: NextRequest) {
         projectManager: action.projectManager,
         relevantActors: action.relevantActors,
         goals: {
-          connect: {
-            id: action.goalId || ""
-          }
+          connect: { id: action.goalId }
         },
         author: {
           connect: {

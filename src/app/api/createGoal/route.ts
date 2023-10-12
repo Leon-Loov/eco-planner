@@ -11,10 +11,18 @@ export async function POST(request: NextRequest) {
   let goal: GoalInput = await request.json();
 
   // Validate request body
-  if (!goal.name || !goal.goalObject || !goal.indicatorParameter) {
+  if (!goal.indicatorParameter || !goal.dataUnit || !goal.dataSeries) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
+      { status: 400 }
+    );
+  }
+
+  if (!goal.roadmapId) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Missing parent. Please report this problem unless you are sending custom requests.' }),
       { status: 400 }
     );
   }
@@ -65,7 +73,8 @@ export async function POST(request: NextRequest) {
   // Prepare for creating data series
   let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
     author: { connect: { id: session.user.id } },
-    unit: goal.dataUnit!,
+    unit: goal.dataUnit,
+    scale: goal.dataScale,
   };
 
   if (goal.dataSeries?.length && goal.dataSeries.length <= 31) {
@@ -79,7 +88,7 @@ export async function POST(request: NextRequest) {
         // other fields in the dataSeries object.
         dataValues[key as keyof Omit<
           Prisma.DataSeriesCreateWithoutGoalsInput,
-          'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' |
+          'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
           'editors' | 'viewers' | 'editGroups' | 'viewGroups'
         >] = value;
       }
@@ -101,7 +110,7 @@ export async function POST(request: NextRequest) {
     let newGoal = await prisma.goal.create({
       data: {
         name: goal.name,
-        goalObject: goal.goalObject,
+        description: goal.description,
         nationalRoadmapId: goal.nationalRoadmapId || undefined,
         nationalGoalId: goal.nationalGoalId || undefined,
         indicatorParameter: goal.indicatorParameter,
@@ -123,9 +132,7 @@ export async function POST(request: NextRequest) {
           connect: viewGroups,
         },
         roadmaps: {
-          connect: {
-            id: goal.roadmapId ? goal.roadmapId : undefined,
-          },
+          connect: { id: goal.roadmapId },
         },
         dataSeries: {
           // The ability to connect to an existing data series is currently disabled

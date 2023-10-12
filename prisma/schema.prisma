@@ -21,22 +21,22 @@ model Action {
   // Name of action, preferably a short summary
   name            String
   // Longer description of action
-  description     String @db.Text
+  description     String? @db.Text
   // The year the action is planned to start
-  startYear       Int?   @map("start_year")
+  startYear       Int?    @map("start_year")
   // The year the action is planned to end
-  endYear         Int?   @map("end_year")
+  endYear         Int?    @map("end_year")
   // Cost efficiency, dunno what more to say, it's a text field
-  costEfficiency  String @map("cost_efficiency") @db.Text
+  costEfficiency  String? @map("cost_efficiency") @db.Text
   // Expected outcome, describe what you expect to happen
-  expectedOutcome String @map("expected_outcome") @db.Text
+  expectedOutcome String? @map("expected_outcome") @db.Text
   // The person responsible for the action
   // ONLY show to the author, because of GDPR
-  projectManager  String @map("project_manager")
+  projectManager  String? @map("project_manager")
   // Currently a text field, but might change to a many-to-many relationship with an actor table instead
   // Might be an organisation, group, company, region, etc.
   // relevantActors actor[]
-  relevantActors  String @map("relevant_actors") @db.Text
+  relevantActors  String? @map("relevant_actors") @db.Text
 
   // UUID of the action this action is inherited from, if any
   parentId   String?     @map("parent_id")
@@ -92,9 +92,10 @@ model Goal {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Name of goal
-  name               String
-  // The "owner" of the goal, an organisation, region, kommun, etc.
-  goalObject         String  @map("goal_object")
+  // If no name is given, show indicator parameter instead
+  name               String?
+  // Longer description of goal
+  description        String? @db.Text
   // The ID of the national roadmap this goal is related to
   // TODO: check where these are hosted or if we need to host them ourselves
   nationalRoadmapId  String? @map("national_roadmap_id")
@@ -138,39 +139,41 @@ model DataSeries {
 
   // Unit used for the yearly fields
   unit    String
+  // An optional scale for the data series, for example % or thousands
+  scale   String?
   // Following is a series values for each year from 2020 to 2050
   // These are the goals for each year
-  val2020 Float? @map("val_2020")
-  val2021 Float? @map("val_2021")
-  val2022 Float? @map("val_2022")
-  val2023 Float? @map("val_2023")
-  val2024 Float? @map("val_2024")
-  val2025 Float? @map("val_2025")
-  val2026 Float? @map("val_2026")
-  val2027 Float? @map("val_2027")
-  val2028 Float? @map("val_2028")
-  val2029 Float? @map("val_2029")
-  val2030 Float? @map("val_2030")
-  val2031 Float? @map("val_2031")
-  val2032 Float? @map("val_2032")
-  val2033 Float? @map("val_2033")
-  val2034 Float? @map("val_2034")
-  val2035 Float? @map("val_2035")
-  val2036 Float? @map("val_2036")
-  val2037 Float? @map("val_2037")
-  val2038 Float? @map("val_2038")
-  val2039 Float? @map("val_2039")
-  val2040 Float? @map("val_2040")
-  val2041 Float? @map("val_2041")
-  val2042 Float? @map("val_2042")
-  val2043 Float? @map("val_2043")
-  val2044 Float? @map("val_2044")
-  val2045 Float? @map("val_2045")
-  val2046 Float? @map("val_2046")
-  val2047 Float? @map("val_2047")
-  val2048 Float? @map("val_2048")
-  val2049 Float? @map("val_2049")
-  val2050 Float? @map("val_2050")
+  val2020 Float?  @map("val_2020")
+  val2021 Float?  @map("val_2021")
+  val2022 Float?  @map("val_2022")
+  val2023 Float?  @map("val_2023")
+  val2024 Float?  @map("val_2024")
+  val2025 Float?  @map("val_2025")
+  val2026 Float?  @map("val_2026")
+  val2027 Float?  @map("val_2027")
+  val2028 Float?  @map("val_2028")
+  val2029 Float?  @map("val_2029")
+  val2030 Float?  @map("val_2030")
+  val2031 Float?  @map("val_2031")
+  val2032 Float?  @map("val_2032")
+  val2033 Float?  @map("val_2033")
+  val2034 Float?  @map("val_2034")
+  val2035 Float?  @map("val_2035")
+  val2036 Float?  @map("val_2036")
+  val2037 Float?  @map("val_2037")
+  val2038 Float?  @map("val_2038")
+  val2039 Float?  @map("val_2039")
+  val2040 Float?  @map("val_2040")
+  val2041 Float?  @map("val_2041")
+  val2042 Float?  @map("val_2042")
+  val2043 Float?  @map("val_2043")
+  val2044 Float?  @map("val_2044")
+  val2045 Float?  @map("val_2045")
+  val2046 Float?  @map("val_2046")
+  val2047 Float?  @map("val_2047")
+  val2048 Float?  @map("val_2048")
+  val2049 Float?  @map("val_2049")
+  val2050 Float?  @map("val_2050")
 
   // Golas that use this data series
   goals      Goal[]      @relation("data_series")

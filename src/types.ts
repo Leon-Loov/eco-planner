@@ -32,23 +32,24 @@ export type RoadmapInput = {
 
 /** The format of the data needed to create a new goal. */
 export type GoalInput = {
-  name: string;
-  goalObject: string;
+  name: string | undefined;
+  description: string | undefined;
   // IDs are UUIDs and thus strings, not numbers
   nationalRoadmapId: string | undefined;
   nationalGoalId: string | undefined;
   indicatorParameter: string;
   // This will be turned into an actual dataSeries object by the API
   // The expected input is a stringified array of floats
-  dataSeries: string[] | undefined;
+  dataSeries: string[];
   // The unit of measurement for the data series, used when creating a new data series
-  dataUnit: string | undefined;
+  dataUnit: string;
+  dataScale: string | undefined;
   // In case the user wants to reference an existing data series instead of creating a new one
   // If both dataSeries and dataSeriesId are provided, dataSeriesId takes precedence
   // Currently disabled
   // dataSeriesId: string | undefined;
   // UUID for the roadmap this goal belongs to
-  roadmapId: string | undefined;
+  roadmapId: string;
   // Accepts lists of UUIDs for all of the following, to link them to the goal (optional)
   editors: string[] | undefined;
   viewers: string[] | undefined;
@@ -59,15 +60,15 @@ export type GoalInput = {
 /** The format of the data needed to create a new action. */
 export type ActionInput = {
   name: string;
-  description: string;
-  costEfficiency: string;
-  expectedOutcome: string;
-  startYear: number;
-  endYear: number;
-  projectManager: string;
-  relevantActors: string;
+  description: string | undefined;
+  costEfficiency: string | undefined;
+  expectedOutcome: string | undefined;
+  startYear: number | undefined;
+  endYear: number | undefined;
+  projectManager: string | undefined;
+  relevantActors: string | undefined;
   // UUID for the goal this goal belongs to
-  goalId: string | null;
+  goalId: string;
   // Accepts lists of UUIDs for all of the following, to link them to the action (optional)
   editors: string[] | null;
   viewers: string[] | null;

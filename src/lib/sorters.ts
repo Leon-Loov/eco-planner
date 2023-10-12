@@ -15,10 +15,11 @@ export function roadmapSorter(a: Roadmap, b: Roadmap) {
 }
 
 /**
- * Sorts goals alphabetically by name
+ * Sorts goals alphabetically by name.
+ * If no name is provided, the indicator parameter is used instead.
  */
 export function goalSorter(a: Goal, b: Goal) {
-  return collator.compare(a.name, b.name);
+  return collator.compare(a.name || a.indicatorParameter, b.name || b.indicatorParameter);
 }
 
 /**

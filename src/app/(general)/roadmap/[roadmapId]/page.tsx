@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
       { // Only show the button if the user has edit access to the roadmap
         (accessChecker(roadmap, session.user) === 'EDIT' || accessChecker(roadmap, session.user) === 'ADMIN') &&
         <NewGoalButton roadmapId={roadmap.id} />
-      }  
+      }
     </label>
     <div className="overflow-x-scroll">
       <table id="goalTable">
@@ -33,7 +33,6 @@ export default async function Page({ params }: { params: { roadmapId: string } }
           <tr>
             <th id="goalName">Målbanenamn</th>
             {/* TODO: Add indicators to headers with tooltips */}
-            <th id="goalObject">Målobjekt</th>
             <th id="leapParameter">LEAP parameter</th>
             <th id="dataUnit">Enhet för dataserie</th>
             <th id="goalActions">Antal åtgärder</th>
@@ -42,8 +41,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         <tbody>
           {roadmap.goals.map(goal => (
             <tr key={goal.id}>
-              <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name}</a></td>
-              <td>{goal.goalObject}</td>
+              <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name || goal.indicatorParameter}</a></td>
               <td>{goal.indicatorParameter}</td>
               <td>{goal.dataSeries?.unit}</td>
               <td>{goal.actions.length}</td>

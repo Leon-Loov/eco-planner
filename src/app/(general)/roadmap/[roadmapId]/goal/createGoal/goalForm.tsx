@@ -39,7 +39,6 @@ export default function GoalForm({
 
     const formJSON = JSON.stringify({
       name: (form.namedItem("goalName") as HTMLInputElement)?.value || null,
-      goalObject: (form.namedItem("goalObject") as HTMLInputElement)?.value || null,
       nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value || null,
       nationalGoalId: (form.namedItem("nationalGoalId") as HTMLInputElement)?.value || null,
       indicatorParameter: (form.namedItem("indicatorParameter") as HTMLInputElement)?.value || null,
@@ -93,7 +92,7 @@ export default function GoalForm({
       // All keys in dataSeries containing numbers are part of the data series itself and should be fine to push to the array
       if (i.match(/[0-9]+/)) {
         // This line *should* start complaining if we add any keys to DataSeries that are not part of the data series, unless the value is a number
-        dataArray.push(currentGoal.dataSeries[i as keyof Omit<DataSeries, 'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' | 'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId'>])
+        dataArray.push(currentGoal.dataSeries[i as keyof Omit<DataSeries, 'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' | 'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId'>])
       }
     }
   }
@@ -116,10 +115,7 @@ export default function GoalForm({
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
-        <input type="text" name="goalName" required id="goalName" defaultValue={currentGoal?.name} />
-        <br />
-        <label htmlFor="goalObject">Målobjekt: </label>
-        <input type="text" name="goalObject" required title="Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation." id="goalObject" defaultValue={currentGoal?.goalObject} />
+        <input type="text" name="goalName" id="goalName" defaultValue={currentGoal?.name ?? undefined} />
         <br />
         <label htmlFor="nationalRoadmapId">Nationell färdplan denna är baserad på (om någon): </label>
         <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)} defaultValue={currentGoal?.nationalRoadmapId || undefined}>
@@ -196,7 +192,7 @@ export default function GoalForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa målbana" className="call-to-action-primary"/>
+        <input type="submit" value="Skapa målbana" className="call-to-action-primary" />
         <Tooltip anchorSelect="#goalObject">
           Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
         </Tooltip>
