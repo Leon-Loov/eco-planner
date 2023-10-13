@@ -1,6 +1,6 @@
 import './header.css'
 import LogoutButton from '@/components/logoutButton'
-import { AdminButton, HomeButton, LoginButton, SignupButton } from '@/components/redirectButtons'
+import { HomeButton, LoginButton, SignupButton } from '@/components/redirectButtons'
 import { getSessionData } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
