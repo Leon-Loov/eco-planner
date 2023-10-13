@@ -30,6 +30,10 @@
 
 /* Flex layouts */
 
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
 .flex-row {
     display: flex;
 }

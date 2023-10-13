@@ -14,7 +14,7 @@ export default async function Page() {
 
   return <>
     <img src="/images/moose.webp" alt="" style={{width: '100%', height: '300px', borderRadius: '.5em', marginTop: '1.5em', objectFit: 'cover' }} />
-    <div className="flex-row flex-between align-center">
+    <div className="flex-row flex-between align-center flex-wrap">
       <h1>Färdplaner</h1>
       { // Only show the new roadmap button if the user is logged in
         session.user &&
