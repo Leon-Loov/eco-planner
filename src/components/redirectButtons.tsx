@@ -8,10 +8,12 @@ export function AdminButton() {
   )
 }
 
-export function HomeButton() {
+export function BackButton({ href }: { href: string }) {
   return (
     <>
-      <Link href="/" className="header-link"> Home </Link>
+      <Link href={href}> 
+        <img src="/icons/back.svg" alt="back" />
+      </Link>
     </>
   )
 }
@@ -19,7 +21,7 @@ export function HomeButton() {
 export function LoginButton() {
   return (
     <>
-      <Link href="/login" className="call-to-action-primary"> Login </Link>
+      <Link href="/login" className="call-to-action-secondary"> Logga in </Link>
     </>
   )
 }
@@ -27,7 +29,7 @@ export function LoginButton() {
 export function SignupButton() {
   return (
     <>
-      <Link href="/signup" className="call-to-action-secondary"> Sign up </Link>
+      <Link href="/signup" className="call-to-action-primary"> Skapa konto </Link>
     </>
   )
 }

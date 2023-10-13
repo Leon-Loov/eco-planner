@@ -2,6 +2,7 @@
 @import url('layouts.css');
 @import url('userinfo.css');
 @import url('actionform.css');
+@import url('forms.css');
 
 /* General  --accent-color: #A17BAC; 33482d*/
 :root {
@@ -12,7 +13,7 @@
 }
 
 body {
-  margin: 0;
+  margin: 0 0 1em 0;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -36,7 +37,6 @@ summary {
   background-color: #ececec;
   border-radius: 3px;
 }
-
 
 /* Forms */
 label:has(+input:required, +select:required)::after {

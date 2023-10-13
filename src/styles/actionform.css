@@ -1,15 +1,14 @@
 /* CSS for most forms, probably needs a better name */
 
-.action-form > input, .action-form > fieldset, .action-form > select{
+.action-form input:not(input[type="checkbox"]), .action-form fieldset, .action-form select {
     display: block;
     margin: 1em 0;
 }
 
-.action-form input[type="text"], .action-form > input[type="number"] {
+.action-form input[type="text"], .action-form input[type="number"] {
     width: 100%;
     padding: 1em;
     border: unset;
-    background-color: #ececec;
     border-radius: 3px;
     box-sizing: border-box;
 }
@@ -29,24 +28,24 @@
     background-position: calc(100% - 0.75rem) center !important;
 }
 
-.action-form fieldset {
-    border: 3px solid #ececec;
-    border-radius: 3px;
-}
 
-.action-form fieldset > *:not(input[type="checkbox"], .action-form label) {
+.action-form fieldset *:not(input[type="checkbox"], .action-form label) {
     display: block;
 }
 
-.action-form fieldset > legend {
+.action-form fieldset legend {
     margin: 1em;
     padding: 0 .5em;
 }
 
-.action-form fieldset > label, fieldset > input {
+.action-form fieldset label, .action-form fieldset input {
     margin: 1em 0;
 }
 
-.action-form fieldset > input[type="checkbox"] {
+.action-form fieldset input[type="checkbox"] {
     margin: .5em .5em .5em 0;
+}
+
+.action-form details {
+    margin: 1em 0;
 }

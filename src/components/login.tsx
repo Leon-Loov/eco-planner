@@ -50,7 +50,7 @@ export default function Login() {
             </div>
             <br />
             <input type="submit" value={'Logga In'}/>
-            <Link href='/signup'>Skapa Konto</Link>
+            <Link href='/signup'>Skapa konto</Link>
           </form>
         </main>
         <aside className="flex-grow-25">

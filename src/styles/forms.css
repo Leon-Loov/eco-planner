@@ -1,0 +1,12 @@
+form {
+    --background-color: #ececec;
+}
+
+form input:not(input[type="checkbox"], input[type="submit"]) {
+    background-color: var(--background-color);
+}
+
+form fieldset {
+    border: 3px solid var(--background-color);
+    border-radius: 3px;
+}

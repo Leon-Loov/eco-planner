@@ -13,6 +13,6 @@ export default function LogoutButton() {
           alert('Logout failed.')
         }
       })
-    }}>Logout</button>
+    }}>Logga ut</button>
   )
 }

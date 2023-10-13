@@ -5,28 +5,28 @@ header {
     top: 0;
     padding: 1em 0;
     background-color: var(--background-color);
-    z-index: 9;
-  }
+    z-index: 9999;
+}
     
-  header nav {
-    display: flex;
-    gap: 1em;
-    align-items: center;
-  }
+header nav {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
   
-  .header-link{
-    text-decoration: unset;
-    color: black;
-    font-weight: bold;
-  }
+.header-link{
+  text-decoration: unset;
+  color: black;
+  font-weight: bold;
+}
   
-  .header-link:hover {
-    border-bottom: 3px solid var(--accent-color);
-    margin-bottom: -3px;
+.header-link:hover {
+  border-bottom: 3px solid var(--accent-color);
+  margin-bottom: -3px;
+}
+
+@media (max-width: 500px) {
+  .header-link {
+    display: none;
   }
-  
-  @media (max-width: 500px) {
-    .header-link {
-      display: none;
-    }
-  }
+}

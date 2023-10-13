@@ -77,11 +77,16 @@ export default function ActionForm({
   return (
     <>
       <form onSubmit={handleSubmit} className="action-form">
-        <label htmlFor="actionName">Namn på åtgärden: </label>
-        <input type="text" name="actionName" required id="actionName" defaultValue={currentAction?.name} />
-        <br />
-        <label htmlFor="actionDescription">Beskrivning av åtgärden: </label>
-        <input type="text" name="actionDescription" id="actionDescription" defaultValue={currentAction?.description ?? undefined} />
+        <div className="grid-auto-rows">
+          <div>
+            <label htmlFor="actionName">Namn på åtgärden: </label>
+            <input type="text" name="actionName" required id="actionName" defaultValue={currentAction?.name} />
+          </div>
+          <div>
+            <label htmlFor="actionDescription">Beskrivning av åtgärden: </label>
+            <input type="text" name="actionDescription" id="actionDescription" defaultValue={currentAction?.description ?? undefined} />
+          </div>
+        </div>
         <br />
         <label htmlFor="costEfficiency">Kostnadseffektivitet: </label>
         <input type="text" name="costEfficiency" id="costEfficiency" defaultValue={currentAction?.costEfficiency ?? undefined} />
@@ -89,12 +94,17 @@ export default function ActionForm({
         <label htmlFor="expectedOutcome">Förväntat resultat: </label>
         <input type="text" name="expectedOutcome" id="expectedOutcome" defaultValue={currentAction?.expectedOutcome ?? undefined} />
         <br />
-        <label htmlFor="startYear">Planerat startår: </label>
-        <input type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} />
+        <div className="grid-auto-rows">
+          <div>
+            <label htmlFor="startYear">Planerat startår: </label>
+            <input type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} />
+          </div>
+          <div>
+            <label htmlFor="endYear">Planerat slutår: </label>
+            <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} />
+          </div>
         <br />
-        <label htmlFor="endYear">Planerat slutår: </label>
-        <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} />
-        <br />
+        </div>
         <label htmlFor="projectManager">Projektansvarig: </label>
         <input type="text" name="projectManager" id="projectManager" defaultValue={currentAction?.projectManager ?? undefined} />
         <br />

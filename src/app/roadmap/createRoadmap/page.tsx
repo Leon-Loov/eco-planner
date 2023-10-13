@@ -2,7 +2,7 @@ import { getSessionData } from '@/lib/session';
 import RoadmapForm from './roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
+import { BackButton } from '@/components/redirectButtons';
 
 export default async function Page() {
   let session = await getSessionData(cookies())
@@ -14,7 +14,7 @@ export default async function Page() {
 
   return (
     <>
-      <p><Link href="../">🠘 Gå tillbaka</Link></p>
+      <p><BackButton href="../"/></p>
       <h1>Skapa en ny färdplan</h1>
       <RoadmapForm user={session.user} userGroups={session.user?.userGroups} />
     </>
