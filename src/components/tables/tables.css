@@ -1,0 +1,33 @@
+/* Table styling*/
+table {
+    --thead-color: #4a6741;
+    --thead-color-text: white;
+    min-width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 3px;
+} 
+  
+thead {
+    background-color: var(--thead-color);
+    color: var(--thead-color-text);
+}
+  
+th, td {
+    padding: 1em;
+}
+
+  
+tbody tr:nth-child(odd) {
+    background-color: whitesmoke;
+}
+  
+tbody tr:nth-child(even) {
+    background-color: #ececec;
+}
+  
+tbody a {
+    font-weight: bold;
+}
