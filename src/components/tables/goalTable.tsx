@@ -28,10 +28,10 @@ export default function Roadmap({
   accessLevel?: AccessLevel
 }) {
   return <>
-    <label htmlFor="goalTable" className="flex-row flex-between align-center">
+    <label htmlFor="goalTable" className="flex-row flex-between align-center flex-wrap">
       <h2>{title}</h2>
       { // Only show the button if the user has edit access to the roadmap
-        (accessLevel === 'EDIT' || accessLevel === 'ADMIN') && 
+        (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
         <NewGoalButton roadmapId={roadmap.id} />
       }
     </label>

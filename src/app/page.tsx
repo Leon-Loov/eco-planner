@@ -2,7 +2,7 @@ import { NewRoadmapButton } from "@/components/redirectButtons";
 import getRoadmaps from "@/functions/getRoadmaps";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
-import Roadmap from "@/components/tables/roadmaps";
+import Roadmap from "@/components/tables/roadmapTable";
 
 export default async function Page() {
   const [session, roadmaps] = await Promise.all([
