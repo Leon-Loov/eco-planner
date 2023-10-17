@@ -1,0 +1,19 @@
+name: build docker image
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build the Docker image
+        run: docker build -t eco-planner .
+      - name: Export image as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: eco-planner
+          path: /home/runner/work/eco-planner/eco-planner
+          retention-days: 1
