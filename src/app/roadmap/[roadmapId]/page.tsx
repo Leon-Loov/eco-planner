@@ -5,51 +5,28 @@ import { NewGoalButton } from "@/components/redirectButtons";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
+import Goals from '@/components/tables/goals'
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
     getSessionData(cookies()),
     getOneRoadmap(params.roadmapId)
   ]);
-
+  
+  let accessLevel;
+  if(roadmap) {
+    accessLevel = accessChecker(roadmap, session.user)
+  }
+  
   // 404 if the roadmap doesn't exist or if the user doesn't have access to it
-  if (!roadmap || !accessChecker(roadmap, session.user)) {
+  if (!roadmap || !accessLevel) {
     return notFound();
   }
 
   return <>
     <h1>Färdplan &quot;{roadmap.name}&quot;{roadmap.isNational ? ", en nationell färdplan" : null}</h1>
 
-    <label htmlFor="goalTable" className="flex-row flex-between align-center">
-      <h2>Målbanor</h2>
-      { // Only show the button if the user has edit access to the roadmap
-        (accessChecker(roadmap, session.user) === 'EDIT' || accessChecker(roadmap, session.user) === 'ADMIN') &&
-        <NewGoalButton roadmapId={roadmap.id} />
-      }
-    </label>
-    <div className="overflow-x-scroll">
-      <table id="goalTable">
-        <thead>
-          <tr>
-            <th id="goalName">Målbanenamn</th>
-            {/* TODO: Add indicators to headers with tooltips */}
-            <th id="leapParameter">LEAP parameter</th>
-            <th id="dataUnit">Enhet för dataserie</th>
-            <th id="goalActions">Antal åtgärder</th>
-          </tr>
-        </thead>
-        <tbody>
-          {roadmap.goals.map(goal => (
-            <tr key={goal.id}>
-              <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name || goal.indicatorParameter}</a></td>
-              <td>{goal.indicatorParameter}</td>
-              <td>{goal.dataSeries?.unit}</td>
-              <td>{goal.actions.length}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <br /><br />
 
     <br />

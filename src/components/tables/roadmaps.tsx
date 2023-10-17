@@ -2,11 +2,11 @@ import './tables.css'
 import { Goal, Roadmap } from "@prisma/client"
 
 export default function Roadmap({
-  roadmaps,
   title,
+  roadmaps,
 }: {
-  roadmaps: (Roadmap & { goals: Goal[] })[],
   title: String,
+  roadmaps: (Roadmap & { goals: Goal[] })[],
 }) {
   return <>
     <h2>{title}</h2>
