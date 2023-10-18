@@ -1,12 +1,13 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import parseCsv from "@/functions/parseCsv"
 import { countiesAndMunicipalities } from "@/lib/countiesAndMunicipalities"
 import { Data } from "@/lib/session"
 import Tooltip from "@/lib/tooltipWrapper"
 import { AccessControlled } from "@/types"
 import { Roadmap } from "@prisma/client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function RoadmapForm({
   user,
@@ -59,6 +60,7 @@ export default function RoadmapForm({
   }
 
   const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.county || null)
+  const [currentFile, setCurrentFile] = useState<File | null>(null)
 
   let currentAccess: AccessControlled | undefined = undefined;
   if (currentRoadmap) {
@@ -70,6 +72,20 @@ export default function RoadmapForm({
       viewGroups: currentRoadmap.viewGroups,
     }
   }
+
+  useEffect(() => {
+    // This component probably shouldn't be async, so we're stacking promises here
+    let buffer = currentFile?.arrayBuffer().then((buffer) => {return buffer})
+    if (!buffer) return
+    buffer.then((buffer) => {
+      let content = parseCsv(buffer)
+      // Remove the first two rows if the second row is empty (This is the case if the file follows the standard format, with metadata in the first row and headers in the third row)
+      if (!content[1][0]) {
+        content = content.slice(2)
+      }
+      console.log(content[1])
+    })
+  }, [currentFile])
 
   return (
     <>
@@ -113,17 +129,8 @@ export default function RoadmapForm({
             <br />
           </>
         }
-        { // This option is now incorporated into the county and municipality dropdowns
-          // This is a toggle to make the roadmap a national roadmap and should only be visible to admins
-          // user?.isAdmin &&
-          // <>
-          //   <label htmlFor="isNational">Är färdplanen en nationell färdplan?</label>
-          //   <input type="checkbox" name="isNational" id="isNational" defaultChecked={currentRoadmap?.isNational} />
-          //   <Tooltip anchorSelect="label[for=isNational], #isNational">
-          //     En nationell färdplan är de som de regionala och kommunala färdplanerna utgår och förhåller sig till.
-          //   </Tooltip>
-          // </>
-        }
+        <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här: </label>
+        <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />
         <br />
         { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user has edit access to the roadmap
           (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
