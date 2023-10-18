@@ -1,5 +1,7 @@
 'use client'
+import AttributedImage from "./images/attributedImage";
 import Link from "next/link";
+import ImageIcon from "./images/imageIcon";
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -36,34 +38,30 @@ export default function Signup() {
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Användarnam </label>
             <div className="flex-row">
-              <div className="image">
-                <img src="/icons/user.svg" alt="Användarnamn"/>
-              </div>
+              <ImageIcon src="/icons/user.svg" alt="lösenord"/>
               <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <br />
             <label htmlFor="email">E-post </label>
             <div className="flex-row">
-              <div className="image">
-                <img src="/icons/email.svg" alt="Email Adress"/>
-              </div>
+              <ImageIcon src="/icons/email.svg" alt="lösenord"/>
               <input type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
             </div>
             <br />
             <label htmlFor="password">Lösenord </label>
             <div className="flex-row">
-              <div className="image">
-                <img src="/icons/password.svg" alt="Lösenord"/>
-              </div>
+              <ImageIcon src="/icons/password.svg" alt="lösenord"/>
               <input type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
             </div>
             <br />
-            <input type="submit" value={'Skapa Konto'}/>
+            <input type="submit" className="call-to-action-primary" value={'Skapa Konto'}/>
             <Link href='/login'>Logga in</Link>
           </form>
         </main>
-        <aside className="flex-grow-25">
-          <img src="/images/owl.webp" alt="" className="login-image"/>
+        <aside style={{width: '40%'}}>
+          <AttributedImage src="/images/owl.webp" alt="Owl taking flight from a branch" borderRadius="0 .5em .5em 0">
+            Photo by <a href="https://unsplash.com/@ronan18?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Ronan Furuta</a> on <a href="https://unsplash.com/photos/8hIErEH5pr0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+          </AttributedImage>
         </aside>
       </div>
     </>

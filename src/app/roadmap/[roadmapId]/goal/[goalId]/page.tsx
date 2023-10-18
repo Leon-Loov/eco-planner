@@ -6,7 +6,7 @@ import { getSessionData } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
 import { AccessLevel, DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import Chart from "@/lib/chartWrapper";
-import Actions from "@/components/tables/actionTable";
+import ActionTable from "@/components/tables/actionTable";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   return (
     <>
       <h1>Målbana &quot;{goal.name}&quot;{roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
-      <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params}/>
+      <ActionTable title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params}/>
       <br />
       { // Only show the chart if there are data points to show
         dataPoints.length > 0 &&
