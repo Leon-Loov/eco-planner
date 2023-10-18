@@ -1,7 +1,7 @@
 import './tables.css'
 import { Goal, Roadmap } from "@prisma/client"
 
-export default function Roadmap({
+export default function RoadmapTable({
   title,
   roadmaps,
 }: {

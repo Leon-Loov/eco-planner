@@ -1,5 +1,7 @@
 'use client'
 import Link from "next/link";
+import AttributedImage from "./images/attributedImage";
+import ImageIcon from "./images/imageIcon";
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -35,26 +37,24 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Användarnamn </label>
             <div className="flex-row">
-              <div className="image">
-                <img src="/icons/user.svg" alt="Användarnamn"/>
-              </div>
+              <ImageIcon src="/icons/user.svg" alt="lösenord" />
               <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <br />
             <label htmlFor="password">Lösenord</label>
             <div className="flex-row">
-              <div className="image">
-                <img src="/icons/password.svg" alt="Lösenord"/>
-              </div>
+              <ImageIcon src="/icons/password.svg" alt="lösenord" />
               <input type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
             </div>
             <br />
-            <input type="submit" value={'Logga In'}/>
+            <input type="submit" className="call-to-action-primary" value={'Logga In'} />
             <Link href='/signup'>Skapa konto</Link>
           </form>
         </main>
-        <aside className="flex-grow-25">
-          <img src="/images/bee.webp" alt="" className="login-image"/>
+        <aside style={{ width: '40%' }}>
+          <AttributedImage src="/images/bee.webp" alt="Bee pollinating a flower" borderRadius="0 .5em .5em 0">
+            Photo by <a href="https://unsplash.com/@alken?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Alfred Kenneally</a> on <a href="https://unsplash.com/photos/cf7YFJ_e8RE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+          </AttributedImage>
         </aside>
       </div>
     </>

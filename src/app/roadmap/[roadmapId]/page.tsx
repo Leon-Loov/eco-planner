@@ -5,7 +5,7 @@ import { NewGoalButton } from "@/components/redirectButtons";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
-import Goals from '@/components/tables/goalTable'
+import GoalTable from '@/components/tables/goalTable'
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return <>
     <h1>Färdplan &quot;{roadmap.name}&quot;{roadmap.isNational ? ", en nationell färdplan" : null}</h1>
-    <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
+    <GoalTable title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Tooltip anchorSelect="#goalName">
       Beskrivning av vad målbanan beskriver, tex. antal bilar.
     </Tooltip>

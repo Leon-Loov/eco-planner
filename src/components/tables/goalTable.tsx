@@ -3,7 +3,7 @@ import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
 import { NewGoalButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
 
-export default function Roadmap({
+export default function GoalTable({
   title,
   roadmap,
   accessLevel,

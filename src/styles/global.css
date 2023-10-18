@@ -63,6 +63,7 @@ button, select, input {
   cursor: pointer;
   font-weight: bold;
   font-size: 1em;
+  display: block;
 }
 
 .call-to-action-primary {
@@ -72,5 +73,9 @@ button, select, input {
 
 .call-to-action-primary:hover {
   background-color: var(--accent-color-dark);
+  border-color: var(--accent-color-dark);
+}
+
+.call-to-action-secondary:hover {
   border-color: var(--accent-color-dark);
 }

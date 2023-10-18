@@ -3,7 +3,7 @@ import { Action, Goal } from "@prisma/client"
 import { NewActionButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
 
-export default function Actions({
+export default function ActionTable({
   title,
   goal,
   accessLevel,
