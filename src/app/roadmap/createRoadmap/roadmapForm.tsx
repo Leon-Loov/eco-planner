@@ -18,7 +18,7 @@ export default function RoadmapForm({
   userGroups: string[],
   currentRoadmap?: Roadmap & AccessControlled,
 }) {
-  function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const form = event.target.elements
@@ -39,6 +39,7 @@ export default function RoadmapForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      goals: currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : undefined,
     })
 
     fetch('/api/createRoadmap', {
