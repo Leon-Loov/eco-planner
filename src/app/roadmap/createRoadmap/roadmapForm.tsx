@@ -1,7 +1,7 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
-import parseCsv from "@/functions/parseCsv"
+import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { countiesAndMunicipalities } from "@/lib/countiesAndMunicipalities"
 import { Data } from "@/lib/session"
 import Tooltip from "@/lib/tooltipWrapper"
@@ -75,7 +75,7 @@ export default function RoadmapForm({
 
   useEffect(() => {
     // This component probably shouldn't be async, so we're stacking promises here
-    let buffer = currentFile?.arrayBuffer().then((buffer) => {return buffer})
+    let buffer = currentFile?.arrayBuffer().then((buffer) => { return buffer })
     if (!buffer) return
     buffer.then((buffer) => {
       let content = parseCsv(buffer)
@@ -83,7 +83,7 @@ export default function RoadmapForm({
       if (!content[1][0]) {
         content = content.slice(2)
       }
-      console.log(content[1])
+      console.log(csvToGoalList(content, "0")[0])
     })
   }, [currentFile])
 
