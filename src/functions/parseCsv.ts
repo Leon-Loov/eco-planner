@@ -13,7 +13,9 @@ export default function parseCsv(csv: ArrayBuffer): string[][] {
  * @param csv A 2D array of strings
  */
 export function csvToGoalList(csv: string[][], roadmapId: string) {
+  /** Header row from the CSV */
   const headers = csv[0]
+
   /** Format: `ourHeaderName: csvHeaderName` */
   const nonNumericHeaders = {
     "indicatorParameter": "Branch Path",
@@ -27,7 +29,7 @@ export function csvToGoalList(csv: string[][], roadmapId: string) {
 
   let headerIndex: { [key: string]: number } = {}
   let output: GoalInput[] = [];
-  
+
   // Check that all headers are present and get their indices
   for (let i of Object.keys(nonNumericHeaders)) {
     if (!headers.includes(nonNumericHeaders[i as keyof typeof nonNumericHeaders])) {
@@ -45,10 +47,11 @@ export function csvToGoalList(csv: string[][], roadmapId: string) {
     }
   }
 
+  // Create GoalInput objects from the data
   for (let i = 1; i < csv.length; i++) {
     let dataSeries: string[] = []
     for (let j of numericHeaders) {
-      dataSeries.push(csv[i][headerIndex[j]])
+      dataSeries.push(csv[i][headerIndex[j]]?.replaceAll(",", "."))
     }
 
     output.push({
