@@ -1,13 +1,14 @@
 import { NextRequest } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
-import { RoadmapInput } from "@/types";
+import { GoalInput, RoadmapInput } from "@/types";
+import roadmapGoalCreator from "./roadmapGoalCreator";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let roadmap: RoadmapInput = await request.json();
+  let roadmap: RoadmapInput & { goals?: GoalInput[] } = await request.json();
 
   // Validate request body
   if (!roadmap.name || (!roadmap.county && !roadmap.isNational)) {
@@ -70,6 +71,9 @@ export async function POST(request: NextRequest) {
         viewers: { connect: viewers },
         editGroups: { connect: editGroups },
         viewGroups: { connect: viewGroups },
+        goals: {
+          create: roadmapGoalCreator(roadmap, session.user.id, editors, viewers, editGroups, viewGroups),
+        },
       },
     });
     // Return the new roadmap's ID if successful
@@ -78,8 +82,19 @@ export async function POST(request: NextRequest) {
       JSON.stringify({ message: "Roadmap created", id: newRoadmap.id }),
       { status: 200 }
     );
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
+    // Custom error if there are errors in the nested goal creation
+    if (e instanceof Error) {
+      e = e as Error
+      if (e.cause == 'nestedGoalCreation') {
+        return createResponse(
+          response,
+          JSON.stringify({ message: e.message }),
+          { status: 400 }
+        );
+      }
+    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),

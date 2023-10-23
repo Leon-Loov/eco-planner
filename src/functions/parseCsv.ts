@@ -13,8 +13,14 @@ export default function parseCsv(csv: ArrayBuffer): string[][] {
  * @param csv A 2D array of strings
  */
 export function csvToGoalList(csv: string[][], roadmapId: string) {
+  // Remove first two rows if the second row is empty (as it should be, with first row containing metadata and third row containing headers)
+  if (!csv[1][0]) {
+    csv = csv.slice(2)
+  }
+
   /** Header row from the CSV */
   const headers = csv[0]
+  console.log(headers)
 
   /** Format: `ourHeaderName: csvHeaderName` */
   const nonNumericHeaders = {
@@ -33,7 +39,7 @@ export function csvToGoalList(csv: string[][], roadmapId: string) {
   // Check that all headers are present and get their indices
   for (let i of Object.keys(nonNumericHeaders)) {
     if (!headers.includes(nonNumericHeaders[i as keyof typeof nonNumericHeaders])) {
-      throw new Error(`Missing header "${i}"`)
+      throw new Error(`Missing header "${nonNumericHeaders[i as keyof typeof nonNumericHeaders]}"`)
     } else {
       headerIndex[i] = headers.indexOf(nonNumericHeaders[i as keyof typeof nonNumericHeaders])
     }

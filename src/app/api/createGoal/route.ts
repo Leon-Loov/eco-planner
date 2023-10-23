@@ -70,6 +70,7 @@ export async function POST(request: NextRequest) {
     viewGroups.push({ name: name });
   }
 
+  // This code also exists in src/app/api/createRoadmap/roadmapGoalCreator.ts, if one changes the other should be changed as well
   // Prepare for creating data series
   let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
     author: { connect: { id: session.user.id } },
