@@ -1,8 +1,8 @@
 import { GoalInput } from "@/types"
 
 export default function parseCsv(csv: ArrayBuffer): string[][] {
-  // ISO-8859-1 is latin1, which is used for Swedish characters
-  const decoder = new TextDecoder('ISO-8859-1')
+  // Windows-1252 (sometimes called ANSI) is the default encoding for CSV files exported from Excel. Is a superset of ISO-8859-1 (Latin-1).
+  const decoder = new TextDecoder('windows-1252')
   const decodedCsv = decoder.decode(csv)
   const rows = decodedCsv.split('\n')
   return rows.map(row => row.split(';'))
