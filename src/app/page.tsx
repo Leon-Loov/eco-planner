@@ -15,7 +15,7 @@ export default async function Page() {
   let regionalRoadmaps = roadmaps.filter(roadmap => !roadmap.isNational)
 
   return <>
-    <div style={{width: '100%', height: '350px', marginTop: '1.5em',}}>
+    <div style={{ width: '100%', height: '350px', marginTop: '1.5em', }}>
       <AttributedImage src="/images/moose.webp" alt="2 Moose calves walking in grass" borderRadius=".5em">
         Photo by <a href="https://unsplash.com/@scottosbornphoto?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Scott Osborn</a> on <a href="https://unsplash.com/photos/SlXRLSUgQmI?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
       </AttributedImage>
@@ -27,13 +27,19 @@ export default async function Page() {
         <NewRoadmapButton />
       }
     </div>
-    <p>Beskrivning, vad är en färdplan?</p>
+    <p>
+      Detta verktyg syftar till att bidra till Sveriges klimatomställning.
+      I verktyget kan nationella scenarier, även kallade kvantitativa färdplaner, brytas ner till regional och lokal nivå och en handlingsplan kan skapas.
+      Handlingsplanen byggs upp av åtgärder vilka relaterar till en specifik målbana och målbanorna utgör tillsammans hela färdplanen.
+      Användare kan inspireras av varandras åtgärder, på så sätt skapas en gemensam åtgärdsdatabas för Sverige.
+      På lokal nivå kan också olika aktörer samarbeta kring åtgärder.
+    </p>
     <section className="grid-auto-rows">
       <div>
-        <RoadmapTable title="Nationella färdplaner" roadmaps={nationalRoadmaps}/>
+        <RoadmapTable title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
       </div>
       <div>
-        <RoadmapTable title="Regionala färdplaner" roadmaps={regionalRoadmaps}/>
+        <RoadmapTable title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
       </div>
     </section>
   </>
