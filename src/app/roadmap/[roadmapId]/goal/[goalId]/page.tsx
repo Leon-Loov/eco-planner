@@ -95,8 +95,8 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <h1>Målbana &quot;{goal.name}&quot;{roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
-      <ActionTable title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params}/>
+      <h1>Målbana &quot;{goal.name ? goal.name : goal.indicatorParameter}&quot;{roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
+      <ActionTable title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
       { // Only show the chart if there are data points to show
         dataPoints.length > 0 &&
