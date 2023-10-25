@@ -55,6 +55,11 @@ export function csvToGoalList(csv: string[][], roadmapId: string) {
 
   // Create GoalInput objects from the data
   for (let i = 1; i < csv.length; i++) {
+    // Skip rows without an indicatorParameter
+    if (!csv[i][headerIndex.indicatorParameter]) {
+      continue
+    }
+
     let dataSeries: string[] = []
     for (let j of numericHeaders) {
       dataSeries.push(csv[i][headerIndex[j]]?.replaceAll(",", "."))
