@@ -64,7 +64,7 @@ export default function RoadmapForm({
 
   const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.county || null)
   const [currentFile, setCurrentFile] = useState<File | null>(null)
-  const [isLoading, setIsLoading] = useState<Boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   let currentAccess: AccessControlled | undefined = undefined;
   if (currentRoadmap) {
@@ -143,7 +143,7 @@ export default function RoadmapForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa färdplan" className="call-to-action-primary" />
+        <input type="submit" value="Skapa färdplan" className="call-to-action-primary" disabled={isLoading} />
       </form>
     </>
   )
