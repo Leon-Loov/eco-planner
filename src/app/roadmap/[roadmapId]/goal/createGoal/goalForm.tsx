@@ -16,7 +16,7 @@ export default function GoalForm({
   roadmapId: string,
   user: Data['user'],
   nationalRoadmaps: (Roadmap & { goals: Goal[] })[],
-  currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries },
+  currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries | null },
 }) {
   // Submit the form to the API
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -47,6 +47,7 @@ export default function GoalForm({
       // This functionality is temporarily or permanently disabled
       // dataSeriesId: (form.namedItem("dataSeriesId") as HTMLInputElement)?.value,
       roadmapId: roadmapId,
+      goalId: currentGoal?.id || null,
       editors: editUsers,
       viewers: viewUsers,
       editGroups,
@@ -86,6 +87,7 @@ export default function GoalForm({
 
   const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(currentGoal?.nationalRoadmapId || null)
 
+  // If there is a data series, convert it to an array of numbers to use as a default value for the form
   let dataArray: (number | null)[] = []
   if (currentGoal?.dataSeries) {
     for (let i in currentGoal.dataSeries) {
@@ -143,7 +145,7 @@ export default function GoalForm({
             <br />
           </>
         }
-        {/* TODO: Make this a dropdown with actual indicator parameters, plus a 'custom' option that allows typing in a custom parameter */}
+        {/* TODO: Make this text input, connected to a `datalist` with all available parameters (this will give the user a list of all existing parameters, but still allow them to enter a custom one) */}
         <label htmlFor="indicatorParameter">LEAP parameter: </label>
         <select name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined}>
           <option value="">Välj indikatorparameter</option>
@@ -153,7 +155,7 @@ export default function GoalForm({
         </select>
         <br />
         <label htmlFor="dataUnit">Enhet för dataserie: </label>
-        <input type="text" name="dataUnit" required id="dataUnit" defaultValue={currentGoal?.dataSeries.unit} />
+        <input type="text" name="dataUnit" required id="dataUnit" defaultValue={currentGoal?.dataSeries?.unit} />
         <br />
         <details>
           <summary>
@@ -192,10 +194,7 @@ export default function GoalForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa målbana" className="call-to-action-primary" />
-        <Tooltip anchorSelect="#goalObject">
-          Målobjektet är den som &quot;äger&quot; ett mål, exempelvis en kommun, region eller organisation.
-        </Tooltip>
+        <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} className="call-to-action-primary" />
       </form>
     </>
   )
