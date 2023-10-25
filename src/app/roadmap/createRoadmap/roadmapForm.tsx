@@ -20,6 +20,7 @@ export default function RoadmapForm({
 }) {
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
+    setIsLoading(true)
 
     const form = event.target.elements
 
@@ -56,12 +57,14 @@ export default function RoadmapForm({
     }).then(data => {
       window.location.href = `/roadmap/${data.id}`
     }).catch((err) => {
+      setIsLoading(false)
       alert('Färdplan kunde inte skapas.')
     })
   }
 
   const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.county || null)
   const [currentFile, setCurrentFile] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState<Boolean>(false)
 
   let currentAccess: AccessControlled | undefined = undefined;
   if (currentRoadmap) {
