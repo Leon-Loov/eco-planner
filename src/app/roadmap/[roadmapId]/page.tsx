@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import Tooltip from "@/lib/tooltipWrapper";
 import getOneRoadmap from "@/functions/getOneRoadmap";
-import { NewGoalButton } from "@/components/redirectButtons";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
@@ -12,12 +11,12 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     getSessionData(cookies()),
     getOneRoadmap(params.roadmapId)
   ]);
-  
+
   let accessLevel;
-  if(roadmap) {
+  if (roadmap) {
     accessLevel = accessChecker(roadmap, session.user)
   }
-  
+
   // 404 if the roadmap doesn't exist or if the user doesn't have access to it
   if (!roadmap || !accessLevel) {
     return notFound();

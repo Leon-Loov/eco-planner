@@ -15,12 +15,12 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
           För att lägga till en användare/grupp, skriv in namnet och tryck på enter.<br />
           För att ta bort en användare/grupp, checka ur rutan bredvid namnet.<br />
         </p>
-      
+
         <div className="grid-auto-rows">
-          <EditUsers />
-          <ViewUsers />
-          <EditGroups groupOptions={groupOptions} />
-          <ViewGroups groupOptions={[...groupOptions, 'Public']} />
+          <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
+          <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
+          <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
+          <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
         </div>
       </details>
     </>
@@ -161,14 +161,12 @@ function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
   // The 'Public' group should never have editing access to an item
   let groups = groupOptions.filter((group) => group !== 'Public')
 
-  const [editGroups, setEditGroups] = useState<string[]>(existingGroups ?? []); // The groups that have editing access to the item
-
   return (
     <fieldset>
       <legend>Grupper med redigeringsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'editGroup' + group}>
-          <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} />
+          <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
           <label className="block" htmlFor={'editGroup' + group}>{group}</label>
           <br />
         </Fragment>
@@ -183,14 +181,12 @@ function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
 function ViewGroups({ groupOptions, existingGroups }: { groupOptions: string[], existingGroups?: string[] }) {
   let groups = groupOptions
 
-  const [viewGroups, setViewGroups] = useState<string[]>(existingGroups ?? []); // The groups that have viewing access to the item
-
   return (
     <fieldset>
       <legend>Grupper med läsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
-          <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} />
+          <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
           <label htmlFor={'viewGroup' + group}>{group}</label>
           <br />
         </Fragment>

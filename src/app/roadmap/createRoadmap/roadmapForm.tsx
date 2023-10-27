@@ -4,7 +4,6 @@ import AccessSelector, { getAccessData } from "@/components/accessSelector"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { countiesAndMunicipalities } from "@/lib/countiesAndMunicipalities"
 import { Data } from "@/lib/session"
-import Tooltip from "@/lib/tooltipWrapper"
 import { AccessControlled } from "@/types"
 import { Roadmap } from "@prisma/client"
 import { useEffect, useState } from "react"
@@ -40,6 +39,7 @@ export default function RoadmapForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      roadmapId: currentRoadmap?.id || undefined,
       goals: currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : undefined,
     })
 
@@ -77,20 +77,6 @@ export default function RoadmapForm({
     }
   }
 
-  useEffect(() => {
-    // This component probably shouldn't be async, so we're stacking promises here
-    let buffer = currentFile?.arrayBuffer().then((buffer) => { return buffer })
-    if (!buffer) return
-    buffer.then((buffer) => {
-      let content = parseCsv(buffer)
-      // Remove the first two rows if the second row is empty (This is the case if the file follows the standard format, with metadata in the first row and headers in the third row)
-      if (!content[1][0]) {
-        content = content.slice(2)
-      }
-      console.log(csvToGoalList(content, "0")[0])
-    })
-  }, [currentFile])
-
   return (
     <>
       <form onSubmit={handleSubmit} className="action-form">
@@ -100,7 +86,7 @@ export default function RoadmapForm({
         <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
         <br />
         <label htmlFor="county">Vilket län gäller färdplanen? </label>
-        <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)}>
+        <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.isNational ? "National" : currentRoadmap?.county ?? undefined}>
           <option value="">Välj län</option>
           { // If the user is an admin, they can select the entire country to make a national roadmap
             user?.isAdmin &&
@@ -119,7 +105,7 @@ export default function RoadmapForm({
           selectedCounty && selectedCounty !== "National" &&
           <>
             <label htmlFor="municipality">Vilken kommun gäller färdplanen? </label>
-            <select name="municipality" id="municipality">
+            <select name="municipality" id="municipality" required defaultValue={currentRoadmap?.municipality ?? undefined}>
               <option value="">Välj kommun</option>
               <option value="Regional">Hela länet</option>
               {
@@ -133,7 +119,7 @@ export default function RoadmapForm({
             <br />
           </>
         }
-        <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här: </label>
+        <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> Notera att det här skapar nya målbanor även om det redan finns några. </label>
         <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />
         <br />
         { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user has edit access to the roadmap
@@ -143,7 +129,7 @@ export default function RoadmapForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa färdplan" className="call-to-action-primary" disabled={isLoading} />
+        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="call-to-action-primary" disabled={isLoading} />
       </form>
     </>
   )
