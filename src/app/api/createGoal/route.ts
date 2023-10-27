@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // TODO: Add a check to make sure user has edit access to parent roadmap to prevent custom requests from creating a goal under a roadmap they don't have access to
   if (!goal.roadmapId) {
     return createResponse(
       response,

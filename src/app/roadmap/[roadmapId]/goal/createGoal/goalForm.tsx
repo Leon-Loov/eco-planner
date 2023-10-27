@@ -2,7 +2,7 @@
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
 import { Data } from "@/lib/session"
-import Tooltip from "@/lib/tooltipWrapper"
+import { parameters as parameterOptions } from "@/lib/LEAPList"
 import { AccessControlled } from "@/types"
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
 import { useState } from "react"
@@ -147,12 +147,7 @@ export default function GoalForm({
         }
         {/* TODO: Make this text input, connected to a `datalist` with all available parameters (this will give the user a list of all existing parameters, but still allow them to enter a custom one) */}
         <label htmlFor="indicatorParameter">LEAP parameter: </label>
-        <select name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined}>
-          <option value="">Välj indikatorparameter</option>
-          <option value="Test">Indikatorparameter 1</option>
-          <option value="Thing">Indikatorparameter 2</option>
-          <option value="A\B">Indikatorparameter 3</option>
-        </select>
+        <input type="text" list="LEAPOptions" name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined} />
         <br />
         <label htmlFor="dataUnit">Enhet för dataserie: </label>
         <input type="text" name="dataUnit" required id="dataUnit" defaultValue={currentGoal?.dataSeries?.unit} />
@@ -196,6 +191,14 @@ export default function GoalForm({
         }
         <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} className="call-to-action-primary" />
       </form>
+
+      <datalist id="LEAPOptions">
+        {parameterOptions.map((option) => {
+          return (
+            <option key={option} value={option} />
+          )
+        })}
+      </datalist>
     </>
   )
 }
