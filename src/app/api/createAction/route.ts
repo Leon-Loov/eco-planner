@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
-import { ActionInput } from "@/types";
+import { AccessLevel, ActionInput } from "@/types";
+import accessChecker from "@/lib/accessChecker";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -121,11 +122,28 @@ export async function PUT(request: NextRequest) {
   }
 
   // Validate session
-  if (!session.user?.isLoggedIn) {
+  try {
+    let accessLevel: AccessLevel = AccessLevel.None;
+    let currentAction = await prisma.action.findUnique({
+      where: { id: action.actionId },
+      include: {
+        author: { select: { id: true, username: true } },
+        editors: { select: { id: true, username: true } },
+        viewers: { select: { id: true, username: true } },
+        editGroups: { include: { users: { select: { id: true, username: true } } } },
+        viewGroups: { include: { users: { select: { id: true, username: true } } } },
+      }
+    });
+    accessLevel = accessChecker(currentAction!, session.user)
+    if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
+      throw new Error('Access denied');
+    }
+  } catch (e) {
+    console.log(e);
     return createResponse(
       response,
-      JSON.stringify({ message: 'Unauthorized' }),
-      { status: 401 }
+      JSON.stringify({ message: "You either don't have access to this action or are trying to edit an action that doesn't exist" }),
+      { status: 403 }
     );
   }
 

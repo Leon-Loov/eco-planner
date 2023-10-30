@@ -39,6 +39,7 @@ export default function ActionForm({
       projectManager: (form.namedItem("projectManager") as HTMLInputElement)?.value,
       relevantActors: (form.namedItem("relevantActors") as HTMLInputElement)?.value,
       goalId: goalId,
+      actionId: currentAction?.id || null,
       editors: editUsers,
       viewers: viewUsers,
       editGroups,
@@ -103,7 +104,7 @@ export default function ActionForm({
             <label htmlFor="endYear">Planerat slutår: </label>
             <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} />
           </div>
-        <br />
+          <br />
         </div>
         <label htmlFor="projectManager">Projektansvarig: </label>
         <input type="text" name="projectManager" id="projectManager" defaultValue={currentAction?.projectManager ?? undefined} />
@@ -118,7 +119,7 @@ export default function ActionForm({
             <br />
           </>
         }
-        <input type="submit" value="Skapa åtgärd" className="call-to-action-primary" />
+        <input type="submit" value={currentAction ? "Spara" : "Skapa åtgärd"} className="call-to-action-primary" />
         <br />
       </form>
     </>

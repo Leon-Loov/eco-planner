@@ -16,7 +16,13 @@ export default async function getOneRoadmap(id: string) {
 
   let roadmap: Roadmap & {
     goals: (Goal & {
-      actions: Action[],
+      actions: (Action & {
+        author: { id: string, username: string },
+        editors: { id: string, username: string }[],
+        viewers: { id: string, username: string }[],
+        editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+        viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+      })[],
       dataSeries: DataSeries | null,
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
@@ -39,7 +45,15 @@ export default async function getOneRoadmap(id: string) {
         include: {
           goals: {
             include: {
-              actions: true,
+              actions: {
+                include: {
+                  author: { select: { id: true, username: true } },
+                  editors: { select: { id: true, username: true } },
+                  viewers: { select: { id: true, username: true } },
+                  editGroups: { include: { users: { select: { id: true, username: true } } } },
+                  viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                },
+              },
               dataSeries: true,
               author: { select: { id: true, username: true } },
               editors: { select: { id: true, username: true } },
@@ -84,7 +98,15 @@ export default async function getOneRoadmap(id: string) {
         include: {
           goals: {
             include: {
-              actions: true,
+              actions: {
+                include: {
+                  author: { select: { id: true, username: true } },
+                  editors: { select: { id: true, username: true } },
+                  viewers: { select: { id: true, username: true } },
+                  editGroups: { include: { users: { select: { id: true, username: true } } } },
+                  viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                },
+              },
               dataSeries: true,
               author: { select: { id: true, username: true } },
               editors: { select: { id: true, username: true } },
@@ -123,7 +145,15 @@ export default async function getOneRoadmap(id: string) {
       include: {
         goals: {
           include: {
-            actions: true,
+            actions: {
+              include: {
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              },
+            },
             dataSeries: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
