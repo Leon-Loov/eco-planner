@@ -11,7 +11,7 @@ export function AdminButton() {
 export function BackButton({ href }: { href: string }) {
   return (
     <>
-      <Link href={href}> 
+      <Link href={href}>
         <img src="/icons/back.svg" alt="back" />
       </Link>
     </>
@@ -34,10 +34,10 @@ export function SignupButton() {
   )
 }
 
-export function NewActionButton({ roadmapId, goalId }: { roadmapId: string, goalId: string}) {
+export function NewActionButton({ roadmapId, goalId }: { roadmapId: string, goalId: string }) {
   return (
     <>
-      <Link href={`/roadmap/${roadmapId}/goal/${goalId}/createAction`} className="call-to-action-primary"> Skapa ny åtgärd </Link>
+      <Link href={`/roadmap/${roadmapId}/goal/${goalId}/action/createAction`} className="call-to-action-primary"> Skapa ny åtgärd </Link>
     </>
   )
 }
