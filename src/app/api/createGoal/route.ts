@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Create lists of UUIDs for linking
+  // Create lists of names for linking
   let editors: { username: string }[] = [];
   for (let name of goal.editors || []) {
     editors.push({ username: name });
@@ -212,7 +212,7 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  // Create lists of UUIDs for linking
+  // Create lists of names for linking
   let editors: { username: string }[] = [];
   for (let name of goal.editors || []) {
     editors.push({ username: name });
