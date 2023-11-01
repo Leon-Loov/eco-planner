@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { roadmapSorter } from "@/lib/sorters";
-import { Goal, Roadmap } from "@prisma/client";
+import { Action, DataSeries, Goal, Roadmap } from "@prisma/client";
 import { cookies } from "next/headers";
 
 export default async function getRoadmaps() {
@@ -9,20 +9,29 @@ export default async function getRoadmaps() {
 
   let roadmaps: (
     Roadmap & {
-      goals: Goal[],
+      goals: (Goal & {
+        dataSeries: DataSeries | null,
+        actions: Action[],
+      })[],
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
       viewers: { id: string, username: string }[],
       editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-    })[] = [];
+    }
+  )[] = [];
 
   // If user is admin, get all roadmaps
   if (session.user?.isAdmin) {
     try {
       roadmaps = await prisma.roadmap.findMany({
         include: {
-          goals: true,
+          goals: {
+            include: {
+              dataSeries: true,
+              actions: true,
+            },
+          },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
@@ -58,7 +67,12 @@ export default async function getRoadmaps() {
           ]
         },
         include: {
-          goals: true,
+          goals: {
+            include: {
+              dataSeries: true,
+              actions: true,
+            },
+          },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
@@ -85,7 +99,12 @@ export default async function getRoadmaps() {
         viewGroups: { some: { name: 'Public' } }
       },
       include: {
-        goals: true,
+        goals: {
+          include: {
+            dataSeries: true,
+            actions: true,
+          },
+        },
         author: { select: { id: true, username: true } },
         editors: { select: { id: true, username: true } },
         viewers: { select: { id: true, username: true } },

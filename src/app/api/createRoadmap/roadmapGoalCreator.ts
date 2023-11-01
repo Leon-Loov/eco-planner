@@ -48,6 +48,10 @@ export default function roadmapGoalCreator(
 
     // Format and add to output
     output.push({
+      name: goal.name,
+      description: goal.description,
+      nationalRoadmapId: goal.nationalRoadmapId,
+      nationalGoalId: goal.nationalGoalId,
       indicatorParameter: goal.indicatorParameter,
       dataSeries: {
         create: dataValues,

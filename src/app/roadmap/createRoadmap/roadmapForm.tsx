@@ -1,20 +1,23 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import goalInputFromRoadmap from "@/functions/goalInputFromRoadmap.ts"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { countiesAndMunicipalities } from "@/lib/countiesAndMunicipalities"
 import { Data } from "@/lib/session"
 import { AccessControlled } from "@/types"
-import { Roadmap } from "@prisma/client"
-import { useEffect, useState } from "react"
+import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
+import { useState } from "react"
 
 export default function RoadmapForm({
   user,
   userGroups,
+  nationalRoadmaps,
   currentRoadmap,
 }: {
   user: Data['user'],
   userGroups: string[],
+  nationalRoadmaps: (Roadmap & { goals?: (Goal & { dataSeries: DataSeries | null, actions: Action[] })[] })[],
   currentRoadmap?: Roadmap & AccessControlled,
 }) {
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -30,6 +33,8 @@ export default function RoadmapForm({
       form.namedItem("viewGroups")
     )
 
+    const parentRoadmap = nationalRoadmaps.find((roadmap) => roadmap.id == (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value)
+
     const formJSON = JSON.stringify({
       name: (form.namedItem("roadmapName") as HTMLInputElement)?.value,
       county: (form.namedItem("county") as HTMLInputElement)?.value == "National" ? undefined : (form.namedItem("county") as HTMLInputElement)?.value || undefined,
@@ -40,7 +45,10 @@ export default function RoadmapForm({
       editGroups,
       viewGroups,
       roadmapId: currentRoadmap?.id || undefined,
-      goals: currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : undefined,
+      goals: [
+        ...(currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : []),
+        ...(parentRoadmap ? goalInputFromRoadmap(parentRoadmap) : [])
+      ],
     })
 
     fetch('/api/createRoadmap', {
@@ -84,6 +92,18 @@ export default function RoadmapForm({
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="name">Namn på färdplanen: </label>
         <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
+        <br />
+        <label htmlFor="copyFrom">Nationell färdplan denna färdplan är baserad på (om någon): </label>
+        <select name="parentRoadmap" id="copyFrom">
+          <option value="">Ingen nationell färdplan</option>
+          {
+            nationalRoadmaps.map((roadmap) => {
+              return (
+                <option key={roadmap.id} value={roadmap.id}>{roadmap.name}</option>
+              )
+            })
+          }
+        </select>
         <br />
         <label htmlFor="county">Vilket län gäller färdplanen? </label>
         <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.isNational ? "National" : currentRoadmap?.county ?? undefined}>
