@@ -14,7 +14,7 @@ export async function Header() {
           <img src='/icons/leaf.svg' /> 
         </Link>
         <nav>
-          <Link href="/" className="header-link"> Home </Link>
+          <Link href="/" className="header-link"> Hem </Link>
           { // Link to login and signup if not logged in
             !user?.isLoggedIn &&
             <>
