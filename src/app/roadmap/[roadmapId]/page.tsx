@@ -23,7 +23,8 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   }
 
   return <>
-    <h1>Färdplan &quot;{roadmap.name}&quot;{roadmap.isNational ? ", en nationell färdplan" : null}</h1>
+    <h1 style={{marginBottom: ".25em"}}>{roadmap.name}</h1>
+    <span style={{color: "gray"}}>Färdplan</span>
     <GoalTable title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Tooltip anchorSelect="#goalName">
       Beskrivning av vad målbanan beskriver, tex. antal bilar.

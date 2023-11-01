@@ -2,6 +2,7 @@ import './tables.css'
 import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
 import { NewGoalButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
+import RadioImage from '../images/radioImage'
 
 export default function GoalTable({
   title,
@@ -30,10 +31,15 @@ export default function GoalTable({
   return <>
     <label htmlFor="goalTable" className="flex-row flex-between align-center flex-wrap">
       <h2>{title}</h2>
-      { // Only show the button if the user has edit access to the roadmap
-        (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
-        <NewGoalButton roadmapId={roadmap.id} />
-      }
+      <nav className='flex-row align-center gap-100'>
+        <RadioImage value='listTree' src='/icons/listTree.svg' name='table' />
+        <RadioImage value='table' src='/icons/table.svg' name='table' />
+        <RadioImage value='columns' src='/icons/columns.svg' name='table' />
+        { // Only show the button if the user has edit access to the roadmap
+          (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+          <NewGoalButton roadmapId={roadmap.id} />
+        }
+      </nav>
     </label>
     <div className="overflow-x-scroll">
       <table id="goalTable">
