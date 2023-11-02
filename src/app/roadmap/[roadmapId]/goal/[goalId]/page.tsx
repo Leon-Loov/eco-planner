@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { NewActionButton } from "@/components/redirectButtons";
 import getOneRoadmap from "@/functions/getOneRoadmap";
 import { cookies } from "next/headers";
 import { getSessionData } from "@/lib/session";
@@ -95,8 +94,8 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <h1 style={{marginBottom: ".25em"}}>{roadmap?.name ? `${roadmap.name}` : null}</h1>
-      <span style={{color: "gray"}}>Målbana</span>
+      <h1 style={{ marginBottom: ".25em" }}>{roadmap?.name ? `${roadmap.name}` : null}</h1>
+      <span style={{ color: "gray" }}>Målbana</span>
       <ActionTable title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
       { // Only show the chart if there are data points to show

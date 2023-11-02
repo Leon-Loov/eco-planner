@@ -63,6 +63,7 @@ export default function RoadmapForm({
         throw new Error('Roadmap could not be created.')
       }
     }).then(data => {
+      setIsLoading(false)
       window.location.href = `/roadmap/${data.id}`
     }).catch((err) => {
       setIsLoading(false)

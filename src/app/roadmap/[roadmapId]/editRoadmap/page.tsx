@@ -4,7 +4,6 @@ import { getSessionData } from '@/lib/session';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/redirectButtons';
-import getRoadmaps from "@/functions/getRoadmaps";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
