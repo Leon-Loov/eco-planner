@@ -1,0 +1,17 @@
+.breadCrumb {
+    color: gray;
+    text-decoration: none;
+    line-height: 1.5;
+}
+
+.breadCrumb:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+.currentBreadCrumb {
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    line-height: 1.5;
+}

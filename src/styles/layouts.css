@@ -62,6 +62,14 @@
     flex-grow: .25;
 }
 
+.gap-25 {
+    gap: .25em;
+}
+
+.gap-50 {
+    gap: .5em;
+}
+
 .gap-100 {
     gap: 1em;
 }
