@@ -7,6 +7,7 @@ import { AccessLevel, DataSeriesDataFields, dataSeriesDataFieldNames } from "@/t
 import Chart from "@/lib/chartWrapper";
 import ActionTable from "@/components/tables/actionTable";
 import CombinedGraph from "./combinedGraph";
+import ActionGraph from "./actionGraph";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -26,7 +27,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     return notFound();
   }
 
-  let dataPoints: ApexAxisChartSeries = [];
+  let mainChart: ApexAxisChartSeries = [];
   let mainSeries = []
   if (goal.dataSeries) {
     for (let i of dataSeriesDataFieldNames) {
@@ -37,13 +38,14 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         })
       }
     }
-    dataPoints.push({
-      name: 'Data',
+    mainChart.push({
+      name: (goal.name || goal.indicatorParameter).split('\\').slice(-1)[0],
       data: mainSeries,
       type: 'line',
     })
   }
 
+  let dataPoints: ApexAxisChartSeries = []
   for (let i in goal.actions) {
     let actionDurations = []
     if (goal.actions[i].startYear || goal.actions[i].endYear) {
@@ -56,17 +58,22 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         y: i,
       })
       dataPoints.push({
-        name: `${goal.actions[i].name}'s  aktiva period`,
+        name: goal.actions[i].name,
         data: actionDurations,
         type: 'line',
       })
     }
   }
 
-  let yaxisData: ApexYAxis[] = [{ seriesName: 'data', title: { text: goal.dataSeries?.unit } }]
-  for (let i = 1; i < dataPoints.length; i++) {
-    yaxisData.push({
-      seriesName: dataPoints[1].name,
+  let mainYAxis: ApexYAxis[] = [{
+    seriesName: (goal.name || goal.indicatorParameter).split('\\').slice(-1)[0],
+    title: { text: goal.dataSeries?.unit },
+  }]
+
+  let actionYAxis: ApexYAxis[] = []
+  for (let i = 0; i < dataPoints.length; i++) {
+    actionYAxis.push({
+      seriesName: dataPoints[0].name,
       opposite: true,
       max: goal.actions.length,
       min: -1,
@@ -76,7 +83,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     })
   }
 
-  let chartOptions: ApexCharts.ApexOptions = {
+  let mainChartOptions: ApexCharts.ApexOptions = {
     chart: { type: 'line' },
     stroke: { curve: 'straight' },
     xaxis: {
@@ -87,7 +94,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
       // categories: dataSeriesDataFieldNames.map(name => name.replace('val', ''))
     },
-    yaxis: yaxisData,
+    yaxis: mainYAxis,
     tooltip: {
       x: { format: 'yyyy' }
     },
@@ -104,14 +111,15 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <>
           <h2>Dataserie</h2>
           <Chart
-            options={chartOptions}
-            series={dataPoints}
+            options={mainChartOptions}
+            series={mainChart}
             type="line"
             width="90%"
             height="500"
           />
           <br />
           <CombinedGraph roadmap={roadmap} goal={goal} />
+          <ActionGraph actions={goal.actions} />
         </>
       }
       <br />
