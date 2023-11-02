@@ -4,11 +4,12 @@ import { getSessionData } from '@/lib/session';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/redirectButtons';
+import getRoadmaps from "@/functions/getRoadmaps";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
     getSessionData(cookies()),
-    getOneRoadmap(params.roadmapId)
+    getOneRoadmap(params.roadmapId),
   ]);
 
   // User must be signed in and have edit access to the roadmap, which must exist
@@ -20,7 +21,11 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     <>
       <p><BackButton href="../" /></p>
       <h1>Redigera färdplanen {`"${roadmap.name}"`}</h1>
-      <RoadmapForm user={session.user} userGroups={session.user?.userGroups} currentRoadmap={roadmap} />
+      <RoadmapForm
+        user={session.user}
+        userGroups={session.user?.userGroups}
+        currentRoadmap={roadmap}
+      />
     </>
   )
 }

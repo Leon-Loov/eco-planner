@@ -20,7 +20,11 @@ export default async function Page() {
     <>
       <p><BackButton href="../" /></p>
       <h1>Skapa en ny färdplan</h1>
-      <RoadmapForm user={session.user} userGroups={session.user?.userGroups} nationalRoadmaps={roadmaps.filter((roadmap) => roadmap.isNational)} />
+      <RoadmapForm
+        user={session.user}
+        userGroups={session.user?.userGroups}
+        nationalRoadmaps={roadmaps.filter((roadmap) => roadmap.isNational)}
+      />
     </>
   )
 }
