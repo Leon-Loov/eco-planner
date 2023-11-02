@@ -6,6 +6,7 @@ import accessChecker from "@/lib/accessChecker";
 import { AccessLevel, DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import Chart from "@/lib/chartWrapper";
 import ActionTable from "@/components/tables/actionTable";
+import CombinedGraph from "./combinedGraph";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -21,7 +22,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   }
 
   // 404 if the goal doesn't exist or if the user doesn't have access to it
-  if (!goal || !accessLevel) {
+  if (!goal || !accessLevel || !roadmap) {
     return notFound();
   }
 
@@ -110,6 +111,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             height="500"
           />
           <br />
+          <CombinedGraph roadmap={roadmap} goal={goal} />
         </>
       }
       <br />
