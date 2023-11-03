@@ -1,9 +1,13 @@
+"use client"
+
 import './tables.css'
 import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
 import { NewGoalButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
+import { useContext } from 'react'
+import { tableContext } from './tableContext'
 
 export default function Goals({
   title,
@@ -29,6 +33,8 @@ export default function Goals({
   },
   accessLevel?: AccessLevel
 }) {
+  let selectedTable = useContext(tableContext)
+  console.log(selectedTable)
   return (
     <>
       <label htmlFor="goalTable" className="flex-row flex-between align-center flex-wrap">
@@ -41,7 +47,9 @@ export default function Goals({
           }
         </nav>
       </label>
-      <GoalTable roadmap={roadmap}></GoalTable>
+      {selectedTable == 'table' ? (
+        <GoalTable roadmap={roadmap}></GoalTable>
+      ): null }
     </>
   )
 }
