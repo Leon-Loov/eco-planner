@@ -20,7 +20,6 @@ export function csvToGoalList(csv: string[][], roadmapId: string) {
 
   /** Header row from the CSV */
   const headers = csv[0]
-  console.log(headers)
 
   /** Format: `ourHeaderName: csvHeaderName` */
   const nonNumericHeaders = {

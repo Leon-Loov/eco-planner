@@ -54,8 +54,6 @@ export default function GoalForm({
       viewGroups,
     })
 
-    console.log(formJSON)
-
     fetch('/api/createGoal', {
       // If a goal is being edited, use PUT instead of POST
       method: currentGoal ? 'PUT' : 'POST',

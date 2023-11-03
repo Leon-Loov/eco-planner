@@ -34,7 +34,6 @@ export default function Goals({
   accessLevel?: AccessLevel
 }) {
   let selectedTable = useContext(tableContext)
-  console.log(selectedTable)
   return (
     <>
       <label htmlFor="goalTable" className="flex-row flex-between align-center flex-wrap">
