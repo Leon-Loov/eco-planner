@@ -4,7 +4,8 @@ import getOneRoadmap from "@/functions/getOneRoadmap";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
-import GoalTable from '@/components/tables/goalTable'
+import GoalTable from '@/components/tables/goalTables/goalTable'
+import Goals from "@/components/tables/goals";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -25,7 +26,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   return <>
     <h1 style={{marginBottom: ".25em"}}>{roadmap.name}</h1>
     <span style={{color: "gray"}}>Färdplan</span>
-    <GoalTable title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
+    <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Tooltip anchorSelect="#goalName">
       Beskrivning av vad målbanan beskriver, tex. antal bilar.
     </Tooltip>

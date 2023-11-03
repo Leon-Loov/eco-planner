@@ -12,7 +12,7 @@ export default async function RootLayout({
       <body>
         <Header />
         <div className='layout-main'>
-          <BreadCrumbs />
+          {/*<BreadCrumbs />*/}
           {children}
         </div>
       </body>

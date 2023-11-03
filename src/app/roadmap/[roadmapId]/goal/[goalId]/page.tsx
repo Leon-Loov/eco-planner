@@ -5,9 +5,10 @@ import { getSessionData } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
 import { AccessLevel, DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import Chart, { floatSmoother } from "@/lib/chartWrapper";
-import ActionTable from "@/components/tables/actionTable";
+import ActionTable from "@/components/tables/actionTables/actionTable";
 import CombinedGraph from "./combinedGraph";
 import ActionGraph from "./actionGraph";
+import Actions from "@/components/tables/actions";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -69,7 +70,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     <>
       <h1 style={{ marginBottom: ".25em" }}>{goal.name ? goal.name : goal.indicatorParameter}</h1>
       <span style={{ color: "gray" }}>Målbana</span>
-      <ActionTable title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
+      <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
       { // Only show the chart if there are data points to show
         mainChart.length > 0 &&

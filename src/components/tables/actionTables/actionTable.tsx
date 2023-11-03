@@ -1,16 +1,11 @@
-import './tables.css'
+import '../tables.css'
 import { Action, Goal } from "@prisma/client"
-import { NewActionButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
-import RadioImage from '../images/radioImage'
 
 export default function ActionTable({
-  title,
   goal,
   accessLevel,
-  params,
 }: {
-  title: String,
   goal: Goal & {
     actions: Action[],
     author: { id: string, username: string },
@@ -20,21 +15,8 @@ export default function ActionTable({
     viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
   },
   accessLevel?: AccessLevel,
-  params: { roadmapId: string, goalId: string },
 }) {
   return <>
-    <label htmlFor="action-table" className="flex-row flex-between align-center flex-wrap">
-      <h2>{title}</h2>
-      <nav className='flex-row align-center gap-100'>
-        <RadioImage value='listTree' src='/icons/listTree.svg' name='table' />
-        <RadioImage value='table' src='/icons/table.svg' name='table' />
-        <RadioImage value='columns' src='/icons/columns.svg' name='table' />
-        { // Only show the button if the user has edit access to the goal
-          (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
-          <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
-        }
-      </nav>
-    </label>
     <div className="overflow-x-scroll">
       <table id="action-table">
         <thead>

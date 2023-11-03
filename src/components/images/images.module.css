@@ -36,38 +36,4 @@
     position: relative;
 }
 
-/* ImageLink */
-
-.radioImageWrapper {
-    position: relative;
-}
-
-.radioImageWrapper > input[type="radio"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.radioImageWrapper > input[type="radio"]:hover ~ .radioImage {
-    outline: 3px solid var(--accent-color);
-}
-
-.radioImageWrapper > input[type="radio"]:checked ~ .radioImage {
-    outline: 3px solid var(--accent-color);
-}
-
-.radioImage {
-    background-color: lightgray;
-    border-radius: 3px;
-    padding: .25em;
-    display: grid;
-    place-items: center;
-    position: relative;
-}
-
-
 
