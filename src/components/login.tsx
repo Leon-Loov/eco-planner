@@ -52,8 +52,8 @@ export default function Login() {
           </form>
         </main>
         <aside style={{ width: '40%' }}>
-          <AttributedImage src="/images/bee.webp" alt="Bee pollinating a flower" borderRadius="0 .5em .5em 0">
-            Photo by <a href="https://unsplash.com/@alken?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Alfred Kenneally</a> on <a href="https://unsplash.com/photos/cf7YFJ_e8RE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+          <AttributedImage src="/images/cyclists.jpg" alt="" borderRadius="0 .5em .5em 0">
+            Photo by <a href="https://unsplash.com/@samtekiefte?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sam te Kiefte</a> on <a href="https://unsplash.com/photos/man-in-red-long-sleeve-shirt-riding-bicycle-on-street-during-daytime-NMeO6NIUOcA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>
         </aside>
       </div>
