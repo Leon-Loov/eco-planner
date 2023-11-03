@@ -1,7 +1,8 @@
 /* Table styling*/
 table {
-    --thead-color: #4a6741;
+    --thead-color: #0066b2;
     --thead-color-text: white;
+    --maybe: #d4e5f2;
     min-width: 100%;
     text-align: left;
     border-collapse: collapse;
@@ -21,7 +22,7 @@ th, td {
 
   
 tbody tr:nth-child(odd) {
-    background-color: whitesmoke;
+    background-color: ghostwhite;
 }
   
 tbody tr:nth-child(even) {

@@ -6,8 +6,8 @@
 /* General  --accent-color: #A17BAC; 33482d*/
 :root {
   --background-color: white;
-  --accent-color: #A17BAC;
-  --accent-color-dark: #705678;
+  --accent-color: seagreen;
+  --accent-color-dark: #1b5233;
   --accent-text: white;
 }
 
