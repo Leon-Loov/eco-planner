@@ -37,7 +37,7 @@ p {
 summary {
   cursor: pointer;
   padding: 1em;
-  background-color: #ececec;
+  background-color: lightgray;
   border-radius: 3px;
 }
 
@@ -53,6 +53,25 @@ input:focus:not(input[type="checkbox"]), select:focus {
 
 button, select, input {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type="file"] {
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 3px;
+  background-color: transparent;
+  padding: 3em;
+  border: 3px dashed lightgray;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+  border-radius: 3px;
+  border: none;
+  padding: .5em 3em;
+  margin: 0 .75em;
+  background-color: lightgray;
+  font-weight: bold;
 }
 
 /* Call to action links */
