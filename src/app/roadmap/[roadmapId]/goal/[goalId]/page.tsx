@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <h1 style={{ marginBottom: ".25em" }}>{roadmap?.name ? `${roadmap.name}` : null}</h1>
+      <h1 style={{ marginBottom: ".25em" }}>{goal.name ? goal.name : goal.indicatorParameter}</h1>
       <span style={{ color: "gray" }}>Målbana</span>
       <ActionTable title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
