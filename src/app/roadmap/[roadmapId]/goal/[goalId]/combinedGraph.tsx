@@ -1,5 +1,5 @@
 import findSiblings from "@/functions/findSiblings";
-import WrappedChart from "@/lib/chartWrapper";
+import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal, Roadmap } from "@prisma/client";
 
@@ -48,7 +48,10 @@ export default function CombinedGraph(
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
       // categories: dataSeriesDataFieldNames.map(name => name.replace('val', ''))
     },
-    yaxis: { title: { text: goal.dataSeries?.unit } },
+    yaxis: {
+      title: { text: goal.dataSeries?.unit },
+      labels: { formatter: floatSmoother },
+    },
     tooltip: {
       x: { format: 'yyyy' }
     },

@@ -56,3 +56,12 @@ export default function WrappedChart({
     </>
   )
 }
+
+/**
+ * Used as a formatter for ApexCharts to remove trailing zeros in floats.
+ * Actually just `value.toString()`.
+ * Declared as a client-side function so it can be used in `WrappedChart`.
+ */
+export function floatSmoother(value: number) {
+  return value.toString()
+}

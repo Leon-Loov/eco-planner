@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { getSessionData } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
 import { AccessLevel, DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
-import Chart from "@/lib/chartWrapper";
+import Chart, { floatSmoother } from "@/lib/chartWrapper";
 import ActionTable from "@/components/tables/actionTable";
 import CombinedGraph from "./combinedGraph";
 import ActionGraph from "./actionGraph";
@@ -45,44 +45,6 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     })
   }
 
-  let dataPoints: ApexAxisChartSeries = []
-  for (let i in goal.actions) {
-    let actionDurations = []
-    if (goal.actions[i].startYear || goal.actions[i].endYear) {
-      actionDurations.push({
-        x: new Date(goal.actions[i].startYear ?? 2020).getTime(),
-        y: i,
-      })
-      actionDurations.push({
-        x: new Date(goal.actions[i].endYear ?? 2050).getTime(),
-        y: i,
-      })
-      dataPoints.push({
-        name: goal.actions[i].name,
-        data: actionDurations,
-        type: 'line',
-      })
-    }
-  }
-
-  let mainYAxis: ApexYAxis[] = [{
-    seriesName: (goal.name || goal.indicatorParameter).split('\\').slice(-1)[0],
-    title: { text: goal.dataSeries?.unit },
-  }]
-
-  let actionYAxis: ApexYAxis[] = []
-  for (let i = 0; i < dataPoints.length; i++) {
-    actionYAxis.push({
-      seriesName: dataPoints[0].name,
-      opposite: true,
-      max: goal.actions.length,
-      min: -1,
-      tickAmount: goal.actions.length + 1,
-      show: i === 1 ? true : false,
-      labels: { show: false },
-    })
-  }
-
   let mainChartOptions: ApexCharts.ApexOptions = {
     chart: { type: 'line' },
     stroke: { curve: 'straight' },
@@ -94,9 +56,12 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
       // categories: dataSeriesDataFieldNames.map(name => name.replace('val', ''))
     },
-    yaxis: mainYAxis,
+    yaxis: {
+      title: { text: goal.dataSeries?.unit },
+      labels: { formatter: floatSmoother },
+    },
     tooltip: {
-      x: { format: 'yyyy' }
+      x: { format: 'yyyy' },
     },
   }
 
@@ -107,7 +72,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       <ActionTable title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
       { // Only show the chart if there are data points to show
-        dataPoints.length > 0 &&
+        mainChart.length > 0 &&
         <>
           <h2>Dataserie</h2>
           <Chart
@@ -118,10 +83,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             height="500"
           />
           <br />
-          <CombinedGraph roadmap={roadmap} goal={goal} />
-          <ActionGraph actions={goal.actions} />
         </>
       }
+      <CombinedGraph roadmap={roadmap} goal={goal} />
+      <br />
+      <ActionGraph actions={goal.actions} />
       <br />
     </>
   )
