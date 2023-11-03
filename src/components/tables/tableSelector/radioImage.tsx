@@ -5,17 +5,21 @@ export default function RadioImage({
   src,
   value,
   name, 
+  checked,
+  onChange,
 }: {
   src: string,
   value: string,
   name: string,
+  checked: boolean,
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 
 
   return (
     <>
       <div className="radioImageWrapper">
-        <input type='radio' name={name} value={value}/>
+        <input type='radio' name={name} value={value} checked={checked} onChange={onChange}/>
         <div className="radioImage">
           <Image src={src} alt={value} width={24} height={24} />
         </div>
