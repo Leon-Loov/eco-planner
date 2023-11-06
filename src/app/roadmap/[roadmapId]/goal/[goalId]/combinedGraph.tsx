@@ -58,6 +58,8 @@ export default function CombinedGraph({
   return (siblings.length > 1 &&
     <>
       <h2>Kombinerad graf</h2>
+      <h3>{goal.indicatorParameter.split('\\').slice(0, -1).join('\\')}
+      </h3>
       <WrappedChart
         options={chartOptions}
         series={dataPoints}
