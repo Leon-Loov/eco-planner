@@ -52,7 +52,7 @@ export default function Login() {
           </form>
         </main>
         <aside style={{ width: '40%' }}>
-          <AttributedImage src="/images/cyclists.jpg" alt="" borderRadius="0 .5em .5em 0">
+          <AttributedImage src="/images/cyclists.webp" alt="" borderRadius="0 .5em .5em 0">
             Photo by <a href="https://unsplash.com/@samtekiefte?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sam te Kiefte</a> on <a href="https://unsplash.com/photos/man-in-red-long-sleeve-shirt-riding-bicycle-on-street-during-daytime-NMeO6NIUOcA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>
         </aside>

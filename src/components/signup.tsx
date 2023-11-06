@@ -59,7 +59,7 @@ export default function Signup() {
           </form>
         </main>
         <aside style={{width: '40%'}}>
-          <AttributedImage src="/images/charging_car.jpg" alt="" borderRadius="0 .5em .5em 0">
+          <AttributedImage src="/images/charging_car.webp" alt="" borderRadius="0 .5em .5em 0">
             Photo by <a href="https://unsplash.com/@juice_world?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">JUICE</a> on <a href="https://unsplash.com/photos/a-man-and-a-woman-are-charging-their-cars-cBHAhaGK_zU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>
         </aside>
