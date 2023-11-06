@@ -1,5 +1,6 @@
 import '@/styles/global.css'
 import { Header } from '@/components/header/header'
+import { GlobalContextProvider } from "./context/store"
 import BreadCrumbs from '@/components/breadcrumbs/breadCrumbs'
 
 export default async function RootLayout({
@@ -13,7 +14,9 @@ export default async function RootLayout({
         <Header />
         <div className='layout-main'>
           {/*<BreadCrumbs />*/}
-          {children}
+          <GlobalContextProvider>
+            {children}
+          </GlobalContextProvider>
         </div>
       </body>
     </html>

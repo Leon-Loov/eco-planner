@@ -9,6 +9,7 @@ table {
     border-spacing: 0;
     overflow: hidden;
     border-radius: 3px;
+    margin: 1em 0;
 } 
   
 thead {
@@ -65,4 +66,49 @@ tbody a {
     display: grid;
     place-items: center;
     position: relative;
+}
+
+/* Minified */
+
+.mini-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: unset;
+    border-radius: 3px;
+} 
+  
+.mini-table > thead {
+    background-color: unset;
+    color: unset;
+}
+
+.mini-table tr th:first-child, .mini-table tr td:first-child {
+    border-left: 1px solid black;
+}
+
+.mini-table tbody tr:first-child > td {
+    border-top: none;
+}
+
+.mini-table tbody tr:last-child > td {
+    border-bottom: 1px solid black;
+}
+
+.mini-table th, .mini-table td {
+    padding: 1em;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.mini-table th {
+    border-bottom: 1px solid black;
+}
+
+.mini-table > tbody tr:nth-child(odd) {
+    background-color: unset;
+}
+  
+.mini-table > tbody tr:nth-child(even) {
+    background-color: unset;
 }

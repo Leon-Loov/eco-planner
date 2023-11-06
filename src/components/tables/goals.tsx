@@ -7,7 +7,8 @@ import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
 import { useContext } from 'react'
-import { tableContext } from './tableContext'
+import { useGlobalContext } from '@/app/context/store'
+import MinifiedGoalTable from './goalTables/minifiedGoalTable'
 
 export default function Goals({
   title,
@@ -33,7 +34,7 @@ export default function Goals({
   },
   accessLevel?: AccessLevel
 }) {
-  let selectedTable = useContext(tableContext)
+  const { tableType } = useGlobalContext();
   return (
     <>
       <label htmlFor="goalTable" className="flex-row flex-between align-center flex-wrap">
@@ -46,8 +47,14 @@ export default function Goals({
           }
         </nav>
       </label>
-      {selectedTable == 'table' ? (
-        <GoalTable roadmap={roadmap}></GoalTable>
+      {tableType == 'table' ? (
+        <GoalTable roadmap={roadmap} />
+      ): null }
+      {tableType == 'listTree' ? (
+        <p>List</p>
+      ): null }
+      {tableType == 'minTable' ? (
+        <MinifiedGoalTable roadmap={roadmap} />
       ): null }
     </>
   )

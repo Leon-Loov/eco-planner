@@ -1,9 +1,13 @@
+"use client"
+
 import './tables.css'
 import { Action, Goal } from "@prisma/client"
 import { NewActionButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
 import TableSelector from './tableSelector/tableSelector'
 import ActionTable from './actionTables/actionTable'
+import { useGlobalContext } from '@/app/context/store'
+import MinifiedActionTable from './actionTables/minifiedActionTable'
 
 export default function Actions({
   title,
@@ -23,6 +27,7 @@ export default function Actions({
   accessLevel?: AccessLevel,
   params: { roadmapId: string, goalId: string },
 }) {
+  const { tableType } = useGlobalContext();
   return <>
     <label htmlFor="action-table" className="flex-row flex-between align-center flex-wrap">
       <h2>{title}</h2>
@@ -34,7 +39,15 @@ export default function Actions({
         }
       </nav>
     </label>
-    <ActionTable goal={goal} accessLevel={accessLevel} />
+    {tableType == 'table' ? (
+      <ActionTable goal={goal} accessLevel={accessLevel} />
+    ): null }
+    {tableType == 'listTree' ? (
+        <p>List</p>
+      ): null }
+    {tableType == 'minTable' ? (
+        <MinifiedActionTable goal={goal} accessLevel={accessLevel} />
+      ): null }
   </>
 
 }

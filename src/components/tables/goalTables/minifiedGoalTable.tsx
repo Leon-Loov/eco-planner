@@ -1,7 +1,6 @@
-import '../tables.css'
 import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
 
-export default function GoalTable({
+export default function MinifiedGoalTable({
   roadmap,
 }: {
   roadmap: Roadmap & {
@@ -23,7 +22,7 @@ export default function GoalTable({
 }) {
   return <>
     <div className="overflow-x-scroll">
-      <table id="goalTable">
+      <table id="goalTable" className="mini-table">
         <thead>
           <tr>
             <th id="goalName">Målbanenamn</th>
