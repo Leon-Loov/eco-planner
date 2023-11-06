@@ -74,7 +74,7 @@ export default async function MainGraph({
 
   return (
     <>
-      <h2>Dataserie</h2>
+      <h2>Målbana</h2>
       <WrappedChart
         options={mainChartOptions}
         series={mainChart}
