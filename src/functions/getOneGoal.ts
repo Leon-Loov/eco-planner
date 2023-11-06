@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import { actionSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
-import { Action, Goal } from "@prisma/client";
+import { Action, DataSeries, Goal } from "@prisma/client";
 import { cookies } from "next/headers";
 
 /**
@@ -15,6 +15,7 @@ export default async function getOneGoal(id: string) {
   const session = await getSessionData(cookies());
 
   let goal: Goal & {
+    dataSeries: DataSeries | null,
     actions: Action[],
     author: { id: string, username: string },
     editors: { id: string, username: string }[],
@@ -29,6 +30,7 @@ export default async function getOneGoal(id: string) {
       goal = await prisma.goal.findUnique({
         where: { id },
         include: {
+          dataSeries: true,
           actions: true,
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
@@ -64,6 +66,7 @@ export default async function getOneGoal(id: string) {
           ]
         },
         include: {
+          dataSeries: true,
           actions: true,
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
@@ -93,6 +96,7 @@ export default async function getOneGoal(id: string) {
         ]
       },
       include: {
+        dataSeries: true,
         actions: true,
         author: { select: { id: true, username: true } },
         editors: { select: { id: true, username: true } },

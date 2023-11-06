@@ -4,17 +4,15 @@ import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal, Roadmap } from "@prisma/client";
 
 
-export default function CombinedGraph(
-  {
-    roadmap,
-    goal,
-  }: {
-    roadmap: Roadmap & {
-      goals: (Goal & { dataSeries: DataSeries | null })[],
-    },
-    goal: Goal & { dataSeries: DataSeries | null },
-  }
-) {
+export default function CombinedGraph({
+  roadmap,
+  goal,
+}: {
+  roadmap: Roadmap & {
+    goals: (Goal & { dataSeries: DataSeries | null })[],
+  },
+  goal: Goal & { dataSeries: DataSeries | null },
+}) {
   const siblings = findSiblings(roadmap, goal);
   const dataPoints: ApexAxisChartSeries = [];
 

@@ -79,7 +79,7 @@ export type ActionInput = {
 /** A type with only the data fields of the data series object. Not dynamic, so might need to be updated if the data series object changes. */
 export type DataSeriesDataFields = Omit<
   DataSeries,
-  'author' | 'unit' | 'id' | 'createdAt' | 'updatedAt' |
+  'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
   'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId'
 >;
 
