@@ -195,9 +195,9 @@ export default function GoalForm({
       </form>
 
       <datalist id="LEAPOptions">
-        {parameterOptions.map((option) => {
+        {parameterOptions.map((option, index) => {
           return (
-            <option key={option} value={option} />
+            <option key={`${option}${index}`} value={option} />
           )
         })}
       </datalist>
