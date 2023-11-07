@@ -58,11 +58,20 @@ export default function CombinedGraph({
     },
   }
 
+  let indicatorCategory: string;
+  let additionalInfo: string = '';
+  if (goal.indicatorParameter.split('\\')[0] == 'Key' || goal.indicatorParameter.split('\\')[0] == 'Demand') {
+    indicatorCategory = goal.indicatorParameter.split('\\').slice(1, -1).join('\\')
+    additionalInfo = "Visar data för både Key och Demand"
+  } else {
+    indicatorCategory = goal.indicatorParameter.split('\\').slice(0, -1).join('\\')
+  }
+
   return (siblings.length > 1 &&
     <>
       <h2>Kombinerad graf</h2>
-      <h3>{goal.indicatorParameter.split('\\').slice(0, -1).join('\\')}
-      </h3>
+      <h3>{indicatorCategory}</h3>
+      {additionalInfo && <p>{additionalInfo}</p>}
       <WrappedChart
         options={chartOptions}
         series={dataPoints}
