@@ -27,6 +27,9 @@ export default function CombinedGraph({
           })
         }
       }
+    }
+    // If the series is only null/0, don't add it to the graph
+    if (mainSeries.filter((entry) => entry.y).length > 0) {
       dataPoints.push({
         name: (siblings[i].name || siblings[i].indicatorParameter).split('\\').slice(-1)[0],
         data: mainSeries,
