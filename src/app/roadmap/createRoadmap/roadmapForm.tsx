@@ -37,6 +37,7 @@ export default function RoadmapForm({
 
     const formJSON = JSON.stringify({
       name: (form.namedItem("roadmapName") as HTMLInputElement)?.value,
+      description: (form.namedItem("description") as HTMLInputElement)?.value || undefined,
       county: (form.namedItem("county") as HTMLInputElement)?.value == "National" ? undefined : (form.namedItem("county") as HTMLInputElement)?.value || undefined,
       municipality: (form.namedItem("municipality") as HTMLInputElement)?.value == "Regional" ? undefined : (form.namedItem("municipality") as HTMLInputElement)?.value || undefined,
       isNational: (form.namedItem("county") as HTMLInputElement)?.value == "National",
@@ -93,6 +94,9 @@ export default function RoadmapForm({
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="name">Namn på färdplanen: </label>
         <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
+        <br />
+        <label htmlFor="description">Beskrivning av färdplanen: </label>
+        <input type="text" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} />
         <br />
         {!!nationalRoadmaps &&
           <>

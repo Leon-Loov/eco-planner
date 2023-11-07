@@ -39,6 +39,7 @@ export default function GoalForm({
 
     const formJSON = JSON.stringify({
       name: (form.namedItem("goalName") as HTMLInputElement)?.value || null,
+      description: (form.namedItem("description") as HTMLInputElement)?.value || null,
       nationalRoadmapId: (form.namedItem("nationalRoadmapId") as HTMLInputElement)?.value || null,
       nationalGoalId: (form.namedItem("nationalGoalId") as HTMLInputElement)?.value || null,
       indicatorParameter: (form.namedItem("indicatorParameter") as HTMLInputElement)?.value || null,
@@ -116,6 +117,9 @@ export default function GoalForm({
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
         <input type="text" name="goalName" id="goalName" defaultValue={currentGoal?.name ?? undefined} />
+        <br />
+        <label htmlFor="description">Beskrivning av målbanan: </label>
+        <input type="text" name="description" id="description" defaultValue={currentGoal?.description ?? undefined} />
         <br />
         <label htmlFor="nationalRoadmapId">Nationell färdplan denna är baserad på (om någon): </label>
         <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)} defaultValue={currentGoal?.nationalRoadmapId || undefined}>

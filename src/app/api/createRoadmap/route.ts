@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
     let newRoadmap = await prisma.roadmap.create({
       data: {
         name: roadmap.name,
+        description: roadmap.description,
         isNational: roadmap.isNational,
         county: roadmap.county,
         municipality: roadmap.municipality,
@@ -188,6 +189,7 @@ export async function PUT(request: NextRequest) {
       where: { id: roadmap.roadmapId },
       data: {
         name: roadmap.name,
+        description: roadmap.description,
         isNational: roadmap.isNational,
         county: roadmap.county,
         municipality: roadmap.municipality,

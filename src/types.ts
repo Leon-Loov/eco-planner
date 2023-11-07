@@ -20,14 +20,15 @@ export enum AccessLevel {
 /** The format of the data needed to create a new roadmap. */
 export type RoadmapInput = {
   name: string;
-  isNational: boolean | undefined;
-  county: string | undefined;
-  municipality: string | undefined;
+  description?: string | undefined;
+  isNational?: boolean | undefined;
+  county?: string | undefined;
+  municipality?: string | undefined;
   // Accepts lists of UUIDs for all of the following, to link them to the roadmap (optional)
-  editors: string[] | undefined;
-  viewers: string[] | undefined;
-  editGroups: string[] | undefined;
-  viewGroups: string[] | undefined;
+  editors?: string[] | undefined;
+  viewers?: string[] | undefined;
+  editGroups?: string[] | undefined;
+  viewGroups?: string[] | undefined;
 }
 
 /** The format of the data needed to create a new goal. */
