@@ -9,6 +9,7 @@ import TableSelector from './tableSelector/tableSelector'
 import { useContext } from 'react'
 import { useGlobalContext } from '@/app/context/store'
 import MinifiedGoalTable from './goalTables/minifiedGoalTable'
+import LinkTree from './goalTables/linkTree'
 
 export default function Goals({
   title,
@@ -51,7 +52,7 @@ export default function Goals({
         <GoalTable roadmap={roadmap} />
       ): null }
       {tableType == 'listTree' ? (
-        <p>List</p>
+        <LinkTree roadmap={roadmap} />
       ): null }
       {tableType == 'minTable' ? (
         <MinifiedGoalTable roadmap={roadmap} />
