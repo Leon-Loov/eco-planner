@@ -3,7 +3,7 @@ table {
     --thead-color: #0066b2;
     --thead-color-text: white;
     --maybe: #d4e5f2;
-    min-width: 100%;
+    width: 100%;
     text-align: left;
     border-collapse: collapse;
     border-spacing: 0;
@@ -19,6 +19,10 @@ thead {
   
 th, td {
     padding: 1em;
+    max-width: 0px; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    overflow: hidden;
 }
 
   
@@ -72,10 +76,13 @@ tbody a {
 
 .mini-table {
     width: 100%;
+    min-width: none;
     border-collapse: separate;
     border-spacing: 0;
     overflow: unset;
     border-radius: 3px;
+    text-wrap: wrap;
+    word-break: break-all;
 } 
   
 .mini-table > thead {
@@ -99,6 +106,10 @@ tbody a {
     padding: 1em;
     border-top: 1px solid black;
     border-right: 1px solid black;
+    max-width: unset; 
+    text-overflow: unset; 
+    white-space: unset; 
+    overflow: unset;
 }
 
 .mini-table th {

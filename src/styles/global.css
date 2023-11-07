@@ -47,12 +47,19 @@ label:has(+input:required, +select:required)::after {
   color: red;
 }
 
-input:focus:not(input[type="checkbox"]), select:focus {
-  outline: 3px solid var(--accent-color);
+input:focus:not(input[type="checkbox"], input[type="file"]) {
+  outline: none;
+  border-bottom: 3px solid var(--accent-color);
+  margin-bottom: calc(1em - 3px);
+  border-radius: 3px 3px 0 0;
 }
 
 button, select, input {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+select:focus {
+  outline: 3px solid var(--accent-color);
 }
 
 input[type="file"] {
@@ -72,6 +79,20 @@ input[type="file"]::file-selector-button {
   margin: 0 .75em;
   background-color: lightgray;
   font-weight: bold;
+}
+
+input[type="file"]:focus::file-selector-button {
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+}
+
+input[type="file"]:focus {
+  border: 3px dashed var(--accent-color);
+  outline: none;
+}
+
+input:invalid, select:invalid {
+  background-color: pink !important;
 }
 
 /* Call to action links */

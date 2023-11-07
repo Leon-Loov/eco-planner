@@ -10,3 +10,14 @@ form fieldset {
     border: 3px solid var(--background-color);
     border-radius: 3px;
 }
+
+.user-info-form input:required {
+    background-color: lightgray !important;
+}
+
+.user-info-form input:focus {
+    border: none !important;
+    margin-bottom: unset !important;
+    border-radius: 0 3px 3px 0 !important;
+    outline: 3px solid var(--accent-color) !important;
+}
