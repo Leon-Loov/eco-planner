@@ -123,3 +123,13 @@ input:invalid, select:invalid {
 .call-to-action-secondary:hover {
   border-color: var(--accent-color-dark);
 }
+
+/* Lists */
+
+ul {
+  padding-inline-start: 0;
+}
+
+li ul {
+  margin-left: 40px;
+}
