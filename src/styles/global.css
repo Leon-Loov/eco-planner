@@ -131,5 +131,6 @@ ul {
 }
 
 li ul {
-  margin-left: 40px;
+  padding-left: 40px;
+  margin-left: 5px;
 }

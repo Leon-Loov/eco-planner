@@ -1,0 +1,21 @@
+.details[open] > ul {
+    border-left: 2px dashed lightgray;
+}
+
+.details[open] > summary {
+    font-weight: bold;
+}
+
+.details > summary {
+    background-color: unset;
+    padding: 1em 0;
+    width: fit-content;
+}
+
+.details > summary::marker {
+    color: lightgray;
+}
+
+.details[open] > summary::marker {
+    color: black;
+}
