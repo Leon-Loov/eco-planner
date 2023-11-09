@@ -32,22 +32,13 @@ export default function Actions({
     <label htmlFor="action-table" className="flex-row flex-between align-center flex-wrap">
       <h2>{title}</h2>
       <nav className='flex-row align-center gap-100'>
-        <TableSelector />
         { // Only show the button if the user has edit access to the goal
           (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
           <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
         }
       </nav>
     </label>
-    {tableType == 'table' ? (
-      <ActionTable goal={goal} accessLevel={accessLevel} />
-    ): null }
-    {tableType == 'listTree' ? (
-        <p>List</p>
-      ): null }
-    {tableType == 'minTable' ? (
-        <MinifiedActionTable goal={goal} accessLevel={accessLevel} />
-      ): null }
+    <ActionTable goal={goal} accessLevel={accessLevel} />
   </>
 
 }
