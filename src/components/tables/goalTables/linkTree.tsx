@@ -1,8 +1,8 @@
 import '../tables.css'
 import styles from '../tables.module.css'
 import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
-import parametersToTree from '@/functions/parametersToTree'
 import Image from 'next/image'
+import goalsToTree from '@/functions/goalsToTree'
 
 export default function LinkTree({
   roadmap,
@@ -22,30 +22,31 @@ export default function LinkTree({
 
   const NestedKeysRenderer = ({ data }: { data: any }) => {
     return (
-      <ul style={{listStyleType: "none"}}>
+      <ul style={{ listStyleType: "none" }}>
         {Object.keys(data).map((key) => (
           <li key={key}>
-          {Object.keys(data[key]).length === 0 ? (
-            <a href={`#${key}`} className={`flex-row gap-50 align-center margin-y-50 ${styles.link}`}>
-              <Image src="/icons/link.svg" alt={`Link to ${key}`} width={16} height={16} />
-              <span>{key}</span>
-            </a>
-          ) : (
-            <details style={{ margin: "1em 0" }} className={styles.details}>
-              <summary>{key}</summary>
-              {Object.keys(data[key]).length > 0 && (
-                <NestedKeysRenderer data={data[key]} />
+            { // If the current object is a goal (has an id), render a link to the goal
+              data[key].id ? (
+                <a href={`/roadmap/${roadmap.id}/goal/${data[key].id}`} className={`flex-row gap-50 align-center margin-y-50 ${styles.link}`}>
+                  <Image src="/icons/link.svg" alt={`Link to ${key}`} width={16} height={16} />
+                  <span>{key}</span>
+                </a>
+              ) : (
+                <details style={{ margin: "1em 0" }} className={styles.details}>
+                  <summary>{key}</summary>
+                  {Object.keys(data[key]).length > 0 && (
+                    <NestedKeysRenderer data={data[key]} />
+                  )}
+                </details>
               )}
-            </details>
-          )}
-        </li>
+          </li>
         ))}
       </ul>
     );
   };
 
-  let data = parametersToTree(roadmap.goals.map(goal => (goal.indicatorParameter)));
-  
+  let data = goalsToTree(roadmap.goals);
+
   return (
     <>
       <NestedKeysRenderer data={data} />
