@@ -8,8 +8,16 @@
 
 .details > summary {
     background-color: unset;
-    padding: 1em 0;
+    padding: 1em 3em 1em 0;
     width: fit-content;
+}
+
+.details > summary:hover {
+    font-weight: bold;
+}
+
+.details > summary:hover::marker{
+    color: black;
 }
 
 .details > summary::marker {
