@@ -1,14 +1,14 @@
 import getOneGoal from "@/functions/getOneGoal";
 import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
-import { dataSeriesDataFieldNames, DataSeriesDataFields } from "@/types";
+import { dataSeriesDataFieldNames } from "@/types";
 import { Goal, DataSeries } from "@prisma/client";
 
-export default async function MainRelativeGraph({
+export default async function MainDeltaGraph({
   goal,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
 }) {
-  if (!goal.dataSeries || goal.dataSeries.unit.toLowerCase() == "procent" || goal.dataSeries.unit.toLowerCase() == "andel") {
+  if (!goal.dataSeries) {
     return null
   }
 
@@ -21,13 +21,14 @@ export default async function MainRelativeGraph({
 
   // Local goal
   let mainSeries = []
-  for (let i in dataSeriesDataFieldNames) {
+  // Start at 1 to skip the first value
+  for (let i = 1; i < dataSeriesDataFieldNames.length; i++) {
     let currentField = dataSeriesDataFieldNames[i]
-    let baseValue = goal.dataSeries[dataSeriesDataFieldNames[0]]
-    if (goal.dataSeries[currentField] && baseValue) {
+    let previousField = dataSeriesDataFieldNames[i - 1]
+    if (goal.dataSeries[currentField] && goal.dataSeries[previousField]) {
       mainSeries.push({
         x: new Date(currentField.replace('val', '')).getTime(),
-        y: (goal.dataSeries[currentField]! / baseValue) * 100
+        y: goal.dataSeries[currentField]! - goal.dataSeries[previousField]!
       })
     }
   }
@@ -40,13 +41,13 @@ export default async function MainRelativeGraph({
   // National goal
   if (nationalGoal?.dataSeries) {
     let nationalSeries = []
-    for (let i in dataSeriesDataFieldNames) {
+    for (let i = 1; i < dataSeriesDataFieldNames.length; i++) {
       let currentField = dataSeriesDataFieldNames[i]
-      let baseValue = nationalGoal.dataSeries[dataSeriesDataFieldNames[0]]
-      if (nationalGoal.dataSeries[currentField] && baseValue) {
+      let previousField = dataSeriesDataFieldNames[i - 1]
+      if (nationalGoal.dataSeries[currentField] && nationalGoal.dataSeries[previousField]) {
         nationalSeries.push({
           x: new Date(currentField.replace('val', '')).getTime(),
-          y: (nationalGoal.dataSeries[currentField]! / baseValue) * 100
+          y: nationalGoal.dataSeries[currentField]! - nationalGoal.dataSeries[previousField]!
         })
       }
     }
@@ -68,9 +69,8 @@ export default async function MainRelativeGraph({
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
     },
     yaxis: {
-      title: { text: "procent relativt basår" },
+      title: { text: `Årlig förändring i ${goal.dataSeries.unit.toLowerCase() == 'procent' ? 'procentenheter' : goal.dataSeries.unit}` },
       labels: { formatter: floatSmoother },
-      min: 0,
     },
     tooltip: {
       x: { format: 'yyyy' },
@@ -79,7 +79,7 @@ export default async function MainRelativeGraph({
 
   return (
     <>
-      <h2>Målbana</h2>
+      <h2>Årlig förändring</h2>
       <WrappedChart
         options={chartOptions}
         series={chart}
@@ -88,5 +88,5 @@ export default async function MainRelativeGraph({
         height="500"
       />
     </>
-  )
+  );
 }
