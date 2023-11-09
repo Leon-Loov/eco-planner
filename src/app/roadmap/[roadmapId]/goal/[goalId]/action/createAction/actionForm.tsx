@@ -56,12 +56,14 @@ export default function ActionForm({
       if (res.ok) {
         return res.json()
       } else {
-        throw new Error('Action could not be created.')
+        res.json().then((data) => {
+          throw new Error(data.message)
+        })
       }
     }).then(data => {
       window.location.href = `/roadmap/${roadmapId}/goal/${goalId}`
     }).catch((err) => {
-      alert('Åtgärd kunde inte skapas.')
+      alert(`Åtgärd kunde inte skapas.\nAnledning: ${err.message}`)
     })
   }
 

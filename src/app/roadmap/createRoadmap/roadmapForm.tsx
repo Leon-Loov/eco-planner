@@ -62,14 +62,16 @@ export default function RoadmapForm({
       if (res.ok) {
         return res.json()
       } else {
-        throw new Error('Roadmap could not be created.')
+        res.json().then((data) => {
+          throw new Error(data.message)
+        })
       }
     }).then(data => {
       setIsLoading(false)
       window.location.href = `/roadmap/${data.id}`
     }).catch((err) => {
       setIsLoading(false)
-      alert('Färdplan kunde inte skapas.')
+      alert(`Färdplan kunde inte skapas.\nAnledning: ${err.message}`)
     })
   }
 

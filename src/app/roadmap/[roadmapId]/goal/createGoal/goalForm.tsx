@@ -65,12 +65,14 @@ export default function GoalForm({
       if (res.ok) {
         return res.json()
       } else {
-        throw new Error('Goal could not be created.')
+        res.json().then((data) => {
+          throw new Error(data.message)
+        })
       }
     }).then(data => {
       window.location.href = `/roadmap/${roadmapId}/goal/${data.id}`
     }).catch((err) => {
-      alert('Målbana kunde inte skapas.')
+      alert(`Målbana kunde inte skapas.\nAnledning: ${err.message}`)
     })
   }
 
