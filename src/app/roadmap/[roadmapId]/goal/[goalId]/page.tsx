@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 import { getSessionData } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
 import { AccessLevel } from "@/types";
-import CombinedGraph from "./combinedGraph";
-import ActionGraph from "./actionGraph";
+import CombinedGraph from "@/components/graphs/combinedGraph";
+import ActionGraph from "@/components/graphs/actionGraph";
 import Actions from "@/components/tables/actions";
-import MainGraph from "./mainGraph";
+import MainGraph from "@/components/graphs/mainGraph";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap] = await Promise.all([

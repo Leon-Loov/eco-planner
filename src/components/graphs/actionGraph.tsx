@@ -1,13 +1,11 @@
 import WrappedChart from "@/lib/chartWrapper";
 import { Action } from "@prisma/client";
 
-export default function ActionGraph(
-  {
-    actions,
-  }: {
-    actions: Action[],
-  }
-) {
+export default function ActionGraph({
+  actions,
+}: {
+  actions: Action[],
+}) {
   let series: ApexAxisChartSeries = [];
   let actionData = []
 
