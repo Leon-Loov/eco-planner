@@ -8,6 +8,7 @@ import CombinedGraph from "@/components/graphs/combinedGraph";
 import ActionGraph from "@/components/graphs/actionGraph";
 import Actions from "@/components/tables/actions";
 import MainGraph from "@/components/graphs/mainGraph";
+import MainRelativeGraph from "@/components/graphs/mainRelativeGraph";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -33,7 +34,12 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       <span style={{ color: "gray" }}>Målbana</span>
       <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
-      <MainGraph goal={goal} />
+      { // TODO: Make this a toggle
+        goal ?
+          <MainGraph goal={goal} />
+          :
+          <MainRelativeGraph goal={goal} />
+      }
       <br />
       <CombinedGraph roadmap={roadmap} goal={goal} />
       <br />
