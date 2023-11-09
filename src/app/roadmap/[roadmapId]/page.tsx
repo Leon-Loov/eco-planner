@@ -4,8 +4,9 @@ import getOneRoadmap from "@/functions/getOneRoadmap";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
-import GoalTable from '@/components/tables/goalTables/goalTable'
 import Goals from "@/components/tables/goals";
+import Link from "next/link";
+import Image from "next/image";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -24,8 +25,16 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   }
 
   return <>
-    <h1 style={{marginBottom: ".25em"}}>{roadmap.name}</h1>
-    <span style={{color: "gray"}}>Färdplan</span>
+    <h1 style={{ marginBottom: ".25em" }} className="flex-row align-center gap-25">
+      { // Only show the edit link if the user has edit access to the roadmap
+        (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+        <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
+          <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.name}`} />
+        </Link>
+      }
+      {roadmap.name}
+    </h1>
+    <span style={{ color: "gray" }}>Färdplan</span>
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Tooltip anchorSelect="#goalName">
       Beskrivning av vad målbanan beskriver, tex. antal bilar.
