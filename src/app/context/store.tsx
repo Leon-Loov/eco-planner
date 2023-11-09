@@ -14,7 +14,7 @@ const GlobalContext = createContext<ContextProps>({
 })
 
 export const GlobalContextProvider = ({ children }: { children : any }) => {
-    const [tableType, setTableType] = useState('table');
+    const [tableType, setTableType] = useState('listTree');
 
     return ( 
         <GlobalContext.Provider value={{ tableType, setTableType,}}>
