@@ -1,5 +1,6 @@
 'use client'
 
+import styles from './breadcrumbs.module.css'
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -39,7 +40,7 @@ export default function Breadcrumb({
   return <>
     <nav className="flex-row align-center gap-25 margin-y-50">
       <span className='flex-row align-center gap-25'>
-        <Link href='/'>
+        <Link href='/' className={styles.breadCrumb}>
           Hem
         </Link>
       </span>
@@ -50,20 +51,22 @@ export default function Breadcrumb({
 
         // If the section is a category, don't make it a link
         if (section == 'roadmap' || section == 'goal' || section == 'action') {
-          return <span key={index} className='flex-row align-center gap-25'>
-            <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
-            {linkName}
-          </span>
+          return (
+            <span key={index} className={`flex-row align-center gap-25 ${styles.breadCrumbTitle}`}>
+              <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
+              {linkName}
+            </span>
+          )
         }
 
         return (
           <span key={index} className='flex-row align-center gap-25'>
-            <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
-            <Link href={href}>
-              {linkName}
-            </Link>
-          </span>
-        );
+          <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
+          <Link href={href} className={styles.breadCrumb}>
+            {linkName}
+          </Link>
+        </span>
+        )
       })}
     </nav>
   </>
