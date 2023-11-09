@@ -47,7 +47,7 @@ label:has(+input:required, +select:required)::after {
   color: red;
 }
 
-input:focus:not(input[type="checkbox"], input[type="file"]) {
+input:focus:not(input[type="checkbox"], input[type="file"], input[type="submit"]) {
   outline: none;
   border-bottom: 3px solid var(--accent-color);
   margin-bottom: calc(1em - 3px);
@@ -115,13 +115,15 @@ input:invalid, select:invalid {
   color: var(--accent-text);
 }
 
-.call-to-action-primary:hover {
+.call-to-action-primary:hover, .call-to-action-primary:focus {
   background-color: var(--accent-color-dark);
   border-color: var(--accent-color-dark);
+  outline: 0;
 }
 
-.call-to-action-secondary:hover {
+.call-to-action-secondary:hover, .call-to-action-primary:focus {
   border-color: var(--accent-color-dark);
+  outline: 0; 
 }
 
 /* Lists */

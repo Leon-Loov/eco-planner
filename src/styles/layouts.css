@@ -73,3 +73,13 @@
 .gap-100 {
     gap: 1em;
 }
+
+/* padding */
+
+.margin-y-50 {
+    padding: .5em 0;
+}
+
+.margin-y-100 {
+    padding: 1em 0;
+}
