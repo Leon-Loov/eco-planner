@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
+import { allowedDomains } from "@/lib/allowedDomains";
 import prisma from "@/prismaClient"
 import bcrypt from "bcrypt";
 
@@ -43,7 +44,17 @@ export async function POST(request: NextRequest) {
   if (emailExists) {
     return createResponse(
       response,
-      JSON.stringify({ message: 'Email ' + email + ' is already in use' }),
+      JSON.stringify({ message: 'Email "' + email + '" is already in use' }),
+      { status: 400 }
+    );
+  }
+
+  // Check if email belongs to an allowed domain
+  // TODO: Add actual email validation by sending a verification email
+  if (!allowedDomains.includes(email.split('@')[1])) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Email domain "' + email.split('@')[1] + '" is not allowed' }),
       { status: 400 }
     );
   }
