@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <p><BackButton href="../" /></p>
+      <p><BackButton href={`/roadmap/${roadmap.id}/goal/${params.goalId}`} /></p>
       <h1>Redigera målbanan &quot;{currentGoal?.name ? currentGoal.name : currentGoal?.indicatorParameter}&quot; {roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
       <GoalForm roadmapId={params.roadmapId} user={session.user} nationalRoadmaps={nationalRoadmaps} currentGoal={currentGoal} />
     </>
