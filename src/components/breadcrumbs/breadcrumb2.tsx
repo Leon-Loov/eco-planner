@@ -37,33 +37,34 @@ export default function Breadcrumb({
   }
 
   return <>
-    {sectionNames.map((section, index) => {
-      // Create href from the original sections array
-      let href = `/${sections.slice(0, index + 1).join('/')}`
-      let linkName = section[0].toUpperCase() + section.slice(1, section.length)
+    <nav className="flex-row align-center gap-25 margin-y-50">
+      <span className='flex-row align-center gap-25'>
+        <Link href='/'>
+          Hem
+        </Link>
+      </span>
+      {sectionNames.map((section, index) => {
+        // Create href from the original sections array
+        let href = `/${sections.slice(0, index + 1).join('/')}`
+        let linkName = section[0].toUpperCase() + section.slice(1, section.length)
 
-      // If the section is a category, don't make it a link
-      if (section == 'roadmap' || section == 'goal' || section == 'action') {
-        return <span key={index} className='flex-row align-center gap-25'>
-          {linkName}
-          <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
-        </span>
-      }
-      // If it's the last section, don't add a chevron, otherwise do
-      return index === sectionNames.length - 1 ? (
-        <span key={index} className='flex-row align-center gap-25'>
-          <Link href={href}>
+        // If the section is a category, don't make it a link
+        if (section == 'roadmap' || section == 'goal' || section == 'action') {
+          return <span key={index} className='flex-row align-center gap-25'>
+            <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
             {linkName}
-          </Link>
-        </span>
-      ) : (
-        <span key={index} className='flex-row align-center gap-25'>
-          <Link href={href}>
-            {linkName}
-          </Link>
-          <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
-        </span>
-      );
-    })}
+          </span>
+        }
+
+        return (
+          <span key={index} className='flex-row align-center gap-25'>
+            <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
+            <Link href={href}>
+              {linkName}
+            </Link>
+          </span>
+        );
+      })}
+    </nav>
   </>
 }

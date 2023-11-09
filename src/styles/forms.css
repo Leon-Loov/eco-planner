@@ -15,7 +15,7 @@ form fieldset {
     background-color: lightgray !important;
 }
 
-.user-info-form input:focus {
+.user-info-form input:focus:not(input[type="submit"]) {
     border: none !important;
     margin-bottom: unset !important;
     border-radius: 0 3px 3px 0 !important;
