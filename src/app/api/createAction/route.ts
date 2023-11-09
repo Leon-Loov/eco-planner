@@ -110,7 +110,7 @@ export async function PUT(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let action: ActionInput & { actionId: string } = await request.json();
+  let action: ActionInput & { actionId: string, timestamp?: number } = await request.json();
 
   // Validate request body
   if (!action.actionId || !action.name) {
@@ -122,6 +122,8 @@ export async function PUT(request: NextRequest) {
   }
 
   // Validate session
+  const accessDenied = "You either don't have access to this entry or are trying to edit an entry that doesn't exist";
+  const staleData = "Stale data; please refresh and try again";
   try {
     let accessLevel: AccessLevel = AccessLevel.None;
     let currentAction = await prisma.action.findUnique({
@@ -136,13 +138,24 @@ export async function PUT(request: NextRequest) {
     });
     accessLevel = accessChecker(currentAction!, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
-      throw new Error('Access denied');
+      throw new Error(accessDenied, { cause: 'action' });
+    }
+
+    if (!action.timestamp || (currentAction?.updatedAt?.getTime() || 0 > action.timestamp)) {
+      throw new Error(staleData, { cause: 'action' });
     }
   } catch (e) {
     console.log(e);
+    if (e instanceof Error && e.message == staleData) {
+      return createResponse(
+        response,
+        JSON.stringify({ message: staleData }),
+        { status: 409 }
+      );
+    }
     return createResponse(
       response,
-      JSON.stringify({ message: "You either don't have access to this action or are trying to edit an action that doesn't exist" }),
+      JSON.stringify({ message: accessDenied }),
       { status: 403 }
     );
   }

@@ -50,6 +50,7 @@ export default function RoadmapForm({
         ...(currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : []),
         ...(parentRoadmap ? goalInputFromRoadmap(parentRoadmap) : [])
       ],
+      timestamp,
     })
 
     fetch('/api/createRoadmap', {
@@ -75,6 +76,7 @@ export default function RoadmapForm({
   const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.county || null)
   const [currentFile, setCurrentFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const timestamp = Date.now()
 
   let currentAccess: AccessControlled | undefined = undefined;
   if (currentRoadmap) {

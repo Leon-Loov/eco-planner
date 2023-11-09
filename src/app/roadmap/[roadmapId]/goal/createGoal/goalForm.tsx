@@ -53,6 +53,7 @@ export default function GoalForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      timestamp,
     })
 
     fetch('/api/createGoal', {
@@ -84,7 +85,8 @@ export default function GoalForm({
    */
   const dataSeriesPattern = "(([0-9]+([.,][0-9]+)?)?[\t;]){0,30}([0-9]+([.,][0-9]+)?)?"
 
-  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(currentGoal?.nationalRoadmapId || null)
+  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(currentGoal?.nationalRoadmapId || null);
+  const timestamp = Date.now();
 
   // If there is a data series, convert it to an array of numbers to use as a default value for the form
   let dataArray: (number | null)[] = []

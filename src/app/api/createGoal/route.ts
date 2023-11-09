@@ -175,7 +175,7 @@ export async function PUT(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let goal: GoalInput & { goalId: string } = await request.json();
+  let goal: GoalInput & { goalId: string, timestamp?: number } = await request.json();
 
   // Validate request body
   if (!goal.indicatorParameter || !goal.dataUnit || !goal.dataSeries || !goal.goalId) {
@@ -187,6 +187,8 @@ export async function PUT(request: NextRequest) {
   }
 
   // Validate session
+  const accessDenied = "You either don't have access to this entry or are trying to edit an entry that doesn't exist"
+  const staleData = "Stale data; please refresh and try again"
   try {
     let accessLevel: AccessLevel = AccessLevel.None;
     let currentGoal = await prisma.goal.findUnique({
@@ -201,13 +203,24 @@ export async function PUT(request: NextRequest) {
     });
     accessLevel = accessChecker(currentGoal!, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
-      throw new Error('Access denied');
+      throw new Error(accessDenied, { cause: 'goal' });
+    }
+
+    if (!goal.timestamp || (currentGoal?.updatedAt?.getTime() || 0 > goal.timestamp)) {
+      throw new Error(staleData, { cause: 'goal' });
     }
   } catch (e) {
     console.log(e);
+    if (e instanceof Error && e.message == staleData) {
+      return createResponse(
+        response,
+        JSON.stringify({ message: staleData }),
+        { status: 409 }
+      );
+    }
     return createResponse(
       response,
-      JSON.stringify({ message: "You either don't have access to this goal or are trying to edit a goal that doesn't exist" }),
+      JSON.stringify({ message: accessDenied }),
       { status: 403 }
     );
   }

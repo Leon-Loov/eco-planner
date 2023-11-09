@@ -44,6 +44,7 @@ export default function ActionForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      timestamp,
     })
 
     fetch('/api/createAction', {
@@ -63,6 +64,8 @@ export default function ActionForm({
       alert('Åtgärd kunde inte skapas.')
     })
   }
+
+  const timestamp = Date.now();
 
   let currentAccess: AccessControlled | undefined = undefined;
   if (currentAction) {
