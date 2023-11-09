@@ -4,10 +4,8 @@ import './tables.css'
 import { Action, Goal } from "@prisma/client"
 import { NewActionButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
-import TableSelector from './tableSelector/tableSelector'
 import ActionTable from './actionTables/actionTable'
 import { useGlobalContext } from '@/app/context/store'
-import MinifiedActionTable from './actionTables/minifiedActionTable'
 
 export default function Actions({
   title,

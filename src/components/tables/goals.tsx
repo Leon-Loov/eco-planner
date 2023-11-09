@@ -6,9 +6,7 @@ import { NewGoalButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
-import { useContext } from 'react'
 import { useGlobalContext } from '@/app/context/store'
-import MinifiedGoalTable from './goalTables/minifiedGoalTable'
 import LinkTree from './goalTables/linkTree'
 
 export default function Goals({
@@ -53,9 +51,6 @@ export default function Goals({
       ): null }
       {tableType == 'listTree' ? (
         <LinkTree roadmap={roadmap} />
-      ): null }
-      {tableType == 'minTable' ? (
-        <MinifiedGoalTable roadmap={roadmap} />
       ): null }
     </>
   )
