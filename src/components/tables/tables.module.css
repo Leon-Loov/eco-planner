@@ -21,9 +21,22 @@
 }
 
 .details > summary::marker {
-    color: lightgray;
+    color: gray;
 }
 
 .details[open] > summary::marker {
     color: black;
+}
+
+/* Links */
+
+.link, .link > span {
+    color: black;
+    text-decoration: none;
+    width: fit-content;
+    padding-right: 3em;
+}
+
+.link:hover, .link.focus {
+    text-decoration: underline;
 }
