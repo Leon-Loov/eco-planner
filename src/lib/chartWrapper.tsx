@@ -63,5 +63,5 @@ export default function WrappedChart({
  * Declared as a client-side function so it can be used in `WrappedChart`.
  */
 export function floatSmoother(value: number) {
-  return value.toString()
+  return value.toLocaleString('sv-SE')
 }

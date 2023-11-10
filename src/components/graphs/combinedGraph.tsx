@@ -33,13 +33,16 @@ export default function CombinedGraph({
       dataPoints.push({
         name: (siblings[i].name || siblings[i].indicatorParameter).split('\\').slice(-1)[0],
         data: mainSeries,
-        type: 'line',
+        type: 'area',
       })
     }
   }
 
   let chartOptions: ApexCharts.ApexOptions = {
-    chart: { type: 'line' },
+    chart: {
+      type: 'area',
+      stacked: true,
+    },
     stroke: { curve: 'straight' },
     xaxis: {
       type: 'datetime',
@@ -47,14 +50,13 @@ export default function CombinedGraph({
       tooltip: { enabled: false },
       min: new Date(dataSeriesDataFieldNames[0].replace('val', '')).getTime(),
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
-      // categories: dataSeriesDataFieldNames.map(name => name.replace('val', ''))
     },
     yaxis: {
       title: { text: goal.dataSeries?.unit },
       labels: { formatter: floatSmoother },
     },
     tooltip: {
-      x: { format: 'yyyy' }
+      x: { format: 'yyyy' },
     },
   }
 
