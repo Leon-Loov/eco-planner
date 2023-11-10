@@ -103,11 +103,11 @@ export default function ActionForm({
         <div className="grid-auto-rows">
           <div>
             <label htmlFor="startYear">Planerat startår: </label>
-            <input type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} />
+            <input type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} min={2000} />
           </div>
           <div>
             <label htmlFor="endYear">Planerat slutår: </label>
-            <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} />
+            <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} min={2000} />
           </div>
           <br />
         </div>
