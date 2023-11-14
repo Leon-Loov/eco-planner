@@ -37,9 +37,11 @@ export default async function Page() {
     <section className="grid-auto-rows">
       <div>
         <RoadmapTable title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
+        {!roadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
       <div>
         <RoadmapTable title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
+        {!roadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
     </section>
   </>
