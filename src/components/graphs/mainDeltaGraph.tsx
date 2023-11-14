@@ -75,12 +75,11 @@ export default function MainDeltaGraph({
 
   return (
     <>
-      <h2>Årlig förändring</h2>
       <WrappedChart
         options={chartOptions}
         series={chart}
         type="line"
-        width="90%"
+        width="100%"
         height="500"
       />
     </>

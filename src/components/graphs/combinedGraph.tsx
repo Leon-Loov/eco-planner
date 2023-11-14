@@ -78,7 +78,7 @@ export default function CombinedGraph({
         options={chartOptions}
         series={dataPoints}
         type="line"
-        width="90%"
+        width="100%"
         height="500"
       />
     </>

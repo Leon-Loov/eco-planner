@@ -75,12 +75,11 @@ export default function MainRelativeGraph({
 
   return (
     <>
-      <h2>Procent relativt basår</h2>
       <WrappedChart
         options={chartOptions}
         series={chart}
         type="line"
-        width="90%"
+        width="100%"
         height="500"
       />
     </>

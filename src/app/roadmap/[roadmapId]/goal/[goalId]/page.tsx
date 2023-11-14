@@ -52,9 +52,6 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       <span style={{ color: "gray" }}>Målbana</span>
       <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
-      <nav className='flex-row align-center gap-100'>
-        <GraphSelector />
-      </nav>
       <GraphGraph goal={goal} nationalGoal={nationalGoal}/>
       <br />
       <CombinedGraph roadmap={roadmap} goal={goal} />

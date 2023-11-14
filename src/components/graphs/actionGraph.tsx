@@ -52,7 +52,7 @@ export default function ActionGraph({
         options={chartOptions}
         series={series}
         type="rangeBar"
-        width="90%"
+        width="100%"
         height="500"
       />
     </>

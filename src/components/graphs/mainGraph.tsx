@@ -70,12 +70,11 @@ export default function MainGraph({
 
   return (
     <>
-      <h2>Målbana</h2>
       <WrappedChart
         options={mainChartOptions}
         series={mainChart}
         type="line"
-        width="90%"
+        width="100%"
         height="500"
       />
     </>
