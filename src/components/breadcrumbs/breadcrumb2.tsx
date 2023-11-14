@@ -38,7 +38,7 @@ export default function Breadcrumb({
   }
 
   return <>
-    <nav className="flex-row align-center gap-25 margin-y-50">
+    <nav className="flex-row align-center gap-25 flex-wrap" style={{margin: '1em 0 0 0'}}>
       <span className='flex-row align-center gap-25'>
         <Link href='/' className={styles.breadCrumb}>
           Hem
@@ -68,6 +68,6 @@ export default function Breadcrumb({
         </span>
         )
       })}
-    </nav>
+    </nav> 
   </>
 }

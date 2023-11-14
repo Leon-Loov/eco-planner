@@ -22,7 +22,8 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   if (!roadmap || !session.user || !accessChecker(roadmap, session.user) || accessChecker(roadmap, session.user) === 'VIEW') {
     return notFound();
   }
-
+  
+// params.goalID WEIRD?!
   return (
     <>
       <p><BackButton href={`/roadmap/${roadmap.id}/goal/${params.goalId}`} /></p>
