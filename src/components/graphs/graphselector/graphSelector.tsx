@@ -9,15 +9,14 @@ export default function GraphSelector() {
 
   const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
     setGraphType(event.target.value);
-    console.log(graphType)
   };
 
   // Set the selectedOption as the context value
   return (
     <>
-      <RadioImage value="mainGraph" src="/icons/listTree.svg" name="table" checked={graphType === 'mainGraph'} onChange={handleRadioChange} />
-      <RadioImage value="mainRelativeGraph" src="/icons/table.svg" name="table" checked={graphType === 'mainRelativeGraph '} onChange={handleRadioChange} />
-      <RadioImage value="mainDeltaGraph" src="/icons/table.svg" name="table" checked={graphType === 'mainDeltaGraph'} onChange={handleRadioChange} />
+      <RadioImage value="mainGraph" src="/icons/chart.svg" name="graph" checked={graphType === 'mainGraph'} onChange={handleRadioChange} />
+      <RadioImage value="mainRelativeGraph" src="/icons/chartChange.svg" name="graph" checked={graphType === 'mainRelativeGraph '} onChange={handleRadioChange} />
+      <RadioImage value="mainDeltaGraph" src="/icons/delta.svg" name="graph" checked={graphType === 'mainDeltaGraph'} onChange={handleRadioChange} />
     </>
   );
 }
