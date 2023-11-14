@@ -1,20 +1,16 @@
-import getOneGoal from "@/functions/getOneGoal";
 import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { dataSeriesDataFieldNames, DataSeriesDataFields } from "@/types";
 import { Goal, DataSeries } from "@prisma/client";
 
-export default async function MainRelativeGraph({
+export default function MainRelativeGraph({
   goal,
+  nationalGoal,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
+  nationalGoal: Goal & { dataSeries: DataSeries | null } | null, 
 }) {
   if (!goal.dataSeries || goal.dataSeries.unit.toLowerCase() == "procent" || goal.dataSeries.unit.toLowerCase() == "andel") {
     return null
-  }
-
-  let nationalGoal: Goal & { dataSeries: DataSeries | null } | null = null;
-  if (goal.nationalGoalId) {
-    nationalGoal = await getOneGoal(goal.nationalGoalId)
   }
 
   let chart: ApexAxisChartSeries = [];

@@ -1,20 +1,16 @@
-import getOneGoal from "@/functions/getOneGoal";
 import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal } from "@prisma/client";
 
-export default async function MainGraph({
+export default function MainGraph({
   goal,
+  nationalGoal,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
+  nationalGoal: Goal & { dataSeries: DataSeries | null } | null, 
 }) {
   if (!goal.dataSeries) {
     return null
-  }
-
-  let nationalGoal: Goal & { dataSeries: DataSeries | null } | null = null;
-  if (goal.nationalGoalId) {
-    nationalGoal = await getOneGoal(goal.nationalGoalId)
   }
 
   let mainChart: ApexAxisChartSeries = [];

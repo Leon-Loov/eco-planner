@@ -7,11 +7,12 @@ import { AccessLevel } from "@/types";
 import CombinedGraph from "@/components/graphs/combinedGraph";
 import ActionGraph from "@/components/graphs/actionGraph";
 import Actions from "@/components/tables/actions";
-import MainGraph from "@/components/graphs/mainGraph";
-import MainRelativeGraph from "@/components/graphs/mainRelativeGraph";
-import MainDeltaGraph from "@/components/graphs/mainDeltaGraph";
 import Link from "next/link";
 import Image from "next/image";
+import GraphGraph from "@/components/graphs/graphGraph";
+import getOneGoal from "@/functions/getOneGoal";
+import { Goal, DataSeries } from "@prisma/client";
+import GraphSelector from "@/components/graphs/graphselector/graphSelector";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -19,19 +20,23 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     getOneRoadmap(params.roadmapId)
   ]);
 
+  let nationalGoal: Goal & { dataSeries: DataSeries | null } | null = null;
   const goal = roadmap?.goals.find(goal => goal.id === params.goalId);
 
   let accessLevel: AccessLevel = AccessLevel.None;
   if (goal) {
     accessLevel = accessChecker(goal, session.user);
+    
+    if (goal.nationalGoalId) {
+      nationalGoal = await getOneGoal(goal.nationalGoalId)
+    }
+
   }
 
   // 404 if the goal doesn't exist or if the user doesn't have access to it
   if (!goal || !accessLevel || !roadmap) {
     return notFound();
   }
-
-  let graphSelection = 'mainGraph';
 
   return (
     <>
@@ -47,18 +52,8 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       <span style={{ color: "gray" }}>Målbana</span>
       <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
-      { // TODO: Make a proper toggle
-        graphSelection == 'mainGraph' ?
-          <MainGraph goal={goal} />
-          :
-          graphSelection == 'mainRelativeGraph' ?
-            <MainRelativeGraph goal={goal} />
-            :
-            graphSelection == 'mainDeltaGraph' ?
-              <MainDeltaGraph goal={goal} />
-              :
-              null
-      }
+      <GraphSelector />
+      <GraphGraph goal={goal} nationalGoal={nationalGoal}/>
       <br />
       <CombinedGraph roadmap={roadmap} goal={goal} />
       <br />
