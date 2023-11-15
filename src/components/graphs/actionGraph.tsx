@@ -51,13 +51,15 @@ export default function ActionGraph({
   return (actions.length > 0 &&
     <>
       <h2>Åtgärdsgraf</h2>
-      <WrappedChart
-        options={chartOptions}
-        series={series}
-        type="rangeBar"
-        width="100%"
-        height="500"
-      />
+      <div style={{height: "500px", width: "100%"}}>
+        <WrappedChart
+          options={chartOptions}
+          series={series}
+          type="rangeBar"
+          width="100%"
+          height="100%"
+        />
+      </div>
     </>
   );
 }

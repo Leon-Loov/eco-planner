@@ -75,13 +75,15 @@ export default function CombinedGraph({
       <h2>Kombinerad graf</h2>
       <h3>{indicatorCategory}</h3>
       {additionalInfo && <p>{additionalInfo}</p>}
-      <WrappedChart
-        options={chartOptions}
-        series={dataPoints}
-        type="line"
-        width="100%"
-        height="500"
-      />
+      <div style={{height: "500px", width: "100%"}}>
+        <WrappedChart
+          options={chartOptions}
+          series={dataPoints}
+          type="line"
+          width="100%"
+          height="100%"
+        />
+      </div>
     </>
   )
 }

@@ -73,13 +73,15 @@ export default function MainGraph({
 
   return (
     <>
-      <WrappedChart
-        options={mainChartOptions}
-        series={mainChart}
-        type="line"
-        width="100%"
-        height="500"
-      />
+      <div style={{height: "500px", width: "100%"}}>
+        <WrappedChart
+          options={mainChartOptions}
+          series={mainChart}
+          type="line"
+          width="100%"
+          height="100%"
+        />
+      </div>
     </>
   )
 }

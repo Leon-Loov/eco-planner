@@ -195,7 +195,6 @@ export default function GoalForm({
             <br />
           </>
         }
-        <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} className="call-to-action-primary" />
       </form>
 
       <datalist id="LEAPOptions">
