@@ -49,7 +49,10 @@ export default function MainGraph({
   }
 
   let mainChartOptions: ApexCharts.ApexOptions = {
-    chart: { type: 'line' },
+    chart: { 
+      type: 'line',
+      animations: { enabled: false, dynamicAnimation: { enabled: false }}
+    },
     stroke: { curve: 'straight' },
     xaxis: {
       type: 'datetime',

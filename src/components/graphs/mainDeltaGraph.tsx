@@ -55,7 +55,10 @@ export default function MainDeltaGraph({
   }
 
   let chartOptions: ApexCharts.ApexOptions = {
-    chart: { type: 'line' },
+    chart: { 
+      type: 'line',
+      animations: { enabled: false, dynamicAnimation: { enabled: false }}
+    },
     stroke: { curve: 'straight' },
     xaxis: {
       type: 'datetime',

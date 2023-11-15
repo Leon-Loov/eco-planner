@@ -42,6 +42,7 @@ export default function CombinedGraph({
     chart: {
       type: 'area',
       stacked: true,
+      animations: { enabled: false, dynamicAnimation: { enabled: false }}
     },
     stroke: { curve: 'straight' },
     xaxis: {

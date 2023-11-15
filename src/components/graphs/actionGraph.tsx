@@ -27,7 +27,10 @@ export default function ActionGraph({
   })
 
   let chartOptions: ApexCharts.ApexOptions = {
-    chart: { type: 'rangeBar' },
+    chart: { 
+      type: 'rangeBar',
+      animations: { enabled: false, dynamicAnimation: { enabled: false }}
+    },
     plotOptions: {
       bar: {
         horizontal: true,
