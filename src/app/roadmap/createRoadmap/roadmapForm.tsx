@@ -162,7 +162,26 @@ export default function RoadmapForm({
             <br />
           </>
         }
-        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="call-to-action-primary" disabled={isLoading} />
+        {isLoading ? (
+          // Show spinner or loading indicator when isLoading is true
+          <div className="call-to-action-primary align-center gap-100" style={{ display: "flex", width: "fit-content", border: "3px solid var(--accent-color-dark)", backgroundColor: "var(--accent-color-dark)"}}>
+            <input
+              type="submit"
+              value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
+              disabled={isLoading}
+              style={{ margin: "unset", cursor: "not-allowed" }}
+            />
+            <div className="loading" />
+          </div>
+        ) : (
+          // Show the button or input element when isLoading is false
+          <input
+            className="call-to-action-primary"
+            type="submit"
+            value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
+            disabled={isLoading}
+          />          
+        )}
       </form>
     </>
   )
