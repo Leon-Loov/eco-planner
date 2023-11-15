@@ -38,11 +38,14 @@ export default function Breadcrumb({
   }
 
   return <>
-    <nav className="flex-row align-center gap-25 flex-wrap" style={{margin: '1em 0 0 0'}}>
+    <nav className="flex-row align-center gap-25 flex-wrap" style={{ margin: '1em 0 0 0' }}>
       <span className='flex-row align-center gap-25'>
         <Link href='/' className={styles.breadCrumb}>
           Hem
         </Link>
+        {sectionNames.length > 0 && (
+          <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
+        )}
       </span>
       {sectionNames.map((section, index) => {
         // Create href from the original sections array
@@ -50,24 +53,43 @@ export default function Breadcrumb({
         let linkName = section[0].toUpperCase() + section.slice(1, section.length)
 
         // If the section is a category, don't make it a link
-        if (section == 'roadmap' || section == 'goal' || section == 'action') {
+        if (section == 'roadmap') {
           return (
             <span key={index} className={`flex-row align-center gap-25 ${styles.breadCrumbTitle}`}>
-              <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
-              {linkName}
+              Färdplan:
             </span>
           )
         }
 
+        if (section == 'goal') {
+          return (
+            <span key={index} className={`flex-row align-center gap-25 ${styles.breadCrumbTitle}`}>
+              Målbana:
+            </span>
+          )
+        }
+
+        if (section == 'action') {
+          return (
+            <span key={index} className={`flex-row align-center gap-25 ${styles.breadCrumbTitle}`}>
+              Åtgärd:
+            </span>
+          )
+        }
+
+        const isLastItem = index === sectionNames.length - 1;
+
         return (
           <span key={index} className='flex-row align-center gap-25'>
-          <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
-          <Link href={href} className={styles.breadCrumb}>
-            {linkName}
-          </Link>
-        </span>
+            <Link href={href} className={styles.breadCrumb}>
+              {linkName}
+            </Link>
+            {!isLastItem && (
+              <Image src='/icons/chevronRight.svg' alt='' height={16} width={16} />
+            )}
+          </span>
         )
       })}
-    </nav> 
+    </nav>
   </>
 }
