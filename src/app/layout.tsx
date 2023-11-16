@@ -1,9 +1,9 @@
 import '@/styles/global.css'
 import { Header } from '@/components/header/header'
 import { GlobalContextProvider } from "./context/store"
-import getOneRoadmap from '@/functions/getOneRoadmap';
+import getOneRoadmap from '@/fetchers/getOneRoadmap';
 import Breadcrumb from '@/components/breadcrumbs/breadcrumb2';
-import getRoadmaps from '@/functions/getRoadmaps';
+import getRoadmaps from '@/fetchers/getRoadmaps';
 
 export default async function RootLayout({
   children,

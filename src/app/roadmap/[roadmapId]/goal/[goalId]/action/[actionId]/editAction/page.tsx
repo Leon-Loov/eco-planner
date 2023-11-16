@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import ActionForm from "../../createAction/actionForm";
-import getOneRoadmap from "@/functions/getOneRoadmap";
+import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { notFound } from "next/navigation";
 import accessChecker from "@/lib/accessChecker";
 import { BackButton } from '@/components/redirectButtons';

@@ -3,7 +3,7 @@ import RoadmapForm from './roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/redirectButtons';
-import getRoadmaps from '@/functions/getRoadmaps';
+import getRoadmaps from '@/fetchers/getRoadmaps';
 
 export default async function Page() {
   const [session, roadmaps] = await Promise.all([

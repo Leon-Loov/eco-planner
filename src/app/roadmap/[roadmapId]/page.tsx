@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Tooltip from "@/lib/tooltipWrapper";
-import getOneRoadmap from "@/functions/getOneRoadmap";
+import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";

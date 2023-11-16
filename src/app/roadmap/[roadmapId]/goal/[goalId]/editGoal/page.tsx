@@ -1,10 +1,10 @@
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import GoalForm from "../../createGoal/goalForm";
-import getOneRoadmap from "@/functions/getOneRoadmap";
+import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
-import getRoadmaps from "@/functions/getRoadmaps";
+import getRoadmaps from "@/fetchers/getRoadmaps";
 import { BackButton } from '@/components/redirectButtons';
 
 
