@@ -164,12 +164,13 @@ export default function RoadmapForm({
         }
         {isLoading ? (
           // Show spinner or loading indicator when isLoading is true
-          <div className="call-to-action-primary align-center gap-100" style={{ display: "flex", width: "fit-content", border: "3px solid var(--accent-color-dark)", backgroundColor: "var(--accent-color-dark)"}}>
+          <div className="call-to-action-primary justify-center align-center gap-100" style={{ margin: "1em 0", position: "relative", display: "flex", width: "fit-content", border: "3px solid var(--accent-color-dark)", backgroundColor: "var(--accent-color-dark)" }}>
             <input
+              className="call-to-action-primary"
               type="submit"
               value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
+              style={{ opacity: "0", height: "0", margin: "unset", cursor: "not-allowed", padding: ".5em 0" }}
               disabled={isLoading}
-              style={{ margin: "unset", cursor: "not-allowed" }}
             />
             <div className="loading" />
           </div>
