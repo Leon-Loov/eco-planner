@@ -20,98 +20,139 @@ export default async function getOneRoadmap(id: string) {
 
 /**
  * Caches the specified roadmap and all goals for that roadmap.
- * Is invalidated when `revalidateTag()` is called on one of its tags ['database', 'roadmap', 'goal'], which is done in relevant API routes.
+ * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap', 'goal']`, which is done in relevant API routes.
  * @param id ID of the roadmap to cache
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedRoadmap = unstable_cache(
-  (id, userId) => getStuff(id),
-  ['getRoadmap'],
-  { revalidate: 600, tags: ['database', 'roadmap', 'goal'] },
-);
+  async (id, userId) => {
+    const session = await getSessionData(cookies());
 
-async function getStuff(id: string) {
-  console.log('Getting roadmap ' + id);
-  const session = await getSessionData(cookies());
-
-  let roadmap: Roadmap & {
-    goals: (Goal & {
-      actions: (Action & {
+    let roadmap: Roadmap & {
+      goals: (Goal & {
+        actions: (Action & {
+          author: { id: string, username: string },
+          editors: { id: string, username: string }[],
+          viewers: { id: string, username: string }[],
+          editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+          viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+        })[],
+        dataSeries: DataSeries | null,
         author: { id: string, username: string },
         editors: { id: string, username: string }[],
         viewers: { id: string, username: string }[],
         editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
         viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       })[],
-      dataSeries: DataSeries | null,
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
       viewers: { id: string, username: string }[],
       editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-    })[],
-    author: { id: string, username: string },
-    editors: { id: string, username: string }[],
-    viewers: { id: string, username: string }[],
-    editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-    viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-  } | null = null;
+    } | null = null;
 
-  // If user is admin, always get the roadmap
-  if (session.user?.isAdmin) {
-    try {
-      roadmap = await prisma.roadmap.findUnique({
-        where: { id },
-        include: {
-          goals: {
-            include: {
-              actions: {
-                include: {
-                  author: { select: { id: true, username: true } },
-                  editors: { select: { id: true, username: true } },
-                  viewers: { select: { id: true, username: true } },
-                  editGroups: { include: { users: { select: { id: true, username: true } } } },
-                  viewGroups: { include: { users: { select: { id: true, username: true } } } },
+    // If user is admin, always get the roadmap
+    if (session.user?.isAdmin) {
+      try {
+        roadmap = await prisma.roadmap.findUnique({
+          where: { id },
+          include: {
+            goals: {
+              include: {
+                actions: {
+                  include: {
+                    author: { select: { id: true, username: true } },
+                    editors: { select: { id: true, username: true } },
+                    viewers: { select: { id: true, username: true } },
+                    editGroups: { include: { users: { select: { id: true, username: true } } } },
+                    viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                  },
                 },
-              },
-              dataSeries: true,
-              author: { select: { id: true, username: true } },
-              editors: { select: { id: true, username: true } },
-              viewers: { select: { id: true, username: true } },
-              editGroups: { include: { users: { select: { id: true, username: true } } } },
-              viewGroups: { include: { users: { select: { id: true, username: true } } } },
-            }
-          },
-          author: { select: { id: true, username: true } },
-          editors: { select: { id: true, username: true } },
-          viewers: { select: { id: true, username: true } },
-          editGroups: { include: { users: { select: { id: true, username: true } } } },
-          viewGroups: { include: { users: { select: { id: true, username: true } } } },
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      console.log('Error fetching admin roadmap');
-      return null
+                dataSeries: true,
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              }
+            },
+            author: { select: { id: true, username: true } },
+            editors: { select: { id: true, username: true } },
+            viewers: { select: { id: true, username: true } },
+            editGroups: { include: { users: { select: { id: true, username: true } } } },
+            viewGroups: { include: { users: { select: { id: true, username: true } } } },
+          }
+        });
+      } catch (error) {
+        console.error(error);
+        console.log('Error fetching admin roadmap');
+        return null
+      }
+
+      roadmap?.goals.sort(goalSorter);
+
+      return roadmap;
     }
 
-    roadmap?.goals.sort(goalSorter);
+    // If user is logged in, get the roadmap if they have access to it
+    if (session.user?.isLoggedIn) {
+      try {
+        roadmap = await prisma.roadmap.findUnique({
+          where: {
+            id,
+            OR: [
+              { authorId: session.user.id },
+              { editors: { some: { id: session.user.id } } },
+              { viewers: { some: { id: session.user.id } } },
+              { editGroups: { some: { users: { some: { id: session.user.id } } } } },
+              { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
+              { viewGroups: { some: { name: 'Public' } } }
+            ]
+          },
+          include: {
+            goals: {
+              include: {
+                actions: {
+                  include: {
+                    author: { select: { id: true, username: true } },
+                    editors: { select: { id: true, username: true } },
+                    viewers: { select: { id: true, username: true } },
+                    editGroups: { include: { users: { select: { id: true, username: true } } } },
+                    viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                  },
+                },
+                dataSeries: true,
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              }
+            },
+            author: { select: { id: true, username: true } },
+            editors: { select: { id: true, username: true } },
+            viewers: { select: { id: true, username: true } },
+            editGroups: { include: { users: { select: { id: true, username: true } } } },
+            viewGroups: { include: { users: { select: { id: true, username: true } } } },
+          }
+        });
+      } catch (error) {
+        console.error(error);
+        console.log('Error fetching user roadmap');
+        return null
+      }
 
-    return roadmap;
-  }
+      roadmap?.goals.sort(goalSorter);
 
-  // If user is logged in, get the roadmap if they have access to it
-  if (session.user?.isLoggedIn) {
+      return roadmap;
+    }
+
+    // If user is not logged in, get the roadmap if it is public
     try {
       roadmap = await prisma.roadmap.findUnique({
         where: {
           id,
           OR: [
-            { authorId: session.user.id },
-            { editors: { some: { id: session.user.id } } },
-            { viewers: { some: { id: session.user.id } } },
-            { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-            { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
             { viewGroups: { some: { name: 'Public' } } }
           ]
         },
@@ -144,58 +185,14 @@ async function getStuff(id: string) {
       });
     } catch (error) {
       console.error(error);
-      console.log('Error fetching user roadmap');
+      console.log('Error fetching public roadmap');
       return null
     }
 
     roadmap?.goals.sort(goalSorter);
 
     return roadmap;
-  }
-
-  // If user is not logged in, get the roadmap if it is public
-  try {
-    roadmap = await prisma.roadmap.findUnique({
-      where: {
-        id,
-        OR: [
-          { viewGroups: { some: { name: 'Public' } } }
-        ]
-      },
-      include: {
-        goals: {
-          include: {
-            actions: {
-              include: {
-                author: { select: { id: true, username: true } },
-                editors: { select: { id: true, username: true } },
-                viewers: { select: { id: true, username: true } },
-                editGroups: { include: { users: { select: { id: true, username: true } } } },
-                viewGroups: { include: { users: { select: { id: true, username: true } } } },
-              },
-            },
-            dataSeries: true,
-            author: { select: { id: true, username: true } },
-            editors: { select: { id: true, username: true } },
-            viewers: { select: { id: true, username: true } },
-            editGroups: { include: { users: { select: { id: true, username: true } } } },
-            viewGroups: { include: { users: { select: { id: true, username: true } } } },
-          }
-        },
-        author: { select: { id: true, username: true } },
-        editors: { select: { id: true, username: true } },
-        viewers: { select: { id: true, username: true } },
-        editGroups: { include: { users: { select: { id: true, username: true } } } },
-        viewGroups: { include: { users: { select: { id: true, username: true } } } },
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    console.log('Error fetching public roadmap');
-    return null
-  }
-
-  roadmap?.goals.sort(goalSorter);
-
-  return roadmap;
-}
+  },
+  ['getOneRoadmap'],
+  { revalidate: 600, tags: ['database', 'roadmap', 'goal'] },
+);
