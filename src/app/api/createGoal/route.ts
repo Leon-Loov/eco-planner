@@ -4,7 +4,6 @@ import prisma from "@/prismaClient";
 import { AccessLevel, GoalInput } from "@/types";
 import { Prisma } from "@prisma/client";
 import accessChecker from "@/lib/accessChecker";
-import { latestDatabaseUpdate } from "@/lib/timestamps";
 import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
