@@ -3,6 +3,7 @@ import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { AccessLevel, ActionInput } from "@/types";
 import accessChecker from "@/lib/accessChecker";
+import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -83,6 +84,8 @@ export async function POST(request: NextRequest) {
         viewGroups: { connect: viewGroups },
       }
     });
+    // Invalidate old cache
+    revalidateTag('action');
     // Return the new action's ID if successful
     return createResponse(
       response,
@@ -202,6 +205,8 @@ export async function PUT(request: NextRequest) {
         viewGroups: { set: viewGroups },
       }
     });
+    // Invalidate old cache
+    revalidateTag('action');
     // Return the new action's ID if successful
     return createResponse(
       response,

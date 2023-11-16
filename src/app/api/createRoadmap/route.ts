@@ -4,6 +4,8 @@ import prisma from "@/prismaClient";
 import { AccessLevel, GoalInput, RoadmapInput } from "@/types";
 import roadmapGoalCreator from "./roadmapGoalCreator";
 import accessChecker from "@/lib/accessChecker";
+import { latestDatabaseUpdate } from "@/lib/timestamps";
+import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -78,6 +80,8 @@ export async function POST(request: NextRequest) {
         },
       },
     });
+    // Invalidate old cache
+    revalidateTag('roadmap');
     // Return the new roadmap's ID if successful
     return createResponse(
       response,
@@ -216,6 +220,8 @@ export async function PUT(request: NextRequest) {
         }
       },
     });
+    // Invalidate old cache
+    revalidateTag('roadmap');
     // Return the new roadmap's ID if successful
     return createResponse(
       response,

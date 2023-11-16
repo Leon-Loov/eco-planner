@@ -20,14 +20,14 @@ export default async function getOneRoadmap(id: string) {
 
 /**
  * Caches the specified roadmap and all goals for that roadmap.
- * Is invalidated when `revalidateTag('database')` is called, which should be done by most API routes.
+ * Is invalidated when `revalidateTag()` is called on one of its tags ['database', 'roadmap', 'goal'], which is done in relevant API routes.
  * @param id ID of the roadmap to cache
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedRoadmap = unstable_cache(
   (id, userId) => getStuff(id),
   ['getRoadmap'],
-  { revalidate: 3600, tags: ['database'] },
+  { revalidate: 600, tags: ['database', 'roadmap', 'goal'] },
 );
 
 async function getStuff(id: string) {

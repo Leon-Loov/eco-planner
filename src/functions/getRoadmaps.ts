@@ -12,13 +12,13 @@ export default async function getRoadmaps() {
 
 /**
  * Caches all roadmaps the user has access to.
- * Is invalidated when `revalidateTag('database')` is called, which should be done by most API routes.
+ * Is invalidated when `revalidateTag('database')` or `revalidateTag('roadmap')` is called, which is done in relevant API routes.
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedRoadmaps = unstable_cache(
   (userId) => getStuff(),
   ['getRoadmaps'],
-  { revalidate: 3600, tags: ['database'] },
+  { revalidate: 600, tags: ['database', 'roadmap'] },
 );
 
 async function getStuff() {
