@@ -2,6 +2,7 @@ import { getSessionData } from "@/lib/session"
 import { goalSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
 import { Action, DataSeries, Goal, Roadmap } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
 /**
@@ -12,6 +13,25 @@ import { cookies } from "next/headers";
  * @returns Roadmap object with goals
  */
 export default async function getOneRoadmap(id: string) {
+  const session = await getSessionData(cookies());
+  console.log(`${JSON.stringify(await getCachedRoadmap(id, session.user?.id ?? '')).length} bytes`)
+  return getCachedRoadmap(id, session.user?.id ?? '')
+}
+
+/**
+ * Caches the specified roadmap and all goals for that roadmap.
+ * Is invalidated when `revalidateTag('database')` is called, which should be done by most API routes.
+ * @param id ID of the roadmap to cache
+ * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
+ */
+const getCachedRoadmap = unstable_cache(
+  (id, userId) => getStuff(id),
+  ['getRoadmap'],
+  { revalidate: 3600, tags: ['database'] },
+);
+
+async function getStuff(id: string) {
+  console.log('Getting roadmap ' + id);
   const session = await getSessionData(cookies());
 
   let roadmap: Roadmap & {
