@@ -6,7 +6,7 @@ export default function GoalTable({
 }: {
   roadmap: Roadmap & {
     goals: (Goal & {
-      actions: Action[],
+      _count: { actions: number }
       dataSeries: DataSeries | null,
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
@@ -39,7 +39,7 @@ export default function GoalTable({
               <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name || goal.indicatorParameter}</a></td>
               <td>{goal.indicatorParameter}</td>
               <td>{goal.dataSeries?.unit}</td>
-              <td>{goal.actions.length}</td>
+              <td>{goal._count.actions}</td>
             </tr>
           ))}
         </tbody>

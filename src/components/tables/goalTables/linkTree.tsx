@@ -9,7 +9,7 @@ export default function LinkTree({
 }: {
   roadmap: Roadmap & {
     goals: (Goal & {
-      actions: Action[],
+      _count: { actions: number }
       dataSeries: DataSeries | null,
       author: { id: string, username: string },
       editors: { id: string, username: string }[],

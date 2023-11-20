@@ -30,13 +30,7 @@ const getCachedRoadmap = unstable_cache(
 
     let roadmap: Roadmap & {
       goals: (Goal & {
-        actions: (Action & {
-          author: { id: string, username: string },
-          editors: { id: string, username: string }[],
-          viewers: { id: string, username: string }[],
-          editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-          viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-        })[],
+        _count: { actions: number },
         dataSeries: DataSeries | null,
         author: { id: string, username: string },
         editors: { id: string, username: string }[],
@@ -59,15 +53,7 @@ const getCachedRoadmap = unstable_cache(
           include: {
             goals: {
               include: {
-                actions: {
-                  include: {
-                    author: { select: { id: true, username: true } },
-                    editors: { select: { id: true, username: true } },
-                    viewers: { select: { id: true, username: true } },
-                    editGroups: { include: { users: { select: { id: true, username: true } } } },
-                    viewGroups: { include: { users: { select: { id: true, username: true } } } },
-                  },
-                },
+                _count: { select: { actions: true } },
                 dataSeries: true,
                 author: { select: { id: true, username: true } },
                 editors: { select: { id: true, username: true } },
@@ -112,15 +98,7 @@ const getCachedRoadmap = unstable_cache(
           include: {
             goals: {
               include: {
-                actions: {
-                  include: {
-                    author: { select: { id: true, username: true } },
-                    editors: { select: { id: true, username: true } },
-                    viewers: { select: { id: true, username: true } },
-                    editGroups: { include: { users: { select: { id: true, username: true } } } },
-                    viewGroups: { include: { users: { select: { id: true, username: true } } } },
-                  },
-                },
+                _count: { select: { actions: true } },
                 dataSeries: true,
                 author: { select: { id: true, username: true } },
                 editors: { select: { id: true, username: true } },
@@ -159,15 +137,7 @@ const getCachedRoadmap = unstable_cache(
         include: {
           goals: {
             include: {
-              actions: {
-                include: {
-                  author: { select: { id: true, username: true } },
-                  editors: { select: { id: true, username: true } },
-                  viewers: { select: { id: true, username: true } },
-                  editGroups: { include: { users: { select: { id: true, username: true } } } },
-                  viewGroups: { include: { users: { select: { id: true, username: true } } } },
-                },
-              },
+              _count: { select: { actions: true } },
               dataSeries: true,
               author: { select: { id: true, username: true } },
               editors: { select: { id: true, username: true } },
