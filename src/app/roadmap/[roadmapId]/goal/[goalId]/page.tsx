@@ -15,18 +15,18 @@ import { Goal, DataSeries } from "@prisma/client";
 import GraphSelector from "@/components/graphs/graphselector/graphSelector";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
-  const [session, roadmap] = await Promise.all([
+  const [session, roadmap, goal] = await Promise.all([
     getSessionData(cookies()),
-    getOneRoadmap(params.roadmapId)
+    getOneRoadmap(params.roadmapId),
+    getOneGoal(params.goalId)
   ]);
 
   let nationalGoal: Goal & { dataSeries: DataSeries | null } | null = null;
-  const goal = roadmap?.goals.find(goal => goal.id === params.goalId);
 
   let accessLevel: AccessLevel = AccessLevel.None;
   if (goal) {
     accessLevel = accessChecker(goal, session.user);
-    
+
     if (goal.nationalGoalId) {
       nationalGoal = await getOneGoal(goal.nationalGoalId)
     }
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       <span style={{ color: "gray" }}>Målbana</span>
       <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
-      <GraphGraph goal={goal} nationalGoal={nationalGoal}/>
+      <GraphGraph goal={goal} nationalGoal={nationalGoal} />
       <br />
       <CombinedGraph roadmap={roadmap} goal={goal} />
       <br />

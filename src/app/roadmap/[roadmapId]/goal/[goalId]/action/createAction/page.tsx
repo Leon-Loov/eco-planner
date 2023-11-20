@@ -1,18 +1,16 @@
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import ActionForm from "./actionForm";
-import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { notFound } from "next/navigation";
 import accessChecker from "@/lib/accessChecker";
 import { BackButton } from '@/components/redirectButtons';
+import getOneGoal from "@/fetchers/getOneGoal";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
-  const [session, roadmap] = await Promise.all([
+  const [session, goal] = await Promise.all([
     getSessionData(cookies()),
-    getOneRoadmap(params.roadmapId)
+    getOneGoal(params.goalId)
   ]);
-
-  let goal = roadmap?.goals.find(goal => goal.id === params.goalId);
 
   // User must be signed in and have edit access to the goal, and the goal must exist
   if (!goal || !session.user || !accessChecker(goal, session.user) || accessChecker(goal, session.user) === 'VIEW') {
@@ -22,7 +20,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   return (
     <>
       <p><BackButton href="../" /></p>
-      <h1>Skapa ny åtgärd {roadmap ? `under målbanan "${goal?.name || goal.indicatorParameter}" i "${roadmap.name}"` : ""}</h1>
+      <h1>Skapa ny åtgärd {`under målbanan "${goal?.name || goal.indicatorParameter}"`}</h1>
       <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} user={session.user} />
     </>
   )

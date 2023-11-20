@@ -29,7 +29,13 @@ const getCachedGoal = unstable_cache(
 
     let goal: Goal & {
       dataSeries: DataSeries | null,
-      actions: Action[],
+      actions: (Action & {
+        author: { id: string, username: string },
+        editors: { id: string, username: string }[],
+        viewers: { id: string, username: string }[],
+        editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+        viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+      })[],
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
       viewers: { id: string, username: string }[],
@@ -44,7 +50,15 @@ const getCachedGoal = unstable_cache(
           where: { id },
           include: {
             dataSeries: true,
-            actions: true,
+            actions: {
+              include: {
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              },
+            },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -80,7 +94,15 @@ const getCachedGoal = unstable_cache(
           },
           include: {
             dataSeries: true,
-            actions: true,
+            actions: {
+              include: {
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              },
+            },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -110,7 +132,15 @@ const getCachedGoal = unstable_cache(
         },
         include: {
           dataSeries: true,
-          actions: true,
+          actions: {
+            include: {
+              author: { select: { id: true, username: true } },
+              editors: { select: { id: true, username: true } },
+              viewers: { select: { id: true, username: true } },
+              editGroups: { include: { users: { select: { id: true, username: true } } } },
+              viewGroups: { include: { users: { select: { id: true, username: true } } } },
+            },
+          },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
