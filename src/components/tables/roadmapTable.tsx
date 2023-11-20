@@ -6,7 +6,7 @@ export default function RoadmapTable({
   roadmaps,
 }: {
   title: String,
-  roadmaps: (Roadmap & { goals: Goal[] })[],
+  roadmaps: (Roadmap & { _count: { goals: number } })[],
 }) {
   return <>
     <h2>{title}</h2>
@@ -22,7 +22,7 @@ export default function RoadmapTable({
           {roadmaps.map(roadmap => (
             <tr key={roadmap.id}>
               <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
-              <td>{roadmap.goals.length}</td>
+              <td>{roadmap._count.goals}</td>
             </tr>
           ))}
         </tbody>

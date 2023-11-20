@@ -15,7 +15,7 @@ export default function GoalForm({
 }: {
   roadmapId: string,
   user: Data['user'],
-  nationalRoadmaps: (Roadmap & { goals: Goal[] })[],
+  nationalRoadmaps: (Roadmap & { goals: { id: string, name: string | null, indicatorParameter: string }[] })[],
   currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries | null },
 }) {
   // Submit the form to the API
@@ -144,7 +144,7 @@ export default function GoalForm({
               { // Allows choosing the goals from the selected national roadmap
                 nationalRoadmaps.find((roadmap) => roadmap.id === selectedRoadmap)?.goals.map((goal) => {
                   return (
-                    <option key={goal.id} value={goal.id}>{goal.name}</option>
+                    <option key={goal.id} value={goal.id}>{goal.name ?? goal.indicatorParameter}</option>
                   )
                 })}
             </select>

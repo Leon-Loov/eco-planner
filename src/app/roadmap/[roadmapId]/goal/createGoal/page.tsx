@@ -4,18 +4,16 @@ import GoalForm from "./goalForm";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
-import getRoadmaps from "@/fetchers/getRoadmaps";
 import { BackButton } from '@/components/redirectButtons';
+import getNationals from "@/fetchers/getNationals";
 
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
-  const [session, roadmap, allRoadmaps] = await Promise.all([
+  const [session, roadmap, nationalRoadmaps] = await Promise.all([
     getSessionData(cookies()),
     getOneRoadmap(params.roadmapId),
-    getRoadmaps(),
+    getNationals(),
   ]);
-
-  let nationalRoadmaps = allRoadmaps.filter((roadmap) => roadmap.isNational);
 
   // User must be signed in and have edit access to the roadmap, and the roadmap must exist
   if (!roadmap || !session.user || !accessChecker(roadmap, session.user) || accessChecker(roadmap, session.user) === 'VIEW') {
@@ -24,7 +22,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return (
     <>
-      <p><BackButton href="../"/></p>
+      <p><BackButton href="../" /></p>
       <h1>Skapa ny målbana{roadmap?.name ? ` under "${roadmap.name}"` : null}</h1>
       <GoalForm roadmapId={params.roadmapId} user={session.user} nationalRoadmaps={nationalRoadmaps} />
     </>

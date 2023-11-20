@@ -6,14 +6,14 @@ import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
 /**
- * Gets all roadmaps the user has access to.
+ * Gets all roadmaps the user has access to, as well as the count of goals for each roadmap.
  * 
  * Returns an empty array if no roadmaps are found or user does not have access to any. Also returns an empty array on error.
  * @returns Array of roadmaps
  */
 export default async function getRoadmaps() {
   const session = await getSessionData(cookies());
-  return getCachedRoadmaps(session.user?.id ?? '')
+  return getCachedRoadmaps(session.user?.id ?? '');
 }
 
 /**
@@ -27,10 +27,7 @@ const getCachedRoadmaps = unstable_cache(
 
     let roadmaps: (
       Roadmap & {
-        goals: (Goal & {
-          dataSeries: DataSeries | null,
-          actions: Action[],
-        })[],
+        _count: { goals: number },
         author: { id: string, username: string },
         editors: { id: string, username: string }[],
         viewers: { id: string, username: string }[],
@@ -44,11 +41,8 @@ const getCachedRoadmaps = unstable_cache(
       try {
         roadmaps = await prisma.roadmap.findMany({
           include: {
-            goals: {
-              include: {
-                dataSeries: true,
-                actions: true,
-              },
+            _count: {
+              select: { goals: true }
             },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -60,7 +54,7 @@ const getCachedRoadmaps = unstable_cache(
       } catch (error) {
         console.error(error);
         console.log('Error fetching admin roadmaps');
-        return []
+        return [];
       }
 
       // Sort roadmaps
@@ -85,11 +79,8 @@ const getCachedRoadmaps = unstable_cache(
             ]
           },
           include: {
-            goals: {
-              include: {
-                dataSeries: true,
-                actions: true,
-              },
+            _count: {
+              select: { goals: true }
             },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -101,7 +92,7 @@ const getCachedRoadmaps = unstable_cache(
       } catch (error) {
         console.error(error);
         console.log('Error fetching user roadmaps');
-        return []
+        return [];
       }
 
       // Sort roadmaps
@@ -117,11 +108,8 @@ const getCachedRoadmaps = unstable_cache(
           viewGroups: { some: { name: 'Public' } }
         },
         include: {
-          goals: {
-            include: {
-              dataSeries: true,
-              actions: true,
-            },
+          _count: {
+            select: { goals: true }
           },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
@@ -133,7 +121,7 @@ const getCachedRoadmaps = unstable_cache(
     } catch (error) {
       console.error(error);
       console.log('Error fetching public roadmaps');
-      return []
+      return [];
     }
 
     // Sort roadmaps
