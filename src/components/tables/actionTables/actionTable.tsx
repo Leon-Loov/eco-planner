@@ -1,10 +1,13 @@
 import '../tables.css'
 import { Action, Goal } from "@prisma/client"
 import { AccessLevel } from '@/types'
+import Image from "next/image";
+import Link from 'next/link';
 
 export default function ActionTable({
   goal,
   accessLevel,
+  params,
 }: {
   goal: Goal & {
     actions: Action[],
@@ -15,6 +18,7 @@ export default function ActionTable({
     viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
   },
   accessLevel?: AccessLevel,
+  params: { roadmapId: string, goalId: string }
 }) {
   return <>
     <div className="overflow-x-scroll">
@@ -35,7 +39,16 @@ export default function ActionTable({
         <tbody>
           {goal.actions.map(action => (
             <tr key={action.id}>
-              <td>{action.name}</td>
+              <td>
+                {action.name}
+                { // Only show the edit link if the user has edit access to the goal
+                  // Should technically be if the user has edit access to the action, but that could build up a lot of checks
+                  (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+                  <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${action.id}/editAction`}>
+                    <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} style={{ marginBottom: "-5px" }} />
+                  </Link>
+                }
+              </td>
               <td>{action.description}</td>
               <td>{action.costEfficiency}</td>
               <td>{action.expectedOutcome}</td>

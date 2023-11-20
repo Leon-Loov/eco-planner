@@ -5,8 +5,6 @@ import { Action, Goal } from "@prisma/client"
 import { NewActionButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
 import ActionTable from './actionTables/actionTable'
-import { useGlobalContext } from '@/app/context/store'
-import GraphSelector from '../graphs/graphselector/graphSelector'
 
 export default function Actions({
   title,
@@ -31,12 +29,12 @@ export default function Actions({
       <h2>{title}</h2>
       <nav className='flex-row align-center gap-100'>
         { // Only show the button if the user has edit access to the goal
-            (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
-            <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
+          (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+          <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
         }
       </nav>
     </label>
-    <ActionTable goal={goal} accessLevel={accessLevel} />
+    <ActionTable goal={goal} accessLevel={accessLevel} params={params} />
   </>
 
 }
