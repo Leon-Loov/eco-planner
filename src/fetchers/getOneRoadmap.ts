@@ -14,7 +14,6 @@ import { cookies } from "next/headers";
  */
 export default async function getOneRoadmap(id: string) {
   const session = await getSessionData(cookies());
-  console.log(`${JSON.stringify(await getCachedRoadmap(id, session.user?.id ?? '')).length} bytes`)
   return getCachedRoadmap(id, session.user?.id ?? '')
 }
 
