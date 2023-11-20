@@ -1,7 +1,7 @@
 "use client"
 
 import './tables.css'
-import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
+import { DataSeries, Goal, Roadmap } from "@prisma/client"
 import { NewGoalButton } from '../redirectButtons'
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
@@ -17,7 +17,7 @@ export default function Goals({
   title: String,
   roadmap: Roadmap & {
     goals: (Goal & {
-      actions: Action[],
+      _count: { actions: number }
       dataSeries: DataSeries | null,
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
@@ -48,10 +48,10 @@ export default function Goals({
       </label>
       {tableType == 'table' ? (
         <GoalTable roadmap={roadmap} />
-      ): null }
+      ) : null}
       {tableType == 'listTree' ? (
         <LinkTree roadmap={roadmap} />
-      ): null }
+      ) : null}
     </>
   )
 }

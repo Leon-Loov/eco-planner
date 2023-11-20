@@ -1,5 +1,5 @@
 import { NewRoadmapButton } from "@/components/redirectButtons";
-import getRoadmaps from "@/functions/getRoadmaps";
+import getRoadmaps from "@/fetchers/getRoadmaps";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import RoadmapTable from "@/components/tables/roadmapTable";

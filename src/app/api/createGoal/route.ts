@@ -4,6 +4,7 @@ import prisma from "@/prismaClient";
 import { AccessLevel, GoalInput } from "@/types";
 import { Prisma } from "@prisma/client";
 import accessChecker from "@/lib/accessChecker";
+import { revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -148,6 +149,8 @@ export async function POST(request: NextRequest) {
         },
       }
     });
+    // Invalidate old cache
+    revalidateTag('goal');
     // Return the new goal's ID if successful
     return createResponse(
       response,
@@ -304,6 +307,8 @@ export async function PUT(request: NextRequest) {
         },
       }
     });
+    // Invalidate old cache
+    revalidateTag('goal');
     // Return the edited goal's ID if successful
     return createResponse(
       response,
