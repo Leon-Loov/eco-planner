@@ -14,6 +14,11 @@ export default async function getNames() {
   return getCachedNames(session.user?.id ?? '');
 }
 
+/**
+ * Caches names and ids of all roadmaps, goals, and actions.
+ * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap', 'goal', 'action']`, which is done in relevant API routes.
+ * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
+ */
 const getCachedNames = unstable_cache(
   async (userId: string) => {
     const session = await getSessionData(cookies());

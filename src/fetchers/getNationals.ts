@@ -6,18 +6,18 @@ import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
 /**
- * Gets all roadmaps the user has access to, as well as the count of goals for each roadmap.
+ * Gets all national roadmaps the user has access to, as well as the ids, names, and indicator parameters of all goals in those roadmaps.
  * 
  * Returns an empty array if no roadmaps are found or user does not have access to any. Also returns an empty array on error.
  * @returns Array of roadmaps
  */
-export default async function getRoadmaps() {
+export default async function getNationals() {
   const session = await getSessionData(cookies());
   return getCachedRoadmaps(session.user?.id ?? '');
 }
 
 /**
- * Caches all roadmaps the user has access to.
+ * Caches all national roadmaps the user has access to.
  * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap']`, which is done in relevant API routes.
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
@@ -130,6 +130,6 @@ const getCachedRoadmaps = unstable_cache(
 
     return roadmaps;
   },
-  ['getRoadmaps'],
+  ['getNationals'],
   { revalidate: 600, tags: ['database', 'roadmap', 'goal'] },
 );
