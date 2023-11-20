@@ -143,5 +143,5 @@ const getCachedNames = unstable_cache(
     return names;
   },
   ['getNames'],
-  { revalidate: 1800, tags: ['database', 'roadmap', 'goal', 'action'] },
+  { revalidate: 600, tags: ['database', 'roadmap', 'goal', 'action'] },
 );
