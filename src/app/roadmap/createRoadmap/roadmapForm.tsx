@@ -62,7 +62,7 @@ export default function RoadmapForm({
       if (res.ok) {
         return res.json()
       } else {
-        res.json().then((data) => {
+        return res.json().then((data) => {
           throw new Error(data.message)
         })
       }
@@ -181,7 +181,7 @@ export default function RoadmapForm({
             type="submit"
             value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
             disabled={isLoading}
-          />          
+          />
         )}
       </form>
     </>

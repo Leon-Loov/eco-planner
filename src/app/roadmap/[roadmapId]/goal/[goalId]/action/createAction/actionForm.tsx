@@ -29,6 +29,8 @@ export default function ActionForm({
       form.namedItem("viewGroups")
     )
 
+    console.log(editUsers, viewUsers, editGroups, viewGroups)
+
     const formJSON = JSON.stringify({
       name: (form.namedItem("actionName") as HTMLInputElement)?.value,
       description: (form.namedItem("actionDescription") as HTMLInputElement)?.value,
@@ -59,7 +61,7 @@ export default function ActionForm({
       if (res.ok) {
         return res.json()
       } else {
-        res.json().then((data) => {
+        return res.json().then((data) => {
           throw new Error(data.message)
         })
       }

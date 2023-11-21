@@ -65,7 +65,7 @@ export default function GoalForm({
       if (res.ok) {
         return res.json()
       } else {
-        res.json().then((data) => {
+        return res.json().then((data) => {
           throw new Error(data.message)
         })
       }
