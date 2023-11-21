@@ -345,6 +345,7 @@ model Link {
   @@map("link")
 }
 
+// There is apparently a default typesript interface called "Comment", so make sure to properly import this type in the code
 model Comment {
   // UUID of the comment
   id        String   @id @default(uuid())

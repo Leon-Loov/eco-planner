@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import { goalSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
-import { Action, DataSeries, Goal, Roadmap } from "@prisma/client";
+import { Action, Comment, DataSeries, Goal, Roadmap } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -37,7 +37,7 @@ const getCachedRoadmap = unstable_cache(
         editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
         viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       })[],
-      comments?: { id: string, commentText: string, author: { id: string, username: string } }[],
+      comments?: (Comment & { author: { id: string, username: string } })[],
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
       viewers: { id: string, username: string }[],
