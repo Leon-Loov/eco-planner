@@ -122,11 +122,12 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
               setEditUsers(editUsers.map((editUser) => editUser === user ? event.currentTarget.value : editUser));
             }} />
             {/* Remove the user from the list of selected editUsers */}
-            <button 
-              onClick={() => {setEditUsers(editUsers.filter((editUser) => editUser !== user)); }} 
-              className={styles.removeUserButton}>
+            <button
+              onClick={() => { setEditUsers(editUsers.filter((editUser) => editUser !== user)); }}
+              className={styles.removeUserButton}
+              type="button">
               <Image src="/icons/close.svg" alt="remove" width={16} height={16}></Image>
-            </button> 
+            </button>
           </label>
         </Fragment>
       ))}
@@ -151,11 +152,12 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
               // Replace the user in the list of selected viewUsers with the new value
               setViewUsers(viewUsers.map((viewUser) => viewUser === user ? event.currentTarget.value : viewUser));
             }} />
-            <button 
-              onClick={() => {setViewUsers(viewUsers.filter((viewUser) => viewUser !== user)); }} 
-              className={styles.removeUserButton}>
+            <button
+              onClick={() => { setViewUsers(viewUsers.filter((viewUser) => viewUser !== user)); }}
+              className={styles.removeUserButton}
+              type="button">
               <Image src="/icons/close.svg" alt="remove" width={16} height={16}></Image>
-            </button> 
+            </button>
           </label>
         </Fragment>
       ))}

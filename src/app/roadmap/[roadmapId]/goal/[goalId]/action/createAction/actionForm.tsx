@@ -127,17 +127,17 @@ export default function ActionForm({
         <input type="text" name="relevantActors" id="relevantActors" defaultValue={currentAction?.relevantActors ?? undefined} />
         <br />
         <p>Vilka kategorier faller åtgärden under?</p>
-        <div className="flex-row gap-25 align-center" style={{margin: ".5em 0"}}>
-          <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} style={{cursor: "pointer"}} />
-          <label htmlFor="isSufficiency" style={{cursor: "pointer"}}>Sufficiency</label>
+        <div className="flex-row gap-25 align-center" style={{ margin: ".5em 0" }}>
+          <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} style={{ cursor: "pointer" }} />
+          <label htmlFor="isSufficiency" style={{ cursor: "pointer" }}>Sufficiency</label>
         </div>
-        <div className="flex-row gap-25 align-center" style={{margin: ".5em 0"}}>
-          <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} style={{cursor: "pointer"}} />
-          <label htmlFor="isEfficiency" style={{cursor: "pointer"}}>Efficiency</label>
+        <div className="flex-row gap-25 align-center" style={{ margin: ".5em 0" }}>
+          <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} style={{ cursor: "pointer" }} />
+          <label htmlFor="isEfficiency" style={{ cursor: "pointer" }}>Efficiency</label>
         </div>
-        <div className="flex-row gap-25 align-center" style={{margin: ".5em 0"}}>
-          <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} style={{cursor: "pointer"}} />
-          <label htmlFor="isRenewables" style={{cursor: "pointer"}}>Renewables</label>
+        <div className="flex-row gap-25 align-center" style={{ margin: ".5em 0" }}>
+          <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} style={{ cursor: "pointer" }} />
+          <label htmlFor="isRenewables" style={{ cursor: "pointer" }}>Renewables</label>
         </div>
         <br />
         <div>

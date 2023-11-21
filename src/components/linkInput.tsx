@@ -11,8 +11,14 @@ export default function LinkInput({ links }: { links?: { url: string, descriptio
       <legend>Länkar till resurser</legend>
       {linkList.map((link, index) => (
         <Fragment key={'link' + index}>
-          <input type="url" name="linkUrl" defaultValue={link.url} />
-          <input type="text" name="linkDescription" defaultValue={link.description} />
+          <label>
+            Länk:
+            <input type="url" name="linkUrl" defaultValue={link.url} />
+          </label>
+          <label>
+            Beskrivning:
+            <input type="text" name="linkDescription" defaultValue={link.description} />
+          </label>
           <input type="button" value="Ta bort ↑" onClick={() => setLinkList(linkList.filter((_, i) => i !== index))} />
         </Fragment>
       ))}
