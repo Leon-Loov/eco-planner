@@ -124,15 +124,18 @@ export default function ActionForm({
         <label htmlFor="relevantActors">Relevanta aktörer: </label>
         <input type="text" name="relevantActors" id="relevantActors" defaultValue={currentAction?.relevantActors ?? undefined} />
         <br />
-        <div>
-          {/* TODO: Styling please :) */}
-          <p>Vilka kategorier faller åtgärden under?</p>
-          <label htmlFor="isSufficiency">Sufficiency</label>
-          <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} />
-          <label htmlFor="isEfficiency">Efficiency</label>
-          <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} />
-          <label htmlFor="isRenewables">Renewables</label>
-          <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} />
+        <p>Vilka kategorier faller åtgärden under?</p>
+        <div className="flex-row gap-25 align-center" style={{margin: ".5em 0"}}>
+          <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} style={{cursor: "pointer"}} />
+          <label htmlFor="isSufficiency" style={{cursor: "pointer"}}>Sufficiency</label>
+        </div>
+        <div className="flex-row gap-25 align-center" style={{margin: ".5em 0"}}>
+          <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} style={{cursor: "pointer"}} />
+          <label htmlFor="isEfficiency" style={{cursor: "pointer"}}>Efficiency</label>
+        </div>
+        <div className="flex-row gap-25 align-center" style={{margin: ".5em 0"}}>
+          <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} style={{cursor: "pointer"}} />
+          <label htmlFor="isRenewables" style={{cursor: "pointer"}}>Renewables</label>
         </div>
         <br />
         { // Only show the access selector if a new action is being created, the useris an admin, or the user is the author of the action
