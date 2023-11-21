@@ -36,6 +36,8 @@ const getCachedGoal = unstable_cache(
         editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
         viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       })[],
+      links: { id: string, url: string }[],
+      comments?: { id: string, commentText: string, author: { id: string, username: string } }[],
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
       viewers: { id: string, username: string }[],
@@ -58,6 +60,12 @@ const getCachedGoal = unstable_cache(
                 editGroups: { include: { users: { select: { id: true, username: true } } } },
                 viewGroups: { include: { users: { select: { id: true, username: true } } } },
               },
+            },
+            links: true,
+            comments: {
+              include: {
+                author: { select: { id: true, username: true } },
+              }
             },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -103,6 +111,7 @@ const getCachedGoal = unstable_cache(
                 viewGroups: { include: { users: { select: { id: true, username: true } } } },
               },
             },
+            links: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -141,6 +150,7 @@ const getCachedGoal = unstable_cache(
               viewGroups: { include: { users: { select: { id: true, username: true } } } },
             },
           },
+          links: true,
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
