@@ -95,8 +95,15 @@ export async function POST(request: NextRequest) {
       JSON.stringify({ message: 'Action created', id: newAction.id }),
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
+    if (error?.code == 'P2025') {
+      return createResponse(
+        response,
+        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        { status: 400 }
+      );
+    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),
@@ -219,8 +226,15 @@ export async function PUT(request: NextRequest) {
       JSON.stringify({ message: 'Action updated', id: updatedAction.id }),
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
+    if (error?.code == 'P2025') {
+      return createResponse(
+        response,
+        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        { status: 400 }
+      );
+    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),

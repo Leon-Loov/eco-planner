@@ -157,8 +157,15 @@ export async function POST(request: NextRequest) {
       JSON.stringify({ message: "Goal created", id: newGoal.id }),
       { status: 200 }
     );
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
+    if (e?.code == 'P2025') {
+      return createResponse(
+        response,
+        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        { status: 400 }
+      );
+    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),
@@ -315,8 +322,15 @@ export async function PUT(request: NextRequest) {
       JSON.stringify({ message: "Goal edited", id: editedGoal.id }),
       { status: 200 }
     );
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
+    if (e?.code == 'P2025') {
+      return createResponse(
+        response,
+        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        { status: 400 }
+      );
+    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),

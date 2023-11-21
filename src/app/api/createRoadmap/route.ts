@@ -100,6 +100,13 @@ export async function POST(request: NextRequest) {
         );
       }
     }
+    if (e?.code == 'P2025') {
+      return createResponse(
+        response,
+        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        { status: 400 }
+      );
+    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),
@@ -229,6 +236,24 @@ export async function PUT(request: NextRequest) {
     );
   } catch (e: any) {
     console.log(e);
+    // Custom error if there are errors in the nested goal creation
+    if (e instanceof Error) {
+      e = e as Error
+      if (e.cause == 'nestedGoalCreation') {
+        return createResponse(
+          response,
+          JSON.stringify({ message: e.message }),
+          { status: 400 }
+        );
+      }
+    }
+    if (e?.code == 'P2025') {
+      return createResponse(
+        response,
+        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        { status: 400 }
+      );
+    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),
