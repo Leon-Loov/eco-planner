@@ -5,7 +5,7 @@
     margin: 1em 0;
 }
 
-.action-form input[type="text"], .action-form input[type="number"] {
+.action-form input[type="text"], .action-form input[type="number"], .action-form input[type="url"] {
     width: 100%;
     padding: 1em;
     border: unset;

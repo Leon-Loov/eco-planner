@@ -1,6 +1,7 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import LinkInput, { getLinks } from "@/components/linkInput"
 import { Data } from "@/lib/session"
 import { AccessControlled } from "@/types"
 import { Action } from "@prisma/client"
@@ -29,7 +30,7 @@ export default function ActionForm({
       form.namedItem("viewGroups")
     )
 
-    console.log(editUsers, viewUsers, editGroups, viewGroups)
+    const links = getLinks(event.target)
 
     const formJSON = JSON.stringify({
       name: (form.namedItem("actionName") as HTMLInputElement)?.value,
@@ -49,6 +50,7 @@ export default function ActionForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      links,
       timestamp,
     })
 
@@ -133,6 +135,10 @@ export default function ActionForm({
           <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} />
           <label htmlFor="isRenewables">Renewables</label>
           <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} />
+        </div>
+        <br />
+        <div>
+          <LinkInput />
         </div>
         <br />
         { // Only show the access selector if a new action is being created, the useris an admin, or the user is the author of the action
