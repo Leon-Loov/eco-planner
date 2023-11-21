@@ -86,6 +86,8 @@ export default function ActionForm({
   return (
     <>
       <form onSubmit={handleSubmit} className="action-form">
+        {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
+        <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <div className="grid-auto-rows">
           <div>
             <label htmlFor="actionName">Namn på åtgärden: </label>
