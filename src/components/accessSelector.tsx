@@ -39,21 +39,21 @@ export function getAccessData(editUsers: RadioNodeList | Element | null, viewUse
 
   if (editUsers instanceof RadioNodeList) {
     for (let i of editUsers) {
-      if (i instanceof HTMLInputElement && i.checked) {
+      if (i instanceof HTMLInputElement && i.value) {
         editUsersValue.push(i.value);
       }
     }
-  } else if (editUsers instanceof HTMLInputElement && editUsers.checked) {
+  } else if (editUsers instanceof HTMLInputElement && editUsers.value) {
     editUsersValue.push(editUsers.value);
   }
 
   if (viewUsers instanceof RadioNodeList) {
     for (let i of viewUsers) {
-      if (i instanceof HTMLInputElement && i.checked) {
+      if (i instanceof HTMLInputElement && i.value) {
         viewUsersValue.push(i.value);
       }
     }
-  } else if (viewUsers instanceof HTMLInputElement && viewUsers.checked) {
+  } else if (viewUsers instanceof HTMLInputElement && viewUsers.value) {
     viewUsersValue.push(viewUsers.value);
   }
 
@@ -112,21 +112,21 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
   return (
     <fieldset>
       <legend>Användare med redigeringsbehörighet</legend>
-      {editUsers.map((user) => (
-        <Fragment key={'editUser' + user}>
-          <input type="checkbox" name="editUsers" id={'editUser' + user} value={user} checked={editUsers.includes(user)} onChange={
-            (event) => {
-              // Remove the user from the list of selected editUsers
-              setEditUsers(editUsers.filter((editUser) => editUser !== user));
-            }
-          } />
-          <label htmlFor={'editUser' + user}>{user}</label>
-          <br />
+      {editUsers.map((user, index) => (
+        <Fragment key={'editUser' + index}>
+          <input type="text" name="editUsers" id={'editUser' + user} value={user} onChange={(event) => {
+            // Replace the user in the list of selected editUsers with the new value
+            setEditUsers(editUsers.map((editUser) => editUser === user ? event.currentTarget.value : editUser));
+          }} />
+          <input type="button" value="Ta bort ↑" onClick={() => {
+            // Remove the user from the list of selected editUsers
+            setEditUsers(editUsers.filter((editUser) => editUser !== user));
+          }} />
         </Fragment>
       ))}
       {/* A text field whose contents get appended to editUsers upon pressing enter */}
       <label className="block" htmlFor="newEditUser">Ny användare: </label>
-      <input type="text" name="newEditUser" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
+      <input type="text" name="editUsers" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
     </fieldset>
   )
 }
@@ -138,21 +138,21 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
   return (
     <fieldset>
       <legend>Användare med läsbehörighet</legend>
-      {viewUsers.map((user) => (
-        <Fragment key={'viewUser' + user}>
-          <input type="checkbox" name="viewUsers" id={'viewUser' + user} value={user} checked={viewUsers.includes(user)} onChange={
-            (event) => {
-              // Remove the user from the list of selected viewUsers if the checkbox is unchecked
-              setViewUsers(viewUsers.filter((viewUser) => viewUser !== user));
-            }
-          } />
-          <label htmlFor={'viewUser' + user}>{user}</label>
-          <br />
+      {viewUsers.map((user, index) => (
+        <Fragment key={'viewUser' + index}>
+          <input type="text" name="viewUsers" id={'viewUser' + user} value={user} onChange={(event) => {
+            // Replace the user in the list of selected viewUsers with the new value
+            setViewUsers(viewUsers.map((viewUser) => viewUser === user ? event.currentTarget.value : viewUser));
+          }} />
+          <input type="button" value="Ta bort ↑" onClick={() => {
+            // Remove the user from the list of selected viewUsers
+            setViewUsers(viewUsers.filter((viewUser) => viewUser !== user));
+          }} />
         </Fragment>
       ))}
       {/* A text field whose contents get appended to viewUsers upon pressing enter */}
       <label className="block" htmlFor="newViewUser">Ny användare: </label>
-      <input type="text" name="newViewUser" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
+      <input type="text" name="viewUsers" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
     </fieldset>
   )
 }
