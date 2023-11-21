@@ -2,6 +2,8 @@
 
 import { AccessControlled } from "@/types";
 import { Fragment, useState } from "react";
+import Image from "next/image";
+import styles from './main.module.css'
 
 export default function AccessSelector({ groupOptions, currentAccess }: { groupOptions: string[], currentAccess?: AccessControlled | undefined }) {
   // In case the groupOptions prop includes 'Public', remove it; it should never have editing access to an item
@@ -114,14 +116,18 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
       <legend>Användare med redigeringsbehörighet</legend>
       {editUsers.map((user, index) => (
         <Fragment key={'editUser' + index}>
-          <input type="text" name="editUsers" id={'editUser' + user} value={user} onChange={(event) => {
-            // Replace the user in the list of selected editUsers with the new value
-            setEditUsers(editUsers.map((editUser) => editUser === user ? event.currentTarget.value : editUser));
-          }} />
-          <input type="button" value="Ta bort ↑" onClick={() => {
-            // Remove the user from the list of selected editUsers
-            setEditUsers(editUsers.filter((editUser) => editUser !== user));
-          }} />
+          <label className="flex-row gap-100 align-center">
+            <input type="text" name="editUsers" id={'editUser' + user} value={user} onChange={(event) => {
+              // Replace the user in the list of selected editUsers with the new value
+              setEditUsers(editUsers.map((editUser) => editUser === user ? event.currentTarget.value : editUser));
+            }} />
+            {/* Remove the user from the list of selected editUsers */}
+            <button 
+              onClick={() => {setEditUsers(editUsers.filter((editUser) => editUser !== user)); }} 
+              className={styles.removeUserButton}>
+              <Image src="/icons/close.svg" alt="remove" width={16} height={16}></Image>
+            </button> 
+          </label>
         </Fragment>
       ))}
       {/* A text field whose contents get appended to editUsers upon pressing enter */}
@@ -140,14 +146,17 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
       <legend>Användare med läsbehörighet</legend>
       {viewUsers.map((user, index) => (
         <Fragment key={'viewUser' + index}>
-          <input type="text" name="viewUsers" id={'viewUser' + user} value={user} onChange={(event) => {
-            // Replace the user in the list of selected viewUsers with the new value
-            setViewUsers(viewUsers.map((viewUser) => viewUser === user ? event.currentTarget.value : viewUser));
-          }} />
-          <input type="button" value="Ta bort ↑" onClick={() => {
-            // Remove the user from the list of selected viewUsers
-            setViewUsers(viewUsers.filter((viewUser) => viewUser !== user));
-          }} />
+          <label className="flex-row gap-100 align-center">
+            <input type="text" name="viewUsers" id={'viewUser' + user} value={user} onChange={(event) => {
+              // Replace the user in the list of selected viewUsers with the new value
+              setViewUsers(viewUsers.map((viewUser) => viewUser === user ? event.currentTarget.value : viewUser));
+            }} />
+            <button 
+              onClick={() => {setViewUsers(viewUsers.filter((viewUser) => viewUser !== user)); }} 
+              className={styles.removeUserButton}>
+              <Image src="/icons/close.svg" alt="remove" width={16} height={16}></Image>
+            </button> 
+          </label>
         </Fragment>
       ))}
       {/* A text field whose contents get appended to viewUsers upon pressing enter */}

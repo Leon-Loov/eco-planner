@@ -1,0 +1,12 @@
+.removeUserButton {
+    border: none; 
+    background-color: pink; 
+    border-radius: 3px;
+    height: 100%;
+    padding: 1em; 
+    cursor: pointer; 
+}
+
+.removeUserButton:hover {
+    background-color: red;
+}
