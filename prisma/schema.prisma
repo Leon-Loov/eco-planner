@@ -38,6 +38,20 @@ model Action {
   // relevantActors actor[]
   relevantActors  String? @map("relevant_actors") @db.Text
 
+  // Different types of actions
+  // Sufficiency generally means reducing consumption
+  isSufficiency Boolean @default(false) @map("is_sufficiency")
+  // Efficiency generally means increasing efficiency
+  isEfficiency  Boolean @default(false) @map("is_efficiency")
+  // Renewables generally means increasing the use of renewables
+  isRenewables  Boolean @default(false) @map("is_renewables")
+
+  // Notes related to this action
+  notes      Notes[]     @relation("action_notes")
+  // Links related to this action
+  links      Link[]      @relation("action_link")
+  // Comments related to this action
+  comments   Comment[]   @relation("action_comment")
   // UUID of the action this action is inherited from, if any
   parentId   String?     @map("parent_id")
   // Reference to parent action
@@ -57,12 +71,11 @@ model Action {
   viewers    User[]      @relation("action_viewers")
   // Groups of users who are allowed to view this action
   viewGroups UserGroup[] @relation("action_view_groups")
-  // Notes related to this action
-  notes      Notes[]     @relation("action_notes")
 
   @@map("action")
 }
 
+// This should have been called "Note", but I guess I misnamed it. Don't want to change it now though.
 model Notes {
   // UUID of the note
   id        String   @id @default(uuid())
@@ -110,6 +123,10 @@ model Goal {
   // A series of datapoints for the goal
   dataSeriesId String?     @map("data_series_id")
   dataSeries   DataSeries? @relation("data_series", fields: [dataSeriesId], references: [id])
+  // Links related to this goal
+  links        Link[]      @relation("goal_link")
+  // Comments related to this goal
+  comments     Comment[]   @relation("goal_comment")
   // The person who created this goal (implicitly allowed to edit)
   authorId     String      @map("author_id")
   author       User        @relation("goal_author", fields: [authorId], references: [id])
@@ -211,6 +228,8 @@ model Roadmap {
   // The municipality the roadmap targets (if local)
   municipality String? @map("municipality")
 
+  // Comments related to this roadmap
+  comments   Comment[]   @relation("roadmap_comment")
   // Goals related to this roadmap
   goals      Goal[]      @relation("roadmap_goal")
   // Author of this roadmap
@@ -252,6 +271,8 @@ model User {
   authoredData     DataSeries[] @relation("data_series_author")
   // Notes the user created
   authoredNotes    Notes[]      @relation("note_author")
+  // Comments the user created
+  authoredComments Comment[]    @relation("comment_author")
   // Actions the user is explicitly allowed to edit
   editActions      Action[]     @relation("action_editors")
   // Actions the user is explicitly allowed to view
@@ -303,6 +324,53 @@ model UserGroup {
   viewData    DataSeries[] @relation("data_series_view_groups")
 
   @@map("user_group")
+}
+
+// Links are used to link to external resources, such as websites, documents, etc.
+// They are a separate model to easily allow for multiple links to be added to a single action/goal
+model Link {
+  // UUID of the link
+  id  String @id @default(uuid())
+  // URL of the link
+  url String
+
+  // A link should be related to either an action or a goal, not both; if both, create two links
+  // Any action this link is related to
+  actionId String? @map("action_id")
+  action   Action? @relation("action_link", fields: [actionId], references: [id])
+  // Any goal this link is related to
+  goalId   String? @map("goal_id")
+  goal     Goal?   @relation("goal_link", fields: [goalId], references: [id])
+
+  @@map("link")
+}
+
+model Comment {
+  // UUID of the comment
+  id        String   @id @default(uuid())
+  // Timestamp of when comment was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when comment was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // The comment itself
+  commentText String @map("comment_text") @db.Text
+
+  // The user who created this comment
+  authorId  String   @map("author_id")
+  author    User     @relation("comment_author", fields: [authorId], references: [id])
+  // A comment should be related to either an action, a goal, or a roadmap.
+  // Any action this comment is related to
+  actionId  String?  @map("action_id")
+  action    Action?  @relation("action_comment", fields: [actionId], references: [id])
+  // Any goal this comment is related to
+  goalId    String?  @map("goal_id")
+  goal      Goal?    @relation("goal_comment", fields: [goalId], references: [id])
+  // Any roadmap this comment is related to
+  roadmapId String?  @map("roadmap_id")
+  roadmap   Roadmap? @relation("roadmap_comment", fields: [roadmapId], references: [id])
+
+  @@map("comment")
 }
 
 // model Organization {
