@@ -68,6 +68,9 @@ export type ActionInput = {
   endYear: number | undefined;
   projectManager: string | undefined;
   relevantActors: string | undefined;
+  isSufficiency: boolean | undefined;
+  isEfficiency: boolean | undefined;
+  isRenewables: boolean | undefined;
   // UUID for the goal this goal belongs to
   goalId: string;
   // Accepts lists of UUIDs for all of the following, to link them to the action (optional)

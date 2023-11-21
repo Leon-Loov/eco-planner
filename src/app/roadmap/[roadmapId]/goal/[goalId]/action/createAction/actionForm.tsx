@@ -38,6 +38,9 @@ export default function ActionForm({
       endYear: (form.namedItem("endYear") as HTMLInputElement)?.value ? parseInt((form.namedItem("endYear") as HTMLInputElement)?.value) : undefined,
       projectManager: (form.namedItem("projectManager") as HTMLInputElement)?.value,
       relevantActors: (form.namedItem("relevantActors") as HTMLInputElement)?.value,
+      isSufficiency: (form.namedItem("isSufficiency") as HTMLInputElement)?.checked,
+      isEfficiency: (form.namedItem("isEfficiency") as HTMLInputElement)?.checked,
+      isRenewables: (form.namedItem("isRenewables") as HTMLInputElement)?.checked,
       goalId: goalId,
       actionId: currentAction?.id || null,
       editors: editUsers,
@@ -116,6 +119,17 @@ export default function ActionForm({
         <br />
         <label htmlFor="relevantActors">Relevanta aktörer: </label>
         <input type="text" name="relevantActors" id="relevantActors" defaultValue={currentAction?.relevantActors ?? undefined} />
+        <br />
+        <div>
+          {/* TODO: Styling please :) */}
+          <p>Vilka kategorier faller åtgärden under?</p>
+          <label htmlFor="isSufficiency">Sufficiency</label>
+          <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} />
+          <label htmlFor="isEfficiency">Efficiency</label>
+          <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} />
+          <label htmlFor="isRenewables">Renewables</label>
+          <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} />
+        </div>
         <br />
         { // Only show the access selector if a new action is being created, the useris an admin, or the user is the author of the action
           (!currentAction || user?.isAdmin || user?.id === currentAction.authorId) &&

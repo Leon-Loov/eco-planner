@@ -70,6 +70,9 @@ export async function POST(request: NextRequest) {
         endYear: action.endYear,
         projectManager: action.projectManager,
         relevantActors: action.relevantActors,
+        isSufficiency: action.isSufficiency,
+        isEfficiency: action.isEfficiency,
+        isRenewables: action.isRenewables,
         goals: {
           connect: { id: action.goalId }
         },
@@ -199,6 +202,9 @@ export async function PUT(request: NextRequest) {
         endYear: action.endYear,
         projectManager: action.projectManager,
         relevantActors: action.relevantActors,
+        isSufficiency: action.isSufficiency,
+        isEfficiency: action.isEfficiency,
+        isRenewables: action.isRenewables,
         editors: { set: editors },
         viewers: { set: viewers },
         editGroups: { set: editGroups },
