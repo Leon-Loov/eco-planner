@@ -73,6 +73,14 @@ export async function POST(request: NextRequest) {
         isSufficiency: action.isSufficiency,
         isEfficiency: action.isEfficiency,
         isRenewables: action.isRenewables,
+        links: {
+          create: action.links?.map(link => {
+            return {
+              url: link.url,
+              description: link.description || undefined,
+            }
+          })
+        },
         goals: {
           connect: { id: action.goalId }
         },
@@ -212,6 +220,15 @@ export async function PUT(request: NextRequest) {
         isSufficiency: action.isSufficiency,
         isEfficiency: action.isEfficiency,
         isRenewables: action.isRenewables,
+        links: {
+          set: [],
+          create: action.links?.map(link => {
+            return {
+              url: link.url,
+              description: link.description || undefined,
+            }
+          })
+        },
         editors: { set: editors },
         viewers: { set: viewers },
         editGroups: { set: editGroups },
