@@ -6,6 +6,7 @@ import { parameters as parameterOptions } from "@/lib/LEAPList"
 import { AccessControlled } from "@/types"
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
 import { useState } from "react"
+import LinkInput, { getLinks } from "@/components/linkInput"
 
 export default function GoalForm({
   roadmapId,
@@ -31,6 +32,8 @@ export default function GoalForm({
       form.namedItem("viewGroups")
     )
 
+    const links = getLinks(event.target)
+
     // Convert the data series to an array of numbers, the actual parsing is done by the API
     const dataSeriesInput = (form.namedItem("dataSeries") as HTMLInputElement)?.value
     const dataSeries = dataSeriesInput.replaceAll(',', '.').split(/[\t;]/).map((value) => {
@@ -53,6 +56,7 @@ export default function GoalForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      links,
       timestamp,
     })
 
@@ -177,6 +181,8 @@ export default function GoalForm({
           title="Använd numeriska värden separerade med semikolon eller tab. Decimaltal kan använda antingen punkt eller komma."
           defaultValue={dataSeriesString}
         />
+        <br />
+        <LinkInput />
         <br />
         {/* This functionality is temporarily or permanently disabled */}
         {/* <label htmlFor="dataSeriesId">Alternativt, välj en dataserie från listan: </label> */}

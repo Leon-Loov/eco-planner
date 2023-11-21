@@ -330,9 +330,11 @@ model UserGroup {
 // They are a separate model to easily allow for multiple links to be added to a single action/goal
 model Link {
   // UUID of the link
-  id  String @id @default(uuid())
+  id          String  @id @default(uuid())
   // URL of the link
-  url String
+  url         String
+  // Description of the link
+  description String?
 
   // A link should be related to either an action or a goal, not both; if both, create two links
   // Any action this link is related to

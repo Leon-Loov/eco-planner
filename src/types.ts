@@ -49,6 +49,7 @@ export type GoalInput = {
   // If both dataSeries and dataSeriesId are provided, dataSeriesId takes precedence
   // Currently disabled
   // dataSeriesId: string | undefined;
+  links?: { url: string, description?: string }[] | undefined;
   // UUID for the roadmap this goal belongs to
   roadmapId: string;
   // Accepts lists of UUIDs for all of the following, to link them to the goal (optional)
@@ -61,23 +62,24 @@ export type GoalInput = {
 /** The format of the data needed to create a new action. */
 export type ActionInput = {
   name: string;
-  description: string | undefined;
-  costEfficiency: string | undefined;
-  expectedOutcome: string | undefined;
-  startYear: number | undefined;
-  endYear: number | undefined;
-  projectManager: string | undefined;
-  relevantActors: string | undefined;
-  isSufficiency: boolean | undefined;
-  isEfficiency: boolean | undefined;
-  isRenewables: boolean | undefined;
+  description?: string | undefined;
+  costEfficiency?: string | undefined;
+  expectedOutcome?: string | undefined;
+  startYear?: number | undefined;
+  endYear?: number | undefined;
+  projectManager?: string | undefined;
+  relevantActors?: string | undefined;
+  isSufficiency?: boolean | undefined;
+  isEfficiency?: boolean | undefined;
+  isRenewables?: boolean | undefined;
+  links?: { url: string, description?: string }[] | undefined;
   // UUID for the goal this goal belongs to
   goalId: string;
   // Accepts lists of UUIDs for all of the following, to link them to the action (optional)
-  editors: string[] | null;
-  viewers: string[] | null;
-  editGroups: string[] | null;
-  viewGroups: string[] | null;
+  editors?: string[] | undefined;
+  viewers?: string[] | undefined;
+  editGroups?: string[] | undefined;
+  viewGroups?: string[] | undefined;
 }
 
 /** A type with only the data fields of the data series object. Not dynamic, so might need to be updated if the data series object changes. */

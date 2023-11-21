@@ -147,6 +147,14 @@ export async function POST(request: NextRequest) {
           create: dataValues,
           // }
         },
+        links: {
+          create: goal.links?.map(link => {
+            return {
+              url: link.url,
+              description: link.description || undefined,
+            }
+          })
+        },
       }
     });
     // Invalidate old cache
@@ -311,6 +319,15 @@ export async function PUT(request: NextRequest) {
             create: dataValues,
             update: dataValues,
           }
+        },
+        links: {
+          set: [],
+          create: goal.links?.map(link => {
+            return {
+              url: link.url,
+              description: link.description || undefined,
+            }
+          })
         },
       }
     });
