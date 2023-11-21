@@ -39,15 +39,15 @@ export default function ActionTable({
         <tbody>
           {goal.actions.map(action => (
             <tr key={action.id}>
-              <td>
-                {action.name}
+              <td className='flex-row gap-50 align-center'>
                 { // Only show the edit link if the user has edit access to the goal
                   // Should technically be if the user has edit access to the action, but that could build up a lot of checks
                   (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
                   <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${action.id}/editAction`}>
-                    <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} style={{ marginBottom: "-5px" }} />
+                    <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} />
                   </Link>
                 }
+                {action.name}
               </td>
               <td>{action.description}</td>
               <td>{action.costEfficiency}</td>
