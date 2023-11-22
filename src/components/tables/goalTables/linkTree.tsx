@@ -26,7 +26,7 @@ export default function LinkTree({
         {Object.keys(data).map((key) => (
           <li key={key}>
             { // If the current object is a goal (has an id), render a link to the goal
-              data[key].id ? (
+              typeof data[key].id == 'string' ? (
                 <a href={`/roadmap/${roadmap.id}/goal/${data[key].id}`} className={`flex-row gap-50 align-center margin-y-50 ${styles.link}`}>
                   <Image src="/icons/link.svg" alt={`Link to ${key}`} width={16} height={16} />
                   <span>{key}</span>
