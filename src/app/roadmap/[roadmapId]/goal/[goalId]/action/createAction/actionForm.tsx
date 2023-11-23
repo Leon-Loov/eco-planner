@@ -15,7 +15,7 @@ export default function ActionForm({
   roadmapId: string,
   goalId: string,
   user: Data['user'],
-  currentAction?: Action & AccessControlled,
+  currentAction?: Action & AccessControlled & { links: { url: string, description: string | null }[] },
 }) {
   // Submit the form to the API
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -141,7 +141,7 @@ export default function ActionForm({
         </div>
         <br />
         <div>
-          <LinkInput />
+          <LinkInput links={currentAction?.links} />
         </div>
         <br />
         { // Only show the access selector if a new action is being created, the useris an admin, or the user is the author of the action

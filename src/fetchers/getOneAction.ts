@@ -30,6 +30,7 @@ const getCachedAction = unstable_cache(
       notes: Notes[],
       links: Link[],
       comments?: (Comment & { author: { id: string, username: string } })[],
+      goals: { id: string, name: string | null, indicatorParameter: string }[],
       parent: Action | null,
       author: { id: string, username: string },
       editors: { id: string, username: string }[],
@@ -47,6 +48,7 @@ const getCachedAction = unstable_cache(
             notes: true,
             links: true,
             comments: { include: { author: { select: { id: true, username: true } } } },
+            goals: { select: { id: true, name: true, indicatorParameter: true } },
             parent: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -82,6 +84,7 @@ const getCachedAction = unstable_cache(
           include: {
             notes: true,
             links: true,
+            goals: { select: { id: true, name: true, indicatorParameter: true } },
             parent: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -111,6 +114,7 @@ const getCachedAction = unstable_cache(
         include: {
           notes: true,
           links: true,
+          goals: { select: { id: true, name: true, indicatorParameter: true } },
           parent: true,
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
