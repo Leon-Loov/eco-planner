@@ -17,7 +17,7 @@ export default function GoalForm({
   roadmapId: string,
   user: Data['user'],
   nationalRoadmaps: (Roadmap & { goals: { id: string, name: string | null, indicatorParameter: string }[] })[],
-  currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries | null },
+  currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries | null } & { links?: { url: string, description: string | null }[] },
 }) {
   // Submit the form to the API
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -182,7 +182,7 @@ export default function GoalForm({
           defaultValue={dataSeriesString}
         />
         <br />
-        <LinkInput />
+        <LinkInput links={currentGoal?.links} />
         <br />
         {/* This functionality is temporarily or permanently disabled */}
         {/* <label htmlFor="dataSeriesId">Alternativt, välj en dataserie från listan: </label> */}

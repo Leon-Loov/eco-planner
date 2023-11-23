@@ -1,32 +1,30 @@
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import GoalForm from "../../createGoal/goalForm";
-import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
 import { BackButton } from '@/components/redirectButtons';
 import getNationals from "@/fetchers/getNationals";
+import getOneGoal from "@/fetchers/getOneGoal";
 
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
-  const [session, roadmap, nationalRoadmaps] = await Promise.all([
+  const [session, currentGoal, nationalRoadmaps] = await Promise.all([
     getSessionData(cookies()),
-    getOneRoadmap(params.roadmapId),
+    getOneGoal(params.goalId),
     getNationals(),
   ]);
 
-  let currentGoal = roadmap!.goals.find(goal => goal.id === params.goalId);
-
-  // User must be signed in and have edit access to the roadmap, and the roadmap must exist
-  if (!roadmap || !session.user || !accessChecker(roadmap, session.user) || accessChecker(roadmap, session.user) === 'VIEW') {
+  // User must be signed in and have edit access to the goal, and the goal must exist
+  if (!currentGoal || !session.user || !accessChecker(currentGoal, session.user) || accessChecker(currentGoal, session.user) === 'VIEW') {
     return notFound();
   }
 
   // params.goalID WEIRD?!
   return (
     <>
-      <p><BackButton href={`/roadmap/${roadmap.id}/goal/${params.goalId}`} /></p>
-      <h1>Redigera målbanan &quot;{currentGoal?.name ? currentGoal.name : currentGoal?.indicatorParameter}&quot; {roadmap?.name ? ` under färdplanen "${roadmap.name}"` : null}</h1>
+      <p><BackButton href={`/roadmap/${params.roadmapId}/goal/${params.goalId}`} /></p>
+      <h1>Redigera målbanan &quot;{currentGoal.name ? currentGoal.name : currentGoal.indicatorParameter}&quot; {currentGoal.roadmaps[0]?.name ? ` under färdplanen "${currentGoal.roadmaps[0].name}"` : null}</h1>
       <GoalForm roadmapId={params.roadmapId} user={session.user} nationalRoadmaps={nationalRoadmaps} currentGoal={currentGoal} />
     </>
   )

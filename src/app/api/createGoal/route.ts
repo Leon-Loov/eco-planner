@@ -224,7 +224,7 @@ export async function PUT(request: NextRequest) {
       throw new Error(accessDenied, { cause: 'goal' });
     }
 
-    if (!goal.timestamp || (currentGoal?.updatedAt?.getTime() || 0 > goal.timestamp)) {
+    if (!goal.timestamp || (currentGoal?.updatedAt?.getTime() || 0) > goal.timestamp) {
       throw new Error(staleData, { cause: 'goal' });
     }
   } catch (e) {

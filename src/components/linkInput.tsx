@@ -2,9 +2,9 @@
 
 import { Fragment, useState } from "react"
 
-export default function LinkInput({ links }: { links?: { url: string, description: string }[] }) {
+export default function LinkInput({ links }: { links?: { url: string, description: string | null }[] }) {
   // The list of links. Is displayed as a list of checkboxes.
-  const [linkList, setLinkList] = useState<{ url: string, description: string }[]>(links ?? [])
+  const [linkList, setLinkList] = useState<{ url: string, description: string | null }[]>(links ?? [])
 
   return (
     <fieldset>
@@ -17,7 +17,7 @@ export default function LinkInput({ links }: { links?: { url: string, descriptio
           </label>
           <label>
             Beskrivning:
-            <input type="text" name="linkDescription" defaultValue={link.description} />
+            <input type="text" name="linkDescription" defaultValue={link.description || ""} />
           </label>
           <input type="button" value="Ta bort ↑" onClick={() => setLinkList(linkList.filter((_, i) => i !== index))} />
         </Fragment>
