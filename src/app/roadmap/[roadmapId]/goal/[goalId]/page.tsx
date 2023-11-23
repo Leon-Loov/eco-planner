@@ -13,6 +13,7 @@ import GraphGraph from "@/components/graphs/graphGraph";
 import getOneGoal from "@/fetchers/getOneGoal";
 import { Goal, DataSeries } from "@prisma/client";
 import GraphSelector from "@/components/graphs/graphselector/graphSelector";
+import Comments from "@/components/comments";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -66,6 +67,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       <br />
       <ActionGraph actions={goal.actions} />
       <br />
+      <Comments comments={goal.comments} objectId={goal.id} />
     </>
   )
 }

@@ -2,6 +2,7 @@ import findTypeFromId from "@/functions/findTypeFromId";
 import { getSession } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { createResponse } from "iron-session";
+import { revalidateTag } from "next/cache";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -46,6 +47,7 @@ export async function POST(request: NextRequest) {
         roadmapId: objectType == "roadmap" ? comment.objectId : undefined,
       }
     });
+    revalidateTag(objectType)
     return createResponse(
       response,
       JSON.stringify({ message: 'Comment created', id: newComment.id }),

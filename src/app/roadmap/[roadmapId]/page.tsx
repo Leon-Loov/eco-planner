@@ -7,6 +7,7 @@ import accessChecker from "@/lib/accessChecker";
 import Goals from "@/components/tables/goals";
 import Link from "next/link";
 import Image from "next/image";
+import Comments from "@/components/comments";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -36,6 +37,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     </h1>
     <span style={{ color: "gray" }}>Färdplan</span>
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
+    <Comments comments={roadmap.comments} objectId={roadmap.id} />
     <Tooltip anchorSelect="#goalName">
       Beskrivning av vad målbanan beskriver, tex. antal bilar.
     </Tooltip>
