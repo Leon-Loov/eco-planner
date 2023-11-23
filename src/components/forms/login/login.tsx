@@ -1,7 +1,7 @@
 'use client'
 import Link from "next/link";
-import AttributedImage from "./generic/images/attributedImage";
-import ImageIcon from "./generic/images/imageIcon";
+import AttributedImage from "../../generic/images/attributedImage";
+import ImageIcon from "../../generic/images/imageIcon";
 
 function handleSubmit(event: any) {
   event.preventDefault()

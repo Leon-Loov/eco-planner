@@ -1,4 +1,4 @@
-import { NewRoadmapButton } from "@/components/redirectButtons";
+import { NewRoadmapButton } from "@/components/buttons/redirectButtons";
 import getRoadmaps from "@/fetchers/getRoadmaps";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";

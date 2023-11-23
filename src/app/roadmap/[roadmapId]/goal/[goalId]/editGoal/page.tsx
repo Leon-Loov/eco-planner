@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import GoalForm from "../../createGoal/goalForm";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
-import { BackButton } from '@/components/redirectButtons';
+import { BackButton } from '@/components/buttons/redirectButtons';
 import getNationals from "@/fetchers/getNationals";
 import getOneGoal from "@/fetchers/getOneGoal";
 

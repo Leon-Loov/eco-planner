@@ -13,7 +13,7 @@ import GraphGraph from "@/components/graphs/graphGraph";
 import getOneGoal from "@/fetchers/getOneGoal";
 import { Goal, DataSeries } from "@prisma/client";
 import GraphSelector from "@/components/graphs/graphselector/graphSelector";
-import Comments from "@/components/comments";
+import Comments from "@/components/comments/comments";
 import { Fragment } from "react";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {

@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import ActionForm from "../../createAction/actionForm";
 import { notFound } from "next/navigation";
 import accessChecker from "@/lib/accessChecker";
-import { BackButton } from '@/components/redirectButtons';
+import { BackButton } from '@/components/buttons/redirectButtons';
 import getOneAction from "@/fetchers/getOneAction";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string, actionId: string } }) {

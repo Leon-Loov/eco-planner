@@ -3,7 +3,7 @@ import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { getSessionData } from '@/lib/session';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { BackButton } from '@/components/redirectButtons';
+import { BackButton } from '@/components/buttons/redirectButtons';
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([

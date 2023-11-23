@@ -2,7 +2,7 @@
 
 import './tables.css'
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
-import { NewGoalButton } from '../redirectButtons'
+import { NewGoalButton } from '../buttons/redirectButtons'
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'

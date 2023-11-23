@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { AccessLevel } from "@/types";
 import accessChecker from "@/lib/accessChecker";
 import { Fragment } from "react";
-import Comments from "@/components/comments";
+import Comments from "@/components/comments/comments";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string, actionId: string } }) {
   const [session, action] = await Promise.all([

@@ -4,7 +4,7 @@ import GoalForm from "./goalForm";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
-import { BackButton } from '@/components/redirectButtons';
+import { BackButton } from '@/components/buttons/redirectButtons';
 import getNationals from "@/fetchers/getNationals";
 
 

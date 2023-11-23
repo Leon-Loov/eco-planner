@@ -1,12 +1,12 @@
 'use client'
 
-import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import { Data } from "@/lib/session"
 import { parameters as parameterOptions } from "@/lib/LEAPList"
 import { AccessControlled } from "@/types"
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
 import { useState } from "react"
-import LinkInput, { getLinks } from "@/components/linkInput"
+import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
 
 export default function GoalForm({
   roadmapId,

@@ -14,19 +14,19 @@
   align-items: center;
 }
   
-.header-link{
+.headerLink{
   text-decoration: unset;
   color: black;
   font-weight: bold;
 }
   
-.header-link:hover {
+.headerLink:hover {
   border-bottom: 3px solid var(--accent-color);
   margin-bottom: -3px;
 }
 
 @media (max-width: 500px) {
-  .header-link {
+  .headerLink {
     display: none;
   }
 }

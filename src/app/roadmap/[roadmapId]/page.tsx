@@ -7,7 +7,7 @@ import accessChecker from "@/lib/accessChecker";
 import Goals from "@/components/tables/goals";
 import Link from "next/link";
 import Image from "next/image";
-import Comments from "@/components/comments";
+import Comments from "@/components/comments/comments";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([

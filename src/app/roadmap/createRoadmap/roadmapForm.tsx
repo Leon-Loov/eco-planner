@@ -1,6 +1,6 @@
 'use client'
 
-import AccessSelector, { getAccessData } from "@/components/accessSelector"
+import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import goalInputFromRoadmap from "@/functions/goalInputFromRoadmap.ts"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { countiesAndMunicipalities } from "@/lib/countiesAndMunicipalities"

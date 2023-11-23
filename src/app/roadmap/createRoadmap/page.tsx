@@ -2,7 +2,7 @@ import { getSessionData } from '@/lib/session';
 import RoadmapForm from './roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { BackButton } from '@/components/redirectButtons';
+import { BackButton } from '@/components/buttons/redirectButtons';
 import getDeeperNationals from '@/fetchers/getDeeperNationals';
 
 export default async function Page() {

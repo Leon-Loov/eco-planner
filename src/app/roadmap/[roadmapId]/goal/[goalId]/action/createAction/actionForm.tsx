@@ -1,7 +1,7 @@
 'use client'
 
-import AccessSelector, { getAccessData } from "@/components/accessSelector"
-import LinkInput, { getLinks } from "@/components/linkInput"
+import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
+import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
 import { Data } from "@/lib/session"
 import { AccessControlled } from "@/types"
 import { Action } from "@prisma/client"

@@ -2,7 +2,7 @@
 
 import './tables.css'
 import { Action, Goal } from "@prisma/client"
-import { NewActionButton } from '../redirectButtons'
+import { NewActionButton } from '../buttons/redirectButtons'
 import { AccessLevel } from '@/types'
 import ActionTable from './actionTables/actionTable'
 

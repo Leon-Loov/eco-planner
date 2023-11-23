@@ -1,6 +1,6 @@
 import styles from './header.module.css'
-import LogoutButton from '@/components/logoutButton'
-import { LoginButton, SignupButton } from '@/components/redirectButtons'
+import LogoutButton from '@/components/buttons/logoutButton'
+import { LoginButton, SignupButton } from '@/components/buttons/redirectButtons'
 import { getSessionData } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
@@ -14,7 +14,7 @@ export async function Header() {
           <img src='/icons/leaf.svg' /> 
         </Link>
         <nav>
-          <Link href="/" className="header-link"> Hem </Link>
+          <Link href="/" className={styles.headerLink}> Hem </Link>
           { // Link to login and signup if not logged in
             !user?.isLoggedIn &&
             <>
