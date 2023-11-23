@@ -178,13 +178,10 @@ function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
       {groups.map((group) => (
         <Fragment key={'editGroup' + group}>
           <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
-          <label className="block" htmlFor={'editGroup' + group}>{group}</label>
+          <label htmlFor={'editGroup' + group}>{group}</label>
           <br />
         </Fragment>
       ))}
-      {/* A text field whose contents get appended to groupOptions upon pressing enter */}
-      {/* Currently disabled, this functionality might not make sense here */}
-      {/* <input type="text" name="newEditGroup" id="newEditGroup" onKeyDown={(event) => handleKeyDown(event, editGroups, setEditGroups, groups)} style={{ backgroundColor: '#F5D5274A' }} /> */}
     </fieldset>
   );
 }
