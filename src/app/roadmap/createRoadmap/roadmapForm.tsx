@@ -17,7 +17,7 @@ export default function RoadmapForm({
 }: {
   user: Data['user'],
   userGroups: string[],
-  nationalRoadmaps?: (Roadmap & { goals?: (Goal & { dataSeries: DataSeries | null, actions: Action[] })[] })[],
+  nationalRoadmaps?: (Roadmap & { goals?: (Goal & { dataSeries: DataSeries | null })[] })[],
   currentRoadmap?: Roadmap & AccessControlled,
 }) {
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
