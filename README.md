@@ -16,17 +16,40 @@ Now you should be able to run the app with `yarn dev` and access it at http://lo
 ## Backend notes
 We use the function unstable_cache from Next.js, which currently returns cached `Date`s in stringified form (See this [GitHub issue](https://github.com/vercel/next.js/issues/51613)). Remember to always create a `new Date()` from the date value whenever you use one, until this problem is fixed.
 
+
 ## Components
 
 ### Generic components
-Located in... Does not contain anything specific to this project, can be used anywhere.
+Generic components are components whose functionality is not tied to this project. They are independently redistributable and function on their own within other next.js projects without any dependancies. Examples include the [attributedImage.tsx component](/src/components/images/attributedImage.tsx) or the [header.tsx](/src/components/header/header.tsx) component. 
+
+All generic components are located within the [generic folder.](/src/components/generic)
 
 ### Project specific components
-Located in... Performs actions which are specifically tied to this project, for example a database call.
+Project specific components are located directly under the [components folder.](/src/components/) Theese are components which are dependent on this projects structure in order to function. This may include files such as [goals.tsx](/src/components/tables/goals.tsx) which are dependant on the `Roadmap` type.
+
+```
+└── components/
+    ├── projectSpecificComponent/
+    │   ├── projectSpecificComponent.tsx
+    │   └── projectSpecificComponent.module.css
+    └── generic/
+        ├── genericComponent/
+        │   ├── genericComponent.tsx
+        │   └── genericComponent.module.css
+        └── GenericComponentGroup/
+            ├── genericComponent1
+            ├── genericComponent2
+            ├── genericComponent3
+            └── genericComponentGroup.module.css
+```
 
 ## CSS
 
-There are 3 different ways of writing css for this project: [Semantic Style Sheets](#semanticstylesheets), [CSS Modules](#cssmodules) and [Global CSS](#globalcss).
+There are 3 different ways of writing css for this project: [Semantic Style Sheets](#semanticstylesheets), [CSS Modules](#cssmodules) and [Global CSS](#globalcss). 
+
+> **<span style="color:#4169E1;">🛈</span> Note**
+>
+> Global CSS and Semantic Style Sheets use kebab-case but CSS Modules use camelCase.
 
 <div id="semanticstylesheets"></div>
 
