@@ -47,7 +47,7 @@ export default function ActionTable({
                     <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} />
                   </Link>
                 }
-                {action.name}
+                <a href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${action.id}`}>{action.name}</a>
               </td>
               <td>{action.description}</td>
               <td>{action.costEfficiency}</td>
