@@ -162,7 +162,7 @@ export async function PUT(request: NextRequest) {
       throw new Error(accessDenied, { cause: 'action' });
     }
 
-    if (!action.timestamp || (currentAction?.updatedAt?.getTime() || 0 > action.timestamp)) {
+    if (!action.timestamp || (currentAction?.updatedAt?.getTime() || 0) > action.timestamp) {
       throw new Error(staleData, { cause: 'action' });
     }
   } catch (e) {

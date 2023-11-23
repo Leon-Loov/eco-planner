@@ -158,7 +158,7 @@ export async function PUT(request: NextRequest) {
       throw new Error(accessDenied, { cause: 'roadmap' });
     }
 
-    if (!roadmap.timestamp || (currentRoadmap?.updatedAt?.getTime() || 0 > roadmap.timestamp)) {
+    if (!roadmap.timestamp || (currentRoadmap?.updatedAt?.getTime() || 0) > roadmap.timestamp) {
       throw new Error(staleData, { cause: 'roadmap' });
     }
   } catch (e) {
