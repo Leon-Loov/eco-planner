@@ -1,4 +1,4 @@
-import './header.css'
+import styles from './header.module.css'
 import LogoutButton from '@/components/logoutButton'
 import { LoginButton, SignupButton } from '@/components/redirectButtons'
 import { getSessionData } from '@/lib/session'
@@ -8,7 +8,7 @@ import Link from 'next/link'
 export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
-    <header>
+    <header className={styles.header}>
       <div className='layout-main flex-row flex-between'>
         <Link href='/' className='flex-row'>
           <img src='/icons/leaf.svg' /> 

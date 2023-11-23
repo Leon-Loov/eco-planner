@@ -3,7 +3,7 @@ import getRoadmaps from "@/fetchers/getRoadmaps";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import RoadmapTable from "@/components/tables/roadmapTable";
-import AttributedImage from "@/components/images/attributedImage";
+import AttributedImage from "@/components/generic/images/attributedImage";
 
 export default async function Page() {
   const [session, roadmaps] = await Promise.all([
