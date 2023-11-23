@@ -29,7 +29,11 @@ export default function LinkTree({
               typeof data[key].id == 'string' ? (
                 <a href={`/roadmap/${roadmap.id}/goal/${data[key].id}`} className={`flex-row gap-50 align-center margin-y-50 ${styles.link}`}>
                   <Image src="/icons/link.svg" alt={`Link to ${key}`} width={16} height={16} />
-                  <span>{key}</span>
+                  <span>
+                    {(data[key].indicatorParameter as string).split('\\')[0].toLowerCase() == "key" && "Scenarioantagande: "}
+                    {(data[key].indicatorParameter as string).split('\\')[0].toLowerCase() == "demand" && "Scenarieresultat: "}
+                    {key}
+                  </span>
                 </a>
               ) : (
                 <details style={{ margin: "1em 0" }} className={styles.details}>

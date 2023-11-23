@@ -5,10 +5,10 @@ export default function goalsToTree(goals: (Goal & { dataSeries: DataSeries | nu
 
   for (const goal of goals) {
     const parameters = goal.indicatorParameter.split('\\')
-    
+
     // TODO: check if naming of demand and key makes sense
     if (parameters[0].toLowerCase() == 'key' || parameters[0].toLowerCase() == 'demand') {
-      parameters.push(parameters.shift()!)
+      parameters.shift();
     }
 
     // Create the path to the goal
