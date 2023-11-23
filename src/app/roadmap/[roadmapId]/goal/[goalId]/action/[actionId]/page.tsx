@@ -1,8 +1,83 @@
-export default function Page() {
+import getOneAction from "@/fetchers/getOneAction";
+import { getSessionData } from "@/lib/session";
+import { cookies } from "next/headers";
+import Link from "next/link";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { AccessLevel } from "@/types";
+import accessChecker from "@/lib/accessChecker";
+import { Fragment } from "react";
+import Comments from "@/components/comments";
+
+export default async function Page({ params }: { params: { roadmapId: string, goalId: string, actionId: string } }) {
+  const [session, action] = await Promise.all([
+    getSessionData(cookies()),
+    getOneAction(params.actionId)
+  ]);
+
+  let accessLevel: AccessLevel = AccessLevel.None;
+  if (action) {
+    accessLevel = accessChecker(action, session.user);
+  }
+
+  // 404 if the action doesn't exist or if the user doesn't have access to it
+  if (!accessLevel || !action) {
+    return notFound();
+  }
+
   return (
     <>
-      <h1>Placeholder</h1>
-      <p>There should be a table of notes here?</p>
+      <h1 style={{ marginBottom: ".25em" }} className="flex-row align-center gap-25 flex-wrap">
+        { // Only show the edit link if the user has edit access to the roadmap
+          (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+          <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`}>
+            <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${action.name}`} />
+          </Link>
+        }
+        {action.name}
+      </h1>
+      <span style={{ color: "gray" }}>Åtgärd</span>
+      {action.links.length > 0 &&
+        <>
+          <h2>Länkar</h2>
+          {action.links.map((link) => (
+            <Fragment key={link.id}>
+              <a href={link.url}>{link.description || link.url}</a>
+              <br />
+            </Fragment>
+          ))}
+        </>
+      }
+      <br />
+      <h2>Detaljer</h2>
+      {action.description && <p>Beskrivning: {action.description}</p>}
+      {(action.startYear || action.endYear) &&
+        <>
+          <p>
+            {"Aktiv period: "}
+            {action.startYear && action.startYear}
+            {action.startYear && action.endYear && ' - '}
+            {action.endYear && action.endYear}
+          </p>
+        </>
+      }
+      {action.costEfficiency && <p>Kostnadseffektivitet: {action.costEfficiency}</p>}
+      {action.expectedOutcome && <p>Förväntad effekt: {action.expectedOutcome}</p>}
+      {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel == AccessLevel.Admin)) &&
+        <p>Projektledare: {action.projectManager}</p>
+      }
+      {action.relevantActors && <p>Relevanta aktörer: {action.relevantActors}</p>}
+      {(action.isEfficiency || action.isSufficiency || action.isRenewables) &&
+        <p>
+          Kategorier: <br />
+          <span className="margin-x-100">
+            {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables)) && <br />}
+            {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables) && <br />}
+            {action.isRenewables && 'Renewables'}
+          </span>
+        </p>
+      }
+      <Comments comments={action.comments} objectId={action.id} />
     </>
   )
 }
