@@ -14,6 +14,7 @@ import getOneGoal from "@/fetchers/getOneGoal";
 import { Goal, DataSeries } from "@prisma/client";
 import GraphSelector from "@/components/graphs/graphselector/graphSelector";
 import Comments from "@/components/comments";
+import { Fragment } from "react";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -55,7 +56,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <>
           <h2>Länkar</h2>
           {goal.links.map((link) => (
-            <a key={link.id} href={link.url}>{link.description}</a>
+            <Fragment key={link.id}>
+              <a href={link.url}>{link.description || link.url}</a>
+              <br />
+            </Fragment>
           ))}
         </>
       }
