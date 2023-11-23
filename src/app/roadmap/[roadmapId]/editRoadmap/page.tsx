@@ -1,4 +1,4 @@
-import RoadmapForm from "../../createRoadmap/roadmapForm";
+import RoadmapForm from "../../../../components/forms/roadmapForm/roadmapForm";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { getSessionData } from '@/lib/session';
 import { cookies } from 'next/headers';

@@ -1,5 +1,5 @@
 import { getSessionData } from '@/lib/session';
-import RoadmapForm from './roadmapForm';
+import RoadmapForm from '@/components/forms/roadmapForm/roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/buttons/redirectButtons';

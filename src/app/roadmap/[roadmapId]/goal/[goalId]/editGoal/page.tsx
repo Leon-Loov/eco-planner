@@ -1,6 +1,6 @@
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
-import GoalForm from "../../createGoal/goalForm";
+import GoalForm from "../../../../../../components/forms/goalForm/goalForm";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
 import { BackButton } from '@/components/buttons/redirectButtons';

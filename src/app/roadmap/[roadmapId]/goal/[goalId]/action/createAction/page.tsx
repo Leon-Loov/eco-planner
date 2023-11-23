@@ -1,6 +1,6 @@
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
-import ActionForm from "../../../../../../../components/forms/createAction/actionForm";
+import ActionForm from "../../../../../../../components/forms/actionForm/actionForm";
 import { notFound } from "next/navigation";
 import accessChecker from "@/lib/accessChecker";
 import { BackButton } from '@/components/buttons/redirectButtons';
