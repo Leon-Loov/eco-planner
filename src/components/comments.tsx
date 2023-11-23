@@ -34,8 +34,6 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
   // Sort comments by date
   comments?.sort(commentSorter);
 
-  console.log(comments)
-
   return (
     <>
       <h2>Kommentarer</h2>
