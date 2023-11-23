@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
+  email = email.toLowerCase();
 
   // Check if email or username already exists; this is implicitly done by Prisma when creating a new user,
   // but we want to return a more specific error message
@@ -70,7 +71,17 @@ export async function POST(request: NextRequest) {
         username: username,
         email: email,
         password: hashedPassword,
-      }
+        userGroups: {
+          connectOrCreate: {
+            where: {
+              name: email.split('@')[1],
+            },
+            create: {
+              name: email.split('@')[1],
+            },
+          },
+        },
+      },
     });
   } catch (e) {
     console.log(e);
