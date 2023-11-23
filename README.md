@@ -27,6 +27,7 @@ All generic components are located within the [generic folder.](/src/components/
 ### Project specific components
 Project specific components are located directly under the [components folder.](/src/components/) Theese are components which are dependent on this projects structure in order to function. This may include files such as [goals.tsx](/src/components/tables/goals.tsx) which are dependant on the `Roadmap` type.
 
+***Component folder structure***
 ```
 └── components/
     ├── projectSpecificComponent/
