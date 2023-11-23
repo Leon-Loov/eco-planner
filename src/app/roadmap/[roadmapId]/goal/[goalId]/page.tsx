@@ -50,6 +50,14 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         {goal.name ? goal.name : goal.indicatorParameter}
       </h1>
       <span style={{ color: "gray" }}>Målbana</span>
+      {goal.links.length > 0 &&
+        <>
+          <h2>Länkar</h2>
+          {goal.links.map((link) => (
+            <a key={link.id} href={link.url}>{link.description}</a>
+          ))}
+        </>
+      }
       <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
       <GraphGraph goal={goal} nationalGoal={nationalGoal} />
