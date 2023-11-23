@@ -1,4 +1,4 @@
-import { Action, Goal, Roadmap } from "@prisma/client";
+import { Action, Comment, Goal, Roadmap } from "@prisma/client";
 
 // Used for alphabetical sorting, we use Swedish locale and ignore case, but it can be changed here
 const collator = new Intl.Collator('se', { numeric: true, sensitivity: 'accent' });
@@ -27,4 +27,12 @@ export function goalSorter(a: Goal, b: Goal) {
  */
 export function actionSorter(a: Action, b: Action) {
   return collator.compare(a.name, b.name);
+}
+
+/**
+ * Sorts comments by time created, newest first.
+ * Since unstable_cache returns stringified dates we need to convert them to Date objects first.
+ */
+export function commentSorter(a: Comment, b: Comment) {
+  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 }
