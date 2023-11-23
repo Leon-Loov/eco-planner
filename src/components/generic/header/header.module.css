@@ -1,6 +1,6 @@
 /* Header */
 
-header {
+.header {
     position: sticky;
     top: 0;
     padding: 1em 0;
@@ -8,7 +8,7 @@ header {
     z-index: 9999;
 }
     
-header nav {
+.header nav {
   display: flex;
   gap: 1em;
   align-items: center;

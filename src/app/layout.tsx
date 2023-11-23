@@ -1,5 +1,5 @@
 import '@/styles/global.css'
-import { Header } from '@/components/header/header'
+import { Header } from '@/components/generic/header/header'
 import { GlobalContextProvider } from "./context/store"
 import Breadcrumb from '@/components/breadcrumbs/breadcrumb2';
 import getNames from '@/fetchers/getNames';
