@@ -151,6 +151,22 @@ flex {
     justify-content: space-evenly;
 }
 
+.flex-grow-25 {
+    flex-grow: .25;
+}
+
+.flex-grow-50 {
+    flex-grow: .5;
+}
+
+.flex-grow-75 {
+    flex-grow: .75;
+}
+
+.flex-grow-100 {
+    flex-grow: 1;
+}
+
 .gap-25 {
     gap: .25rem;
 }

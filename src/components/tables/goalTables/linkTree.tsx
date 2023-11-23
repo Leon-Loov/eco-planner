@@ -27,7 +27,7 @@ export default function LinkTree({
           <li key={key}>
             { // If the current object is a goal (has an id), render a link to the goal
               typeof data[key].id == 'string' ? (
-                <a href={`/roadmap/${roadmap.id}/goal/${data[key].id}`} className={`flex-row gap-50 align-center margin-y-50 ${styles.link}`}>
+                <a href={`/roadmap/${roadmap.id}/goal/${data[key].id}`} className={`display-flex gap-50 align-items-center padding-y-50 ${styles.link}`}>
                   <Image src="/icons/link.svg" alt={`Link to ${key}`} width={16} height={16} />
                   <span>
                     {(data[key].indicatorParameter as string).split('\\')[0].toLowerCase() == "key" && "Scenarioantagande: "}

@@ -34,24 +34,24 @@ function handleSubmit(event: any) {
 export default function Signup() {
   return (
     <>
-      <div className="card flex-row">
+      <div className="card display-flex">
         <main className="user-info-form flex-grow-100">
           <h1>Skapa Konto</h1>
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Användarnam </label>
-            <div className="flex-row">
+            <div className="display-flex">
               <ImageIcon src="/icons/user.svg" alt="lösenord" />
               <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <br />
             <label htmlFor="email">E-post </label>
-            <div className="flex-row">
+            <div className="display-flex">
               <ImageIcon src="/icons/email.svg" alt="lösenord" />
               <input type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
             </div>
             <br />
             <label htmlFor="password">Lösenord </label>
-            <div className="flex-row">
+            <div className="display-flex">
               <ImageIcon src="/icons/password.svg" alt="lösenord" />
               <input type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
             </div>

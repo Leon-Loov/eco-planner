@@ -31,18 +31,18 @@ function handleSubmit(event: any) {
 export default function Login() {
   return (
     <>
-      <div className="card flex-row">
+      <div className="card display-flex">
         <main className="user-info-form flex-grow-100">
           <h1>Logga In</h1>
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Användarnamn </label>
-            <div className="flex-row">
+            <div className="display-flex">
               <ImageIcon src="/icons/user.svg" alt="lösenord" />
               <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <br />
             <label htmlFor="password">Lösenord</label>
-            <div className="flex-row">
+            <div className="display-flex">
               <ImageIcon src="/icons/password.svg" alt="lösenord" />
               <input type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
             </div>

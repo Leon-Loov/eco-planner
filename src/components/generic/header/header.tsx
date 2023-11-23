@@ -9,8 +9,8 @@ export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
     <header className={styles.header}>
-      <div className='layout-main flex-row flex-between'>
-        <Link href='/' className='flex-row'>
+      <div className='layout-main display-flex justify-content-space-between'>
+        <Link href='/' className='display-flex'>
           <img src='/icons/leaf.svg' /> 
         </Link>
         <nav>

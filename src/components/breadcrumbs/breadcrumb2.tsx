@@ -38,8 +38,8 @@ export default function Breadcrumb({
   }
 
   return <>
-    <nav className="flex-row align-center gap-25 flex-wrap" style={{ margin: '1em 0 0 0' }}>
-      <span className='flex-row align-center gap-25'>
+    <nav className="display-flex align-items-center gap-25 flex-wrap-wrap" style={{ margin: '1em 0 0 0' }}>
+      <span className='display-flex align-items-center gap-25'>
         <Link href='/' className={styles.breadCrumb}>
           Hem
         </Link>
@@ -55,7 +55,7 @@ export default function Breadcrumb({
         // If the section is a category, don't make it a link
         if (section == 'roadmap') {
           return (
-            <span key={index} className={`flex-row align-center gap-25 ${styles.breadCrumbTitle}`}>
+            <span key={index} className={`display-flex align-items-center gap-25 ${styles.breadCrumbTitle}`}>
               Färdplan:
             </span>
           )
@@ -63,7 +63,7 @@ export default function Breadcrumb({
 
         if (section == 'goal') {
           return (
-            <span key={index} className={`flex-row align-center gap-25 ${styles.breadCrumbTitle}`}>
+            <span key={index} className={`display-flex align-items-center gap-25 ${styles.breadCrumbTitle}`}>
               Målbana:
             </span>
           )
@@ -71,7 +71,7 @@ export default function Breadcrumb({
 
         if (section == 'action') {
           return (
-            <span key={index} className={`flex-row align-center gap-25 ${styles.breadCrumbTitle}`}>
+            <span key={index} className={`display-flex align-items-center gap-25 ${styles.breadCrumbTitle}`}>
               Åtgärd:
             </span>
           )
@@ -80,7 +80,7 @@ export default function Breadcrumb({
         const isLastItem = index === sectionNames.length - 1;
 
         return (
-          <span key={index} className='flex-row align-center gap-25'>
+          <span key={index} className='display-flex align-items-center gap-25'>
             <Link href={href} className={styles.breadCrumb}>
               {linkName}
             </Link>

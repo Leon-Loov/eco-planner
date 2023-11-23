@@ -36,9 +36,9 @@ export default function Goals({
   const { tableType } = useGlobalContext();
   return (
     <>
-      <label htmlFor="goalTable" className="flex-row flex-between align-center flex-wrap">
+      <label htmlFor="goalTable" className="display-flex justify-content-space-between align-items-center flex-wrap-wrap">
         <h2>{title}</h2>
-        <nav className='flex-row align-center gap-100'>
+        <nav className='display-flex align-items-center gap-100'>
           <TableSelector />
           { // Only show the button if the user has edit access to the roadmap
             (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&

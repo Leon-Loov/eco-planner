@@ -116,7 +116,7 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
       <legend>Användare med redigeringsbehörighet</legend>
       {editUsers.map((user, index) => (
         <Fragment key={'editUser' + index}>
-          <label className="flex-row gap-100 align-center">
+          <label className="display-flex gap-100 align-items-center">
             <input type="text" name="editUsers" id={'editUser' + user} value={user} onChange={(event) => {
               // Replace the user in the list of selected editUsers with the new value
               setEditUsers(editUsers.map((editUser) => editUser === user ? event.currentTarget.value : editUser));
@@ -147,7 +147,7 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
       <legend>Användare med läsbehörighet</legend>
       {viewUsers.map((user, index) => (
         <Fragment key={'viewUser' + index}>
-          <label className="flex-row gap-100 align-center">
+          <label className="display-flex gap-100 align-items-center">
             <input type="text" name="viewUsers" id={'viewUser' + user} value={user} onChange={(event) => {
               // Replace the user in the list of selected viewUsers with the new value
               setViewUsers(viewUsers.map((viewUser) => viewUser === user ? event.currentTarget.value : viewUser));

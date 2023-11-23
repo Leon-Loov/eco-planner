@@ -20,7 +20,7 @@ export default async function Page() {
         Photo by <a href="https://unsplash.com/@alvarordesign?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Alvaro Reyes</a> on <a href="https://unsplash.com/photos/person-working-on-blue-and-white-paper-on-board-qWwpHwip31M?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
       </AttributedImage>
     </div>
-    <div className="flex-row flex-between align-center flex-wrap">
+    <div className="display-flex justify-content-space-between align-items-center flex-wrap-wrap">
       <h1>Färdplaner</h1>
       { // Only show the new roadmap button if the user is logged in
         session.user &&

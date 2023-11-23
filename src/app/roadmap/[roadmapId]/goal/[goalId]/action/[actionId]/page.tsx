@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <h1 style={{ marginBottom: ".25em" }} className="flex-row align-center gap-25 flex-wrap">
+      <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
         { // Only show the edit link if the user has edit access to the roadmap
           (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
           <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`}>

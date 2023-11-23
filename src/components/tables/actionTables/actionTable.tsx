@@ -39,7 +39,7 @@ export default function ActionTable({
         <tbody>
           {goal.actions.map(action => (
             <tr key={action.id}>
-              <td className='flex-row gap-50 align-center'>
+              <td className='display-flex gap-50 align-items-center'>
                 { // Only show the edit link if the user has edit access to the goal
                   // Should technically be if the user has edit access to the action, but that could build up a lot of checks
                   (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
