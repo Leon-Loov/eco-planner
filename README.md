@@ -29,6 +29,8 @@ convention info (snakecase) <br />
 ### Semantic Style Sheets
 This project uses a custom made version of [Semantic Style Sheets v.0.0.1](https://github.com/Axelgustavschnurer/semantic-style-sheets) to add commonly used utility classes and styling for custom html tags. The code for this can be located within [/src/styles/utility.css.](/src/styles/utility.css) 
 
+<script>alert('AAAAAA')</script>
+
 <details>
 <summary>Custom Semantics</summary><br/>
 
@@ -355,8 +357,9 @@ flex {
 ### CSS modules
 In some areas there is a larger requirement to have more complicated styling, which usually isn't suitable for [Semantic Style Sheets](https://github.com/Axelgustavschnurer/semantic-style-sheets). For this usecase we define custom classes within [CSS modules](https://github.com/css-modules/css-modules). A page, component or group of components should have an accompanying css module file for this case. The CSS module stylesheet should be named after the file or group of files, which it belongs to.
 
-<TODO Turn into info >
-Note that CSS modules use camelCase instead of snake-case.
+> **<span style="color:#4169E1;">🛈</span> Note**
+>
+> CSS modules use camelCase instead of snake-case.
 
 #### Setup CSS module
 1. Create file `component.tsx`
@@ -400,7 +403,7 @@ export default function Component() {
 
 <TODO Update this warning to look better>
 
-> **❗ Warning**
+> **<span style="color:red;">⚠</span> Warning**
 >
 > *Using global styling often leads to css files which are difficult to read and maintain. It may also cause specificity problems. Ensure that your decision to use global styling is well thought through.*
 
