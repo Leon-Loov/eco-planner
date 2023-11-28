@@ -1,6 +1,6 @@
 import styles from './header.module.css'
 import LogoutButton from '@/components/buttons/logoutButton'
-import { LoginButton, SignupButton } from '@/components/buttons/redirectButtons'
+import { SecondaryLink, PrimaryLink } from '../links/links'
 import { getSessionData } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
@@ -18,16 +18,15 @@ export async function Header() {
           { // Link to login and signup if not logged in
             !user?.isLoggedIn &&
             <>
-              <SignupButton />
-              <LoginButton />
+              <PrimaryLink href='./signup'>Skapa Konto</PrimaryLink>
+              <SecondaryLink href='./login'>Logga In</SecondaryLink>
             </>
           }
           { // Link to admin page and a logout button if logged in
             user?.isLoggedIn &&
             <>
               {/* Admin pages don't currently exist */}
-              {/* <br />
-              <AdminButton /> */}
+              {/* <PrimaryLink href="./admin">To Admin Page</PrimaryLink> */}
               <LogoutButton />
             </>
           }

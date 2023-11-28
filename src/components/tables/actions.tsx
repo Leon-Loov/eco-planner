@@ -1,9 +1,9 @@
 "use client"
 
 import { Action, Goal } from "@prisma/client"
-import { NewActionButton } from '../buttons/redirectButtons'
 import { AccessLevel } from '@/types'
 import ActionTable from './actionTables/actionTable'
+import { PrimaryLink } from "../generic/links/links"
 
 export default function Actions({
   title,
@@ -29,7 +29,7 @@ export default function Actions({
       <nav className='display-flex align-items-center gap-100'>
         { // Only show the button if the user has edit access to the goal
           (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
-          <NewActionButton roadmapId={params.roadmapId} goalId={params.goalId} />
+          <PrimaryLink href={`./roadmap/${params.roadmapId}/goal/${params.goalId}/action/createAction`}>Skapa ny åtgärd</PrimaryLink>
         }
       </nav>
     </label>

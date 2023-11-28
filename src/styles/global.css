@@ -178,6 +178,7 @@ input:invalid, select:invalid {
 /* Call to action links */
 
 .call-to-action-primary, .call-to-action-secondary {
+  text-align: center;
   background-color: transparent;
   border: 3px solid var(--accent-color);
   text-decoration: unset;
@@ -187,7 +188,6 @@ input:invalid, select:invalid {
   cursor: pointer;
   font-weight: bold;
   font-size: 1em;
-  display: block;
 }
 
 .call-to-action-primary {

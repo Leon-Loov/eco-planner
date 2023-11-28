@@ -56,7 +56,7 @@ export default function Signup() {
               <input type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
             </div>
             <br />
-            <input type="submit" className="call-to-action-primary" value={'Skapa Konto'} />
+            <input type="submit" className="call-to-action-primary" value={'Skapa Konto'} style={{display: 'block'}} />
             <Link href='/login'>Logga in</Link>
           </form>
         </main>

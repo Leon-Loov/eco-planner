@@ -1,7 +1,7 @@
 "use client"
 
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
-import { NewGoalButton } from '../buttons/redirectButtons'
+import { PrimaryLink } from "../generic/links/links"
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
@@ -41,7 +41,7 @@ export default function Goals({
           <TableSelector />
           { // Only show the button if the user has edit access to the roadmap
             (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
-            <NewGoalButton roadmapId={roadmap.id} />
+            <PrimaryLink href={`./roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</PrimaryLink>
           }
         </nav>
       </label>

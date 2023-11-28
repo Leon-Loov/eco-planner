@@ -1,9 +1,9 @@
-import { NewRoadmapButton } from "@/components/buttons/redirectButtons";
 import getRoadmaps from "@/fetchers/getRoadmaps";
 import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import RoadmapTable from "@/components/tables/roadmapTable";
 import AttributedImage from "@/components/generic/images/attributedImage";
+import { PrimaryLink, SecondaryLink, BackButton } from "@/components/generic/links/links";
 
 export default async function Page() {
   const [session, roadmaps] = await Promise.all([
@@ -24,7 +24,7 @@ export default async function Page() {
       <h1>Färdplaner</h1>
       { // Only show the new roadmap button if the user is logged in
         session.user &&
-        <NewRoadmapButton />
+        <PrimaryLink href="./roadmap/createRoadmap">Skapa ny Färdplan</PrimaryLink>
       }
     </div>
     <p>
