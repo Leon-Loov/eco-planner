@@ -83,7 +83,19 @@ const getCachedRoadmaps = unstable_cache(
             ]
           },
           include: {
-            goals: { select: { id: true, name: true, indicatorParameter: true } },
+            goals: {
+              where: {
+                OR: [
+                  { authorId: session.user.id },
+                  { editors: { some: { id: session.user.id } } },
+                  { viewers: { some: { id: session.user.id } } },
+                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { name: 'Public' } } }
+                ]
+              },
+              select: { id: true, name: true, indicatorParameter: true }
+            },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -111,7 +123,10 @@ const getCachedRoadmaps = unstable_cache(
           viewGroups: { some: { name: 'Public' } }
         },
         include: {
-          goals: { select: { id: true, name: true, indicatorParameter: true } },
+          goals: {
+            where: { viewGroups: { some: { name: 'Public' } } },
+            select: { id: true, name: true, indicatorParameter: true }
+          },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },

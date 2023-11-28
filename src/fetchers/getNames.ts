@@ -87,11 +87,31 @@ const getCachedNames = unstable_cache(
             name: true,
             id: true,
             goals: {
+              where: {
+                OR: [
+                  { authorId: session.user.id },
+                  { editors: { some: { id: session.user.id } } },
+                  { viewers: { some: { id: session.user.id } } },
+                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { name: 'Public' } } }
+                ]
+              },
               select: {
                 name: true,
                 indicatorParameter: true,
                 id: true,
                 actions: {
+                  where: {
+                    OR: [
+                      { authorId: session.user.id },
+                      { editors: { some: { id: session.user.id } } },
+                      { viewers: { some: { id: session.user.id } } },
+                      { editGroups: { some: { users: { some: { id: session.user.id } } } } },
+                      { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
+                      { viewGroups: { some: { name: 'Public' } } }
+                    ]
+                  },
                   select: {
                     name: true,
                     id: true,
@@ -113,18 +133,18 @@ const getCachedNames = unstable_cache(
     // If user is not logged in, get all public roadmaps
     try {
       names = await prisma.roadmap.findMany({
-        where: {
-          viewGroups: { some: { name: 'Public' } }
-        },
+        where: { viewGroups: { some: { name: 'Public' } } },
         select: {
           name: true,
           id: true,
           goals: {
+            where: { viewGroups: { some: { name: 'Public' } } },
             select: {
               name: true,
               indicatorParameter: true,
               id: true,
               actions: {
+                where: { viewGroups: { some: { name: 'Public' } } },
                 select: {
                   name: true,
                   id: true,

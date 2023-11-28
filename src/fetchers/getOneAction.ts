@@ -107,9 +107,7 @@ const getCachedAction = unstable_cache(
       action = await prisma.action.findUnique({
         where: {
           id,
-          OR: [
-            { viewGroups: { some: { name: 'Public' } } }
-          ]
+          viewGroups: { some: { name: 'Public' } }
         },
         include: {
           notes: true,
