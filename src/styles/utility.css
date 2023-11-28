@@ -1,8 +1,8 @@
-grid {
+.grid {
     display: grid;
 }
 
-flex {
+.flex {
     display: flex;
 }
 
