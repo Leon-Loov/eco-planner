@@ -3,7 +3,7 @@ import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import RoadmapTable from "@/components/tables/roadmapTable";
 import AttributedImage from "@/components/generic/images/attributedImage";
-import { PrimaryLink, SecondaryLink, BackButton } from "@/components/generic/links/links";
+import { PrimaryLink } from "@/components/generic/links/links";
 
 export default async function Page() {
   const [session, roadmaps] = await Promise.all([

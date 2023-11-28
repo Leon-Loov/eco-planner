@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// Important link
+// Important link ({`/${href}`} is not making sense?)
 export function PrimaryLink({ href, children  }: { href: string; children: React.ReactNode }) {
   return (
     <>
@@ -11,7 +11,7 @@ export function PrimaryLink({ href, children  }: { href: string; children: React
   )
 }
 
-// Kinda important Link
+// Kinda important Link (Might make sense to turn into one and let classname be a prop)
 export function SecondaryLink({ href, children  }: { href: string; children: React.ReactNode }) {
   return (
     <>
@@ -21,7 +21,6 @@ export function SecondaryLink({ href, children  }: { href: string; children: Rea
     </>
   )
 }
-
 
 // Backbutton
 // should not export href but rather move backwards
