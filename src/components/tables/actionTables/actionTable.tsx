@@ -20,6 +20,8 @@ export default function ActionTable({
   accessLevel?: AccessLevel,
   params: { roadmapId: string, goalId: string }
 }) {
+  if (!goal.actions.length) return (<p>Det har inte tillgång till några åtgärder i denna målbana, eller så har målbanan inga åtgärder.</p>);
+
   return <>
     <div className="overflow-x-scroll">
       <table id="action-table">

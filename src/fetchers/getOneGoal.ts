@@ -110,6 +110,16 @@ const getCachedGoal = unstable_cache(
           include: {
             dataSeries: true,
             actions: {
+              where: {
+                OR: [
+                  { authorId: session.user.id },
+                  { editors: { some: { id: session.user.id } } },
+                  { viewers: { some: { id: session.user.id } } },
+                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { name: 'Public' } } }
+                ]
+              },
               include: {
                 author: { select: { id: true, username: true } },
                 editors: { select: { id: true, username: true } },
@@ -148,13 +158,12 @@ const getCachedGoal = unstable_cache(
       goal = await prisma.goal.findUnique({
         where: {
           id,
-          OR: [
-            { viewGroups: { some: { name: 'Public' } } }
-          ]
+          OR: [{ viewGroups: { some: { name: 'Public' } } }]
         },
         include: {
           dataSeries: true,
           actions: {
+            where: { viewGroups: { some: { name: 'Public' } } },
             include: {
               author: { select: { id: true, username: true } },
               editors: { select: { id: true, username: true } },

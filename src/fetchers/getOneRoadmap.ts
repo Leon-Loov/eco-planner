@@ -102,6 +102,16 @@ const getCachedRoadmap = unstable_cache(
           },
           include: {
             goals: {
+              where: {
+                OR: [
+                  { authorId: session.user.id },
+                  { editors: { some: { id: session.user.id } } },
+                  { viewers: { some: { id: session.user.id } } },
+                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
+                  { viewGroups: { some: { name: 'Public' } } }
+                ]
+              },
               include: {
                 _count: { select: { actions: true } },
                 dataSeries: true,
@@ -135,12 +145,11 @@ const getCachedRoadmap = unstable_cache(
       roadmap = await prisma.roadmap.findUnique({
         where: {
           id,
-          OR: [
-            { viewGroups: { some: { name: 'Public' } } }
-          ]
+          viewGroups: { some: { name: 'Public' } },
         },
         include: {
           goals: {
+            where: { viewGroups: { some: { name: 'Public' } } },
             include: {
               _count: { select: { actions: true } },
               dataSeries: true,

@@ -1,5 +1,5 @@
 import '../tables.css'
-import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
+import { DataSeries, Goal, Roadmap } from "@prisma/client"
 
 export default function GoalTable({
   roadmap,
@@ -21,6 +21,8 @@ export default function GoalTable({
     viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
   },
 }) {
+  if (!roadmap.goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
+
   return <>
     <div className="overflow-x-scroll">
       <table id="goalTable">
