@@ -3,15 +3,82 @@
 
 /* General  --accent-color: #A17BAC; 33482d*/
 :root {
-  --background-color: white;
   --accent-color: seagreen;
   --accent-color-dark: #1b5233;
-  --accent-text: white;
+
+  --seagreen: hsl(146, 50%, 36%);
+  --seagreen-10: hsl(146, 50%, 10%);
+  --seagreen-20: hsl(146, 50%, 20%);
+  --seagreen-30: hsl(146, 50%, 30%);
+  --seagreen-40: hsl(146, 50%, 40%);  
+  --seagreen-50: hsl(146, 50%, 50%); 
+  --seagreen-60: hsl(146, 50%, 60%);
+  --seagreen-70: hsl(146, 50%, 70%);
+  --seagreen-80: hsl(146, 50%, 80%);
+  --seagreen-90: hsl(146, 50%, 90%);
+
+  --darkblue: hsl(195, 97%, 13%);
+  --darkblue-10: hsl(195, 97%, 10%);
+  --darkblue-20: hsl(195, 97%, 20%);
+  --darkblue-30: hsl(195, 97%, 30%);
+  --darkblue-40: hsl(195, 97%, 40%);
+  --darkblue-50: hsl(195, 97%, 50%);
+  --darkblue-60: hsl(195, 97%, 60%);
+  --darkblue-70: hsl(195, 97%, 70%);
+  --darkblue-80: hsl(195, 97%, 80%);
+  --darkblue-90: hsl(195, 97%, 90%);
+
+  --blue: hsl(206, 100%, 35%);
+  --blue-10: hsl(206, 100%, 10%);
+  --blue-20: hsl(206, 100%, 20%);
+  --blue-30: hsl(206, 100%, 30%);
+  --blue-40: hsl(206, 100%, 40%);
+  --blue-50: hsl(206, 100%, 50%);
+  --blue-60: hsl(206, 100%, 60%);
+  --blue-70: hsl(206, 100%, 70%);
+  --blue-80: hsl(206, 100%, 80%);
+  --blue-90: hsl(206, 100%, 90%);
+  
+  --brown: hsl(28, 40%, 83%);
+  --brown-10: hsl(28, 40%, 10%);
+  --brown-20: hsl(28, 40%, 20%);
+  --brown-30: hsl(28, 40%, 30%);
+  --brown-40: hsl(28, 40%, 40%);
+  --brown-50: hsl(28, 40%, 50%);
+  --brown-60: hsl(28, 40%, 60%);
+  --brown-70: hsl(28, 40%, 70%);
+  --brown-80: hsl(28, 40%, 80%);
+  --brown-90: hsl(28, 40%, 90%);
+  
+  --gray: hsl(207, 21%, 82%);
+  --gray-10: hsl(207, 21%, 10%);
+  --gray-20: hsl(207, 21%, 20%);
+  --gray-30: hsl(207, 21%, 30%);
+  --gray-40: hsl(207, 21%, 40%);
+  --gray-50: hsl(207, 21%, 50%);
+  --gray-60: hsl(207, 21%, 60%);
+  --gray-70: hsl(207, 21%, 70%);
+  --gray-80: hsl(207, 21%, 80%);
+  --gray-90: hsl(207, 21%, 90%);
+
+  --white: hsl(42, 33%, 94%);
+  --white-10: hsl(42, 33%, 10%);
+  --white-20: hsl(42, 33%, 20%);
+  --white-30: hsl(42, 33%, 30%);
+  --white-40: hsl(42, 33%, 40%);
+  --white-50: hsl(42, 33%, 50%);
+  --white-60: hsl(42, 33%, 60%);
+  --white-70: hsl(42, 33%, 70%);
+  --white-80: hsl(42, 33%, 80%);
+  --white-90: hsl(42, 33%, 90%);
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
   margin: 0 0 1em 0;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -40,7 +107,6 @@ p {
   grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
   grid-auto-rows: auto;
 }
-
 
 .overflow-x-scroll { 
   overflow-x: scroll;
@@ -72,10 +138,6 @@ input:focus:not(input[type="checkbox"], input[type="file"], input[type="submit"]
   border-radius: 3px 3px 0 0;
 }
 
-button, select, input {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 select:focus {
   outline: 3px solid var(--accent-color);
 }
@@ -101,7 +163,7 @@ input[type="file"]::file-selector-button {
 
 input[type="file"]:focus::file-selector-button {
   background-color: var(--accent-color);
-  color: var(--accent-text);
+  color: white;
 }
 
 input[type="file"]:focus {
@@ -130,7 +192,7 @@ input:invalid, select:invalid {
 
 .call-to-action-primary {
   background-color: var(--accent-color);
-  color: var(--accent-text);
+  color: white;
 }
 
 .call-to-action-primary:hover, .call-to-action-primary:focus {

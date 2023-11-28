@@ -431,3 +431,8 @@ export default function Component() {
 > *Using global styling often leads to css files which are difficult to read and maintain. It may also cause specificity problems. Ensure that your decision to use global styling is well thought through.*
 
 This project contains a [global.css](/src/styles/global.css) file to style  elements which should have a consistent appearance across the application. This may for example include buttons or forms. The file also contains variables for colors, contained within the css `:root{}` element.
+
+## Styling
+
+### Color Palette
+![Color Palette](/public/images/palette.png "Color Palette")
