@@ -19,6 +19,7 @@ export default function LinkTree({
     })[],
   },
 }) {
+  if (!roadmap.goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
 
   const NestedKeysRenderer = ({ data }: { data: any }) => {
     return (
