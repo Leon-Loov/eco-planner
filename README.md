@@ -55,28 +55,7 @@ There are 3 different ways of writing css for this project: [Semantic Style Shee
 <div id="semanticstylesheets"></div>
 
 ### Semantic Style Sheets 
-This project uses a custom made version of [Semantic Style Sheets v.0.0.1](https://github.com/Axelgustavschnurer/semantic-style-sheets) to add commonly used utility classes and styling for custom html tags. The code for this can be located within [/src/styles/utility.css.](/src/styles/utility.css) 
-
-<details>
-<summary>Custom Semantics</summary><br/>
-
-```css
-grid {
-    display: grid;
-}
-
-flex {
-    display: flex;
-}
-```
-
-```html
-<grid>This is a grid layout</grid>
-
-<flex>This is a flex layout</flex>
-```
-
-</details>
+This project uses a custom made version of [Semantic Style Sheets v.0.0.1](https://github.com/Axelgustavschnurer/semantic-style-sheets) to add commonly used utility classes. The code for this can be located within [/src/styles/utility.css.](/src/styles/utility.css) 
 
 <TODO remove this and replace with site docs when those are added >
 <details>

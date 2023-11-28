@@ -44,7 +44,7 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
         </div>
       ))}
       <form onSubmit={handleSubmit}>
-        <div className="flex gap-100">
+        <div className="display-flex gap-100">
           <input type="text" name="comment" id="comment" style={{borderRadius: "3px", border: "none", padding: "1em"}} />
           <input type="submit" value="Skicka" className="call-to-action-primary" style={{height: "100%"}} />
         </div>
