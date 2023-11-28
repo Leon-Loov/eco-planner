@@ -1,5 +1,3 @@
-@import url('userinfo.css');
-@import url('actionform.css');
 @import url('forms.css');
 @import url('utility.css');
 
@@ -184,4 +182,50 @@ li ul {
 @keyframes spin {
   0% { transform: translate(-50%, -50%) rotate(0deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* For login and signup page */ 
+
+.card {
+  margin: 5em 0;
+  border-radius: .5em 0 0 .5em;
+  box-shadow: 0 0 1em lightgray;
+  box-sizing: border-box;
+}
+
+.user-info-form { /* Login / signup */
+  padding: 2em;
+  box-sizing: border-box;
+}
+
+@media (max-width: 500px) {
+  .card {
+      box-shadow: unset;
+      margin: 1em 0;
+      border-radius: .5em;
+  }
+  .user-info-form {
+      padding: 0;
+  }
+}
+
+.user-info-form > *, .user-info-form > form > * {
+  margin: 1em 0;
+}
+
+.user-info-form input[type="text"], .user-info-form input[type="password"], .user-info-form input[type="email"] {
+  display: block;
+  padding: 1em;
+  width: 100%;
+  border-radius: 0 3px 3px 0;
+  border: unset;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+
+@media (max-width: 750px) {
+  aside {
+      display: none;
+  }
 }
