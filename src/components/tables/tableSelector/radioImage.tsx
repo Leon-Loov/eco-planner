@@ -1,4 +1,4 @@
-import '../tables.css';
+import styles from '../tables.module.css';
 import Image from "next/image";
 
 export default function RadioImage({
@@ -18,9 +18,9 @@ export default function RadioImage({
 
   return (
     <>
-      <div className="radioImageWrapper">
+      <div className={styles.radioImageWrapper}>
         <input type='radio' name={name} value={value} checked={checked} onChange={onChange}/>
-        <div className="radioImage">
+        <div className={styles.radioImage}>
           <Image src={src} alt={value} width={24} height={24} />
         </div>
       </div>

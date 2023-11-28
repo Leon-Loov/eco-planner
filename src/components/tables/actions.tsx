@@ -1,6 +1,5 @@
 "use client"
 
-import './tables.css'
 import { Action, Goal } from "@prisma/client"
 import { NewActionButton } from '../buttons/redirectButtons'
 import { AccessLevel } from '@/types'

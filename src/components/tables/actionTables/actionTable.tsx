@@ -1,4 +1,4 @@
-import '../tables.css'
+import styles from '../tables.module.css'
 import { Action, Goal } from "@prisma/client"
 import { AccessLevel } from '@/types'
 import Image from "next/image";
@@ -24,7 +24,7 @@ export default function ActionTable({
 
   return <>
     <div className="overflow-x-scroll">
-      <table id="action-table">
+      <table id="action-table" className={styles.table}>
         <thead>
           <tr>
             <th>Namn</th>

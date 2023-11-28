@@ -1,4 +1,3 @@
-import '../tables.css'
 import styles from '../tables.module.css'
 import { Action, DataSeries, Goal, Roadmap } from "@prisma/client"
 import Image from 'next/image'

@@ -1,4 +1,4 @@
-import '../tables.css'
+import styles from '../tables.module.css'
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
 
 export default function GoalTable({
@@ -25,7 +25,7 @@ export default function GoalTable({
 
   return <>
     <div className="overflow-x-scroll">
-      <table id="goalTable">
+      <table id="goalTable" className={styles.table}>
         <thead>
           <tr>
             <th id="goalName">Målbanenamn</th>

@@ -1,4 +1,4 @@
-import './tables.css'
+import styles from './tables.module.css'
 import { Goal, Roadmap } from "@prisma/client"
 
 export default function RoadmapTable({
@@ -11,7 +11,7 @@ export default function RoadmapTable({
   return <>
     <h2>{title}</h2>
     <div className="overflow-x-scroll">
-      <table>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>Namn</th>
