@@ -1,4 +1,4 @@
-import styles from './header.module.css'
+import styles from './header.module.css' with { type: "css" }
 import LogoutButton from '@/components/buttons/logoutButton'
 import { SecondaryLink, PrimaryLink } from '../links/links'
 import { getSessionData } from '@/lib/session'

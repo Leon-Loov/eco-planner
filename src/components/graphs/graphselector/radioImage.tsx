@@ -1,4 +1,4 @@
-import styles from '../../tables/tables.module.css';
+import styles from '../../tables/tables.module.css' with { type: "css" };
 import Image from "next/image";
 
 export default function RadioImage({

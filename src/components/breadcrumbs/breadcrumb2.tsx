@@ -1,6 +1,6 @@
 'use client'
 
-import styles from './breadcrumbs.module.css'
+import styles from './breadcrumbs.module.css' with { type: "css" }
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"

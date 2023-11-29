@@ -3,7 +3,7 @@
 import { AccessControlled } from "@/types";
 import { Fragment, useState } from "react";
 import Image from "next/image";
-import styles from './accessSelector.module.css'
+import styles from './accessSelector.module.css' with { type: "css" };
 
 export default function AccessSelector({ groupOptions, currentAccess }: { groupOptions: string[], currentAccess?: AccessControlled | undefined }) {
   // In case the groupOptions prop includes 'Public', remove it; it should never have editing access to an item

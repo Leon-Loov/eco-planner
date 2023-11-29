@@ -1,5 +1,5 @@
-import styles from './tables.module.css'
-import { Goal, Roadmap } from "@prisma/client"
+import styles from './tables.module.css' with { type: "css" };
+import { Goal, Roadmap } from "@prisma/client";
 
 export default function RoadmapTable({
   title,

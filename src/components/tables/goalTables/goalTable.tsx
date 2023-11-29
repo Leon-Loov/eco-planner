@@ -1,4 +1,4 @@
-import styles from '../tables.module.css'
+import styles from '../tables.module.css' with { type: "css" };
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
 
 export default function GoalTable({
