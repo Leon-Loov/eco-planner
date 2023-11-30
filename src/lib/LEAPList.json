@@ -1,4 +1,4 @@
-export const parameters = [
+[
   "Key\\Bostäder och lokaler\\Småhus\\Hushållsel per m2",
   "Key\\Bostäder och lokaler\\Småhus\\VP luft luft procentandel värmebehov",
   "Key\\Bostäder och lokaler\\Småhus\\VP berg procentandel värmebehov",
@@ -718,5 +718,5 @@ export const parameters = [
   "Demand\\Sjöfart\\Inrikes sjöfart 2\\E bränsleframställning\\Elektricitet",
   "Demand\\Sjöfart\\Inrikes sjöfart 2\\E bränsleframställning\\Elektricitet",
   "Demand\\Negativa utsläpp\\BioCCS",
-  "Demand\\Negativa utsläpp\\BioCCS\\BioCCS",
+  "Demand\\Negativa utsläpp\\BioCCS\\BioCCS"
 ]

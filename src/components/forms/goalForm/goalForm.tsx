@@ -2,7 +2,7 @@
 
 import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import { Data } from "@/lib/session"
-import { parameters as parameterOptions } from "@/lib/LEAPList"
+import parameterOptions from "@/lib/LEAPList.json" with { type: "json" }
 import { AccessControlled } from "@/types"
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
 import { useState } from "react"
@@ -155,7 +155,6 @@ export default function GoalForm({
             <br />
           </>
         }
-        {/* TODO: Make this text input, connected to a `datalist` with all available parameters (this will give the user a list of all existing parameters, but still allow them to enter a custom one) */}
         <label htmlFor="indicatorParameter">LEAP parameter: </label>
         <input type="text" list="LEAPOptions" name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined} />
         <br />
@@ -205,7 +204,10 @@ export default function GoalForm({
       </form>
 
       <datalist id="LEAPOptions">
-        {parameterOptions.map((option, index) => {
+        {/* Use all unique entries as suggestions for indicator parameter */}
+        {parameterOptions.filter((option, index, self) => {
+          return self.indexOf(option) === index
+        }).map((option, index) => {
           return (
             <option key={`${option}${index}`} value={option} />
           )
