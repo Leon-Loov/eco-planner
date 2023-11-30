@@ -13,6 +13,9 @@ This tool requires the following environment variables to be set:
 
 Now you should be able to run the app with `yarn dev` and access it at http://localhost:3000 or build it with `yarn build` and run it with `yarn start`.
 
+Please run `git update-index --skip-worktree src/lib/LEAPList.json` to prevent git from tracking changes to the LEAPList.json file as this file is regenerated every build.
+If you for some reason need to update the default LEAPList.json file, run `git update-index --no-skip-worktree src/lib/LEAPList.json` to allow git to track changes to the file again.
+
 ## Backend notes
 We use the function unstable_cache from Next.js, which currently returns cached `Date`s in stringified form (See this [GitHub issue](https://github.com/vercel/next.js/issues/51613)). Remember to always create a `new Date()` from the date value whenever you use one, until this problem is fixed.
 
