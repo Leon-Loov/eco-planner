@@ -1,8 +1,4 @@
-/**
- * Counties and municipalities in Sweden.
- * Keys are counties, values are arrays of municipalities.
- */
-export const countiesAndMunicipalities = {
+{
   "Stockholms län": [
     "Upplands Väsby",
     "Vallentuna",
@@ -29,7 +25,7 @@ export const countiesAndMunicipalities = {
     "Vaxholm",
     "Norrtälje",
     "Sigtuna",
-    "Nynäshamn",
+    "Nynäshamn"
   ],
   "Uppsala län": [
     "Håbo",
@@ -39,7 +35,7 @@ export const countiesAndMunicipalities = {
     "Tierp",
     "Uppsala",
     "Enköping",
-    "Östhammar",
+    "Östhammar"
   ],
   "Södermanlands län": [
     "Vingåker",
@@ -50,7 +46,7 @@ export const countiesAndMunicipalities = {
     "Katrineholm",
     "Eskilstuna",
     "Strängnäs",
-    "Trosa",
+    "Trosa"
   ],
   "Östergötlands län": [
     "Ödeshög",
@@ -65,7 +61,7 @@ export const countiesAndMunicipalities = {
     "Söderköping",
     "Motala",
     "Vadstena",
-    "Mjölby",
+    "Mjölby"
   ],
   "Jönköpings län": [
     "Aneby",
@@ -80,7 +76,7 @@ export const countiesAndMunicipalities = {
     "Sävsjö",
     "Vetlanda",
     "Eksjö",
-    "Tranås",
+    "Tranås"
   ],
   "Kronobergs län": [
     "Uppvidinge",
@@ -90,7 +86,7 @@ export const countiesAndMunicipalities = {
     "Älmhult",
     "Markaryd",
     "Växjö",
-    "Ljungby",
+    "Ljungby"
   ],
   "Kalmar län": [
     "Högsby",
@@ -104,15 +100,17 @@ export const countiesAndMunicipalities = {
     "Oskarshamn",
     "Västervik",
     "Vimmerby",
-    "Borgholm",
+    "Borgholm"
   ],
-  "Gotlands län": ["Gotland"],
+  "Gotlands län": [
+    "Gotland"
+  ],
   "Blekinge län": [
     "Olofström",
     "Karlskrona",
     "Ronneby",
     "Karlshamn",
-    "Sölvesborg",
+    "Sölvesborg"
   ],
   "Skåne län": [
     "Svalöv",
@@ -147,7 +145,7 @@ export const countiesAndMunicipalities = {
     "Kristianstad",
     "Simrishamn",
     "Ängelholm",
-    "Hässleholm",
+    "Hässleholm"
   ],
   "Hallands län": [
     "Hylte",
@@ -155,7 +153,7 @@ export const countiesAndMunicipalities = {
     "Laholm",
     "Falkenberg",
     "Varberg",
-    "Kungsbacka",
+    "Kungsbacka"
   ],
   "Västra Götalands län": [
     "Härryda",
@@ -206,7 +204,7 @@ export const countiesAndMunicipalities = {
     "Skövde",
     "Hjo",
     "Tidaholm",
-    "Falköping",
+    "Falköping"
   ],
   "Värmlands län": [
     "Kil",
@@ -224,7 +222,7 @@ export const countiesAndMunicipalities = {
     "Filipstad",
     "Hagfors",
     "Arvika",
-    "Säffle",
+    "Säffle"
   ],
   "Örebro län": [
     "Lekeberg",
@@ -238,7 +236,7 @@ export const countiesAndMunicipalities = {
     "Askersund",
     "Karlskoga",
     "Nora",
-    "Lindesberg",
+    "Lindesberg"
   ],
   "Västmanlands län": [
     "Skinnskatteberg",
@@ -250,7 +248,7 @@ export const countiesAndMunicipalities = {
     "Sala",
     "Fagersta",
     "Köping",
-    "Arboga",
+    "Arboga"
   ],
   "Dalarnas län": [
     "Vansbro",
@@ -267,7 +265,7 @@ export const countiesAndMunicipalities = {
     "Säter",
     "Hedemora",
     "Avesta",
-    "Ludvika",
+    "Ludvika"
   ],
   "Gävleborgs län": [
     "Ockelbo",
@@ -279,7 +277,7 @@ export const countiesAndMunicipalities = {
     "Sandviken",
     "Söderhamn",
     "Bollnäs",
-    "Hudiksvall",
+    "Hudiksvall"
   ],
   "Västernorrlands län": [
     "Ånge",
@@ -288,7 +286,7 @@ export const countiesAndMunicipalities = {
     "Sundsvall",
     "Kramfors",
     "Sollefteå",
-    "Örnsköldsvik",
+    "Örnsköldsvik"
   ],
   "Jämtlands län": [
     "Ragunda",
@@ -298,7 +296,7 @@ export const countiesAndMunicipalities = {
     "Åre",
     "Berg",
     "Härjedalen",
-    "Östersund",
+    "Östersund"
   ],
   "Västerbottens län": [
     "Nordmaling",
@@ -315,7 +313,7 @@ export const countiesAndMunicipalities = {
     "Åsele",
     "Umeå",
     "Lycksele",
-    "Skellefteå",
+    "Skellefteå"
   ],
   "Norrbottens län": [
     "Arvidsjaur",
@@ -331,6 +329,6 @@ export const countiesAndMunicipalities = {
     "Piteå",
     "Boden",
     "Haparanda",
-    "Kiruna",
-  ],
-};
+    "Kiruna"
+  ]
+}
