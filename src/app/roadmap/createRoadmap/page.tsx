@@ -3,12 +3,12 @@ import RoadmapForm from '@/components/forms/roadmapForm/roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/buttons/redirectButtons';
-import getDeeperNationals from '@/fetchers/getDeeperNationals';
+import getNationals from '@/fetchers/getNationals';
 
 export default async function Page() {
   const [session, nationalRoadmaps] = await Promise.all([
     getSessionData(cookies()),
-    getDeeperNationals(),
+    getNationals(),
   ]);
 
   // User must be signed in

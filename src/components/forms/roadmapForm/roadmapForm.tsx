@@ -17,7 +17,13 @@ export default function RoadmapForm({
 }: {
   user: Data['user'],
   userGroups: string[],
-  nationalRoadmaps?: (Roadmap & { goals?: (Goal & { dataSeries: DataSeries | null })[] })[],
+  nationalRoadmaps?: (Roadmap & {
+    goals: {
+      id: string,
+      name: string | null,
+      indicatorParameter: string,
+    }[],
+  })[],
   currentRoadmap?: Roadmap & AccessControlled,
 }) {
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -33,7 +39,7 @@ export default function RoadmapForm({
       form.namedItem("viewGroups")
     )
 
-    const parentRoadmap = nationalRoadmaps?.find((roadmap) => roadmap.id == (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value)
+    const parentRoadmapId = (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
 
     const formJSON = JSON.stringify({
       name: (form.namedItem("roadmapName") as HTMLInputElement)?.value,
@@ -47,9 +53,9 @@ export default function RoadmapForm({
       viewGroups,
       roadmapId: currentRoadmap?.id || undefined,
       goals: [
-        ...(currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : []),
-        ...(parentRoadmap ? goalInputFromRoadmap(parentRoadmap) : [])
+        ...(currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : [])
       ],
+      parentRoadmapId,
       timestamp,
     })
 

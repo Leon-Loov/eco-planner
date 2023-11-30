@@ -5,6 +5,8 @@ import { AccessLevel, GoalInput, RoadmapInput } from "@/types";
 import roadmapGoalCreator from "./roadmapGoalCreator";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
+import goalInputFromRoadmap from "@/functions/goalInputFromRoadmap.ts";
+import getOneRoadmap from "@/fetchers/getOneRoadmap";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -37,6 +39,23 @@ export async function POST(request: NextRequest) {
       JSON.stringify({ message: 'Forbidden; only admins can create national roadmaps' }),
       { status: 403 }
     );
+  }
+
+  // If a parent roadmap is defined, append its goals to the new roadmap's goals
+  if (roadmap.parentRoadmapId) {
+    try {
+      const parentRoadmap = await getOneRoadmap(roadmap.parentRoadmapId);
+      if (parentRoadmap) {
+        roadmap.goals = [...(roadmap.goals || []), ...goalInputFromRoadmap(parentRoadmap)];
+      }
+    } catch (e) {
+      console.log(e);
+      return createResponse(
+        response,
+        JSON.stringify({ message: 'Failed to fetch parent roadmap' }),
+        { status: 400 }
+      );
+    }
   }
 
   // Create lists of names for linking
