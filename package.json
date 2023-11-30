@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node --loader ts-node/esm ./src/scripts/generateLeapList.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
