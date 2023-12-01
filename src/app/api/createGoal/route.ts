@@ -302,35 +302,54 @@ export async function PUT(request: NextRequest) {
 
   // Edit goal
   try {
-    let editedGoal = await prisma.goal.update({
+    // Get list of IDs of goals under this goal
+    const goalContents = await prisma.goal.findUnique({
       where: { id: goal.goalId },
-      data: {
-        name: goal.name,
-        description: goal.description,
-        nationalRoadmapId: goal.nationalRoadmapId,
-        nationalGoalId: goal.nationalGoalId,
-        indicatorParameter: goal.indicatorParameter,
-        editors: { set: editors },
-        viewers: { set: viewers },
-        editGroups: { set: editGroups },
-        viewGroups: { set: viewGroups },
-        dataSeries: {
-          upsert: {
-            create: dataValues,
-            update: dataValues,
-          }
-        },
-        links: {
-          set: [],
-          create: goal.links?.map(link => {
-            return {
-              url: link.url,
-              description: link.description || undefined,
-            }
-          })
-        },
-      }
+      select: { actions: { select: { id: true } } }
     });
+    const actionIds = goalContents?.actions.map(action => action.id) || [];
+
+    // Update goal and actions in a single transaction
+    const [editedGoal] = await prisma.$transaction([
+      prisma.goal.update({
+        where: { id: goal.goalId },
+        data: {
+          name: goal.name,
+          description: goal.description,
+          nationalRoadmapId: goal.nationalRoadmapId,
+          nationalGoalId: goal.nationalGoalId,
+          indicatorParameter: goal.indicatorParameter,
+          editors: { set: editors },
+          viewers: { set: viewers },
+          editGroups: { set: editGroups },
+          viewGroups: { set: viewGroups },
+          dataSeries: {
+            upsert: {
+              create: dataValues,
+              update: dataValues,
+            }
+          },
+          links: {
+            set: [],
+            create: goal.links?.map(link => {
+              return {
+                url: link.url,
+                description: link.description || undefined,
+              }
+            })
+          },
+        }
+      }),
+      ...actionIds.map(actionId => prisma.action.update({
+        where: { id: actionId },
+        data: {
+          editors: { set: editors },
+          viewers: { set: viewers },
+          editGroups: { set: editGroups },
+          viewGroups: { set: viewGroups },
+        }
+      })),
+    ]);
     // Invalidate old cache
     revalidateTag('goal');
     // Return the edited goal's ID if successful
