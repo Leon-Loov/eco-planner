@@ -1,7 +1,8 @@
 'use client'
-import AttributedImage from "../../generic/images/attributedImage";
+
+import AttributedImage from "@/components/generic/images/attributedImage";
 import Link from "next/link";
-import ImageIcon from "../../generic/images/imageIcon";
+import ImageIcon from "@/components/generic/images/imageIcon";
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -56,7 +57,7 @@ export default function Signup() {
               <input type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
             </div>
             <br />
-            <input type="submit" className="call-to-action-primary" value={'Skapa Konto'} style={{display: 'block'}} />
+            <input type="submit" className="call-to-action-primary" value={'Skapa Konto'} style={{ display: 'block' }} />
             <Link href='/login'>Logga in</Link>
           </form>
         </main>
