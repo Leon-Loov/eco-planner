@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { roadmapSorter } from "@/lib/sorters";
-import { Action, DataSeries, Goal, Roadmap } from "@prisma/client";
+import { Roadmap } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 

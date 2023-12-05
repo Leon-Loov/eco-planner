@@ -12,7 +12,6 @@ import Image from "next/image";
 import GraphGraph from "@/components/graphs/graphGraph";
 import getOneGoal from "@/fetchers/getOneGoal";
 import { Goal, DataSeries } from "@prisma/client";
-import GraphSelector from "@/components/graphs/graphselector/graphSelector";
 import Comments from "@/components/comments/comments";
 import { Fragment } from "react";
 

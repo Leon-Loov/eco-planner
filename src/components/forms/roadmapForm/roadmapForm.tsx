@@ -1,12 +1,11 @@
 'use client'
 
 import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
-import goalInputFromRoadmap from "@/functions/goalInputFromRoadmap.ts"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import countiesAndMunicipalities from "@/lib/countiesAndMunicipalities.json" with { type: "json" }
 import { Data } from "@/lib/session"
 import { AccessControlled } from "@/types"
-import { DataSeries, Goal, Roadmap } from "@prisma/client"
+import { Roadmap } from "@prisma/client"
 import { useState } from "react"
 
 export default function RoadmapForm({
