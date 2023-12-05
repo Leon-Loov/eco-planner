@@ -228,23 +228,59 @@ export async function PUT(request: NextRequest) {
 
   // Update the roadmap
   try {
-    let updatedRoadmap = await prisma.roadmap.update({
+    // Get list of IDs of all goals and actions under this roadmap
+    const roadmapContents = await prisma.roadmap.findUnique({
       where: { id: roadmap.roadmapId },
-      data: {
-        name: roadmap.name,
-        description: roadmap.description,
-        isNational: roadmap.isNational,
-        county: roadmap.county,
-        municipality: roadmap.municipality,
-        editors: { set: editors },
-        viewers: { set: viewers },
-        editGroups: { set: editGroups },
-        viewGroups: { set: viewGroups },
+      select: {
         goals: {
-          create: roadmapGoalCreator(roadmap, session.user!.id, editors, viewers, editGroups, viewGroups),
+          select: {
+            id: true,
+            actions: { select: { id: true } }
+          }
         }
-      },
+      }
     });
+    const goalIds = roadmapContents?.goals.map(goal => goal.id) || [];
+    const actionIds = roadmapContents?.goals.flatMap(goal => goal.actions.map(action => action.id)) || [];
+
+    // Update roadmap, goals, and actions in a single transaction
+    const [updatedRoadmap] = await prisma.$transaction([
+      prisma.roadmap.update({
+        where: { id: roadmap.roadmapId },
+        data: {
+          name: roadmap.name,
+          description: roadmap.description,
+          isNational: roadmap.isNational,
+          county: roadmap.county,
+          municipality: roadmap.municipality,
+          editors: { set: editors },
+          viewers: { set: viewers },
+          editGroups: { set: editGroups },
+          viewGroups: { set: viewGroups },
+          goals: {
+            create: roadmapGoalCreator(roadmap, session.user!.id, editors, viewers, editGroups, viewGroups),
+          }
+        },
+      }),
+      ...goalIds.map(goalId => prisma.goal.update({
+        where: { id: goalId },
+        data: {
+          editors: { set: editors },
+          viewers: { set: viewers },
+          editGroups: { set: editGroups },
+          viewGroups: { set: viewGroups },
+        }
+      })),
+      ...actionIds.map(actionId => prisma.action.update({
+        where: { id: actionId },
+        data: {
+          editors: { set: editors },
+          viewers: { set: viewers },
+          editGroups: { set: editGroups },
+          viewGroups: { set: viewGroups },
+        }
+      })),
+    ]);
     // Invalidate old cache
     revalidateTag('roadmap');
     // Return the new roadmap's ID if successful
