@@ -51,6 +51,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         }
         {goal.name ? goal.name : goal.indicatorParameter}
       </h1>
+      {goal.name && <>
+        <span style={{ color: "gray" }}> {`${goal.indicatorParameter}, `} </span>
+        <br />
+      </>}
       <span style={{ color: "gray" }}>Målbana</span>
       {goal.links.length > 0 &&
         <>
