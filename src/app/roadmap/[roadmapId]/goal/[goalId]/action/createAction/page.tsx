@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import accessChecker from "@/lib/accessChecker";
 import { BackButton } from '@/components/buttons/redirectButtons';
 import getOneGoal from "@/fetchers/getOneGoal";
+import { AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, goal] = await Promise.all([
@@ -13,7 +14,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   ]);
 
   // User must be signed in and have edit access to the goal, and the goal must exist
-  if (!goal || !session.user || !accessChecker(goal, session.user) || accessChecker(goal, session.user) === 'VIEW') {
+  if (!goal || !session.user || !accessChecker(goal, session.user) || accessChecker(goal, session.user) === AccessLevel.View) {
     return notFound();
   }
 

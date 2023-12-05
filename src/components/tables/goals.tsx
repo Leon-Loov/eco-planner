@@ -40,7 +40,7 @@ export default function Goals({
         <nav className='display-flex align-items-center gap-100'>
           <TableSelector />
           { // Only show the button if the user has edit access to the roadmap
-            (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
             <PrimaryLink href={`./roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</PrimaryLink>
           }
         </nav>

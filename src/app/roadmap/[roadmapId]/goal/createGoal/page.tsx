@@ -6,6 +6,7 @@ import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
 import { BackButton } from '@/components/buttons/redirectButtons';
 import getNationals from "@/fetchers/getNationals";
+import { AccessLevel } from "@/types";
 
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
@@ -16,7 +17,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   ]);
 
   // User must be signed in and have edit access to the roadmap, and the roadmap must exist
-  if (!roadmap || !session.user || !accessChecker(roadmap, session.user) || accessChecker(roadmap, session.user) === 'VIEW') {
+  if (!roadmap || !session.user || !accessChecker(roadmap, session.user) || accessChecker(roadmap, session.user) === AccessLevel.View) {
     return notFound();
   }
 

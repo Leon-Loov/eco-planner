@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { BackButton } from '@/components/buttons/redirectButtons';
 import getNationals from "@/fetchers/getNationals";
 import getOneGoal from "@/fetchers/getOneGoal";
+import { AccessLevel } from "@/types";
 
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
@@ -16,7 +17,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   ]);
 
   // User must be signed in and have edit access to the goal, and the goal must exist
-  if (!currentGoal || !session.user || !accessChecker(currentGoal, session.user) || accessChecker(currentGoal, session.user) === 'VIEW') {
+  if (!currentGoal || !session.user || !accessChecker(currentGoal, session.user) || accessChecker(currentGoal, session.user) === AccessLevel.View) {
     return notFound();
   }
 

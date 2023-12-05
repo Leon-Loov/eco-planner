@@ -8,6 +8,7 @@ import Goals from "@/components/tables/goals";
 import Link from "next/link";
 import Image from "next/image";
 import Comments from "@/components/comments/comments";
+import { AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -28,7 +29,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   return <>
     <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
       { // Only show the edit link if the user has edit access to the roadmap
-        (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+        (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
         <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
           <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.name}`} />
         </Link>

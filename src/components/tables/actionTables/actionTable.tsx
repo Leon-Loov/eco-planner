@@ -33,7 +33,7 @@ export default function ActionTable({
             <th>Förväntat utfall</th>
             <th>Relevanta aktörer</th>
             { // Only show project manager if the user has edit access to the goal
-              (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+              (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
               <th>Projektansvarig</th>
             }
           </tr>
@@ -44,7 +44,7 @@ export default function ActionTable({
               <td className='display-flex gap-50 align-items-center'>
                 { // Only show the edit link if the user has edit access to the goal
                   // Should technically be if the user has edit access to the action, but that could build up a lot of checks
-                  (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+                  (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
                   <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${action.id}/editAction`}>
                     <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} />
                   </Link>
@@ -56,7 +56,7 @@ export default function ActionTable({
               <td>{action.expectedOutcome}</td>
               <td>{action.relevantActors}</td>
               { // Only show project manager if the user has edit access to the goal
-                (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+                (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
                 <td>{action.projectManager}</td>
               }
             </tr>

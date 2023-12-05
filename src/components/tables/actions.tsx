@@ -28,7 +28,7 @@ export default function Actions({
       <h2>{title}</h2>
       <nav className='display-flex align-items-center gap-100'>
         { // Only show the button if the user has edit access to the goal
-          (accessLevel === 'EDIT' || accessLevel === 'ADMIN') &&
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
           <PrimaryLink href={`./roadmap/${params.roadmapId}/goal/${params.goalId}/action/createAction`}>Skapa ny åtgärd</PrimaryLink>
         }
       </nav>
