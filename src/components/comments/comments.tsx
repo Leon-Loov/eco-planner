@@ -35,6 +35,8 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
 
   // Sort comments by date
   comments?.sort(commentSorter);
+
+  /* Handle input from span */
   const [editedContent, setEditedContent] = useState('Editable content');
   const handleInput = (event: ChangeEvent<HTMLSpanElement>) => {
     setEditedContent(event.target.innerText);
@@ -67,7 +69,8 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
       */}
       {comments?.map((comment) => (
         <div key={comment.id}>
-          <p><b>{comment.author.username}</b> <i>{new Date(comment.createdAt).toLocaleString('sv-SE')}</i></p>
+          <p style={{marginBottom: "0", textTransform: "capitalize"}}><b>{comment.author.username}</b></p>
+          <span style={{fontSize: ".75em"}}>{new Date(comment.createdAt).toLocaleString('sv-SE')}</span>
           <p>{comment.commentText}</p>
         </div>
       ))}
