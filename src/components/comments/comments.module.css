@@ -1,0 +1,47 @@
+.button {
+    border: none;
+    padding: .5em 1em;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+}
+  
+.cancel {
+    background-color: transparent;
+    transition: background-color .1s;
+}
+  
+.cancel:hover {
+    background-color: lightgray;
+}
+
+.comment {
+    background-color: var(--blue);
+    color: white;
+}
+
+.comment:hover {
+    background-color: var(--blue-20);
+}
+
+.textarea {
+    border-bottom: 2px solid lightgray;
+    box-sizing: border-box;
+    outline: none;
+    display: block;
+    min-height: 1em;
+    overflow: hidden;
+    transition: border-color .5s;
+    padding: .25em 0;
+}
+  
+.textarea:focus {
+    border-color: black;
+}
+  
+.textarea:empty:not(:has(*)):before {
+    content: attr(aria-placeholder);
+    color: gray;
+    cursor: text;
+}
