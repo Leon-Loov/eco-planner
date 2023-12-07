@@ -40,7 +40,7 @@
     border-color: black;
 }
   
-.textarea:empty:not(:has(*)):before {
+.textarea:empty:before {
     content: attr(aria-placeholder);
     color: gray;
     cursor: text;

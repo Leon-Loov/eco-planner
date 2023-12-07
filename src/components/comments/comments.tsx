@@ -40,7 +40,6 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
   const [editedContent, setEditedContent] = useState('Editable content');
   const handleInput = (event: ChangeEvent<HTMLSpanElement>) => {
     setEditedContent(event.target.innerText);
-    console.log(editedContent)
   };
 
   return (
