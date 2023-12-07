@@ -13,15 +13,21 @@
 }
   
 .cancel:hover {
-    background-color: lightgray;
+    background-color: var(--gray-90);
 }
 
 .comment {
+    transition: background-color .1s;
     background-color: var(--blue);
     color: white;
 }
 
-.comment:hover {
+.comment:disabled {
+    transition: background-color .1s;
+    background-color: var(--gray-70);
+}
+
+.comment:not(:disabled):hover {
     background-color: var(--blue-20);
 }
 

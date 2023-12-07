@@ -37,10 +37,11 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
   comments?.sort(commentSorter);
 
   /* Handle input from span */
-  const [editedContent, setEditedContent] = useState('Editable content');
+  const [editedContent, setEditedContent] = useState('');
   const handleInput = (event: ChangeEvent<HTMLSpanElement>) => {
     setEditedContent(event.target.innerText);
   };
+  
 
   return (
     <>
@@ -49,12 +50,8 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
         <span className={styles.textarea} role="textbox" contentEditable aria-placeholder="Skriv Kommentar" onInput={handleInput} onBlur={handleInput} ></span>
         <input type="hidden" name="comment" id="comment" value={editedContent} />
         <div className="display-flex justify-content-flex-end gap-50 padding-y-50">
-          {/*
-          <button className={`${styles.button} ${styles.cancel}`}>Avbryt</button>
-          <button className={`${styles.button} ${styles.comment}`} >Kommentera</button>
-           */}
-          <input type="submit" value="Skicka" className="call-to-action-primary" style={{height: "100%"}} />
-
+          {/*<button className={`${styles.button} ${styles.cancel}`}>Avbryt</button>*/}
+          <input type="submit" value="Skicka" disabled={!editedContent} className={`${styles.button} ${styles.comment}`} style={{height: "100%"}} />
         </div>
       </form>
       {/*
