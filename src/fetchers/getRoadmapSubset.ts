@@ -32,6 +32,8 @@ const getCachedRoadmapSubset = unstable_cache(
     let roadmaps: (
       Roadmap & {
         _count: { goals: number },
+        // Goal IDs are returned in order to later fetch these goals individually
+        goals: { id: string }[],
         author: { id: string, username: string },
         editors: { id: string, username: string }[],
         viewers: { id: string, username: string }[],
@@ -52,6 +54,7 @@ const getCachedRoadmapSubset = unstable_cache(
             _count: {
               select: { goals: true }
             },
+            goals: { select: { id: true } },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -90,6 +93,7 @@ const getCachedRoadmapSubset = unstable_cache(
             _count: {
               select: { goals: true }
             },
+            goals: { select: { id: true } },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -121,6 +125,7 @@ const getCachedRoadmapSubset = unstable_cache(
           _count: {
             select: { goals: true }
           },
+          goals: { select: { id: true } },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
