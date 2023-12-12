@@ -46,7 +46,7 @@ export default function Goals({
         </nav>
       </label>
       {tableType == 'table' ? (
-        <GoalTable roadmap={roadmap} />
+        <GoalTable goals={roadmap.goals} />
       ) : null}
       {tableType == 'listTree' ? (
         <LinkTree roadmap={roadmap} />
