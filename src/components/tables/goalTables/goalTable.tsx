@@ -2,26 +2,24 @@ import styles from '../tables.module.css' with { type: "css" };
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
 
 export default function GoalTable({
-  roadmap,
+  goals,
+  roadmapId,
 }: {
-  roadmap: Roadmap & {
-    goals: (Goal & {
-      _count: { actions: number }
-      dataSeries: DataSeries | null,
-      author: { id: string, username: string },
-      editors: { id: string, username: string }[],
-      viewers: { id: string, username: string }[],
-      editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-      viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-    })[],
+  goals: ((Goal & {
+    _count: { actions: number }
+    dataSeries: DataSeries | null,
+    roadmaps?: { id: string, name: string }[],
     author: { id: string, username: string },
     editors: { id: string, username: string }[],
     viewers: { id: string, username: string }[],
     editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
     viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-  },
+  }) | null)[],
+  roadmapId?: string,
 }) {
-  if (!roadmap.goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
+  if (!goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
+
+  if (!roadmapId && goals.find(goal => goal && !goal.roadmaps?.length)) { throw new Error('GoalTable: roadmapId must be provided if any goal does not pass a `.roadmaps` property') }
 
   return <>
     <div className="overflow-x-scroll">
@@ -36,9 +34,9 @@ export default function GoalTable({
           </tr>
         </thead>
         <tbody>
-          {roadmap.goals.map(goal => (
+          {goals.map(goal => (goal &&
             <tr key={goal.id}>
-              <td><a href={`/roadmap/${roadmap?.id}/goal/${goal.id}`}>{goal.name || goal.indicatorParameter}</a></td>
+              <td><a href={`/roadmap/${roadmapId || goal.roadmaps?.length ? goal.roadmaps![0].id : null || ""}/goal/${goal.id}`}>{goal.name || goal.indicatorParameter}</a></td>
               <td>{goal.indicatorParameter}</td>
               <td>{goal.dataSeries?.unit}</td>
               <td>{goal._count.actions}</td>

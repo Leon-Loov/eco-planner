@@ -28,6 +28,7 @@ const getCachedGoal = unstable_cache(
     const session = await getSessionData(cookies());
 
     let goal: Goal & {
+      _count: { actions: number }
       dataSeries: DataSeries | null,
       actions: (Action & {
         author: { id: string, username: string },
@@ -52,6 +53,7 @@ const getCachedGoal = unstable_cache(
         goal = await prisma.goal.findUnique({
           where: { id },
           include: {
+            _count: { select: { actions: true } },
             dataSeries: true,
             actions: {
               include: {
@@ -108,6 +110,7 @@ const getCachedGoal = unstable_cache(
             ]
           },
           include: {
+            _count: { select: { actions: true } },
             dataSeries: true,
             actions: {
               where: {
@@ -161,6 +164,7 @@ const getCachedGoal = unstable_cache(
           OR: [{ viewGroups: { some: { name: 'Public' } } }]
         },
         include: {
+          _count: { select: { actions: true } },
           dataSeries: true,
           actions: {
             where: { viewGroups: { some: { name: 'Public' } } },

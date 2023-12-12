@@ -20,6 +20,7 @@ export default function Breadcrumb({
   // Get the sections of the pathname and filter out empty strings
   let sections = usePathname().split('/')
   sections = sections.filter(section => !!section)
+  sections = sections.map(section => decodeURI(section))
 
   /** A second array where the UUIDs are replaced with the related object's name or indicatorParameter */
   let sectionNames = [...sections]
