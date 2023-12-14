@@ -1,9 +1,13 @@
 import { DataSeries, Goal } from "@prisma/client";
 
-export default function goalsToTree(goals: (Goal & { dataSeries: DataSeries | null })[]) {
+export default function goalsToTree(goals: ((Goal & { dataSeries: DataSeries | null }) | null)[]) {
   let tree: any = {}
 
   for (const goal of goals) {
+    if (!goal) {
+      continue
+    }
+
     const parameters = goal.indicatorParameter.split('\\')
 
     // TODO: check if naming of demand and key makes sense
