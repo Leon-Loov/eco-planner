@@ -36,7 +36,7 @@ export default function GoalTable({
         <tbody>
           {goals.map(goal => (goal &&
             <tr key={goal.id}>
-              <td><a href={`/roadmap/${roadmapId || goal.roadmaps?.length ? goal.roadmaps![0].id : null || ""}/goal/${goal.id}`}>{goal.name || goal.indicatorParameter}</a></td>
+              <td><a href={`/roadmap/${roadmapId || (goal.roadmaps?.length ? goal.roadmaps[0].id : null) || ""}/goal/${goal.id}`}>{goal.name || goal.indicatorParameter}</a></td>
               <td>{goal.indicatorParameter}</td>
               <td>{goal.dataSeries?.unit}</td>
               <td>{goal._count.actions}</td>
