@@ -22,7 +22,7 @@ export default function CombinedGraph({
       for (let j of dataSeriesDataFieldNames) {
         mainSeries.push({
           x: new Date(j.replace('val', '')).getTime(),
-          y: siblings[i].dataSeries![j as keyof DataSeriesDataFields] || 0
+          y: siblings[i].dataSeries![j as keyof DataSeriesDataFields] ?? null
         })
       }
     }
