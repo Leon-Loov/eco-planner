@@ -124,7 +124,7 @@ export default function RoadmapForm({
         }
 
         <div className="display-flex align-items-center gap-100">
-          <div className="flex-grow-100" style={{maxWidth: "50%"}}>
+          <div className="flex-grow-100" style={{maxWidth: "250px"}}>
             <label htmlFor="county">Län</label>
             <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.isNational ? "National" : currentRoadmap?.county ?? undefined}>
               <option value="">Välj län</option>
@@ -141,7 +141,7 @@ export default function RoadmapForm({
               }
             </select>
           </div>
-          <div className="flex-grow-100" style={{maxWidth: "50%"}}>
+          <div className="flex-grow-100" style={{maxWidth: "250px"}}>
           { // If a county is selected, show a dropdown for municipalities in that county
             selectedCounty && selectedCounty !== "National" &&
             <>

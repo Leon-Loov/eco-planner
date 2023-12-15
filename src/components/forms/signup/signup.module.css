@@ -1,0 +1,41 @@
+.userInfo {
+    padding: 2em;
+    @media (max-width: 500px) {
+        padding: 0;
+    }
+}
+
+.form > input[type="submit"] {
+    text-align: center;
+    background-color: var(--accent-color);
+    border: 3px solid var(--accent-color);
+    color: white;
+    text-decoration: unset;
+    border-radius: 3px;
+    padding: .5em 2em;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.form > input[type="submit"]:hover, .form > input[type="submit"]:focus {
+    background-color: var(--accent-color-dark);
+    border-color: var(--accent-color-dark);
+    outline: 0;
+}
+
+.form input[type="text"], .form input[type="password"], .form input[type="email"] {
+    border: none;
+    border-radius: 0 3px 3px 0;
+    z-index: 1;
+    padding: 1rem;
+} 
+
+.form label {
+    display: block;
+    margin: 2rem 0 .5rem 0;
+}
+
+.submitButton {
+    margin: 3rem 0 .5rem 0;
+}

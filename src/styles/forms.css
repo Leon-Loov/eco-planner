@@ -23,17 +23,6 @@ form fieldset {
     border-radius: 3px;
 }
 
-.user-info-form input:required {
-    background-color: lightgray !important;
-}
-
-.user-info-form input:focus:not(input[type="submit"]) {
-    border: none !important;
-    margin-bottom: unset !important;
-    border-radius: 0 3px 3px 0 !important;
-    outline: 3px solid var(--accent-color) !important;
-}
-
 /* CSS for most forms, probably needs a better name */
 
 .action-form input:not(input[type="checkbox"]), .action-form fieldset, .action-form select {

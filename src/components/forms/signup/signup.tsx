@@ -1,8 +1,11 @@
 'use client'
 
+//TODO: Move signup and loginforms into the same folder
+
 import AttributedImage from "@/components/generic/images/attributedImage";
 import Link from "next/link";
 import ImageIcon from "@/components/generic/images/imageIcon";
+import styles from './signup.module.css'
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -36,28 +39,28 @@ export default function Signup() {
   return (
     <>
       <div className="card display-flex">
-        <main className="user-info-form flex-grow-100">
+        <main className={`${styles.userInfo} flex-grow-100`}>
           <h1>Skapa Konto</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className={styles.form}>
             <label htmlFor="username">Användarnam </label>
             <div className="display-flex">
               <ImageIcon src="/icons/user.svg" alt="lösenord" />
-              <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
+              <input className="flex-grow-100" type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <br />
             <label htmlFor="email">E-post </label>
             <div className="display-flex">
               <ImageIcon src="/icons/email.svg" alt="lösenord" />
-              <input type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
+              <input className="flex-grow-100" type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
             </div>
             <br />
             <label htmlFor="password">Lösenord </label>
             <div className="display-flex">
               <ImageIcon src="/icons/password.svg" alt="lösenord" />
-              <input type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
+              <input className="flex-grow-100" type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
             </div>
             <br />
-            <input type="submit" className="call-to-action-primary" value={'Skapa Konto'} style={{ display: 'block' }} />
+            <input type="submit" className={styles.submitButton} value={'Skapa Konto'} style={{ display: 'block' }} />
             <Link href='/login'>Logga in</Link>
           </form>
         </main>

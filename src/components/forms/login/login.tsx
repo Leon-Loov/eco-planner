@@ -3,6 +3,7 @@
 import Link from "next/link";
 import AttributedImage from "@/components/generic/images/attributedImage";
 import ImageIcon from "@/components/generic/images/imageIcon";
+import styles from './login.module.css'
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -33,23 +34,21 @@ export default function Login() {
   return (
     <>
       <div className="card display-flex">
-        <main className="user-info-form flex-grow-100">
+        <main className={`flex-grow-100 ${styles.userInfo}`}>
           <h1>Logga In</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className={styles.form}>
             <label htmlFor="username">Användarnamn </label>
             <div className="display-flex">
               <ImageIcon src="/icons/user.svg" alt="lösenord" />
-              <input type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
+              <input className="flex-grow-100" type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
-            <br />
             <label htmlFor="password">Lösenord</label>
             <div className="display-flex">
               <ImageIcon src="/icons/password.svg" alt="lösenord" />
-              <input type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
+              <input className="flex-grow-100" type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
             </div>
-            <br />
-            <input type="submit" className="call-to-action-primary" value={'Logga In'} style={{ display: 'block' }} />
-            <Link href='/signup'>Skapa konto</Link>
+            <input type="submit" className={styles.submitButton} value={'Logga In'} style={{ display: 'block' }} />
+            <Link href='/signup' >Skapa konto</Link>
           </form>
         </main>
         <aside style={{ width: '40%' }}>

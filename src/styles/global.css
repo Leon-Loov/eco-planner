@@ -127,7 +127,7 @@ summary {
 }
 
 /* Forms */
-label:has(+input:not(:required), +select:not(:required))::after {
+label:has(+input:not(:required), +select:not(:required), +textarea:not(:required))::after {
   content: '(valfri)';
 }
 
@@ -249,34 +249,12 @@ li ul {
   box-sizing: border-box;
 }
 
-.user-info-form { /* Login / signup */
-  padding: 2em;
-  box-sizing: border-box;
-}
-
 @media (max-width: 500px) {
   .card {
       box-shadow: unset;
       margin: 1em 0;
       border-radius: .5em;
   }
-  .user-info-form {
-      padding: 0;
-  }
-}
-
-.user-info-form > *, .user-info-form > form > * {
-  margin: 1em 0;
-}
-
-.user-info-form input[type="text"], .user-info-form input[type="password"], .user-info-form input[type="email"] {
-  display: block;
-  padding: 1em;
-  width: 100%;
-  border-radius: 0 3px 3px 0;
-  border: unset;
-  box-sizing: border-box;
-  z-index: 1;
 }
 
 
