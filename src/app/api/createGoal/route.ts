@@ -85,9 +85,13 @@ export async function POST(request: NextRequest) {
     // The keys for the data values are `val2020`, `val2021`, etc. up to `val2050
     let keys = goal.dataSeries.map((_, index) => `val${index + 2020}`);
     keys.forEach((key, index) => {
-      let value = parseFloat(goal.dataSeries![index]);
-      // If the value is a number, add it to the dataValues object
-      if (!isNaN(value)) {
+      let value: number | null = parseFloat(goal.dataSeries![index]);
+      // If the value is empty, set it to null
+      if (!goal.dataSeries![index] && goal.dataSeries![index] != "0") {
+        value = null;
+      }
+      // If the value is a number or null, add it to the dataValues object
+      if (value === null || !isNaN(value)) {
         // This mess assures TypeScript that we are not trying to assign numbers to any of the
         // other fields in the dataSeries object.
         dataValues[key as keyof Omit<
@@ -276,9 +280,13 @@ export async function PUT(request: NextRequest) {
     // The keys for the data values are `val2020`, `val2021`, etc. up to `val2050
     let keys = goal.dataSeries.map((_, index) => `val${index + 2020}`);
     keys.forEach((key, index) => {
-      let value = parseFloat(goal.dataSeries![index]);
-      // If the value is a number, add it to the dataValues object
-      if (!isNaN(value)) {
+      let value: number | null = parseFloat(goal.dataSeries![index]);
+      // If the value is empty, set it to null
+      if (!goal.dataSeries![index] && goal.dataSeries![index] != "0") {
+        value = null;
+      }
+      // If the value is a number or null, add it to the dataValues object
+      if (value === null || !isNaN(value)) {
         // This mess assures TypeScript that we are not trying to assign numbers to any of the
         // other fields in the dataSeries object.
         dataValues[key as keyof Omit<
