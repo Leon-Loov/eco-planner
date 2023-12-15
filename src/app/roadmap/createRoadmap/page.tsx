@@ -18,8 +18,10 @@ export default async function Page() {
 
   return (
     <>
-      <p><BackButton href="../" /></p>
-      <h1>Skapa en ny färdplan</h1>
+      <div className='display-flex align-items-center gap-100'>
+        <BackButton href="../" />
+        <h1>Skapa en ny färdplan</h1>
+      </div>
       <RoadmapForm
         user={session.user}
         userGroups={session.user?.userGroups}

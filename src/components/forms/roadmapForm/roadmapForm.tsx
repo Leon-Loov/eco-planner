@@ -101,15 +101,15 @@ export default function RoadmapForm({
       <form onSubmit={handleSubmit} className="action-form">
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
-        <label htmlFor="name">Namn på färdplanen: </label>
+        <label htmlFor="name">Färdplansnamn </label>
         <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
-        <br />
-        <label htmlFor="description">Beskrivning av färdplanen: </label>
+
+        <label htmlFor="description">Beskrivning av färdplanen </label>
         <input type="text" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} />
-        <br />
+
         {!!nationalRoadmaps &&
           <>
-            <label htmlFor="copyFrom">Nationell färdplan denna färdplan är baserad på (om någon): </label>
+            <label htmlFor="copyFrom">Nationell färdplan denna färdplan är baserad på </label>
             <select name="parentRoadmap" id="copyFrom">
               <option value="">Ingen nationell färdplan</option>
               {
@@ -120,43 +120,48 @@ export default function RoadmapForm({
                 })
               }
             </select>
-            <br />
           </>
         }
-        <label htmlFor="county">Vilket län gäller färdplanen? </label>
-        <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.isNational ? "National" : currentRoadmap?.county ?? undefined}>
-          <option value="">Välj län</option>
-          { // If the user is an admin, they can select the entire country to make a national roadmap
-            user?.isAdmin &&
-            <option value="National">Hela landet (nationell färdplan)</option>
-          }
-          {
-            Object.keys(countiesAndMunicipalities).map((county) => {
-              return (
-                <option key={county} value={county}>{county}</option>
-              )
-            })
-          }
-        </select>
-        <br />
-        { // If a county is selected, show a dropdown for municipalities in that county
-          selectedCounty && selectedCounty !== "National" &&
-          <>
-            <label htmlFor="municipality">Vilken kommun gäller färdplanen? </label>
-            <select name="municipality" id="municipality" required defaultValue={currentRoadmap?.municipality ?? undefined}>
-              <option value="">Välj kommun</option>
-              <option value="Regional">Hela länet</option>
+
+        <div className="display-flex align-items-center gap-100">
+          <div className="flex-grow-100" style={{maxWidth: "50%"}}>
+            <label htmlFor="county">Län</label>
+            <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.isNational ? "National" : currentRoadmap?.county ?? undefined}>
+              <option value="">Välj län</option>
+              { // If the user is an admin, they can select the entire country to make a national roadmap
+                user?.isAdmin &&
+                <option value="National">Hela landet (nationell färdplan)</option>
+              }
               {
-                countiesAndMunicipalities[selectedCounty as keyof typeof countiesAndMunicipalities].map((municipality) => {
+                Object.keys(countiesAndMunicipalities).map((county) => {
                   return (
-                    <option key={municipality} value={municipality}>{municipality}</option>
+                    <option key={county} value={county}>{county}</option>
                   )
                 })
               }
             </select>
-            <br />
-          </>
-        }
+          </div>
+          <div className="flex-grow-100" style={{maxWidth: "50%"}}>
+          { // If a county is selected, show a dropdown for municipalities in that county
+            selectedCounty && selectedCounty !== "National" &&
+            <>
+              <label htmlFor="municipality">Kommun</label>
+              <select name="municipality" id="municipality" required defaultValue={currentRoadmap?.municipality ?? undefined}>
+                <option value="">Välj kommun</option>
+                <option value="Regional">Hela länet</option>
+                {
+                  countiesAndMunicipalities[selectedCounty as keyof typeof countiesAndMunicipalities].map((municipality) => {
+                    return (
+                      <option key={municipality} value={municipality}>{municipality}</option>
+                    )
+                  })
+                }
+              </select>
+            </>
+          }
+          </div>
+        </div>
+
         <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> Notera att det här skapar nya målbanor även om det redan finns några. </label>
         <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />
         <br />
@@ -164,7 +169,6 @@ export default function RoadmapForm({
           (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
           <>
             <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
-            <br />
           </>
         }
         {isLoading ? (

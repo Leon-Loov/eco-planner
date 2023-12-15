@@ -4,7 +4,7 @@ import Link from "next/link";
 export function BackButton({ href }: { href: string }) {
   return (
     <>
-      <Link href={href}>
+      <Link href={href} className="display-flex align-items-center">
         <img src="/icons/back.svg" alt="back" />
       </Link>
     </>

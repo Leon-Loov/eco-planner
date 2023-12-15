@@ -126,9 +126,8 @@ summary {
 }
 
 /* Forms */
-label:has(+input:required, +select:required)::after {
-  content: '*';
-  color: red;
+label:has(+input:not(:required), +select:not(:required))::after {
+  content: '(valfri)';
 }
 
 input:focus:not(input[type="checkbox"], input[type="file"], input[type="submit"]) {
@@ -171,9 +170,6 @@ input[type="file"]:focus {
   outline: none;
 }
 
-input:invalid, select:invalid {
-  background-color: pink !important;
-}
 
 /* Call to action links */
 
