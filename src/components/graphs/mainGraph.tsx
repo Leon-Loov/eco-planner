@@ -7,7 +7,7 @@ export default function MainGraph({
   nationalGoal,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
-  nationalGoal: Goal & { dataSeries: DataSeries | null } | null, 
+  nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
 }) {
   if (!goal.dataSeries) {
     return null
@@ -49,9 +49,9 @@ export default function MainGraph({
   }
 
   let mainChartOptions: ApexCharts.ApexOptions = {
-    chart: { 
+    chart: {
       type: 'line',
-      animations: { enabled: false, dynamicAnimation: { enabled: false }}
+      animations: { enabled: false, dynamicAnimation: { enabled: false } }
     },
     stroke: { curve: 'straight' },
     xaxis: {
@@ -62,18 +62,28 @@ export default function MainGraph({
       max: new Date(dataSeriesDataFieldNames[dataSeriesDataFieldNames.length - 1].replace('val', '')).getTime()
       // categories: dataSeriesDataFieldNames.map(name => name.replace('val', ''))
     },
-    yaxis: {
-      title: { text: goal.dataSeries?.unit },
-      labels: { formatter: floatSmoother },
-    },
+    yaxis: [
+      {
+        title: { text: goal.dataSeries?.unit },
+        labels: { formatter: floatSmoother },
+      }
+    ],
     tooltip: {
       x: { format: 'yyyy' },
     },
   }
 
+  if (mainChart.length > 1) {
+    (mainChartOptions.yaxis as ApexYAxis[]).push({
+      title: { text: "Natioinell målbana" },
+      labels: { formatter: floatSmoother },
+      opposite: true,
+    })
+  }
+
   return (
     <>
-      <div style={{height: "500px", width: "100%"}}>
+      <div style={{ height: "500px", width: "100%" }}>
         <WrappedChart
           options={mainChartOptions}
           series={mainChart}
