@@ -34,7 +34,8 @@ export default function ActionGraph({
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "33%",
+        barHeight: "50px",
+        
       }
     },
     xaxis: {
