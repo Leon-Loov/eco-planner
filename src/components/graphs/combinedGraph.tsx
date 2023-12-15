@@ -20,12 +20,10 @@ export default function CombinedGraph({
     let mainSeries = []
     if (siblings[i].dataSeries) {
       for (let j of dataSeriesDataFieldNames) {
-        if (siblings[i].dataSeries![j as keyof DataSeriesDataFields]) {
-          mainSeries.push({
-            x: new Date(j.replace('val', '')).getTime(),
-            y: siblings[i].dataSeries![j as keyof DataSeriesDataFields]
-          })
-        }
+        mainSeries.push({
+          x: new Date(j.replace('val', '')).getTime(),
+          y: siblings[i].dataSeries![j as keyof DataSeriesDataFields] || 0
+        })
       }
     }
     // If the series is only null/0, don't add it to the graph
@@ -42,7 +40,7 @@ export default function CombinedGraph({
     chart: {
       type: 'area',
       stacked: true,
-      animations: { enabled: false, dynamicAnimation: { enabled: false }}
+      animations: { enabled: false, dynamicAnimation: { enabled: false } }
     },
     stroke: { curve: 'straight' },
     xaxis: {
@@ -75,7 +73,7 @@ export default function CombinedGraph({
       <h2>Kombinerad graf</h2>
       <h3>{indicatorCategory}</h3>
       {additionalInfo && <p>{additionalInfo}</p>}
-      <div style={{height: "500px", width: "100%"}}>
+      <div style={{ height: "500px", width: "100%" }}>
         <WrappedChart
           options={chartOptions}
           series={dataPoints}
