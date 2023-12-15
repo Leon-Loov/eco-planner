@@ -105,7 +105,7 @@ export default function RoadmapForm({
         <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
 
         <label htmlFor="description">Beskrivning av färdplanen </label>
-        <input type="text" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} />
+        <textarea name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined}></textarea>
 
         {!!nationalRoadmaps &&
           <>

@@ -2,6 +2,18 @@ form {
     --background-color: lightgray;
 }
 
+textarea {
+    border-radius: 3px;
+    border: none;
+    background-color: lightgray;
+    display: block;
+    width: 100%;
+    resize: vertical;
+    padding: .5rem;
+    margin: 1rem 0;
+    font-size: 1rem;
+}
+
 form input:not(input[type="checkbox"], input[type="submit"], input[type="file"]) {
     background-color: var(--background-color);
 }

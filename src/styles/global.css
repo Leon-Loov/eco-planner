@@ -75,6 +75,7 @@
 
 * {
   font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
 }
 
 body {
@@ -130,11 +131,8 @@ label:has(+input:not(:required), +select:not(:required))::after {
   content: '(valfri)';
 }
 
-input:focus:not(input[type="checkbox"], input[type="file"], input[type="submit"]) {
-  outline: none;
-  border-bottom: 3px solid var(--accent-color);
-  margin-bottom: calc(1em - 3px);
-  border-radius: 3px 3px 0 0;
+input:focus:not(input[type="checkbox"], input[type="file"], input[type="submit"]), textarea:focus {
+  outline: 3px solid var(--accent-color);
 }
 
 select:focus {
