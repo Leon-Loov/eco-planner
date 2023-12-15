@@ -26,6 +26,12 @@ export default function findSiblings(
     if (goal.dataSeries?.unit != sibling.dataSeries?.unit) {
       isSibling = false;
     }
+    // Goals with different data scales are not siblings
+    if (isSibling) {
+      if (goal.dataSeries?.scale != sibling.dataSeries?.scale) {
+        isSibling = false;
+      }
+    }
     // Goals on different levels are not siblings
     if (isSibling) {
       if (goalParameters.length != siblingParameters.length) {

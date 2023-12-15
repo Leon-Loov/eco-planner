@@ -68,6 +68,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       }
       <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <br />
+      {goal.dataSeries?.scale &&
+        <>
+          <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
+        </>
+      }
       <GraphGraph goal={goal} nationalGoal={nationalGoal} />
       <br />
       <CombinedGraph roadmap={roadmap} goal={goal} />
