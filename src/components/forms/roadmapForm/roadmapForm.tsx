@@ -164,7 +164,6 @@ export default function RoadmapForm({
 
         <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> Notera att det här skapar nya målbanor även om det redan finns några. </label>
         <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />
-        <br />
         { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user has edit access to the roadmap
           (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
           <>

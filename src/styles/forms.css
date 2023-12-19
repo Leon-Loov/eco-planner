@@ -70,7 +70,3 @@ form fieldset {
 .action-form fieldset input[type="checkbox"] {
     margin: .5em .5em .5em 0;
 }
-
-.action-form details {
-    margin: 1em 0;
-}

@@ -32,7 +32,7 @@
 }
 
 .textarea {
-    border-bottom: 2px solid lightgray;
+    border-bottom: 2px solid var(--gray);
     box-sizing: border-box;
     outline: none;
     display: block;

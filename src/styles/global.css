@@ -119,12 +119,6 @@ p {
   display: none;
 }
 
-summary {
-  cursor: pointer;
-  padding: 1em;
-  background-color: lightgray;
-  border-radius: 3px;
-}
 
 /* Forms */
 label:has(+input:not(:required), +select:not(:required), +textarea:not(:required))::after {

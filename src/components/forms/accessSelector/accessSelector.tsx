@@ -11,8 +11,11 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
 
   return (
     <>
-      <details open>
-        <summary>Redigera behörigheter</summary>
+      <details className={styles.permissionDetails} open>
+        <summary className={styles.permissionSummary}>
+          <span>Redigera behörigheter</span>
+          <Image src="/icons/plus.svg" alt="expand" width={24} height={24}></Image>
+        </summary>
         <p>
           För att lägga till en användare/grupp, skriv in namnet och tryck på enter.<br />
           För att ta bort en användare/grupp, checka ur rutan bredvid namnet.<br />
