@@ -20,13 +20,7 @@ export default async function Page() {
         Photo by <a href="https://unsplash.com/@alvarordesign?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Alvaro Reyes</a> on <a href="https://unsplash.com/photos/person-working-on-blue-and-white-paper-on-board-qWwpHwip31M?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
       </AttributedImage>
     </div>
-    <div className="display-flex justify-content-space-between align-items-center flex-wrap-wrap">
-      <h1>Färdplaner</h1>
-      { // Only show the new roadmap button if the user is logged in
-        session.user &&
-        <PrimaryLink href="./roadmap/createRoadmap">Skapa ny Färdplan</PrimaryLink>
-      }
-    </div>
+    <h1>Färdplaner</h1>
     <p>
       Detta verktyg syftar till att bidra till Sveriges klimatomställning.
       I verktyget kan nationella scenarier, även kallade kvantitativa färdplaner, brytas ner till regional och lokal nivå och en handlingsplan kan skapas.

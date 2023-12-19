@@ -33,7 +33,8 @@ export default function RoadmapTable({
         <thead>
           <tr>
             <th>Namn</th>
-            <th>Antal mål</th>
+            <th>Antal målbanor</th>
+            <th>Åtgärder</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +42,11 @@ export default function RoadmapTable({
             <tr key={roadmap.id}>
               <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
               <td>{roadmap._count.goals}</td>
+              <td>
+                <button className={`${styles.actionButton} display-flex`}>
+                  <Image src='/icons/dotsVertical.svg' alt='Åtgärder' width={24} height={24}></Image>
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
