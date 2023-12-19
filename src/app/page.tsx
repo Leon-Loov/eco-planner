@@ -36,11 +36,11 @@ export default async function Page() {
     </p>
     <section className="grid-auto-rows">
       <div>
-        <RoadmapTable title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
+        <RoadmapTable user={session.user} title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
         {!roadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
       <div>
-        <RoadmapTable title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
+        <RoadmapTable user={session.user} title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
         {!roadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
     </section>

@@ -77,43 +77,52 @@ ul > li:nth-child(1) > .link {
 
 
 /* Table styling*/
+
+.tableHeader {
+    background-color: var(--blue);
+    color: white;
+    border-radius: 3px 3px 0 0;
+    padding: 1em;
+}
+
+.tableHeader > h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
 .table {
-    --thead-color: #0066b2;
-    --thead-color-text: white;
-    --maybe: #d4e5f2;
     min-width: 100%;
     text-align: left;
     overflow: hidden;
     border-collapse: collapse;
     border-spacing: 0;
-    border-radius: 3px;
-    margin: 1em 0;
+    background-color: var(--gray-90);
 } 
-  
-.table thead {
-    background-color: var(--thead-color);
-    color: var(--thead-color-text);
-}
   
 .table th, .table td {
     padding: 1em;
+    font-weight: 500;
 }
 
 .table td {
     text-wrap: wrap;
     word-break: break-word;
     min-width: 250px;
+    border-bottom: 1px solid var(--gray);
 }
 
   
-.table tbody tr:nth-child(odd) {
-    background-color: ghostwhite;
+.table tbody {
+    background-color: #fefefe;
 }
-  
-.table tbody tr:nth-child(even) {
-    background-color: #ececec;
-}
-  
-.table tbody a {
+
+.newRoadmap {
+    color: white;
     font-weight: bold;
+    text-decoration: none;
+}
+
+.newRoadmap:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
 }
