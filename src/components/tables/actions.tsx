@@ -1,7 +1,7 @@
 "use client"
 
 import { Action, Goal } from "@prisma/client"
-import { AccessLevel } from '@/types'
+import { AccessControlled, AccessLevel } from '@/types'
 import ActionTable from './actionTables/actionTable'
 import { PrimaryLink } from "../generic/links/links"
 
@@ -12,13 +12,8 @@ export default function Actions({
   params,
 }: {
   title: String,
-  goal: Goal & {
-    actions: Action[],
-    author: { id: string, username: string },
-    editors: { id: string, username: string }[],
-    viewers: { id: string, username: string }[],
-    editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-    viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+  goal: Goal & AccessControlled & {
+    actions: (Action & AccessControlled)[]
   },
   accessLevel?: AccessLevel,
   params: { roadmapId: string, goalId: string },
@@ -33,7 +28,7 @@ export default function Actions({
         }
       </nav>
     </label>
-    <ActionTable goal={goal} accessLevel={accessLevel} params={params} />
+    <ActionTable goal={goal} accessLevel={accessLevel} roadmapId={params.roadmapId} />
   </>
 
 }
