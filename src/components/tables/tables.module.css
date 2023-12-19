@@ -126,3 +126,16 @@ ul > li:nth-child(1) > .link {
     text-decoration: underline;
     text-decoration-thickness: 2px;
 }
+
+.actionButton {
+    padding: .5rem;
+    margin: none;
+    background-color: transparent;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.actionButton:hover {
+    background-color: var(--gray-90);
+}
