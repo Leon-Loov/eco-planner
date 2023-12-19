@@ -134,6 +134,7 @@ ul > li:nth-child(1) > .link {
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    transition: background-color .2s;
 }
 
 .actionButton:hover {
