@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 // Important link ({`/${href}`} is not making sense?)
 export function PrimaryLink({ href, children  }: { href: string; children: React.ReactNode }) {
@@ -27,8 +28,8 @@ export function SecondaryLink({ href, children  }: { href: string; children: Rea
 export function BackButton({ href }: { href: string }) {
   return (
     <>
-      <Link href={href}>
-        <img src="/icons/back.svg" alt="back" />
+      <Link href={href} style={{display: "flex"}}>
+        <Image src="/icons/back.svg" alt="back" width={24} height={24}></Image>
       </Link>
     </>
   )

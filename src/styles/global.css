@@ -139,7 +139,7 @@ input[type="file"] {
   border-radius: 3px;
   background-color: transparent;
   padding: 2em;
-  border: 3px dashed lightgray;
+  border: 3px dashed var(--gray-90);
   cursor: pointer;
 }
 
@@ -148,7 +148,7 @@ input[type="file"]::file-selector-button {
   border: none;
   padding: .5em 3em;
   margin: 0 .75em;
-  background-color: lightgray;
+  background-color: var(--gray-90);
   font-weight: bold;
 }
 

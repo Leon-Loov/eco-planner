@@ -120,7 +120,7 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
       {editUsers.map((user, index) => (
         <Fragment key={'editUser' + index}>
           <label className="display-flex gap-100 align-items-center">
-            <input type="text" name="editUsers" id={'editUser' + user} value={user} onChange={(event) => {
+            <input className={styles.editUser} type="text" name="editUsers" id={'editUser' + user} value={user} onChange={(event) => {
               // Replace the user in the list of selected editUsers with the new value
               setEditUsers(editUsers.map((editUser) => editUser === user ? event.currentTarget.value : editUser));
             }} />
@@ -129,7 +129,7 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
               onClick={() => { setEditUsers(editUsers.filter((editUser) => editUser !== user)); }}
               className={styles.removeUserButton}
               type="button">
-              <Image src="/icons/close.svg" alt="remove" width={16} height={16}></Image>
+              <Image src="/icons/plus.svg" alt="remove" width={24} height={24}></Image>
             </button>
           </label>
         </Fragment>
@@ -159,7 +159,7 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
               onClick={() => { setViewUsers(viewUsers.filter((viewUser) => viewUser !== user)); }}
               className={styles.removeUserButton}
               type="button">
-              <Image src="/icons/close.svg" alt="remove" width={16} height={16}></Image>
+              <Image src="/icons/plus.svg" alt="remove" width={24} height={24}></Image>
             </button>
           </label>
         </Fragment>
@@ -180,9 +180,10 @@ function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
       <legend>Grupper med redigeringsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'editGroup' + group}>
-          <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
-          <label htmlFor={'editGroup' + group}>{group}</label>
-          <br />
+          <label className="display-flex align-items-center gap-100" htmlFor={'editGroup' + group}>
+            <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
+            {group}
+          </label>
         </Fragment>
       ))}
     </fieldset>
@@ -197,9 +198,10 @@ function ViewGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
       <legend>Grupper med läsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
-          <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
-          <label htmlFor={'viewGroup' + group}>{group}</label>
-          <br />
+          <label className="display-flex align-items-center gap-100" htmlFor={'viewGroup' + group}>
+            <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
+            {group}
+          </label>
         </Fragment>
       ))}
     </fieldset>

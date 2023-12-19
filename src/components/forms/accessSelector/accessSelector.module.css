@@ -31,13 +31,14 @@
 
 .removeUserButton {
     border: none; 
-    background-color: pink; 
     border-radius: 3px;
-    height: 100%;
-    padding: 1em; 
+    padding: .5rem; 
+    display: flex;
     cursor: pointer; 
+    background-color: transparent;
+    transition: background-color .5s;
 }
 
 .removeUserButton:hover {
-    background-color: red;
+    background-color: var(--gray-90);
 }
