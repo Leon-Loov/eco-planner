@@ -24,6 +24,10 @@ fieldset {
     border-radius: 3px;
 }
 
+summary {
+    cursor: pointer;
+}
+
 details {
     margin: 3rem 0;
 }
