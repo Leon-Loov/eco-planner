@@ -22,7 +22,7 @@ export function RoadmapActionButton(
         <Image src='/icons/dotsVertical.svg' width={24} height={24} alt=""></Image>
         <nav className={styles.menu}>
           <Link href={addGoalHref} className={styles.menuAction}>
-            <Image src='/icons/plus.svg' alt="" width={24} height={24} />
+            <Image src='/icons/plus-light.svg' alt="" width={24} height={24} />
             <span>Lägg till målbana</span> 
           </Link>
           <Link href={editHref} className={styles.menuAction}>
