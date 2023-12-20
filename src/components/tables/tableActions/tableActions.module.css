@@ -1,0 +1,14 @@
+.actionButton {
+    padding: .5rem;
+    margin: none;
+    background-color: transparent;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color .2s;
+    margin: auto;
+}
+
+.actionButton:hover {
+    background-color: var(--gray-90);
+}

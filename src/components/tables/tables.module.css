@@ -91,7 +91,8 @@ ul > li:nth-child(1) > .link {
 }
 
 .table {
-    min-width: 100%;
+    table-layout: auto;
+    width: 100%;
     text-align: left;
     overflow: hidden;
     border-collapse: collapse;
@@ -104,10 +105,13 @@ ul > li:nth-child(1) > .link {
     font-weight: 500;
 }
 
+.table th {
+    text-wrap: nowrap;
+}
+
 .table td {
     text-wrap: wrap;
     word-break: break-word;
-    min-width: 250px;
     border-bottom: 1px solid var(--gray);
 }
 
@@ -125,18 +129,4 @@ ul > li:nth-child(1) > .link {
 .newRoadmap:hover {
     text-decoration: underline;
     text-decoration-thickness: 2px;
-}
-
-.actionButton {
-    padding: .5rem;
-    margin: none;
-    background-color: transparent;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color .2s;
-}
-
-.actionButton:hover {
-    background-color: var(--gray-90);
 }
