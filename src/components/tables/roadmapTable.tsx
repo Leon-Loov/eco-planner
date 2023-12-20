@@ -42,17 +42,12 @@ export default function RoadmapTable({
             <tr key={roadmap.id}>
               <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
               <td style={{textAlign: 'center'}}>{roadmap._count.goals}</td>
-              <td>
-                <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
-                  <RoadmapActionButton />
-                </Link>
-                {/* Use this to create a link leading to add goal
-                <Link href={`/roadmap/${roadmap.id}/goal/createGoal`}>
-                  <button className={`${styles.actionButton} display-flex`}>
-                    <Image src='/icons/dotsVertical.svg' alt='Åtgärder' width={24} height={24}></Image>
-                  </button>
-                </Link>
-                */}
+              <td>                  
+                <RoadmapActionButton 
+                  addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`} 
+                  editHref={`/roadmap/${roadmap.id}/editRoadmap`} 
+                  roadmapName={roadmap.name} 
+                />
               </td>
             </tr>
           ))}

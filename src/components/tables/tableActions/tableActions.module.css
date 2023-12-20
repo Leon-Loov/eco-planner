@@ -1,5 +1,6 @@
 .actionButton {
     padding: .5rem;
+    width: fit-content;
     margin: none;
     background-color: transparent;
     border: none;
@@ -7,8 +8,61 @@
     cursor: pointer;
     transition: background-color .2s;
     margin: auto;
+    position: relative;
 }
 
-.actionButton:hover {
+.actionButton:hover, .actionButton:has(input[type="radio"]:focus) {
+    background-color: var(--gray-90);
+}
+
+.actionButton > input[type="radio"] {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    margin: 0;
+}
+
+.actionButton > input[type="radio"]:checked ~ .menu {
+    display: block;
+}
+
+/* Menu */
+
+.menu {
+    display: none;
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translate(0, -50%);
+    background-color: #fefefe;
+    border-radius: 3px;
+    box-shadow: 0 0 .5rem var(--gray-90);
+}
+
+.menu .menuAction:first-child {
+    border-radius: 3px 3px 0 0;
+}
+
+.menu .menuAction {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    white-space: nowrap;
+    padding: 1rem;
+    margin: 0;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.menu .menuAction:last-child {
+    border-radius: 0 0 3px 3px;
+}
+
+.menu .menuAction:hover {
     background-color: var(--gray-90);
 }
