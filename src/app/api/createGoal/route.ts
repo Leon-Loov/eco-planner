@@ -123,9 +123,7 @@ export async function POST(request: NextRequest) {
         nationalGoalId: goal.nationalGoalId || undefined,
         indicatorParameter: goal.indicatorParameter,
         author: {
-          connect: {
-            id: session.user.id,
-          },
+          connect: { id: session.user.id },
         },
         editors: {
           connect: editors,
@@ -139,17 +137,11 @@ export async function POST(request: NextRequest) {
         viewGroups: {
           connect: viewGroups,
         },
-        roadmaps: {
+        roadmap: {
           connect: { id: goal.roadmapId },
         },
         dataSeries: {
-          // The ability to connect to an existing data series is currently disabled
-          // connectOrCreate: {
-          //   where: {
-          //     id: goal.dataSeriesId,
-          //   },
           create: dataValues,
-          // }
         },
         links: {
           create: goal.links?.map(link => {

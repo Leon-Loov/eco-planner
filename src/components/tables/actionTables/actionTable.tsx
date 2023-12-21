@@ -22,7 +22,7 @@ interface ActionTableWithActions extends ActionTableCommonProps {
   goal?: never,
   roadmapId?: never,
   actions: (Action & AccessControlled & {
-    goals: { id: string, roadmaps: { id: string }[] }[]
+    goals: { id: string, roadmap: { id: string } }[]
   })[],
 }
 
@@ -47,7 +47,7 @@ export default function ActionTable({
   // If a goal is provided, extract the actions from it
   if (!actions) {
     actions = goal.actions.map((action) => {
-      let goals = [{ id: goal.id, roadmaps: [{ id: roadmapId }] }];
+      let goals = [{ id: goal.id, roadmap: { id: roadmapId } }];
       return { ...action, goals };
     });
   }
@@ -78,11 +78,11 @@ export default function ActionTable({
                 { // Only show the edit link if the user has edit access to the goal
                   // Should technically be if the user has edit access to the action, but that could build up a lot of checks
                   (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
-                  <Link href={`/roadmap/${action.goals[0].roadmaps[0].id}/goal/${action.goals[0].id}/action/${action.id}/editAction`}>
+                  <Link href={`/roadmap/${action.goals[0].roadmap.id}/goal/${action.goals[0].id}/action/${action.id}/editAction`}>
                     <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} />
                   </Link>
                 }
-                <a href={`/roadmap/${action.goals[0].roadmaps[0].id}/goal/${action.goals[0].id}/action/${action.id}`}>{action.name}</a>
+                <a href={`/roadmap/${action.goals[0].roadmap.id}/goal/${action.goals[0].id}/action/${action.id}`}>{action.name}</a>
               </td>
               <td>{action.description}</td>
               <td>{action.costEfficiency}</td>

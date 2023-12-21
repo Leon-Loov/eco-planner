@@ -34,11 +34,11 @@ export default async function DashboardBase({ county, municipality }: { county: 
   }
 
   // Get a list of actions
-  let actions: (Action & AccessControlled & { goals: { id: string, roadmaps: { id: string }[] }[] })[] = [];
+  let actions: (Action & AccessControlled & { goals: { id: string, roadmap: { id: string } }[] })[] = [];
   for (let goal of goals) {
     if (!goal) continue;
     for (let action of goal.actions) {
-      actions.push({ ...action, goals: [{ id: goal.id, roadmaps: [{ id: goal.roadmaps[0].id }] }] })
+      actions.push({ ...action, goals: [{ id: goal.id, roadmap: { id: goal.roadmap.id } }] })
     }
   }
 

@@ -37,7 +37,7 @@ const getCachedGoal = unstable_cache(
         editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
         viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       })[],
-      roadmaps: { id: string, name: string }[],
+      roadmap: { id: string, name: string },
       links: Link[],
       comments?: (Comment & { author: { id: string, username: string } })[],
       author: { id: string, username: string },
@@ -64,7 +64,7 @@ const getCachedGoal = unstable_cache(
                 viewGroups: { include: { users: { select: { id: true, username: true } } } },
               },
             },
-            roadmaps: {
+            roadmap: {
               select: {
                 id: true,
                 name: true,
@@ -131,7 +131,7 @@ const getCachedGoal = unstable_cache(
                 viewGroups: { include: { users: { select: { id: true, username: true } } } },
               },
             },
-            roadmaps: {
+            roadmap: {
               select: {
                 id: true,
                 name: true,
@@ -176,7 +176,7 @@ const getCachedGoal = unstable_cache(
               viewGroups: { include: { users: { select: { id: true, username: true } } } },
             },
           },
-          roadmaps: {
+          roadmap: {
             select: {
               id: true,
               name: true,

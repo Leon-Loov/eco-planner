@@ -138,10 +138,11 @@ model Goal {
   viewers      User[]      @relation("goal_viewers")
   // Groups of users who are allowed to view this goal
   viewGroups   UserGroup[] @relation("goal_view_groups")
-  // Actions which use this goal
+  // Child Actions
   actions      Action[]    @relation("action_goal")
-  // Roadmaps which use this goal
-  roadmaps     Roadmap[]   @relation("roadmap_goal")
+  // Parent Roadmap
+  roadmapId    String      @map("roadmap_id")
+  roadmap      Roadmap     @relation("roadmap_goal", fields: [roadmapId], references: [id])
 
   @@map("goal")
 }

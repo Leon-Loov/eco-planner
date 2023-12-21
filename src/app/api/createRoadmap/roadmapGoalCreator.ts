@@ -13,7 +13,7 @@ export default function roadmapGoalCreator(
     return undefined;
   }
 
-  let output: Prisma.GoalCreateWithoutRoadmapsInput[] = [];
+  let output: Prisma.GoalCreateWithoutRoadmapInput[] = [];
 
   roadmap.goals.forEach((goal, goalIndex) => {
     // The code for data series also exists in src/app/api/createGoal/route.ts, if one changes the other should be changed as well
