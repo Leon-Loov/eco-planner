@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     getOneRoadmap(params.roadmapId)
   ]);
 
-  let accessLevel;
+  let accessLevel: AccessLevel = AccessLevel.None;
   if (roadmap) {
     accessLevel = accessChecker(roadmap, session.user)
   }
