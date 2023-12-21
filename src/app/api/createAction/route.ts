@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
             }
           })
         },
-        goals: {
+        goal: {
           connect: { id: action.goalId }
         },
         author: {

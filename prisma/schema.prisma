@@ -58,8 +58,9 @@ model Action {
   parent     Action?     @relation("action_inheritance", fields: [parentId], references: [id])
   // Reference to children actions
   children   Action[]    @relation("action_inheritance")
-  // Goals related to this action
-  goals      Goal[]      @relation("action_goal")
+  // Parent Goal
+  goalId     String      @map("goal_id")
+  goal       Goal        @relation("action_goal", fields: [goalId], references: [id])
   // The person who created this action (implicitly allowed to edit)
   authorId   String      @map("author_id")
   author     User        @relation("action_author", fields: [authorId], references: [id])
