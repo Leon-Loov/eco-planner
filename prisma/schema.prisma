@@ -62,15 +62,11 @@ model Goal {
   // Longer description of goal
   description        String? @db.Text
   // The ID of the national roadmap this goal is related to
-  // TODO: check where these are hosted or if we need to host them ourselves
   nationalRoadmapId  String? @map("national_roadmap_id")
   // The ID of the national goal this goal is related to
   nationalGoalId     String? @map("national_goal_id")
   // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas", as defined by LEAP
-  // TODO: Add a list of predefined categories to choose from, in addition to allowing custom categories
   indicatorParameter String  @map("indicator_parameter") @db.Text
-  // There was an idea to use an ´isNationalGoal´ field to indicate if the goal is part of a national roadmap or not,
-  // but it's probably better to just check if it has a relation to any national roadmap if we want to know that
 
   // A series of datapoints for the goal
   dataSeries DataSeries? @relation("data_series")
