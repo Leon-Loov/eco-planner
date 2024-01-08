@@ -52,12 +52,6 @@ model Action {
   links      Link[]      @relation("action_link")
   // Comments related to this action
   comments   Comment[]   @relation("action_comment")
-  // UUID of the action this action is inherited from, if any
-  parentId   String?     @map("parent_id")
-  // Reference to parent action
-  parent     Action?     @relation("action_inheritance", fields: [parentId], references: [id])
-  // Reference to children actions
-  children   Action[]    @relation("action_inheritance")
   // Parent Goal
   goalId     String      @map("goal_id")
   goal       Goal        @relation("action_goal", fields: [goalId], references: [id], onDelete: Cascade)
