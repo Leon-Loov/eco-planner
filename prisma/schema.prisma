@@ -60,7 +60,7 @@ model Action {
   children   Action[]    @relation("action_inheritance")
   // Parent Goal
   goalId     String      @map("goal_id")
-  goal       Goal        @relation("action_goal", fields: [goalId], references: [id])
+  goal       Goal        @relation("action_goal", fields: [goalId], references: [id], onDelete: Cascade)
   // The person who created this action (implicitly allowed to edit)
   authorId   String      @map("author_id")
   author     User        @relation("action_author", fields: [authorId], references: [id])
@@ -89,7 +89,7 @@ model Notes {
   note     String @db.Text
   // The action this note is related to
   actionId String @map("action_id")
-  action   Action @relation("action_notes", fields: [actionId], references: [id])
+  action   Action @relation("action_notes", fields: [actionId], references: [id], onDelete: Cascade)
   // The user who created this note
   authorId String @map("author_id")
   author   User   @relation("note_author", fields: [authorId], references: [id])
@@ -142,7 +142,7 @@ model Goal {
   actions    Action[]    @relation("action_goal")
   // Parent Roadmap
   roadmapId  String      @map("roadmap_id")
-  roadmap    Roadmap     @relation("roadmap_goal", fields: [roadmapId], references: [id])
+  roadmap    Roadmap     @relation("roadmap_goal", fields: [roadmapId], references: [id], onDelete: Cascade)
 
   @@map("goal")
 }
@@ -193,7 +193,7 @@ model DataSeries {
   val2049 Float?  @map("val_2049")
   val2050 Float?  @map("val_2050")
 
-  // Goal that uses this data series
+  // Related goal
   goalId     String      @unique @map("goal_id")
   goal       Goal        @relation("data_series", fields: [goalId], references: [id], onDelete: Cascade)
   // Author of the data series
@@ -341,10 +341,10 @@ model Link {
   // A link should be related to either an action or a goal, not both; if both, create two links
   // Any action this link is related to
   actionId String? @map("action_id")
-  action   Action? @relation("action_link", fields: [actionId], references: [id])
+  action   Action? @relation("action_link", fields: [actionId], references: [id], onDelete: Cascade)
   // Any goal this link is related to
   goalId   String? @map("goal_id")
-  goal     Goal?   @relation("goal_link", fields: [goalId], references: [id])
+  goal     Goal?   @relation("goal_link", fields: [goalId], references: [id], onDelete: Cascade)
 
   @@map("link")
 }
@@ -367,13 +367,13 @@ model Comment {
   // A comment should be related to either an action, a goal, or a roadmap.
   // Any action this comment is related to
   actionId  String?  @map("action_id")
-  action    Action?  @relation("action_comment", fields: [actionId], references: [id])
+  action    Action?  @relation("action_comment", fields: [actionId], references: [id], onDelete: Cascade)
   // Any goal this comment is related to
   goalId    String?  @map("goal_id")
-  goal      Goal?    @relation("goal_comment", fields: [goalId], references: [id])
+  goal      Goal?    @relation("goal_comment", fields: [goalId], references: [id], onDelete: Cascade)
   // Any roadmap this comment is related to
   roadmapId String?  @map("roadmap_id")
-  roadmap   Roadmap? @relation("roadmap_comment", fields: [roadmapId], references: [id])
+  roadmap   Roadmap? @relation("roadmap_comment", fields: [roadmapId], references: [id], onDelete: Cascade)
 
   @@map("comment")
 }
