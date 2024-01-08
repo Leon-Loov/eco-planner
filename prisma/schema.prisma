@@ -10,19 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RoadmapType {
+  NATIONAL
+  REGIONAL
+  LOCAL
+}
+
 model Roadmap {
   // UUID of the roadmap
-  id          String   @id @default(uuid())
+  id          String      @id @default(uuid())
   // Timestamp of when roadmap was created
-  createdAt   DateTime @default(now()) @map("created_at")
+  createdAt   DateTime    @default(now()) @map("created_at")
   // Timestamp of when roadmap was last updated
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
   // Name of roadmap
   name        String
   // Optional description of roadmap
-  description String?  @db.Text
-  // Whether the roadmap is a national roadmap (true) or a local roadmap (false)
-  isNational  Boolean  @default(false) @map("is_national")
+  description String?     @db.Text
+  // The type of roadmap, for example national, regional, or local
+  type        RoadmapType
 
   // The county the roadmap targets (if local)
   county       String? @map("county")

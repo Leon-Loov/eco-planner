@@ -4,14 +4,31 @@ import { Action, Comment, Goal, Roadmap } from "@prisma/client";
 const collator = new Intl.Collator('se', { numeric: true, sensitivity: 'accent' });
 
 /**
- * Sorts roadmaps by whether they are national or not, then alphabetically by name
+ * Sorts roadmaps by type (national first), then alphabetically by name
  */
 export function roadmapSorter(a: Roadmap, b: Roadmap) {
-  if (a.isNational === b.isNational) {
-    return collator.compare(a.name, b.name);
+  switch (a.type) {
+    case 'NATIONAL':
+      if (b.type === 'NATIONAL') {
+        return collator.compare(a.name, b.name);
+      }
+      return -1;
+    case 'REGIONAL':
+      if (b.type === 'REGIONAL') {
+        return collator.compare(a.name, b.name);
+      }
+      return b.type === 'NATIONAL' ? 1 : -1;
+    case 'LOCAL':
+      if (b.type === 'LOCAL') {
+        return collator.compare(a.name, b.name);
+      }
+      return (b.type === 'NATIONAL' || b.type === 'REGIONAL') ? 1 : -1;
+    default:
+      if (b.type === 'NATIONAL' || b.type === 'REGIONAL' || b.type === 'LOCAL') {
+        return 1;
+      }
+      return collator.compare(a.name, b.name);
   }
-
-  return a.isNational ? -1 : 1;
 }
 
 /**

@@ -5,7 +5,7 @@ import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import countiesAndMunicipalities from "@/lib/countiesAndMunicipalities.json" with { type: "json" }
 import { Data } from "@/lib/session"
 import { AccessControlled } from "@/types"
-import { Roadmap } from "@prisma/client"
+import { Roadmap, RoadmapType } from "@prisma/client"
 import { useState } from "react"
 
 export default function RoadmapForm({
@@ -45,7 +45,7 @@ export default function RoadmapForm({
       description: (form.namedItem("description") as HTMLInputElement)?.value || undefined,
       county: (form.namedItem("county") as HTMLInputElement)?.value == "National" ? undefined : (form.namedItem("county") as HTMLInputElement)?.value || undefined,
       municipality: (form.namedItem("municipality") as HTMLInputElement)?.value == "Regional" ? undefined : (form.namedItem("municipality") as HTMLInputElement)?.value || undefined,
-      isNational: (form.namedItem("county") as HTMLInputElement)?.value == "National",
+      type: ((form.namedItem("county") as HTMLInputElement)?.value == "National") ? RoadmapType.NATIONAL : ((form.namedItem("municipality") as HTMLInputElement)?.value == "Regional") ? RoadmapType.REGIONAL : RoadmapType.LOCAL,
       editors: editUsers,
       viewers: viewUsers,
       editGroups,
@@ -124,9 +124,9 @@ export default function RoadmapForm({
         }
 
         <div className="display-flex align-items-center gap-100">
-          <div className="flex-grow-100" style={{maxWidth: "250px"}}>
+          <div className="flex-grow-100" style={{ maxWidth: "250px" }}>
             <label htmlFor="county">Län</label>
-            <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.isNational ? "National" : currentRoadmap?.county ?? undefined}>
+            <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.type == RoadmapType.NATIONAL ? "National" : currentRoadmap?.county ?? undefined}>
               <option value="">Välj län</option>
               { // If the user is an admin, they can select the entire country to make a national roadmap
                 user?.isAdmin &&
@@ -141,24 +141,24 @@ export default function RoadmapForm({
               }
             </select>
           </div>
-          <div className="flex-grow-100" style={{maxWidth: "250px"}}>
-          { // If a county is selected, show a dropdown for municipalities in that county
-            selectedCounty && selectedCounty !== "National" &&
-            <>
-              <label htmlFor="municipality">Kommun</label>
-              <select name="municipality" id="municipality" required defaultValue={currentRoadmap?.municipality ?? undefined}>
-                <option value="">Välj kommun</option>
-                <option value="Regional">Hela länet</option>
-                {
-                  countiesAndMunicipalities[selectedCounty as keyof typeof countiesAndMunicipalities].map((municipality) => {
-                    return (
-                      <option key={municipality} value={municipality}>{municipality}</option>
-                    )
-                  })
-                }
-              </select>
-            </>
-          }
+          <div className="flex-grow-100" style={{ maxWidth: "250px" }}>
+            { // If a county is selected, show a dropdown for municipalities in that county
+              selectedCounty && selectedCounty !== "National" &&
+              <>
+                <label htmlFor="municipality">Kommun</label>
+                <select name="municipality" id="municipality" required defaultValue={currentRoadmap?.type == RoadmapType.REGIONAL ? "Regional" : currentRoadmap?.municipality ?? undefined}>
+                  <option value="">Välj kommun</option>
+                  <option value="Regional">Hela länet</option>
+                  {
+                    countiesAndMunicipalities[selectedCounty as keyof typeof countiesAndMunicipalities].map((municipality) => {
+                      return (
+                        <option key={municipality} value={municipality}>{municipality}</option>
+                      )
+                    })
+                  }
+                </select>
+              </>
+            }
           </div>
         </div>
 

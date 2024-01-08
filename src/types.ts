@@ -1,4 +1,4 @@
-import { DataSeries } from "@prisma/client";
+import { DataSeries, RoadmapType } from "@prisma/client";
 
 /** An object that implements the AccessControlled interface can be checked with the accessChecker function. */
 export interface AccessControlled {
@@ -21,7 +21,7 @@ export enum AccessLevel {
 export type RoadmapInput = {
   name: string;
   description?: string | undefined;
-  isNational?: boolean | undefined;
+  type: RoadmapType;
   county?: string | undefined;
   municipality?: string | undefined;
   parentRoadmapId?: string | undefined;

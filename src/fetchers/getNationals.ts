@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { roadmapSorter } from "@/lib/sorters";
-import { Roadmap } from "@prisma/client";
+import { Roadmap, RoadmapType } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -44,7 +44,7 @@ const getCachedRoadmaps = unstable_cache(
     if (session.user?.isAdmin) {
       try {
         roadmaps = await prisma.roadmap.findMany({
-          where: { isNational: true },
+          where: { type: RoadmapType.NATIONAL },
           include: {
             goals: { select: { id: true, name: true, indicatorParameter: true } },
             author: { select: { id: true, username: true } },
@@ -72,7 +72,7 @@ const getCachedRoadmaps = unstable_cache(
         // Get all roadmaps authored by the user
         roadmaps = await prisma.roadmap.findMany({
           where: {
-            isNational: true,
+            type: RoadmapType.NATIONAL,
             OR: [
               { authorId: session.user.id },
               { editors: { some: { id: session.user.id } } },
@@ -119,7 +119,7 @@ const getCachedRoadmaps = unstable_cache(
     try {
       roadmaps = await prisma.roadmap.findMany({
         where: {
-          isNational: true,
+          type: RoadmapType.NATIONAL,
           viewGroups: { some: { name: 'Public' } }
         },
         include: {

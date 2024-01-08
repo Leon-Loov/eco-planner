@@ -7,6 +7,7 @@ import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
 import goalInputFromRoadmap from "@/functions/goalInputFromRoadmap.ts";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
+import { RoadmapType } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -15,7 +16,7 @@ export async function POST(request: NextRequest) {
   let roadmap: RoadmapInput & { goals?: GoalInput[] } = await request.json();
 
   // Validate request body
-  if (!roadmap.name || (!roadmap.county && !roadmap.isNational)) {
+  if (!roadmap.name || /*!roadmap.county ||*/ !Object.values(RoadmapType).includes(roadmap.type)) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Only admins can create national roadmaps
-  if (roadmap.isNational && !session.user?.isAdmin) {
+  if (roadmap.type == RoadmapType.NATIONAL && !session.user?.isAdmin) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Forbidden; only admins can create national roadmaps' }),
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
       data: {
         name: roadmap.name,
         description: roadmap.description,
-        isNational: roadmap.isNational,
+        type: roadmap.type,
         county: roadmap.county,
         municipality: roadmap.municipality,
         author: { connect: { id: session.user.id } },
@@ -148,7 +149,7 @@ export async function PUT(request: NextRequest) {
   let roadmap: RoadmapInput & { goals?: GoalInput[], roadmapId: string, timestamp?: number } = await request.json();
 
   // Validate request body
-  if (!roadmap.roadmapId || !roadmap.name || (!roadmap.county && !roadmap.isNational)) {
+  if (!roadmap.roadmapId || !roadmap.name || /*!roadmap.county ||*/ !Object.values(RoadmapType).includes(roadmap.type)) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -197,7 +198,7 @@ export async function PUT(request: NextRequest) {
   }
 
   // Only admins can create national roadmaps
-  if (roadmap.isNational && !session.user?.isAdmin) {
+  if (roadmap.type == RoadmapType.NATIONAL && !session.user?.isAdmin) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Forbidden; only admins can create national roadmaps' }),
@@ -250,7 +251,7 @@ export async function PUT(request: NextRequest) {
         data: {
           name: roadmap.name,
           description: roadmap.description,
-          isNational: roadmap.isNational,
+          type: roadmap.type,
           county: roadmap.county,
           municipality: roadmap.municipality,
           editors: { set: editors },

@@ -3,7 +3,7 @@ import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import RoadmapTable from "@/components/tables/roadmapTable";
 import AttributedImage from "@/components/generic/images/attributedImage";
-import { PrimaryLink } from "@/components/generic/links/links";
+import { RoadmapType } from "@prisma/client";
 
 export default async function Page() {
   const [session, roadmaps] = await Promise.all([
@@ -11,8 +11,9 @@ export default async function Page() {
     getRoadmaps()
   ]);
 
-  let nationalRoadmaps = roadmaps.filter(roadmap => roadmap.isNational)
-  let regionalRoadmaps = roadmaps.filter(roadmap => !roadmap.isNational)
+  // TODO: Filter into more categories based on `RoadmapType`
+  let nationalRoadmaps = roadmaps.filter(roadmap => roadmap.type === RoadmapType.NATIONAL)
+  let regionalRoadmaps = roadmaps.filter(roadmap => roadmap.type !== RoadmapType.NATIONAL)
 
   return <>
     <div style={{ width: '100%', height: '350px', marginTop: '1.5em', }}>
