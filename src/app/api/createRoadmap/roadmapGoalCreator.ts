@@ -18,7 +18,7 @@ export default function roadmapGoalCreator(
   roadmap.goals.forEach((goal, goalIndex) => {
     // The code for data series also exists in src/app/api/createGoal/route.ts, if one changes the other should be changed as well
     // Create data series
-    let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
+    let dataValues: Prisma.DataSeriesCreateWithoutGoalInput = {
       author: { connect: { id: author } },
       unit: goal.dataUnit ?? "missing",
       scale: goal.dataScale,
@@ -38,7 +38,7 @@ export default function roadmapGoalCreator(
           // This mess assures TypeScript that we are not trying to assign numbers to any of the
           // other fields in the dataSeries object.
           dataValues[key as keyof Omit<
-            Prisma.DataSeriesCreateWithoutGoalsInput,
+            Prisma.DataSeriesCreateWithoutGoalInput,
             'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
             'editors' | 'viewers' | 'editGroups' | 'viewGroups'
           >] = value;

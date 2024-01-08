@@ -87,7 +87,7 @@ export type ActionInput = {
 export type DataSeriesDataFields = Omit<
   DataSeries,
   'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
-  'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId'
+  'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId' | 'goalId'
 >;
 
 let dataFields: (keyof DataSeriesDataFields)[] = []

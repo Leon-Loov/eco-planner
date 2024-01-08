@@ -122,28 +122,27 @@ model Goal {
   // but it's probably better to just check if it has a relation to any national roadmap if we want to know that
 
   // A series of datapoints for the goal
-  dataSeriesId String?     @map("data_series_id")
-  dataSeries   DataSeries? @relation("data_series", fields: [dataSeriesId], references: [id])
+  dataSeries DataSeries? @relation("data_series")
   // Links related to this goal
-  links        Link[]      @relation("goal_link")
+  links      Link[]      @relation("goal_link")
   // Comments related to this goal
-  comments     Comment[]   @relation("goal_comment")
+  comments   Comment[]   @relation("goal_comment")
   // The person who created this goal (implicitly allowed to edit)
-  authorId     String      @map("author_id")
-  author       User        @relation("goal_author", fields: [authorId], references: [id])
+  authorId   String      @map("author_id")
+  author     User        @relation("goal_author", fields: [authorId], references: [id])
   // Specific users who are allowed to edit this goal
-  editors      User[]      @relation("goal_editors")
+  editors    User[]      @relation("goal_editors")
   // Groups of users who are allowed to edit this goal
-  editGroups   UserGroup[] @relation("goal_edit_groups")
+  editGroups UserGroup[] @relation("goal_edit_groups")
   // Specific users who are allowed to view this goal
-  viewers      User[]      @relation("goal_viewers")
+  viewers    User[]      @relation("goal_viewers")
   // Groups of users who are allowed to view this goal
-  viewGroups   UserGroup[] @relation("goal_view_groups")
+  viewGroups UserGroup[] @relation("goal_view_groups")
   // Child Actions
-  actions      Action[]    @relation("action_goal")
+  actions    Action[]    @relation("action_goal")
   // Parent Roadmap
-  roadmapId    String      @map("roadmap_id")
-  roadmap      Roadmap     @relation("roadmap_goal", fields: [roadmapId], references: [id])
+  roadmapId  String      @map("roadmap_id")
+  roadmap    Roadmap     @relation("roadmap_goal", fields: [roadmapId], references: [id])
 
   @@map("goal")
 }
@@ -194,8 +193,9 @@ model DataSeries {
   val2049 Float?  @map("val_2049")
   val2050 Float?  @map("val_2050")
 
-  // Golas that use this data series
-  goals      Goal[]      @relation("data_series")
+  // Goal that uses this data series
+  goalId     String      @unique @map("goal_id")
+  goal       Goal        @relation("data_series", fields: [goalId], references: [id], onDelete: Cascade)
   // Author of the data series
   authorId   String      @map("author_id")
   author     User        @relation("data_series_author", fields: [authorId], references: [id])

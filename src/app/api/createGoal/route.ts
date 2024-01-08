@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
   // This code also exists in src/app/api/createRoadmap/roadmapGoalCreator.ts, if one changes the other should be changed as well
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
+  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput = {
     author: { connect: { id: session.user.id } },
     unit: goal.dataUnit,
     scale: goal.dataScale,
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
         // This mess assures TypeScript that we are not trying to assign numbers to any of the
         // other fields in the dataSeries object.
         dataValues[key as keyof Omit<
-          Prisma.DataSeriesCreateWithoutGoalsInput,
+          Prisma.DataSeriesCreateWithoutGoalInput,
           'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
           'editors' | 'viewers' | 'editGroups' | 'viewGroups'
         >] = value;
@@ -262,7 +262,7 @@ export async function PUT(request: NextRequest) {
 
   // This code also exists in src/app/api/createRoadmap/roadmapGoalCreator.ts, if one changes the other should be changed as well
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
+  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput = {
     author: { connect: { id: session.user!.id } },
     unit: goal.dataUnit,
     scale: goal.dataScale,
@@ -282,7 +282,7 @@ export async function PUT(request: NextRequest) {
         // This mess assures TypeScript that we are not trying to assign numbers to any of the
         // other fields in the dataSeries object.
         dataValues[key as keyof Omit<
-          Prisma.DataSeriesCreateWithoutGoalsInput,
+          Prisma.DataSeriesCreateWithoutGoalInput,
           'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
           'editors' | 'viewers' | 'editGroups' | 'viewGroups'
         >] = value;

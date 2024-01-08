@@ -101,7 +101,7 @@ export default function GoalForm({
       // All keys in dataSeries containing numbers are part of the data series itself and should be fine to push to the array
       if (i.match(/[0-9]+/)) {
         // This line *should* start complaining if we add any keys to DataSeries that are not part of the data series, unless the value is a number
-        dataArray.push(currentGoal.dataSeries[i as keyof Omit<DataSeries, 'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' | 'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId'>])
+        dataArray.push(currentGoal.dataSeries[i as keyof Omit<DataSeries, 'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' | 'editors' | 'viewers' | 'editGroups' | 'viewGroups' | 'authorId' | 'goalId'>])
       }
     }
   }
