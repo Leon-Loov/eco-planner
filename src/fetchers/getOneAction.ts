@@ -1,6 +1,6 @@
 import { getSessionData } from "@/lib/session";
 import prisma from "@/prismaClient";
-import { Action, Link, Notes, Comment } from "@prisma/client";
+import { Action, Link, Note, Comment } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -27,7 +27,7 @@ const getCachedAction = unstable_cache(
     const session = await getSessionData(cookies());
 
     let action: Action & {
-      notes: Notes[],
+      notes: Note[],
       links: Link[],
       comments?: (Comment & { author: { id: string, username: string } })[],
       goal: { id: string, name: string | null, indicatorParameter: string },
