@@ -4,55 +4,54 @@
     margin: none;
     background-color: transparent;
     border: none;
-    border-radius: 3px;
-    cursor: pointer;
+    border-radius: 9999px;
     transition: background-color .2s;
     margin: auto;
     position: relative;
 }
 
-.actionButton:hover, .actionButton:has(input[type="radio"]:focus) {
+.actionButton > button:hover {
     background-color: var(--gray-90);
 }
 
-.actionButton > input[type="radio"] {
+.button {
+    background-color: transparent;
+    border-radius: 9999px;
+    border: none;
+    padding: .5rem;
     cursor: pointer;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    opacity: 0;
-    left: 0;
-    top: 0;
-    margin: 0;
+    display: flex;
+    align-items: center;
 }
 
-.actionButton > input[type="radio"]:checked ~ .menu {
-    display: block;
+.button:hover {
+    background-color: var(--gray-90);
 }
 
 /* Menu */
 
 .menu {
-    display: none;
     position: absolute;
     right: 100%;
     top: 50%;
     transform: translate(0, -50%);
     background-color: #fefefe;
-    border-radius: 3px;
+    border-radius: 1px;
     box-shadow: 0 0 .5rem var(--gray-90);
 }
 
-.menu .menuAction:first-child {
-    border-radius: 3px 3px 0 0;
+.menuHeading {
+    padding: .5rem;
+    border-bottom: 2px solid var(--gray-90);
+    width: 100%;
 }
 
 .menu .menuAction {
     display: flex;
-    gap: .5rem;
+    gap: 1rem;
     align-items: center;
     white-space: nowrap;
-    padding: 1rem;
+    padding: 1rem .5rem;
     margin: 0;
     color: black;
     text-decoration: none;

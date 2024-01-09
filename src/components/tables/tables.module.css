@@ -94,7 +94,6 @@ ul > li:nth-child(1) > .link {
     table-layout: auto;
     width: 100%;
     text-align: left;
-    overflow: hidden;
     border-collapse: collapse;
     border-spacing: 0;
     background-color: var(--gray-90);
