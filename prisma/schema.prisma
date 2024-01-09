@@ -83,6 +83,7 @@ model Roadmap {
   // The version of the roadmap, ONLY USED FOR META ROADMAPS
   version             Int?         @default(1)
 
+  // A roadmap may be related to either a parent roadmap or a meta roadmap (or neither), but not both
   // Parent roadmap
   parentRoadmapId    String?      @map("parent_roadmap_id")
   parentRoadmap      Roadmap?     @relation("roadmap_parent", fields: [parentRoadmapId], references: [id], onDelete: SetNull)
@@ -93,7 +94,7 @@ model Roadmap {
   metaRoadmapId      String?      @map("meta_roadmap_id")
   metaRoadmap        MetaRoadmap? @relation("meta_roadmap", fields: [metaRoadmapId], references: [id], onDelete: SetNull)
   // Specific version of the meta roadmap this roadmap refers to (if any)
-  // If NULL, zero/negative, or larger than the number of versions, use the latest version
+  // If NULL, zero/negative, or larger than the number of versions, use the latest version available
   metaRoadmapVersion Int?         @map("meta_roadmap_version")
 
   // Comments related to this roadmap
