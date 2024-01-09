@@ -37,6 +37,12 @@ model Roadmap {
   // The municipality the roadmap targets (if local)
   municipality String? @map("municipality")
 
+  // Parent roadmap
+  parentRoadmapId String?   @map("parent_roadmap_id")
+  parentRoadmap   Roadmap?  @relation("roadmap_parent", fields: [parentRoadmapId], references: [id], onDelete: SetNull)
+  // Child roadmaps
+  childRoadmaps   Roadmap[] @relation("roadmap_parent")
+
   // Comments related to this roadmap
   comments   Comment[]   @relation("roadmap_comment")
   // Goals related to this roadmap
