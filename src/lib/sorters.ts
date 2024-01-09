@@ -1,33 +1,27 @@
-import { Action, Comment, Goal, Roadmap } from "@prisma/client";
+import { Action, Comment, Goal, Roadmap, RoadmapType } from "@prisma/client";
 
 // Used for alphabetical sorting, we use Swedish locale and ignore case, but it can be changed here
-const collator = new Intl.Collator('se', { numeric: true, sensitivity: 'accent' });
+const collator = new Intl.Collator('se', { numeric: true, sensitivity: 'accent', caseFirst: 'upper' });
 
 /**
  * Sorts roadmaps by type (national first), then alphabetically by name
  */
 export function roadmapSorter(a: Roadmap, b: Roadmap) {
-  switch (a.type) {
-    case 'NATIONAL':
-      if (b.type === 'NATIONAL') {
-        return collator.compare(a.name, b.name);
-      }
-      return -1;
-    case 'REGIONAL':
-      if (b.type === 'REGIONAL') {
-        return collator.compare(a.name, b.name);
-      }
-      return b.type === 'NATIONAL' ? 1 : -1;
-    case 'LOCAL':
-      if (b.type === 'LOCAL') {
-        return collator.compare(a.name, b.name);
-      }
-      return (b.type === 'NATIONAL' || b.type === 'REGIONAL') ? 1 : -1;
-    default:
-      if (b.type === 'NATIONAL' || b.type === 'REGIONAL' || b.type === 'LOCAL') {
-        return 1;
-      }
-      return collator.compare(a.name, b.name);
+  // Higher priority roadmaps are first in the values array, so we reverse it to
+  // account for the fact that indexOf() returns -1 if the element is not found, which
+  // should be considered lower priority than any other index
+  let values = Object.values(RoadmapType);
+  values.reverse();
+  const aIndex = values.indexOf(a.type);
+  const bIndex = values.indexOf(b.type);
+  // Larger index means higher priority (closer to national level)
+  // Negative return values are placed before positive ones in the sorted array
+  if (aIndex > bIndex) {
+    return -1;
+  } else if (aIndex < bIndex) {
+    return 1;
+  } else {
+    return collator.compare(a.name, b.name);
   }
 }
 
