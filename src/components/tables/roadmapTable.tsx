@@ -15,37 +15,38 @@ export default function RoadmapTable({
   user: Data['user']
 }) {
   return <>
-      <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>
-        <h2>{title}</h2>
-        <div>
-          { // Only show the new roadmap button if the user is logged in
-            user &&
-            <> 
-              <Link className={`${styles.newRoadmap} display-flex gap-50`} href='./roadmap/createRoadmap'>
-                Skapa Färdplan
-                <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new roadmap"></Image>
-              </Link>
-            </>
-          }  
-        </div>
+    <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>
+      <h2>{title}</h2>
+      <div>
+        { // Only show the new roadmap button if the user is logged in
+          user &&
+          <>
+            <Link className={`${styles.newRoadmap} display-flex gap-50`} href='./roadmap/createRoadmap'>
+              Skapa Färdplan
+              <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new roadmap"></Image>
+            </Link>
+          </>
+        }
       </div>
+    </div>
+    <div className={styles.tableWrapper}>
       <table className={styles.table}>
         <thead>
           <tr>
             <th>Namn</th>
-            <th style={{textAlign: 'center'}}>Antal målbanor</th>
-            <th style={{textAlign: 'center'}}>Redigera</th>
+            <th style={{ textAlign: 'center' }}>Antal målbanor</th>
+            <th style={{ textAlign: 'center' }}>Redigera</th>
           </tr>
         </thead>
         <tbody>
           {roadmaps.map(roadmap => (
             <tr key={roadmap.id}>
               <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
-              <td style={{textAlign: 'center'}}>{roadmap._count.goals}</td>
-              <td>                  
-                <RoadmapActionButton 
-                  addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`} 
-                  editHref={`/roadmap/${roadmap.id}/editRoadmap`} 
+              <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
+              <td>
+                <RoadmapActionButton
+                  addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
+                  editHref={`/roadmap/${roadmap.id}/editRoadmap`}
                   id={roadmap.id}
                   tableName={roadmap.name}
                 />
@@ -54,5 +55,6 @@ export default function RoadmapTable({
           ))}
         </tbody>
       </table>
+    </div>
   </>
 }

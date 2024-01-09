@@ -60,7 +60,6 @@ export function RoadmapActionButton(
                 </Link> 
               */}
             </nav>
-            <div className={styles.backdrop} onClick={openMenu}></div>
           </>
           : null }
       </div>

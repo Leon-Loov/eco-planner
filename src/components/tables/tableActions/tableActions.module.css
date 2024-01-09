@@ -74,14 +74,3 @@
 .menu .menuAction:hover {
     background-color: var(--gray-90);
 }
-
-/* Backdrop */
-
-.backdrop {
-    position: fixed;
-    width: 100%;
-    height: 100dvh;
-    top: 0;
-    left: 0;
-    z-index: 9998;
-}
