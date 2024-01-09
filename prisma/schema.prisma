@@ -13,7 +13,9 @@ datasource db {
 enum RoadmapType {
   NATIONAL
   REGIONAL
+  MUNICIPAL
   LOCAL
+  OTHER
 }
 
 model Roadmap {
@@ -28,7 +30,7 @@ model Roadmap {
   // Optional description of roadmap
   description String?     @db.Text
   // The type of roadmap, for example national, regional, or local
-  type        RoadmapType
+  type        RoadmapType @default(OTHER)
 
   // The county the roadmap targets (if local)
   county       String? @map("county")
