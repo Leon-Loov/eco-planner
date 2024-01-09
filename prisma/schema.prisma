@@ -203,7 +203,7 @@ model Action {
   isRenewables  Boolean @default(false) @map("is_renewables")
 
   // Notes related to this action
-  notes      Notes[]     @relation("action_notes")
+  notes      Note[]      @relation("action_notes")
   // Links related to this action
   links      Link[]      @relation("action_link")
   // Comments related to this action
@@ -227,7 +227,7 @@ model Action {
 }
 
 // This should have been called "Note", but I guess I misnamed it. Don't want to change it now though.
-model Notes {
+model Note {
   // UUID of the note
   id        String   @id @default(uuid())
   // Timestamp of when note was created
@@ -244,7 +244,7 @@ model Notes {
   authorId String @map("author_id")
   author   User   @relation("note_author", fields: [authorId], references: [id])
 
-  @@map("notes")
+  @@map("note")
 }
 
 // Links are used to link to external resources, such as websites, documents, etc.
@@ -320,7 +320,7 @@ model User {
   // Data series the user created
   authoredData     DataSeries[] @relation("data_series_author")
   // Notes the user created
-  authoredNotes    Notes[]      @relation("note_author")
+  authoredNotes    Note[]       @relation("note_author")
   // Comments the user created
   authoredComments Comment[]    @relation("comment_author")
   // Actions the user is explicitly allowed to edit
