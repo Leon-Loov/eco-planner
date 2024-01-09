@@ -15,7 +15,7 @@ export function roadmapSorter(a: Roadmap, b: Roadmap) {
   const aIndex = values.indexOf(a.type);
   const bIndex = values.indexOf(b.type);
   // Larger index means higher priority (closer to national level)
-  // Negative return values are placed before positive ones in the sorted array
+  // Negative return values means a is placed before b in the sorted array
   if (aIndex > bIndex) {
     return -1;
   } else if (aIndex < bIndex) {
