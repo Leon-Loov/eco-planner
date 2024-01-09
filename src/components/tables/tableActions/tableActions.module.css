@@ -49,6 +49,12 @@
     border-radius: 3px 3px 0 0;
 }
 
+.menuHeadingTitle {
+    color: initial;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .menu .menuAction {
     display: flex;
     gap: 3rem;

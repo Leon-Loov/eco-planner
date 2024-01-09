@@ -40,7 +40,7 @@ export function RoadmapActionButton(
           <>
             <nav className={styles.menu} id={`${id}-menu`}>
               <div className={`display-flex align-items-center justify-content-space-between ${styles.menuHeading}`}>
-                <strong>{tableName}</strong>
+              <Link href={`/roadmap/${id}`} className={styles.menuHeadingTitle}>{tableName}</Link>
                 <button onClick={openMenu} className={styles.button} >
                   <Image src='/icons/close.svg' alt="" width={18} height={18} />
                 </button>
