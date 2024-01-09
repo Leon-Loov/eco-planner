@@ -1,7 +1,7 @@
 import { Action, Comment, Goal, Roadmap, RoadmapType } from "@prisma/client";
 
 // Used for alphabetical sorting, we use Swedish locale and ignore case, but it can be changed here
-const collator = new Intl.Collator('se', { numeric: true, sensitivity: 'accent', caseFirst: 'upper' });
+const collator = new Intl.Collator('sv', { numeric: true, sensitivity: 'accent', caseFirst: 'upper' });
 
 /**
  * Sorts roadmaps by type (national first), then alphabetically by name
