@@ -258,6 +258,9 @@ model Link {
   description String?
 
   // A link should be related to either an action or a goal, not both; if both, create two links
+  // Has to be enforced through custom SQL migration, as Prisma does not support this
+  // https://github.com/prisma/prisma/discussions/21214
+  // For MariaDB, see: https://mariadb.com/kb/en/constraint/#check-constraints
   // Any action this link is related to
   actionId String? @map("action_id")
   action   Action? @relation("action_link", fields: [actionId], references: [id], onDelete: Cascade)
@@ -284,6 +287,9 @@ model Comment {
   authorId  String   @map("author_id")
   author    User     @relation("comment_author", fields: [authorId], references: [id])
   // A comment should be related to either an action, a goal, or a roadmap.
+  // Has to be enforced through custom SQL migration, as Prisma does not support this
+  // https://github.com/prisma/prisma/discussions/21214
+  // For MariaDB, see: https://mariadb.com/kb/en/constraint/#check-constraints
   // Any action this comment is related to
   actionId  String?  @map("action_id")
   action    Action?  @relation("action_comment", fields: [actionId], references: [id], onDelete: Cascade)
