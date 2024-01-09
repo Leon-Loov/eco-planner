@@ -38,18 +38,22 @@
     background-color: #fefefe;
     border-radius: 1px;
     box-shadow: 0 0 .5rem var(--gray-90);
+    border-radius: 3px;
+    z-index: 9999;
 }
 
 .menuHeading {
     padding: .5rem;
     border-bottom: 2px solid var(--gray-90);
     width: 100%;
+    border-radius: 3px 3px 0 0;
 }
 
 .menu .menuAction {
     display: flex;
-    gap: 1rem;
+    gap: 3rem;
     align-items: center;
+    justify-content: space-between;
     white-space: nowrap;
     padding: 1rem .5rem;
     margin: 0;
@@ -57,10 +61,21 @@
     text-decoration: none;
 }
 
-.menu .menuAction:last-child {
+.menuAction:last-child {
     border-radius: 0 0 3px 3px;
 }
 
 .menu .menuAction:hover {
     background-color: var(--gray-90);
+}
+
+/* Backdrop */
+
+.backdrop {
+    position: fixed;
+    width: 100%;
+    height: 100dvh;
+    top: 0;
+    left: 0;
+    z-index: 9998;
 }

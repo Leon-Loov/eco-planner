@@ -46,7 +46,8 @@ export default function RoadmapTable({
                 <RoadmapActionButton 
                   addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`} 
                   editHref={`/roadmap/${roadmap.id}/editRoadmap`} 
-                  roadmapName={roadmap.name} 
+                  id={roadmap.id}
+                  tableName={roadmap.name}
                 />
               </td>
             </tr>

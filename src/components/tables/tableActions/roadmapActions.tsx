@@ -12,10 +12,12 @@ export function RoadmapActionButton(
     addGoalHref,
     editHref,
     id,
+    tableName,
   }: {
     addGoalHref: string,
     editHref: string,
-    id: string
+    id: string,
+    tableName: string,
   }) {
 
   const [menu, setMenu] = useState(false)
@@ -35,24 +37,32 @@ export function RoadmapActionButton(
           <Image src='/icons/dotsVertical.svg' width={24} height={24} alt=""></Image>
         </button> {/* Button should open menu */}
         {menu ?
-          <nav className={styles.menu} id={`${id}-menu`}>
-            <div className={`display-flex align-items-center justify-content-space-between ${styles.menuHeading}`}>
-              <strong>Redigera</strong>
-              <button onClick={openMenu} className={styles.button} >
-                <Image src='/icons/close.svg' alt="" width={18} height={18} />
-              </button>
-            </div>
-            <Link href={addGoalHref} className={styles.menuAction}>
-              <span>Lägg till målbana</span> 
-              <Image src='/icons/plus-light.svg' alt="" width={24} height={24} />
-            </Link>
-            <Link href={editHref} className={styles.menuAction}>
-              <span>Redigera färdplan</span>
-              <Image src='/icons/edit.svg' alt="" width={24} height={24} />
-            </Link>
-            {/* <p>Ta bort färdplan</p> */}
-          </nav>
-        : null }
+          <>
+            <nav className={styles.menu} id={`${id}-menu`}>
+              <div className={`display-flex align-items-center justify-content-space-between ${styles.menuHeading}`}>
+                <strong>{tableName}</strong>
+                <button onClick={openMenu} className={styles.button} >
+                  <Image src='/icons/close.svg' alt="" width={18} height={18} />
+                </button>
+              </div>
+              <Link href={addGoalHref} className={styles.menuAction}>
+                <span>Ny målbana</span> 
+                <Image src='/icons/plus-light.svg' alt="" width={24} height={24} className={styles.actionImage} />
+              </Link>
+              <Link href={editHref} className={styles.menuAction}>
+                <span>Redigera färdplan</span>
+                <Image src='/icons/edit.svg' alt="" width={24} height={24} className={styles.actionImage} />
+              </Link>
+              {/*
+                <Link href={editHref} className={styles.menuAction}>
+                  <span>Radera färdplan</span>
+                  <Image src='/icons/delete.svg' alt="" width={24} height={24} className={styles.actionImage} />
+                </Link> 
+              */}
+            </nav>
+            <div className={styles.backdrop} onClick={openMenu}></div>
+          </>
+          : null }
       </div>
     </>
   )
