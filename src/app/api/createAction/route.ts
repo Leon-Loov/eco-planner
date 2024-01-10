@@ -1,9 +1,10 @@
 import { NextRequest } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
-import { AccessLevel, ActionInput } from "@/types";
+import { AccessControlled, AccessLevel, ActionInput } from "@/types";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -20,6 +21,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // TODO: Make sure user has access to the parent goal (declared in goal's parent roadmap)
   if (!action.goalId) {
     return createResponse(
       response,
@@ -35,27 +37,6 @@ export async function POST(request: NextRequest) {
       JSON.stringify({ message: 'Unauthorized' }),
       { status: 401 }
     );
-  }
-
-  // Create lists of names for linking
-  let editors: { username: string }[] = [];
-  for (let name of action.editors || []) {
-    editors.push({ username: name });
-  }
-
-  let viewers: { username: string }[] = [];
-  for (let name of action.viewers || []) {
-    viewers.push({ username: name });
-  }
-
-  let editGroups: { name: string }[] = [];
-  for (let name of action.editGroups || []) {
-    editGroups.push({ name: name });
-  }
-
-  let viewGroups: { name: string }[] = [];
-  for (let name of action.viewGroups || []) {
-    viewGroups.push({ name: name });
   }
 
   // Create the action
@@ -81,6 +62,7 @@ export async function POST(request: NextRequest) {
             }
           })
         },
+        // TODO: Add `Note`s
         goal: {
           connect: { id: action.goalId }
         },
@@ -89,10 +71,6 @@ export async function POST(request: NextRequest) {
             id: session.user.id
           }
         },
-        editors: { connect: editors },
-        viewers: { connect: viewers },
-        editGroups: { connect: editGroups },
-        viewGroups: { connect: viewGroups },
       }
     });
     // Invalidate old cache
@@ -151,13 +129,33 @@ export async function PUT(request: NextRequest) {
       where: { id: action.actionId },
       include: {
         author: { select: { id: true, username: true } },
-        editors: { select: { id: true, username: true } },
-        viewers: { select: { id: true, username: true } },
-        editGroups: { include: { users: { select: { id: true, username: true } } } },
-        viewGroups: { include: { users: { select: { id: true, username: true } } } },
+        goal: {
+          select: {
+            roadmap: {
+              select: {
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              }
+            }
+          }
+        },
       }
     });
-    accessLevel = accessChecker(currentAction!, session.user)
+
+    if (!currentAction) {
+      throw new Error(accessDenied, { cause: 'action' });
+    }
+
+    let accessFields: AccessControlled = {
+      author: currentAction.author,
+      editors: currentAction.goal.roadmap.editors,
+      viewers: currentAction.goal.roadmap.viewers,
+      editGroups: currentAction.goal.roadmap.editGroups,
+      viewGroups: currentAction.goal.roadmap.viewGroups,
+    }
+    accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
       throw new Error(accessDenied, { cause: 'action' });
     }
@@ -179,27 +177,6 @@ export async function PUT(request: NextRequest) {
       JSON.stringify({ message: accessDenied }),
       { status: 403 }
     );
-  }
-
-  // Create lists of names for linking
-  let editors: { username: string }[] = [];
-  for (let name of action.editors || []) {
-    editors.push({ username: name });
-  }
-
-  let viewers: { username: string }[] = [];
-  for (let name of action.viewers || []) {
-    viewers.push({ username: name });
-  }
-
-  let editGroups: { name: string }[] = [];
-  for (let name of action.editGroups || []) {
-    editGroups.push({ name: name });
-  }
-
-  let viewGroups: { name: string }[] = [];
-  for (let name of action.viewGroups || []) {
-    viewGroups.push({ name: name });
   }
 
   // Update the action
@@ -229,10 +206,6 @@ export async function PUT(request: NextRequest) {
             }
           })
         },
-        editors: { set: editors },
-        viewers: { set: viewers },
-        editGroups: { set: editGroups },
-        viewGroups: { set: viewGroups },
       }
     });
     // Invalidate old cache
@@ -258,4 +231,11 @@ export async function PUT(request: NextRequest) {
       { status: 500 }
     );
   }
+
+  // If we get here, something went wrong
+  return createResponse(
+    response,
+    JSON.stringify({ message: "Internal server error" }),
+    { status: 500 }
+  );
 }
