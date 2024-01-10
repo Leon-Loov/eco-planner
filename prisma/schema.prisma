@@ -120,10 +120,6 @@ model Goal {
   name               String?
   // Longer description of goal
   description        String? @db.Text
-  // The ID of the national roadmap this goal is related to
-  nationalRoadmapId  String? @map("national_roadmap_id")
-  // The ID of the national goal this goal is related to
-  nationalGoalId     String? @map("national_goal_id")
   // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas", as defined by LEAP
   indicatorParameter String  @map("indicator_parameter") @db.Text
 
