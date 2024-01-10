@@ -280,9 +280,8 @@ model Link {
   description String?
 
   // A link should be related to either an action, a goal, XOR a meta roadmap.
-  // Has to be enforced through custom SQL migration, as Prisma does not support this
-  // https://github.com/prisma/prisma/discussions/21214
-  // For MariaDB, see: https://mariadb.com/kb/en/constraint/#check-constraints
+  // Has to be enforced in the code, as prisma does not support custom constraints and many SQL implementations
+  // do not support check constraints on columns with referential actions.
   // Any action this link is related to
   actionId      String?      @map("action_id")
   action        Action?      @relation("action_link", fields: [actionId], references: [id], onDelete: Cascade)
@@ -313,9 +312,8 @@ model Comment {
   author   User   @relation("comment_author", fields: [authorId], references: [id])
 
   // A comment should be related to either an action, a goal, a roadmap, XOR a meta roadmap.
-  // Has to be enforced through custom SQL migration, as Prisma does not support this
-  // https://github.com/prisma/prisma/discussions/21214
-  // For MariaDB, see: https://mariadb.com/kb/en/constraint/#check-constraints
+  // Has to be enforced in the code, as prisma does not support custom constraints and many SQL implementations
+  // do not support check constraints on columns with referential actions.
   // Any action this comment is related to
   actionId      String?      @map("action_id")
   action        Action?      @relation("action_comment", fields: [actionId], references: [id], onDelete: Cascade)
