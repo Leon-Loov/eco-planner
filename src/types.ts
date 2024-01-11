@@ -33,31 +33,19 @@ export type RoadmapInput = {
 }
 
 /** The format of the data needed to create a new goal. */
-export type GoalInput = {
-  name?: string | undefined;
-  description?: string | undefined;
-  // IDs are UUIDs and thus strings, not numbers
-  nationalRoadmapId?: string | undefined;
-  nationalGoalId?: string | undefined;
-  indicatorParameter: string;
+export type GoalInput = Omit<
+  Prisma.GoalCreateInput,
+  'id' | 'createdAt' | 'updatedAt' | 'roadmap' | 'author' | 'dataSeries' | 'links' | 'comments' | 'actions'
+> & {
   // This will be turned into an actual dataSeries object by the API
   // The expected input is a stringified array of floats
   dataSeries: string[];
-  // The unit of measurement for the data series, used when creating a new data series
+  // The unit of measurement for the data series
   dataUnit: string;
   dataScale?: string | undefined;
-  // In case the user wants to reference an existing data series instead of creating a new one
-  // If both dataSeries and dataSeriesId are provided, dataSeriesId takes precedence
-  // Currently disabled
-  // dataSeriesId: string | undefined;
   links?: { url: string, description?: string }[] | undefined;
   // UUID for the roadmap this goal belongs to
   roadmapId: string;
-  // Accepts lists of UUIDs for all of the following, to link them to the goal (optional)
-  editors?: string[] | undefined;
-  viewers?: string[] | undefined;
-  editGroups?: string[] | undefined;
-  viewGroups?: string[] | undefined;
 };
 
 /** The format of the data needed to create a new action. */
@@ -68,7 +56,7 @@ export type ActionInput = Omit<
   links?: { url: string, description?: string }[] | undefined;
   // UUID for the goal this action belongs to
   goalId: string;
-}
+};
 
 /** A type with only the data fields of the data series object. Not dynamic, so might need to be updated if the data series object changes. */
 export type DataSeriesDataFields = Omit<
@@ -80,6 +68,6 @@ export type DataSeriesDataFields = Omit<
 let dataFields: (keyof DataSeriesDataFields)[] = []
 for (let i = 2020; i <= 2050; i++) {
   dataFields.push(`val${i}` as keyof DataSeriesDataFields)
-}
+};
 /** An array containing the keys of the actual data fields in the data series object. Not dynamic, so might need to be updated if the data series object changes. */
 export const dataSeriesDataFieldNames = dataFields;
