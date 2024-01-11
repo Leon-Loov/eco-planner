@@ -7,7 +7,10 @@ import { Data } from "./session";
  * @param user The user object from the session
  * @returns A string representing the user's access level to the item; "", "VIEW", "EDIT", or "ADMIN", based on the `AccessLevel` enum
  */
-export default function accessChecker(item: AccessControlled, user: Data["user"]): AccessLevel {
+export default function accessChecker(item: AccessControlled | null | undefined, user: Data["user"]): AccessLevel {
+  // If the item is null or undefined, return no access
+  if (!item) return AccessLevel.None;
+
   // User is not signed in
   if (!user) {
     if (item.viewGroups?.map(group => group.name).includes("Public")) return AccessLevel.View;

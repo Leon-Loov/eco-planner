@@ -1,124 +1,111 @@
 import { NextRequest } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { createResponse, getSession } from "@/lib/session";
+import { AccessLevel, MetaRoadmapInput } from "@/types";
+import { RoadmapType } from "@prisma/client";
 import prisma from "@/prismaClient";
-import { AccessLevel, GoalInput, RoadmapInput } from "@/types";
-import roadmapGoalCreator from "./roadmapGoalCreator";
-import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
-import goalInputFromRoadmap from "@/functions/goalInputFromRoadmap.ts";
-import getOneRoadmap from "@/fetchers/getOneRoadmap";
+import accessChecker from "@/lib/accessChecker";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let roadmap: RoadmapInput & { goals?: GoalInput[] } = await request.json();
+  let metaRoadmap: MetaRoadmapInput = await request.json();
 
   // Validate request body
-  if (!roadmap.version || !roadmap.metaRoadmapId) {
-    return createResponse(
-      response,
+  if (!metaRoadmap.name || !metaRoadmap.description) {
+    return new Response(
       JSON.stringify({ message: 'Missing required input parameters' }),
       { status: 400 }
     );
   }
 
+  // If given roadmap type is invalid, set it to OTHER
+  if (!Object.values(RoadmapType).includes(metaRoadmap.type!)) {
+    metaRoadmap.type = RoadmapType.OTHER;
+  }
+
   // Validate session
   if (!session.user?.isLoggedIn) {
-    return createResponse(
-      response,
+    return new Response(
       JSON.stringify({ message: 'Unauthorized' }),
       { status: 401 }
     );
   }
 
-  // If a parent roadmap is defined to be inherited from, append its goals to the new roadmap's goals
-  if (roadmap.inheritFromId) {
-    try {
-      const parentRoadmap = await getOneRoadmap(roadmap.inheritFromId);
-      if (parentRoadmap) {
-        roadmap.goals = [...(roadmap.goals || []), ...goalInputFromRoadmap(parentRoadmap)];
-      }
-    } catch (e) {
-      console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to fetch parent roadmap' }),
-        { status: 400 }
-      );
-    }
+  // Only allow admins to create national roadmaps
+  if (metaRoadmap.type == RoadmapType.NATIONAL && !session.user.isAdmin) {
+    return new Response(
+      JSON.stringify({ message: 'Forbidden; only admins can create national roadmaps' }),
+      { status: 403 }
+    );
   }
 
   // Create lists of names for linking
   let editors: { username: string }[] = [];
-  for (let name of roadmap.editors || []) {
+  for (let name of metaRoadmap.editors || []) {
     editors.push({ username: name });
   }
 
   let viewers: { username: string }[] = [];
-  for (let name of roadmap.viewers || []) {
+  for (let name of metaRoadmap.viewers || []) {
     viewers.push({ username: name });
   }
 
   let editGroups: { name: string }[] = [];
-  for (let name of roadmap.editGroups || []) {
+  for (let name of metaRoadmap.editGroups || []) {
     editGroups.push({ name: name });
   }
 
   let viewGroups: { name: string }[] = [];
-  for (let name of roadmap.viewGroups || []) {
+  for (let name of metaRoadmap.viewGroups || []) {
     viewGroups.push({ name: name });
   }
 
-  // Create the roadmap
+  // Create the new meta roadmap
   try {
-    let newRoadmap = await prisma.roadmap.create({
+    const newMetaRoadmap = await prisma.metaRoadmap.create({
       data: {
-        description: roadmap.description,
-        version: roadmap.version,
-        targetVersion: roadmap.targetVersion,
+        name: metaRoadmap.name,
+        description: metaRoadmap.description,
+        type: metaRoadmap.type,
+        actor: metaRoadmap.actor,
+        parentRoadmap: metaRoadmap.parentRoadmapId ? { connect: { id: metaRoadmap.parentRoadmapId } } : undefined,
+        links: {
+          create: metaRoadmap.links?.map(link => {
+            return {
+              url: link.url,
+              description: link.description || undefined,
+            }
+          })
+        },
         author: { connect: { id: session.user.id } },
         editors: { connect: editors },
         viewers: { connect: viewers },
         editGroups: { connect: editGroups },
         viewGroups: { connect: viewGroups },
-        metaRoadmap: { connect: { id: roadmap.metaRoadmapId } },
-        goals: {
-          create: roadmapGoalCreator(roadmap, session.user.id),
-        },
-      },
+      }
     });
     // Invalidate old cache
     revalidateTag('roadmap');
-    // Return the new roadmap's ID if successful
+    // Return the new meta roadmap's ID if successful
     return createResponse(
       response,
-      JSON.stringify({ message: "Roadmap created", id: newRoadmap.id }),
+      JSON.stringify({ message: "Roadmap metadata created", id: newMetaRoadmap.id }),
       { status: 200 }
     );
   } catch (e: any) {
     console.log(e);
-    // Custom error if there are errors in the nested goal creation
-    if (e instanceof Error) {
-      e = e as Error
-      if (e.cause == 'nestedGoalCreation') {
-        return createResponse(
-          response,
-          JSON.stringify({ message: e.message }),
-          { status: 400 }
-        );
-      }
-    }
     if (e?.code == 'P2025') {
       return createResponse(
         response,
         JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
         { status: 400 }
-      );
+      )
     }
     return createResponse(
       response,
-      JSON.stringify({ message: "Internal server error" }),
+      JSON.stringify({ message: 'Failed to create roadmap metadata' }),
       { status: 500 }
     );
   }
@@ -126,7 +113,7 @@ export async function POST(request: NextRequest) {
   // If we get here, something went wrong
   return createResponse(
     response,
-    JSON.stringify({ message: "Internal server error" }),
+    JSON.stringify({ message: 'Internal server error' }),
     { status: 500 }
   );
 }
@@ -135,16 +122,19 @@ export async function PUT(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  // The version number is not allowed to be changed
-  let roadmap: Omit<RoadmapInput, 'version'> & { goals?: GoalInput[], roadmapId: string, timestamp?: number } = await request.json();
+  let metaRoadmap: MetaRoadmapInput & { id: string, timestamp?: number } = await request.json();
 
   // Validate request body
-  if (!roadmap.metaRoadmapId) {
-    return createResponse(
-      response,
+  if (!metaRoadmap.id || !metaRoadmap.name || !metaRoadmap.description) {
+    return new Response(
       JSON.stringify({ message: 'Missing required input parameters' }),
       { status: 400 }
     );
+  }
+
+  // If given roadmap type is invalid, set it to OTHER. If type is undefined leave it be; it wont update the existing value in the database
+  if (!Object.values(RoadmapType).includes(metaRoadmap.type!) && metaRoadmap.type !== undefined) {
+    metaRoadmap.type = RoadmapType.OTHER;
   }
 
   // Validate session
@@ -153,7 +143,7 @@ export async function PUT(request: NextRequest) {
   try {
     let access: AccessLevel = AccessLevel.None;
     let currentRoadmap = await prisma.roadmap.findUnique({
-      where: { id: roadmap.roadmapId },
+      where: { id: metaRoadmap.id },
       include: {
         author: { select: { id: true, username: true } },
         editors: { select: { id: true, username: true } },
@@ -167,7 +157,7 @@ export async function PUT(request: NextRequest) {
       throw new Error(accessDenied, { cause: 'roadmap' });
     }
 
-    if (!roadmap.timestamp || (currentRoadmap?.updatedAt?.getTime() || 0) > roadmap.timestamp) {
+    if (!metaRoadmap.timestamp || (currentRoadmap?.updatedAt?.getTime() || 0) > metaRoadmap.timestamp) {
       throw new Error(staleData, { cause: 'roadmap' });
     }
   } catch (e) {
@@ -186,75 +176,80 @@ export async function PUT(request: NextRequest) {
     );
   }
 
+  // Only allow admins to create national roadmaps
+  if (metaRoadmap.type == RoadmapType.NATIONAL && !session.user?.isAdmin) {
+    return new Response(
+      JSON.stringify({ message: 'Forbidden; only admins can create national roadmaps' }),
+      { status: 403 }
+    );
+  }
+
   // Create lists of names for linking
   let editors: { username: string }[] = [];
-  for (let name of roadmap.editors || []) {
+  for (let name of metaRoadmap.editors || []) {
     editors.push({ username: name });
   }
 
   let viewers: { username: string }[] = [];
-  for (let name of roadmap.viewers || []) {
+  for (let name of metaRoadmap.viewers || []) {
     viewers.push({ username: name });
   }
 
   let editGroups: { name: string }[] = [];
-  for (let name of roadmap.editGroups || []) {
+  for (let name of metaRoadmap.editGroups || []) {
     editGroups.push({ name: name });
   }
 
   let viewGroups: { name: string }[] = [];
-  for (let name of roadmap.viewGroups || []) {
+  for (let name of metaRoadmap.viewGroups || []) {
     viewGroups.push({ name: name });
   }
 
-  // Update the roadmap
+  // Update the meta roadmap
   try {
-    // Update roadmap, goals, and actions in a single transaction
-    const updatedRoadmap = await prisma.roadmap.update({
-      where: { id: roadmap.roadmapId },
+    const newMetaRoadmap = await prisma.metaRoadmap.update({
+      where: { id: metaRoadmap.id },
       data: {
-        description: roadmap.description,
-        targetVersion: roadmap.targetVersion,
+        name: metaRoadmap.name,
+        description: metaRoadmap.description,
+        type: metaRoadmap.type,
+        actor: metaRoadmap.actor,
+        parentRoadmap: metaRoadmap.parentRoadmapId ? { connect: { id: metaRoadmap.parentRoadmapId } } : undefined,
+        links: {
+          set: [],
+          create: metaRoadmap.links?.map(link => {
+            return {
+              url: link.url,
+              description: link.description || undefined,
+            }
+          })
+        },
         editors: { set: editors },
         viewers: { set: viewers },
         editGroups: { set: editGroups },
         viewGroups: { set: viewGroups },
-        goals: {
-          create: roadmapGoalCreator(roadmap, session.user!.id),
-        }
-      },
+      }
     });
     // Invalidate old cache
     revalidateTag('roadmap');
-    // Return the new roadmap's ID if successful
+    // Return the edited meta roadmap's ID if successful
     return createResponse(
       response,
-      JSON.stringify({ message: "Roadmap updated", id: updatedRoadmap.id }),
+      JSON.stringify({ message: "Roadmap metadata updated", id: newMetaRoadmap.id }),
       { status: 200 }
     );
   } catch (e: any) {
     console.log(e);
-    // Custom error if there are errors in the nested goal creation
-    if (e instanceof Error) {
-      e = e as Error
-      if (e.cause == 'nestedGoalCreation') {
-        return createResponse(
-          response,
-          JSON.stringify({ message: e.message }),
-          { status: 400 }
-        );
-      }
-    }
     if (e?.code == 'P2025') {
       return createResponse(
         response,
         JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
         { status: 400 }
-      );
+      )
     }
     return createResponse(
       response,
-      JSON.stringify({ message: "Internal server error" }),
+      JSON.stringify({ message: 'Failed to update roadmap metadata' }),
       { status: 500 }
     );
   }
@@ -262,7 +257,7 @@ export async function PUT(request: NextRequest) {
   // If we get here, something went wrong
   return createResponse(
     response,
-    JSON.stringify({ message: "Internal server error" }),
+    JSON.stringify({ message: 'Internal server error' }),
     { status: 500 }
   );
 }

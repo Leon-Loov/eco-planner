@@ -2,12 +2,8 @@ import { RoadmapInput, GoalInput } from "@/types";
 import { Prisma } from "@prisma/client";
 
 export default function roadmapGoalCreator(
-  roadmap: RoadmapInput & { goals?: GoalInput[]; },
+  roadmap: Omit<RoadmapInput, 'version'> & { goals?: GoalInput[]; },
   author: string,
-  editors: { username: string }[],
-  viewers: { username: string }[],
-  editGroups: { name: string }[],
-  viewGroups: { name: string }[],
 ) {
   if (!roadmap.goals?.length) {
     return undefined;
@@ -54,17 +50,11 @@ export default function roadmapGoalCreator(
     output.push({
       name: goal.name,
       description: goal.description,
-      nationalRoadmapId: goal.nationalRoadmapId,
-      nationalGoalId: goal.nationalGoalId,
       indicatorParameter: goal.indicatorParameter,
       dataSeries: {
         create: dataValues,
       },
       author: { connect: { id: author } },
-      editors: { connect: editors },
-      viewers: { connect: viewers },
-      editGroups: { connect: editGroups },
-      viewGroups: { connect: viewGroups },
     })
   });
 

@@ -7,7 +7,7 @@ export interface AccessControlled {
   viewers: { id: string, username: string }[],
   editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
   viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-}
+};
 
 /** Enum for the different access levels returned by the accessChecker function. */
 export enum AccessLevel {
@@ -15,22 +15,40 @@ export enum AccessLevel {
   View = "VIEW",
   Edit = "EDIT",
   Admin = "ADMIN",
-}
+};
 
-/** The format of the data needed to create a new roadmap. */
-export type RoadmapInput = {
-  name: string;
-  description?: string | undefined;
-  type: RoadmapType;
-  county?: string | undefined;
-  municipality?: string | undefined;
-  parentRoadmapId?: string | undefined;
+/** The format of the data needed to create new roadmap metadata. */
+export type MetaRoadmapInput = Omit<
+  Prisma.MetaRoadmapCreateInput,
+  'id' | 'createdAt' | 'updatedAt' | 'author' | 'editors' |
+  'viewers' | 'editGroups' | 'viewGroups' | 'comments' | 'links' |
+  'roadmapVersions' | 'parentRoadmap' | 'childRoadmaps'
+> & {
+  links?: { url: string, description?: string }[] | undefined;
   // Accepts lists of UUIDs for all of the following, to link them to the roadmap (optional)
   editors?: string[] | undefined;
   viewers?: string[] | undefined;
   editGroups?: string[] | undefined;
   viewGroups?: string[] | undefined;
-}
+  // UUID for the parent meta roadmap (if any)
+  parentRoadmapId?: string | undefined;
+};
+
+/** The format of the data needed to create a new roadmap version. */
+export type RoadmapInput = Omit<
+  Prisma.RoadmapCreateInput,
+  'id' | 'createdAt' | 'updatedAt' | 'goals' | 'author' | 'editors' |
+  'viewers' | 'editGroups' | 'viewGroups' | 'comments' | 'metaRoadmap'
+> & {
+  // Accepts lists of UUIDs for all of the following, to link them to the roadmap (optional)
+  editors?: string[] | undefined;
+  viewers?: string[] | undefined;
+  editGroups?: string[] | undefined;
+  viewGroups?: string[] | undefined;
+  // UUID for the meta roadmap this roadmap belongs to
+  metaRoadmapId: string;
+  inheritFromId?: string | undefined;
+};
 
 /** The format of the data needed to create a new goal. */
 export type GoalInput = Omit<
