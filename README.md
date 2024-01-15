@@ -13,8 +13,9 @@ This tool requires the following environment variables to be set:
 
 Now you should be able to run the app with `yarn dev` and access it at http://localhost:3000 or build it with `yarn build` and run it with `yarn start`.
 
-Please run `git update-index --skip-worktree src/lib/LEAPList.json` to prevent git from tracking changes to the LEAPList.json file as this file is regenerated every build.
-If you for some reason need to update the default LEAPList.json file, run `git update-index --no-skip-worktree src/lib/LEAPList.json` to allow git to track changes to the file again.
+Please run `git update-index --skip-worktree src/lib/LEAPList.json` and `git update-index --skip-worktree src/lib/dataSeriesDataFieldNames.json` to prevent git from tracking changes to the LEAPList.json and dataSeriesDataFieldNames.json file as these files are locally regenerated at build time.
+If you for some reason need to update the default version of either file, run `git update-index --no-skip-worktree FILEPATH` to allow git to track changes to the file again.
+
 The current server also skips tracking changes to the `next.config.mjs` file, so if you need to change the config, run `git update-index --no-skip-worktree next.config.mjs` on the server or update the file there manually.
 
 ## Backend notes
