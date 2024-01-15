@@ -4,10 +4,10 @@ import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
 /**
- * Gets names and ids of all roadmaps, goals, and actions. Mainly intended for breadcrumbs, but could be useful for other things too.
+ * Gets names and ids of all meta roadmaps, roadmaps, goals, and actions. Mainly intended for breadcrumbs, but could be useful for other things too.
  * 
  * Returns an empty array if user does not have access to any roadmaps. Also returns an empty array on error.
- * @returns Nested array of roadmaps, goals, and actions (just ids and names, plus indicator parameter for goals)
+ * @returns Nested array of meta roadmaps, roadmaps, goals, and actions (just ids and names, plus indicator parameter for goals, and a version rather than name for roadmaps)
  */
 export default async function getNames() {
   const session = await getSessionData(cookies());
@@ -26,13 +26,17 @@ const getCachedNames = unstable_cache(
     let names: {
       name: string,
       id: string,
-      goals: {
-        name: string | null,
-        indicatorParameter: string,
+      roadmapVersions: {
+        version: number,
         id: string,
-        actions: {
-          name: string,
+        goals: {
+          name: string | null,
+          indicatorParameter: string,
           id: string,
+          actions: {
+            name: string,
+            id: string,
+          }[],
         }[],
       }[],
     }[] = [];
@@ -40,19 +44,25 @@ const getCachedNames = unstable_cache(
     // If user is admin, get all roadmaps
     if (session.user?.isAdmin) {
       try {
-        names = await prisma.roadmap.findMany({
+        names = await prisma.metaRoadmap.findMany({
           select: {
             name: true,
             id: true,
-            goals: {
+            roadmapVersions: {
               select: {
-                name: true,
-                indicatorParameter: true,
+                version: true,
                 id: true,
-                actions: {
+                goals: {
                   select: {
                     name: true,
+                    indicatorParameter: true,
                     id: true,
+                    actions: {
+                      select: {
+                        name: true,
+                        id: true,
+                      },
+                    },
                   },
                 },
               },
@@ -72,7 +82,7 @@ const getCachedNames = unstable_cache(
     if (session.user?.isLoggedIn) {
       try {
         // Get all roadmaps authored by the user
-        names = await prisma.roadmap.findMany({
+        names = await prisma.metaRoadmap.findMany({
           where: {
             OR: [
               { authorId: session.user.id },
@@ -86,7 +96,7 @@ const getCachedNames = unstable_cache(
           select: {
             name: true,
             id: true,
-            goals: {
+            roadmapVersions: {
               where: {
                 OR: [
                   { authorId: session.user.id },
@@ -98,23 +108,19 @@ const getCachedNames = unstable_cache(
                 ]
               },
               select: {
-                name: true,
-                indicatorParameter: true,
+                version: true,
                 id: true,
-                actions: {
-                  where: {
-                    OR: [
-                      { authorId: session.user.id },
-                      { editors: { some: { id: session.user.id } } },
-                      { viewers: { some: { id: session.user.id } } },
-                      { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-                      { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-                      { viewGroups: { some: { name: 'Public' } } }
-                    ]
-                  },
+                goals: {
                   select: {
                     name: true,
+                    indicatorParameter: true,
                     id: true,
+                    actions: {
+                      select: {
+                        name: true,
+                        id: true,
+                      },
+                    },
                   },
                 },
               },
@@ -132,22 +138,31 @@ const getCachedNames = unstable_cache(
 
     // If user is not logged in, get all public roadmaps
     try {
-      names = await prisma.roadmap.findMany({
+      names = await prisma.metaRoadmap.findMany({
         where: { viewGroups: { some: { name: 'Public' } } },
         select: {
           name: true,
           id: true,
-          goals: {
-            where: { viewGroups: { some: { name: 'Public' } } },
+          roadmapVersions: {
+            where: {
+              OR: [
+                { viewGroups: { some: { name: 'Public' } } }
+              ]
+            },
             select: {
-              name: true,
-              indicatorParameter: true,
+              version: true,
               id: true,
-              actions: {
-                where: { viewGroups: { some: { name: 'Public' } } },
+              goals: {
                 select: {
                   name: true,
+                  indicatorParameter: true,
                   id: true,
+                  actions: {
+                    select: {
+                      name: true,
+                      id: true,
+                    },
+                  },
                 },
               },
             },
