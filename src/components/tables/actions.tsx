@@ -12,8 +12,8 @@ export default function Actions({
   params,
 }: {
   title: String,
-  goal: Goal & AccessControlled & {
-    actions: (Action & AccessControlled)[]
+  goal: Goal & {
+    actions: (Action)[]
   },
   accessLevel?: AccessLevel,
   params: { roadmapId: string, goalId: string },

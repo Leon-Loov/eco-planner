@@ -8,7 +8,7 @@ export default function LinkTree({
   goals,
   roadmapId,
 }: {
-  goals: ((Goal & AccessControlled & {
+  goals: ((Goal & {
     _count: { actions: number }
     dataSeries: DataSeries | null,
     roadmap?: { id: string, name: string },

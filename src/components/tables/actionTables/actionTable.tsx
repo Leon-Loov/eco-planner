@@ -11,8 +11,8 @@ interface ActionTableCommonProps {
 }
 
 interface ActionTableWithGoal extends ActionTableCommonProps {
-  goal: Goal & AccessControlled & {
-    actions: (Action & AccessControlled)[]
+  goal: Goal & {
+    actions: (Action)[]
   },
   roadmapId: string,
   actions?: never,
@@ -21,7 +21,7 @@ interface ActionTableWithGoal extends ActionTableCommonProps {
 interface ActionTableWithActions extends ActionTableCommonProps {
   goal?: never,
   roadmapId?: never,
-  actions: (Action & AccessControlled & {
+  actions: (Action & {
     goal: { id: string, roadmap: { id: string } }
   })[],
 }

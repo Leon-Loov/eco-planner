@@ -6,10 +6,10 @@ export default function GoalTable({
   goals,
   roadmapId,
 }: {
-  goals: ((Goal & AccessControlled & {
+  goals: ((Goal & {
     _count: { actions: number }
     dataSeries: DataSeries | null,
-    roadmap?: { id: string, name: string },
+    roadmap?: { id: string, metaRoadmap: { name: string, id: string } },
   }) | null)[],
   roadmapId?: string,
 }) {
