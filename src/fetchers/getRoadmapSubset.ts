@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session";
 import { roadmapSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
-import { Roadmap } from "@prisma/client";
+import { MetaRoadmap, Roadmap } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -13,9 +13,9 @@ import { cookies } from "next/headers";
  * @param municipality Municipality to filter by
  * @returns Array of roadmaps
  */
-export default async function getRoadmapSubset(county?: string, municipality?: string) {
+export default async function getRoadmapSubset(actor?: string) {
   const session = await getSessionData(cookies());
-  return getCachedRoadmapSubset(session.user?.id ?? '', county, municipality);
+  return getCachedRoadmapSubset(session.user?.id ?? '', actor);
 }
 
 /**
@@ -26,12 +26,13 @@ export default async function getRoadmapSubset(county?: string, municipality?: s
  * @param municipality Municipality to filter by
  */
 const getCachedRoadmapSubset = unstable_cache(
-  async (userId: any, county?: string, municipality?: string) => {
+  async (userId: any, actor?: string) => {
     const session = await getSessionData(cookies());
 
     let roadmaps: (
       Roadmap & {
         _count: { goals: number },
+        metaRoadmap: MetaRoadmap,
         // Goal IDs are returned in order to later fetch these goals individually
         goals: { id: string }[],
         author: { id: string, username: string },
@@ -47,13 +48,13 @@ const getCachedRoadmapSubset = unstable_cache(
       try {
         roadmaps = await prisma.roadmap.findMany({
           where: {
-            county: county ?? undefined,
-            municipality: municipality ?? undefined,
+            metaRoadmap: { actor: actor ?? undefined },
           },
           include: {
             _count: {
               select: { goals: true }
             },
+            metaRoadmap: true,
             goals: { select: { id: true } },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -79,8 +80,7 @@ const getCachedRoadmapSubset = unstable_cache(
       try {
         roadmaps = await prisma.roadmap.findMany({
           where: {
-            county: county ?? undefined,
-            municipality: municipality ?? undefined,
+            metaRoadmap: { actor: actor ?? undefined },
             OR: [
               { authorId: session.user.id },
               { editors: { some: { id: session.user.id } } },
@@ -93,6 +93,7 @@ const getCachedRoadmapSubset = unstable_cache(
             _count: {
               select: { goals: true }
             },
+            metaRoadmap: true,
             goals: { select: { id: true } },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -117,14 +118,14 @@ const getCachedRoadmapSubset = unstable_cache(
     try {
       roadmaps = await prisma.roadmap.findMany({
         where: {
-          county: county ?? undefined,
-          municipality: municipality ?? undefined,
+          metaRoadmap: { actor: actor ?? undefined },
           viewGroups: { some: { name: 'Public' } }
         },
         include: {
           _count: {
             select: { goals: true }
           },
+          metaRoadmap: true,
           goals: { select: { id: true } },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },

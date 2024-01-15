@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { roadmapSorter } from "@/lib/sorters";
-import { Roadmap } from "@prisma/client";
+import { MetaRoadmap, Roadmap } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -28,6 +28,7 @@ const getCachedRoadmaps = unstable_cache(
     let roadmaps: (
       Roadmap & {
         _count: { goals: number },
+        metaRoadmap: MetaRoadmap,
         author: { id: string, username: string },
         editors: { id: string, username: string }[],
         viewers: { id: string, username: string }[],
@@ -44,6 +45,7 @@ const getCachedRoadmaps = unstable_cache(
             _count: {
               select: { goals: true }
             },
+            metaRoadmap: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -82,6 +84,7 @@ const getCachedRoadmaps = unstable_cache(
             _count: {
               select: { goals: true }
             },
+            metaRoadmap: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -111,6 +114,7 @@ const getCachedRoadmaps = unstable_cache(
           _count: {
             select: { goals: true }
           },
+          metaRoadmap: true,
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
           viewers: { select: { id: true, username: true } },
