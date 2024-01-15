@@ -32,10 +32,6 @@ const getCachedAction = unstable_cache(
       comments?: (Comment & { author: { id: string, username: string } })[],
       goal: { id: string, name: string | null, indicatorParameter: string },
       author: { id: string, username: string },
-      editors: { id: string, username: string }[],
-      viewers: { id: string, username: string }[],
-      editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-      viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
     } | null = null;
 
     // If user is admin, always get the action
@@ -49,10 +45,6 @@ const getCachedAction = unstable_cache(
             comments: { include: { author: { select: { id: true, username: true } } } },
             goal: { select: { id: true, name: true, indicatorParameter: true } },
             author: { select: { id: true, username: true } },
-            editors: { select: { id: true, username: true } },
-            viewers: { select: { id: true, username: true } },
-            editGroups: { include: { users: { select: { id: true, username: true } } } },
-            viewGroups: { include: { users: { select: { id: true, username: true } } } },
           },
         });
       } catch (error) {
@@ -70,24 +62,24 @@ const getCachedAction = unstable_cache(
         action = await prisma.action.findUnique({
           where: {
             id,
-            OR: [
-              { authorId: session.user.id },
-              { editors: { some: { id: userId } } },
-              { viewers: { some: { id: userId } } },
-              { editGroups: { some: { users: { some: { id: userId } } } } },
-              { viewGroups: { some: { users: { some: { id: userId } } } } },
-              { viewGroups: { some: { name: 'Public' } } }
-            ]
+            goal: {
+              roadmap: {
+                OR: [
+                  { authorId: session.user.id },
+                  { editors: { some: { id: userId } } },
+                  { viewers: { some: { id: userId } } },
+                  { editGroups: { some: { users: { some: { id: userId } } } } },
+                  { viewGroups: { some: { users: { some: { id: userId } } } } },
+                  { viewGroups: { some: { name: 'Public' } } }
+                ]
+              }
+            }
           },
           include: {
             notes: true,
             links: true,
             goal: { select: { id: true, name: true, indicatorParameter: true } },
             author: { select: { id: true, username: true } },
-            editors: { select: { id: true, username: true } },
-            viewers: { select: { id: true, username: true } },
-            editGroups: { include: { users: { select: { id: true, username: true } } } },
-            viewGroups: { include: { users: { select: { id: true, username: true } } } },
           },
         });
       } catch (error) {
@@ -104,17 +96,13 @@ const getCachedAction = unstable_cache(
       action = await prisma.action.findUnique({
         where: {
           id,
-          viewGroups: { some: { name: 'Public' } }
+          goal: { roadmap: { viewGroups: { some: { name: 'Public' } } } }
         },
         include: {
           notes: true,
           links: true,
           goal: { select: { id: true, name: true, indicatorParameter: true } },
           author: { select: { id: true, username: true } },
-          editors: { select: { id: true, username: true } },
-          viewers: { select: { id: true, username: true } },
-          editGroups: { include: { users: { select: { id: true, username: true } } } },
-          viewGroups: { include: { users: { select: { id: true, username: true } } } },
         }
       });
     } catch (error) {
