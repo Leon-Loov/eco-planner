@@ -18,7 +18,7 @@ export default async function getNationals() {
 
 /**
  * Caches all national roadmaps the user has access to.
- * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap']`, which is done in relevant API routes.
+ * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap', 'goal']`, which is done in relevant API routes.
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedRoadmaps = unstable_cache(
@@ -44,7 +44,7 @@ const getCachedRoadmaps = unstable_cache(
     if (session.user?.isAdmin) {
       try {
         roadmaps = await prisma.roadmap.findMany({
-          where: { type: RoadmapType.NATIONAL },
+          where: { metaRoadmap: { type: RoadmapType.NATIONAL } },
           include: {
             goals: { select: { id: true, name: true, indicatorParameter: true } },
             author: { select: { id: true, username: true } },
@@ -72,7 +72,7 @@ const getCachedRoadmaps = unstable_cache(
         // Get all roadmaps authored by the user
         roadmaps = await prisma.roadmap.findMany({
           where: {
-            type: RoadmapType.NATIONAL,
+            metaRoadmap: { type: RoadmapType.NATIONAL },
             OR: [
               { authorId: session.user.id },
               { editors: { some: { id: session.user.id } } },
@@ -84,16 +84,6 @@ const getCachedRoadmaps = unstable_cache(
           },
           include: {
             goals: {
-              where: {
-                OR: [
-                  { authorId: session.user.id },
-                  { editors: { some: { id: session.user.id } } },
-                  { viewers: { some: { id: session.user.id } } },
-                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
-                ]
-              },
               select: { id: true, name: true, indicatorParameter: true }
             },
             author: { select: { id: true, username: true } },
@@ -119,12 +109,11 @@ const getCachedRoadmaps = unstable_cache(
     try {
       roadmaps = await prisma.roadmap.findMany({
         where: {
-          type: RoadmapType.NATIONAL,
+          metaRoadmap: { type: RoadmapType.NATIONAL },
           viewGroups: { some: { name: 'Public' } }
         },
         include: {
           goals: {
-            where: { viewGroups: { some: { name: 'Public' } } },
             select: { id: true, name: true, indicatorParameter: true }
           },
           author: { select: { id: true, username: true } },
