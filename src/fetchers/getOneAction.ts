@@ -1,5 +1,6 @@
 import { getSessionData } from "@/lib/session";
 import prisma from "@/prismaClient";
+import { AccessControlled } from "@/types";
 import { Action, Link, Note, Comment } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
@@ -30,7 +31,7 @@ const getCachedAction = unstable_cache(
       notes: Note[],
       links: Link[],
       comments?: (Comment & { author: { id: string, username: string } })[],
-      goal: { id: string, name: string | null, indicatorParameter: string },
+      goal: { id: string, name: string | null, indicatorParameter: string, roadmap: AccessControlled & { id: string } },
       author: { id: string, username: string },
     } | null = null;
 
@@ -43,7 +44,23 @@ const getCachedAction = unstable_cache(
             notes: true,
             links: true,
             comments: { include: { author: { select: { id: true, username: true } } } },
-            goal: { select: { id: true, name: true, indicatorParameter: true } },
+            goal: {
+              select: {
+                id: true,
+                name: true,
+                indicatorParameter: true,
+                roadmap: {
+                  select: {
+                    id: true,
+                    author: { select: { id: true, username: true } },
+                    editors: { select: { id: true, username: true } },
+                    viewers: { select: { id: true, username: true } },
+                    editGroups: { include: { users: { select: { id: true, username: true } } } },
+                    viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                  }
+                }
+              }
+            },
             author: { select: { id: true, username: true } },
           },
         });
@@ -78,7 +95,23 @@ const getCachedAction = unstable_cache(
           include: {
             notes: true,
             links: true,
-            goal: { select: { id: true, name: true, indicatorParameter: true } },
+            goal: {
+              select: {
+                id: true,
+                name: true,
+                indicatorParameter: true,
+                roadmap: {
+                  select: {
+                    id: true,
+                    author: { select: { id: true, username: true } },
+                    editors: { select: { id: true, username: true } },
+                    viewers: { select: { id: true, username: true } },
+                    editGroups: { include: { users: { select: { id: true, username: true } } } },
+                    viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                  }
+                }
+              }
+            },
             author: { select: { id: true, username: true } },
           },
         });
@@ -101,7 +134,23 @@ const getCachedAction = unstable_cache(
         include: {
           notes: true,
           links: true,
-          goal: { select: { id: true, name: true, indicatorParameter: true } },
+          goal: {
+            select: {
+              id: true,
+              name: true,
+              indicatorParameter: true,
+              roadmap: {
+                select: {
+                  id: true,
+                  author: { select: { id: true, username: true } },
+                  editors: { select: { id: true, username: true } },
+                  viewers: { select: { id: true, username: true } },
+                  editGroups: { include: { users: { select: { id: true, username: true } } } },
+                  viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                }
+              }
+            }
+          },
           author: { select: { id: true, username: true } },
         }
       });

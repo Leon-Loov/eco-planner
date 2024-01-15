@@ -3,7 +3,7 @@ import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { cookies } from "next/headers";
 import { getSessionData } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
-import { AccessLevel } from "@/types";
+import { AccessControlled, AccessLevel } from "@/types";
 import CombinedGraph from "@/components/graphs/combinedGraph";
 import ActionGraph from "@/components/graphs/actionGraph";
 import Actions from "@/components/tables/actions";
@@ -22,16 +22,19 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     getOneGoal(params.goalId)
   ]);
 
+  // TODO: Fetch national/parent goal
   let nationalGoal: Goal & { dataSeries: DataSeries | null } | null = null;
 
   let accessLevel: AccessLevel = AccessLevel.None;
   if (goal) {
-    accessLevel = accessChecker(goal, session.user);
-
-    if (goal.nationalGoalId) {
-      nationalGoal = await getOneGoal(goal.nationalGoalId)
+    const goalAccessData: AccessControlled = {
+      author: goal.author,
+      editors: goal.roadmap.editors,
+      viewers: goal.roadmap.viewers,
+      editGroups: goal.roadmap.editGroups,
+      viewGroups: goal.roadmap.viewGroups,
     }
-
+    accessLevel = accessChecker(goalAccessData, session.user);
   }
 
   // 404 if the goal doesn't exist or if the user doesn't have access to it

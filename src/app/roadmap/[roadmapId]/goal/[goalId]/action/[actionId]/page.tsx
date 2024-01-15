@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { AccessLevel } from "@/types";
+import { AccessControlled, AccessLevel } from "@/types";
 import accessChecker from "@/lib/accessChecker";
 import { Fragment } from "react";
 import Comments from "@/components/comments/comments";
@@ -17,7 +17,14 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   let accessLevel: AccessLevel = AccessLevel.None;
   if (action) {
-    accessLevel = accessChecker(action, session.user);
+    const actionAccessData: AccessControlled = {
+      author: action.author,
+      editors: action.goal.roadmap.editors,
+      viewers: action.goal.roadmap.viewers,
+      editGroups: action.goal.roadmap.editGroups,
+      viewGroups: action.goal.roadmap.viewGroups,
+    }
+    accessLevel = accessChecker(actionAccessData, session.user);
   }
 
   // 404 if the action doesn't exist or if the user doesn't have access to it

@@ -4,7 +4,7 @@ import AccessSelector, { getAccessData } from "@/components/forms/accessSelector
 import { Data } from "@/lib/session"
 import parameterOptions from "@/lib/LEAPList.json" with { type: "json" }
 import { AccessControlled } from "@/types"
-import { DataSeries, Goal, Roadmap } from "@prisma/client"
+import { DataSeries, Goal, MetaRoadmap, Roadmap } from "@prisma/client"
 import { useState } from "react"
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
 
@@ -16,8 +16,12 @@ export default function GoalForm({
 }: {
   roadmapId: string,
   user: Data['user'],
-  nationalRoadmaps: (Roadmap & { goals: { id: string, name: string | null, indicatorParameter: string }[] })[],
-  currentGoal?: Goal & AccessControlled & { dataSeries: DataSeries | null } & { links?: { url: string, description: string | null }[] },
+  nationalRoadmaps: (Roadmap & { goals: { id: string, name: string | null, indicatorParameter: string }[], metaRoadmap: MetaRoadmap })[],
+  currentGoal?: Goal &
+  { dataSeries: DataSeries | null } &
+  { author: { id: string, username: string } } &
+  { links?: { url: string, description: string | null }[] } &
+  { roadmap: AccessControlled & { id: string, metaRoadmap: { name: string, id: string, parentRoadmapId: string | null } } },
 }) {
   // Submit the form to the API
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -91,7 +95,7 @@ export default function GoalForm({
    */
   const dataSeriesPattern = "(([0-9]+([.,][0-9]+)?)?[\t;]){0,30}([0-9]+([.,][0-9]+)?)?"
 
-  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(currentGoal?.nationalRoadmapId || null);
+  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(currentGoal?.roadmap.metaRoadmap.parentRoadmapId || null);
   const timestamp = Date.now();
 
   // If there is a data series, convert it to an array of numbers to use as a default value for the form
@@ -111,10 +115,10 @@ export default function GoalForm({
   if (currentGoal) {
     currentAccess = {
       author: currentGoal.author,
-      editors: currentGoal.editors,
-      viewers: currentGoal.viewers,
-      editGroups: currentGoal.editGroups,
-      viewGroups: currentGoal.viewGroups,
+      editors: currentGoal.roadmap.editors,
+      viewers: currentGoal.roadmap.viewers,
+      editGroups: currentGoal.roadmap.editGroups,
+      viewGroups: currentGoal.roadmap.viewGroups,
     }
   }
 
@@ -130,11 +134,11 @@ export default function GoalForm({
         <input type="text" name="description" id="description" defaultValue={currentGoal?.description ?? undefined} />
         <br />
         <label htmlFor="nationalRoadmapId">Nationell färdplan denna är baserad på (om någon): </label>
-        <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)} defaultValue={currentGoal?.nationalRoadmapId || undefined}>
+        <select name="nationalRoadmapId" id="nationalRoadmapId" onChange={(e) => setSelectedRoadmap(e.target.value)} defaultValue={currentGoal?.roadmap.metaRoadmap.parentRoadmapId || undefined}>
           <option value="">Ingen nationell målbana</option>
           {nationalRoadmaps.map((roadmap) => {
             return (
-              <option key={roadmap.id} value={roadmap.id}>{roadmap.name}</option>
+              <option key={roadmap.id} value={roadmap.id}>{roadmap.metaRoadmap.name}</option>
             )
           })}
         </select>
@@ -143,7 +147,7 @@ export default function GoalForm({
           selectedRoadmap &&
           <>
             <label htmlFor="nationalGoalId">Målbana i den nationella färdplanen denna är baserad på (om någon): </label>
-            <select name="nationalGoalId" id="nationalGoalId" defaultValue={currentGoal?.nationalGoalId || undefined}>
+            <select name="nationalGoalId" id="nationalGoalId" defaultValue={currentGoal?.roadmap.metaRoadmap.parentRoadmapId || undefined}>
               <option value="">Inget mål</option>
               { // Allows choosing the goals from the selected national roadmap
                 nationalRoadmaps.find((roadmap) => roadmap.id === selectedRoadmap)?.goals.map((goal) => {

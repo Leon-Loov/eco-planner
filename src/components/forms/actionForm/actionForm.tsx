@@ -15,7 +15,13 @@ export default function ActionForm({
   roadmapId: string,
   goalId: string,
   user: Data['user'],
-  currentAction?: Action & AccessControlled & { links: { url: string, description: string | null }[] },
+  currentAction?: Action & {
+    links: { url: string, description: string | null }[],
+    goal: {
+      roadmap: AccessControlled
+    },
+    author: { id: string, username: string }
+  },
 }) {
   // Submit the form to the API
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -80,10 +86,10 @@ export default function ActionForm({
   if (currentAction) {
     currentAccess = {
       author: currentAction.author,
-      editors: currentAction.editors,
-      viewers: currentAction.viewers,
-      editGroups: currentAction.editGroups,
-      viewGroups: currentAction.viewGroups,
+      editors: currentAction.goal.roadmap.editors,
+      viewers: currentAction.goal.roadmap.viewers,
+      editGroups: currentAction.goal.roadmap.editGroups,
+      viewGroups: currentAction.goal.roadmap.viewGroups,
     }
   }
 

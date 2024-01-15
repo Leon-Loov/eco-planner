@@ -12,8 +12,8 @@ export default async function Page() {
   ]);
 
   // TODO: Filter into more categories based on `RoadmapType`
-  let nationalRoadmaps = roadmaps.filter(roadmap => roadmap.type === RoadmapType.NATIONAL)
-  let regionalRoadmaps = roadmaps.filter(roadmap => roadmap.type !== RoadmapType.NATIONAL)
+  let nationalRoadmaps = roadmaps.filter(roadmap => roadmap.metaRoadmap.type === RoadmapType.NATIONAL)
+  let regionalRoadmaps = roadmaps.filter(roadmap => roadmap.metaRoadmap.type !== RoadmapType.NATIONAL)
 
   return <>
     <div style={{ width: '100%', height: '350px', marginTop: '1.5em', }}>

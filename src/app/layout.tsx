@@ -10,7 +10,8 @@ export default async function RootLayout({
   children: React.ReactNode,
 }) {
   // Get names and ids of all roadmaps, goals and actions
-  let roadmaps = await getNames()
+  let metaRoadmaps = await getNames()
+  let roadmaps = metaRoadmaps.flatMap(metaRoadmap => metaRoadmap.roadmapVersions)
   let goals = roadmaps.flatMap(roadmap => roadmap.goals)
   let actions = goals.flatMap(goal => goal.actions)
 

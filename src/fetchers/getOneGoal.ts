@@ -1,6 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import { actionSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
+import { AccessControlled } from "@/types";
 import { Action, Comment, DataSeries, Goal, Link } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
@@ -33,7 +34,7 @@ const getCachedGoal = unstable_cache(
       actions: (Action & {
         author: { id: string, username: string },
       })[],
-      roadmap: { id: string, metaRoadmap: { id: string, name: string } },
+      roadmap: AccessControlled & { id: string, version: number, targetVersion: number | null, metaRoadmap: { id: string, name: string, parentRoadmapId: string | null } },
       links: Link[],
       comments?: (Comment & { author: { id: string, username: string } })[],
       author: { id: string, username: string },
@@ -56,12 +57,19 @@ const getCachedGoal = unstable_cache(
               select: {
                 id: true,
                 version: true,
+                targetVersion: true,
                 metaRoadmap: {
                   select: {
                     id: true,
                     name: true,
+                    parentRoadmapId: true,
                   },
                 },
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
               },
             },
             links: true,
@@ -113,12 +121,19 @@ const getCachedGoal = unstable_cache(
               select: {
                 id: true,
                 version: true,
+                targetVersion: true,
                 metaRoadmap: {
                   select: {
                     id: true,
                     name: true,
+                    parentRoadmapId: true,
                   },
                 },
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
               },
             },
             links: true,
@@ -155,12 +170,19 @@ const getCachedGoal = unstable_cache(
             select: {
               id: true,
               version: true,
+              targetVersion: true,
               metaRoadmap: {
                 select: {
                   id: true,
                   name: true,
+                  parentRoadmapId: true,
                 },
               },
+              author: { select: { id: true, username: true } },
+              editors: { select: { id: true, username: true } },
+              viewers: { select: { id: true, username: true } },
+              editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+              viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
             },
           },
           links: true,

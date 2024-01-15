@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   return (
     <>
       <p><BackButton href={`/roadmap/${roadmap.id}`} /></p>
-      <h1>Redigera färdplanen {`"${roadmap.name}"`}</h1>
+      <h1>Redigera färdplanen {`"${roadmap.metaRoadmap.name}"`}</h1>
       <RoadmapForm
         user={session.user}
         userGroups={session.user?.userGroups}
