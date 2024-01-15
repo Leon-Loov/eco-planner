@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import { goalSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
-import { Comment, DataSeries, Goal, Roadmap } from "@prisma/client";
+import { Comment, DataSeries, Goal, MetaRoadmap, Roadmap } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -28,14 +28,11 @@ const getCachedRoadmap = unstable_cache(
     const session = await getSessionData(cookies());
 
     let roadmap: Roadmap & {
+      metaRoadmap: MetaRoadmap,
       goals: (Goal & {
         _count: { actions: number },
         dataSeries: DataSeries | null,
         author: { id: string, username: string },
-        editors: { id: string, username: string }[],
-        viewers: { id: string, username: string }[],
-        editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-        viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       })[],
       comments?: (Comment & { author: { id: string, username: string } })[],
       author: { id: string, username: string },
@@ -51,15 +48,12 @@ const getCachedRoadmap = unstable_cache(
         roadmap = await prisma.roadmap.findUnique({
           where: { id },
           include: {
+            metaRoadmap: true,
             goals: {
               include: {
                 _count: { select: { actions: true } },
                 dataSeries: true,
                 author: { select: { id: true, username: true } },
-                editors: { select: { id: true, username: true } },
-                viewers: { select: { id: true, username: true } },
-                editGroups: { include: { users: { select: { id: true, username: true } } } },
-                viewGroups: { include: { users: { select: { id: true, username: true } } } },
               }
             },
             comments: {
@@ -101,25 +95,12 @@ const getCachedRoadmap = unstable_cache(
             ]
           },
           include: {
+            metaRoadmap: true,
             goals: {
-              where: {
-                OR: [
-                  { authorId: session.user.id },
-                  { editors: { some: { id: session.user.id } } },
-                  { viewers: { some: { id: session.user.id } } },
-                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
-                ]
-              },
               include: {
                 _count: { select: { actions: true } },
                 dataSeries: true,
                 author: { select: { id: true, username: true } },
-                editors: { select: { id: true, username: true } },
-                viewers: { select: { id: true, username: true } },
-                editGroups: { include: { users: { select: { id: true, username: true } } } },
-                viewGroups: { include: { users: { select: { id: true, username: true } } } },
               }
             },
             author: { select: { id: true, username: true } },
@@ -148,16 +129,12 @@ const getCachedRoadmap = unstable_cache(
           viewGroups: { some: { name: 'Public' } },
         },
         include: {
+          metaRoadmap: true,
           goals: {
-            where: { viewGroups: { some: { name: 'Public' } } },
             include: {
               _count: { select: { actions: true } },
               dataSeries: true,
               author: { select: { id: true, username: true } },
-              editors: { select: { id: true, username: true } },
-              viewers: { select: { id: true, username: true } },
-              editGroups: { include: { users: { select: { id: true, username: true } } } },
-              viewGroups: { include: { users: { select: { id: true, username: true } } } },
             }
           },
           author: { select: { id: true, username: true } },
