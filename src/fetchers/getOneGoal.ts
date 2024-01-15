@@ -19,7 +19,7 @@ export default async function getOneGoal(id: string) {
 
 /**
  * Caches the specified goal and all actions for that goal.
- * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'goal', 'action']`, which is done in relevant API routes.
+ * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'goal', 'action', 'dataSeries']`, which is done in relevant API routes.
  * @param id ID of the goal to cache
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
@@ -32,19 +32,11 @@ const getCachedGoal = unstable_cache(
       dataSeries: DataSeries | null,
       actions: (Action & {
         author: { id: string, username: string },
-        editors: { id: string, username: string }[],
-        viewers: { id: string, username: string }[],
-        editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-        viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
       })[],
-      roadmap: { id: string, name: string },
+      roadmap: { id: string, metaRoadmap: { id: string, name: string } },
       links: Link[],
       comments?: (Comment & { author: { id: string, username: string } })[],
       author: { id: string, username: string },
-      editors: { id: string, username: string }[],
-      viewers: { id: string, username: string }[],
-      editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-      viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
     } | null = null;
 
     // If user is admin, always get the goal
@@ -58,29 +50,27 @@ const getCachedGoal = unstable_cache(
             actions: {
               include: {
                 author: { select: { id: true, username: true } },
-                editors: { select: { id: true, username: true } },
-                viewers: { select: { id: true, username: true } },
-                editGroups: { include: { users: { select: { id: true, username: true } } } },
-                viewGroups: { include: { users: { select: { id: true, username: true } } } },
               },
             },
             roadmap: {
               select: {
                 id: true,
-                name: true,
+                version: true,
+                metaRoadmap: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
             links: true,
             comments: {
               include: {
                 author: { select: { id: true, username: true } },
-              }
+              },
             },
             author: { select: { id: true, username: true } },
-            editors: { select: { id: true, username: true } },
-            viewers: { select: { id: true, username: true } },
-            editGroups: { include: { users: { select: { id: true, username: true } } } },
-            viewGroups: { include: { users: { select: { id: true, username: true } } } },
           }
         });
       } catch (error) {
@@ -100,49 +90,39 @@ const getCachedGoal = unstable_cache(
         goal = await prisma.goal.findUnique({
           where: {
             id,
-            OR: [
-              { authorId: session.user.id },
-              { editors: { some: { id: session.user.id } } },
-              { viewers: { some: { id: session.user.id } } },
-              { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-              { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-              { viewGroups: { some: { name: 'Public' } } }
-            ]
+            roadmap: {
+              OR: [
+                { authorId: session.user.id },
+                { editors: { some: { id: userId } } },
+                { viewers: { some: { id: userId } } },
+                { editGroups: { some: { users: { some: { id: userId } } } } },
+                { viewGroups: { some: { users: { some: { id: userId } } } } },
+                { viewGroups: { some: { name: 'Public' } } }
+              ]
+            }
           },
           include: {
             _count: { select: { actions: true } },
             dataSeries: true,
             actions: {
-              where: {
-                OR: [
-                  { authorId: session.user.id },
-                  { editors: { some: { id: session.user.id } } },
-                  { viewers: { some: { id: session.user.id } } },
-                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
-                ]
-              },
               include: {
                 author: { select: { id: true, username: true } },
-                editors: { select: { id: true, username: true } },
-                viewers: { select: { id: true, username: true } },
-                editGroups: { include: { users: { select: { id: true, username: true } } } },
-                viewGroups: { include: { users: { select: { id: true, username: true } } } },
               },
             },
             roadmap: {
               select: {
                 id: true,
-                name: true,
+                version: true,
+                metaRoadmap: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
             links: true,
             author: { select: { id: true, username: true } },
-            editors: { select: { id: true, username: true } },
-            viewers: { select: { id: true, username: true } },
-            editGroups: { include: { users: { select: { id: true, username: true } } } },
-            viewGroups: { include: { users: { select: { id: true, username: true } } } },
           }
         });
       } catch (error) {
@@ -161,33 +141,30 @@ const getCachedGoal = unstable_cache(
       goal = await prisma.goal.findUnique({
         where: {
           id,
-          OR: [{ viewGroups: { some: { name: 'Public' } } }]
+          roadmap: { viewGroups: { some: { name: 'Public' } } }
         },
         include: {
           _count: { select: { actions: true } },
           dataSeries: true,
           actions: {
-            where: { viewGroups: { some: { name: 'Public' } } },
             include: {
               author: { select: { id: true, username: true } },
-              editors: { select: { id: true, username: true } },
-              viewers: { select: { id: true, username: true } },
-              editGroups: { include: { users: { select: { id: true, username: true } } } },
-              viewGroups: { include: { users: { select: { id: true, username: true } } } },
             },
           },
           roadmap: {
             select: {
               id: true,
-              name: true,
+              version: true,
+              metaRoadmap: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
           links: true,
           author: { select: { id: true, username: true } },
-          editors: { select: { id: true, username: true } },
-          viewers: { select: { id: true, username: true } },
-          editGroups: { include: { users: { select: { id: true, username: true } } } },
-          viewGroups: { include: { users: { select: { id: true, username: true } } } },
         }
       });
     } catch (error) {
