@@ -10,7 +10,7 @@ async function generateLeapList() {
   // Get the indicator parameters
   let rawData = await prisma.roadmap.findMany({
     where: {
-      type: RoadmapType.NATIONAL,
+      metaRoadmap: { type: RoadmapType.NATIONAL },
       viewGroups: { some: { name: 'public' } },
     },
     select: {
