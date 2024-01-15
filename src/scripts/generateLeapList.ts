@@ -20,7 +20,12 @@ async function generateLeapList() {
         },
       },
     },
-  });
+  }).catch((err) => { });
+
+  if (rawData?.length === 0 || !rawData) {
+    console.log("No public, national roadmaps found; LEAP list not touched.")
+    return
+  }
 
   // Flatten the data
   let leapList = [];

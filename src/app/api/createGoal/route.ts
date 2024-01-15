@@ -5,6 +5,7 @@ import { AccessControlled, AccessLevel, GoalInput } from "@/types";
 import { Prisma } from "@prisma/client";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
+import dataSeriesPrep from "./dataSeriesPrep";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -39,38 +40,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // TODO: Break this out into a separate function
-  // This code also exists in src/app/api/createRoadmap/roadmapGoalCreator.ts, if one changes the other should be changed as well
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput = {
-    author: { connect: { id: session.user.id } },
-    unit: goal.dataUnit,
-    scale: goal.dataScale,
-  };
-
-  if (goal.dataSeries?.length && goal.dataSeries.length <= 31) {
-    // The keys for the data values are `val2020`, `val2021`, etc. up to `val2050
-    let keys = goal.dataSeries.map((_, index) => `val${index + 2020}`);
-    keys.forEach((key, index) => {
-      let value: number | null = parseFloat(goal.dataSeries![index]);
-      // If the value is empty, set it to null
-      if (!goal.dataSeries![index] && goal.dataSeries![index] != "0") {
-        value = null;
-      }
-      // If the value is a number or null, add it to the dataValues object
-      if (value === null || !isNaN(value)) {
-        // This mess assures TypeScript that we are not trying to assign numbers to any of the
-        // other fields in the dataSeries object.
-        dataValues[key as keyof Omit<
-          Prisma.DataSeriesCreateWithoutGoalInput,
-          'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
-          'editors' | 'viewers' | 'editGroups' | 'viewGroups'
-        >] = value;
-      }
-    });
-  }
+  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
   // If the data series is invalid, return an error
-  else if (!goal.dataSeries?.length || goal.dataSeries!.length > 31) {
+  if (dataValues === null) {
     return createResponse(
       response,
       JSON.stringify({
@@ -208,37 +181,10 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  // This code also exists in src/app/api/createRoadmap/roadmapGoalCreator.ts, if one changes the other should be changed as well
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput = {
-    author: { connect: { id: session.user!.id } },
-    unit: goal.dataUnit,
-    scale: goal.dataScale,
-  };
-
-  if (goal.dataSeries?.length && goal.dataSeries.length <= 31) {
-    // The keys for the data values are `val2020`, `val2021`, etc. up to `val2050
-    let keys = goal.dataSeries.map((_, index) => `val${index + 2020}`);
-    keys.forEach((key, index) => {
-      let value: number | null = parseFloat(goal.dataSeries![index]);
-      // If the value is empty, set it to null
-      if (!goal.dataSeries![index] && goal.dataSeries![index] != "0") {
-        value = null;
-      }
-      // If the value is a number or null, add it to the dataValues object
-      if (value === null || !isNaN(value)) {
-        // This mess assures TypeScript that we are not trying to assign numbers to any of the
-        // other fields in the dataSeries object.
-        dataValues[key as keyof Omit<
-          Prisma.DataSeriesCreateWithoutGoalInput,
-          'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
-          'editors' | 'viewers' | 'editGroups' | 'viewGroups'
-        >] = value;
-      }
-    });
-  }
+  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
   // If the data series is invalid, return an error
-  else if (!goal.dataSeries?.length || goal.dataSeries!.length > 31) {
+  if (dataValues === null) {
     return createResponse(
       response,
       JSON.stringify({
