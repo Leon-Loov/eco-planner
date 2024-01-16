@@ -50,6 +50,17 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
     setEditedContent('')
   }
 
+  const [expandedComments, setExpandedComments] = useState<string[]>([]);
+  const expandComment = (commentId: string) => {
+    setExpandedComments((prevExpandedComments) => {
+      if (prevExpandedComments.includes(commentId)) {
+        return prevExpandedComments.filter((id) => id !== commentId);
+      } else {
+        return [...prevExpandedComments, commentId];
+      }
+    });
+  };
+
   return (
     <>
       <section>
@@ -66,8 +77,15 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
           <div key={comment.id}>
             <p style={{marginBottom: "0", textTransform: "capitalize"}}><b>{comment.author.username}</b></p>
             <span style={{fontSize: ".75em"}}>{new Date(comment.createdAt).toLocaleString('sv-SE')}</span>
-            <p>{comment.commentText}</p>
-          </div>
+            <p>
+            {expandedComments.includes(comment.id) ? comment.commentText : comment.commentText.length > 300 ? `${comment.commentText.substring(0, 300)}...` : comment.commentText}
+            </p>  
+            {comment.commentText.length > 300 ? 
+              <button className={styles.readMoreButton} onClick={() => expandComment(comment.id)}>  
+                {expandedComments.includes(comment.id) ? 'Visa mindre' : 'Visa mer'}
+              </button>
+            :  null}
+          </div> 
         ))}
       </section>
     </>

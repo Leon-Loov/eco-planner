@@ -51,3 +51,17 @@
     color: gray;
     cursor: text;
 }
+
+.readMoreButton {
+    display: block;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-weight: bold;
+    color: var(--gray-50);
+}
+
+.readMoreButton:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
