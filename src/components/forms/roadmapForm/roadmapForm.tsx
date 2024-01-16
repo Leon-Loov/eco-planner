@@ -5,7 +5,7 @@ import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import countiesAndMunicipalities from "@/lib/countiesAndMunicipalities.json" with { type: "json" }
 import { Data } from "@/lib/session"
 import { AccessControlled } from "@/types"
-import { Roadmap, RoadmapType } from "@prisma/client"
+import { MetaRoadmap, Roadmap, RoadmapType } from "@prisma/client"
 import { useState } from "react"
 
 export default function RoadmapForm({
@@ -22,8 +22,13 @@ export default function RoadmapForm({
       name: string | null,
       indicatorParameter: string,
     }[],
+    metaRoadmap: {
+      id: string,
+      name: string,
+      actor: string | null,
+    }
   })[],
-  currentRoadmap?: Roadmap & AccessControlled,
+  currentRoadmap?: Roadmap & AccessControlled & { metaRoadmap: MetaRoadmap },
 }) {
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -80,7 +85,7 @@ export default function RoadmapForm({
     })
   }
 
-  const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.county || null)
+  const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.metaRoadmap.actor || null)
   const [currentFile, setCurrentFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const timestamp = Date.now()
@@ -101,8 +106,6 @@ export default function RoadmapForm({
       <form onSubmit={handleSubmit} className="action-form">
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
-        <label htmlFor="name">Färdplansnamn </label>
-        <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
 
         <label htmlFor="description">Beskrivning av färdplanen </label>
         <textarea name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined}></textarea>
@@ -115,18 +118,19 @@ export default function RoadmapForm({
               {
                 nationalRoadmaps.map((roadmap) => {
                   return (
-                    <option key={roadmap.id} value={roadmap.id}>{roadmap.name}</option>
+                    <option key={roadmap.id} value={roadmap.id}>{roadmap.metaRoadmap.name}</option>
                   )
                 })
               }
             </select>
+            {/* TODO: Add secondary dropdown to select target version */}
           </>
         }
 
         <div className="display-flex align-items-center gap-100">
           <div className="flex-grow-100" style={{ maxWidth: "250px" }}>
             <label htmlFor="county">Län</label>
-            <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.type == RoadmapType.NATIONAL ? "National" : currentRoadmap?.county ?? undefined}>
+            <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.metaRoadmap.actor ?? undefined}>
               <option value="">Välj län</option>
               { // If the user is an admin, they can select the entire country to make a national roadmap
                 user?.isAdmin &&
@@ -140,25 +144,6 @@ export default function RoadmapForm({
                 })
               }
             </select>
-          </div>
-          <div className="flex-grow-100" style={{ maxWidth: "250px" }}>
-            { // If a county is selected, show a dropdown for municipalities in that county
-              selectedCounty && selectedCounty !== "National" &&
-              <>
-                <label htmlFor="municipality">Kommun</label>
-                <select name="municipality" id="municipality" required defaultValue={currentRoadmap?.type == RoadmapType.REGIONAL ? "Regional" : currentRoadmap?.municipality ?? undefined}>
-                  <option value="">Välj kommun</option>
-                  <option value="Regional">Hela länet</option>
-                  {
-                    countiesAndMunicipalities[selectedCounty as keyof typeof countiesAndMunicipalities].map((municipality) => {
-                      return (
-                        <option key={municipality} value={municipality}>{municipality}</option>
-                      )
-                    })
-                  }
-                </select>
-              </>
-            }
           </div>
         </div>
 
