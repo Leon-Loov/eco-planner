@@ -143,7 +143,7 @@ ul>li:nth-child(1)>.link {
     max-height: 500px;
     width: calc(100% + .5rem + 3px);
     padding-right: 3px;
-    scrollbar-color: var(--gray-90) #f1f1f1;
+    scrollbar-color: var(--gray-80) #f1f1f1;
     scrollbar-width: thin;
 }
 
@@ -161,11 +161,11 @@ ul>li:nth-child(1)>.link {
 
 /* Handle */
 .tableWrapper::-webkit-scrollbar-thumb {
-    background: var(--gray-90);
+    background: var(--gray-80);
     border-radius: 9999px;
 }
 
 /* Handle on hover */
 .tableWrapper::-webkit-scrollbar-thumb:hover {
-    background: var(--gray-80);
+    background: var(--gray-70);
 }
