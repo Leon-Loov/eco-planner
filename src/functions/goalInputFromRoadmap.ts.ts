@@ -18,8 +18,6 @@ export default function goalInputFromRoadmap(roadmap: Roadmap & { goals?: (Goal 
     output.push({
       name: goal.name ?? undefined,
       description: goal.description ?? undefined,
-      nationalRoadmapId: roadmap.id,
-      nationalGoalId: goal.id,
       indicatorParameter: goal.indicatorParameter,
       dataSeries: dataSeries,
       dataUnit: goal.dataSeries.unit,
