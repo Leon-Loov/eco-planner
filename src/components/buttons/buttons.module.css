@@ -1,0 +1,8 @@
+.backButton {
+    border-radius: 9999px;
+    padding: .25rem;
+}
+
+.backButton:hover {
+    background-color: var(--gray-90);
+}

@@ -20,8 +20,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <p><BackButton href="./" /></p>
-      <h1>Redigera åtgärden {`"${action.name}" under målbanan "${action.goals[0]?.name || action.goals[0]?.indicatorParameter || "ERROR"}"`}</h1>
+      <div className='display-flex align-items-center gap-100 margin-y-100'>
+        <p><BackButton href="./" /></p>
+        <h1>Redigera åtgärden {`"${action.name}" under målbanan "${action.goals[0]?.name || action.goals[0]?.indicatorParameter || "ERROR"}"`}</h1>
+      </div>
       <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} user={session.user} currentAction={action} />
     </>
   )
