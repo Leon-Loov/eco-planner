@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     <>
       <p><BackButton href="../" /></p>
       <h1>Skapa ny åtgärd {`under målbanan "${goal?.name || goal.indicatorParameter}"`}</h1>
-      <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} user={session.user} />
+      <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} />
     </>
   )
 }
