@@ -1,5 +1,6 @@
 "use client";
 
+// TODO: Move to actions.tsx
 import styles from '../tables.module.css' with { type: "css" };
 import { Action, Goal } from "@prisma/client"
 import { AccessControlled, AccessLevel } from '@/types'
@@ -16,6 +17,7 @@ interface ActionTableWithGoal extends ActionTableCommonProps {
   },
   roadmapId: string,
   actions?: never,
+  goalId: string, // TODO: Checka med leon om dessa typer
 }
 
 interface ActionTableWithActions extends ActionTableCommonProps {
@@ -24,6 +26,7 @@ interface ActionTableWithActions extends ActionTableCommonProps {
   actions: (Action & AccessControlled & {
     goals: { id: string, roadmaps: { id: string }[] }[]
   })[],
+  goalId: string,
 }
 
 type ActionTableProps = ActionTableWithGoal | ActionTableWithActions;
@@ -40,6 +43,7 @@ export default function ActionTable({
   actions,
   accessLevel,
   roadmapId,
+  goalId,
 }: ActionTableProps) {
   // Failsafe in case wrong props are passed
   if ((!actions && !goal) || (actions && goal)) throw new Error('ActionTable: Either `goal` XOR `actions` must be provided');
@@ -51,13 +55,27 @@ export default function ActionTable({
       return { ...action, goals };
     });
   }
+  console.log(roadmapId)
+  console.log(goalId)
 
   // If no actions are found, return a message
   if (!actions.length) return (<p>Det har inte tillgång till några åtgärder i denna målbana, eller så har målbanan inga åtgärder.</p>);
 
   return <>
-    <div className="overflow-x-scroll">
-      <table id="action-table" className={styles.table}>
+    <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>
+      <h2>Åtgärder</h2>
+      <nav className='display-flex align-items-center gap-100'>
+        { // Only show the button if the user has edit access to the goal
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
+          <Link className={`${styles.newRoadmap} display-flex gap-50`} href={`/roadmap/${roadmapId}/goal/${goalId}/action/createAction`}>
+            Skapa ny åtgärd
+            <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new action"></Image>
+          </Link>
+        }
+      </nav>
+    </div>
+    <div className={styles.tableWrapper}>
+      <table id='action-table' className={styles.table}>
         <thead>
           <tr>
             <th>Namn</th>

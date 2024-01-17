@@ -19,16 +19,9 @@ export default function Actions({
   params: { roadmapId: string, goalId: string },
 }) {
   return <>
-    <label htmlFor="action-table" className="display-flex justify-content-space-between align-items-center flex-wrap-wrap">
-      <h2>{title}</h2>
-      <nav className='display-flex align-items-center gap-100'>
-        { // Only show the button if the user has edit access to the goal
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
-          <PrimaryLink href={`./roadmap/${params.roadmapId}/goal/${params.goalId}/action/createAction`}>Skapa ny åtgärd</PrimaryLink>
-        }
-      </nav>
-    </label>
-    <ActionTable goal={goal} accessLevel={accessLevel} roadmapId={params.roadmapId} />
+    <div style={{marginTop: '1.5rem'}}> {/* TODO: Remove this div (replace with layout in parent page) */}
+      <ActionTable goal={goal} accessLevel={accessLevel} roadmapId={params.roadmapId} goalId={params.goalId} />
+    </div>
   </>
 
 }

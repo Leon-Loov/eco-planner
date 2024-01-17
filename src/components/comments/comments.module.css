@@ -4,7 +4,8 @@
     border-radius: 3px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 1em;
+    font-size: 1rem;
+    line-height: 1.5;
 }
   
 .cancel {
