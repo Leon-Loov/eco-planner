@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   let roadmap: RoadmapInput & { goals?: GoalInput[] } = await request.json();
 
   // Validate request body
-  if (!roadmap.version || !roadmap.metaRoadmapId) {
+  if (!roadmap.metaRoadmapId) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -43,10 +43,25 @@ export async function POST(request: NextRequest) {
       console.log(e);
       return createResponse(
         response,
-        JSON.stringify({ message: 'Failed to fetch parent roadmap' }),
+        JSON.stringify({ message: 'Failed to fetch roadmap to inherit from' }),
         { status: 400 }
       );
     }
+  }
+
+  // Get the highest existing version number for this meta roadmap, defaulting to 0
+  let latestVersion: number;
+  try {
+    latestVersion = (await prisma.roadmap.aggregate({
+      where: { metaRoadmapId: roadmap.metaRoadmapId },
+      _max: { version: true },
+    }))._max.version || 0;
+  } catch {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Failed to fetch latest roadmap version' }),
+      { status: 500 }
+    );
   }
 
   // Create lists of names for linking
@@ -75,7 +90,7 @@ export async function POST(request: NextRequest) {
     let newRoadmap = await prisma.roadmap.create({
       data: {
         description: roadmap.description,
-        version: roadmap.version,
+        version: latestVersion + 1,
         targetVersion: roadmap.targetVersion,
         author: { connect: { id: session.user.id } },
         editors: { connect: editors },

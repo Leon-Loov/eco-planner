@@ -39,7 +39,7 @@ export type MetaRoadmapInput = Omit<
 export type RoadmapInput = Omit<
   Prisma.RoadmapCreateInput,
   'id' | 'createdAt' | 'updatedAt' | 'goals' | 'author' | 'editors' |
-  'viewers' | 'editGroups' | 'viewGroups' | 'comments' | 'metaRoadmap'
+  'viewers' | 'editGroups' | 'viewGroups' | 'comments' | 'metaRoadmap' | 'version'
 > & {
   // Accepts lists of UUIDs for all of the following, to link them to the roadmap (optional)
   editors?: string[] | undefined;
@@ -48,7 +48,9 @@ export type RoadmapInput = Omit<
   viewGroups?: string[] | undefined;
   // UUID for the meta roadmap this roadmap belongs to
   metaRoadmapId: string;
+  // To be used in API to copy the goals and actions from given roadmap
   inheritFromId?: string | undefined;
+  // Version numbers are assigned by the API
 };
 
 /** The format of the data needed to create a new goal. */
