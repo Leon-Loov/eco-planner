@@ -104,6 +104,9 @@ model Roadmap {
   // Groups of users who are allowed to view this roadmap
   viewGroups UserGroup[] @relation("roadmap_view_groups")
 
+  // Two roadmaps may not have the same meta roadmap AND version
+  // Also allows for querying a roadmap by meta roadmap and version
+  @@unique(name: "meta_version", [metaRoadmapId, version])
   @@map("roadmap")
 }
 
