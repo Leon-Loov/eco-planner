@@ -4,6 +4,27 @@ import { Action, Comment, Goal, MetaRoadmap, Roadmap, RoadmapType } from "@prism
 const collator = new Intl.Collator('sv', { numeric: true, sensitivity: 'accent', caseFirst: 'upper' });
 
 /**
+ * Sorts meta roadmaps by type (national first), then alphabetically by name
+ */
+export function metaRoadmapSorter(a: MetaRoadmap, b: MetaRoadmap) {
+  // Higher priority roadmaps are first in the values array, so we reverse it to
+  // account for the fact that indexOf() returns -1 if the element is not found, which
+  // should be considered lower priority than any other index
+  let values = Object.values(RoadmapType);
+  values.reverse();
+  const aIndex = values.indexOf(a.type);
+  const bIndex = values.indexOf(b.type);
+  // Larger index means higher priority (closer to national level)
+  if (aIndex > bIndex) {
+    return -1;
+  } else if (aIndex < bIndex) {
+    return 1;
+  } else {
+    return collator.compare(a.name, b.name);
+  }
+}
+
+/**
  * Sorts roadmaps by type (national first), then alphabetically by name
  */
 export function roadmapSorter(a: Roadmap & { metaRoadmap: MetaRoadmap }, b: Roadmap & { metaRoadmap: MetaRoadmap }) {
