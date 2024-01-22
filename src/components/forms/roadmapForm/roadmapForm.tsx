@@ -120,7 +120,7 @@ export default function RoadmapForm({
               {
                 nationalRoadmaps.map((roadmap) => {
                   return (
-                    <option key={roadmap.id} value={roadmap.id}>{roadmap.metaRoadmap.name}</option>
+                    <option key={roadmap.id} value={roadmap.id}>{`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}</option>
                   )
                 })
               }
@@ -129,7 +129,7 @@ export default function RoadmapForm({
           </>
         }
 
-        {/* TODO: Add selector for inheriting goals from another roadmap version */}
+        {/* TODO: Add selector for inheriting some/all goals from another roadmap */}
 
         <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> Notera att det här skapar nya målbanor även om det redan finns några. </label>
         <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />

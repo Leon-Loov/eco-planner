@@ -15,6 +15,9 @@ import { Goal, DataSeries } from "@prisma/client";
 import Comments from "@/components/comments/comments";
 import { Fragment } from "react";
 import styles from './page.module.css'
+import getGoalByIndicator from "@/fetchers/getGoalByIndicator";
+import getRoadmapByVersion from "@/fetchers/getRoadmapByVersion";
+import prisma from "@/prismaClient";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -22,9 +25,6 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     getOneRoadmap(params.roadmapId),
     getOneGoal(params.goalId)
   ]);
-
-  // TODO: Fetch national/parent goal
-  let nationalGoal: Goal & { dataSeries: DataSeries | null } | null = null;
 
   let accessLevel: AccessLevel = AccessLevel.None;
   if (goal) {
@@ -41,6 +41,26 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   // 404 if the goal doesn't exist or if the user doesn't have access to it
   if (!goal || !accessLevel || !roadmap) {
     return notFound();
+  }
+
+  // Fetch parent goal
+  let parentGoal: Goal & { dataSeries: DataSeries | null } | null = null;
+  if (roadmap?.metaRoadmap.parentRoadmapId) {
+    try {
+      // Get the parent roadmap (if any)
+      let parentRoadmap = await getRoadmapByVersion(roadmap.metaRoadmap.parentRoadmapId,
+        roadmap.targetVersion ||
+        (await prisma.roadmap.aggregate({ where: { metaRoadmapId: roadmap.metaRoadmap.parentRoadmapId }, _max: { version: true } }))._max.version ||
+        0);
+
+      // If there is a parent roadmap, look for a goal with the same indicator parameter in it
+      if (parentRoadmap) {
+        parentGoal = await getGoalByIndicator(parentRoadmap.id, goal.indicatorParameter);
+      }
+    } catch (error) {
+      parentGoal = null;
+      console.error(error);
+    }
   }
 
   return (
@@ -75,7 +95,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
         </>
       }
-      <GraphGraph goal={goal} nationalGoal={nationalGoal} />
+      <GraphGraph goal={goal} nationalGoal={parentGoal} />
       <CombinedGraph roadmap={roadmap} goal={goal} />
       <ActionGraph actions={goal.actions} />
       <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
