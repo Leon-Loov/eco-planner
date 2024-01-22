@@ -29,29 +29,32 @@ export default function RoadmapTable({
         }
       </div>
     </div>
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th>Namn</th>
-          <th style={{ textAlign: 'center' }}>Antal målbanor</th>
-          <th style={{ textAlign: 'center' }}>Redigera</th>
-        </tr>
-      </thead>
-      <tbody>
-        {roadmaps.map(roadmap => (
-          <tr key={roadmap.id}>
-            <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.metaRoadmap.name}</a></td>
-            <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
-            <td>
-              <RoadmapActionButton
-                addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
-                editHref={`/roadmap/${roadmap.id}/editRoadmap`}
-                roadmapName={roadmap.metaRoadmap.name}
-              />
-            </td>
+    <div className={styles.tableWrapper}>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>Namn</th>
+            <th style={{ textAlign: 'center' }}>Antal målbanor</th>
+            <th style={{ textAlign: 'center' }}>Redigera</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {roadmaps.map(roadmap => (
+            <tr key={roadmap.id}>
+              <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.metaRoadmap.name}</a></td>
+              <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
+              <td>
+                <RoadmapActionButton
+                  addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
+                  editHref={`/roadmap/${roadmap.id}/editRoadmap`}
+                  id={roadmap.id}
+                  tableName={roadmap.metaRoadmap.name}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </>
 }

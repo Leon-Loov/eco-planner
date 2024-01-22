@@ -1,47 +1,49 @@
-.details[open] > ul {
+.details[open]>ul {
     border-left: 2px dashed lightgray;
 }
 
-.details[open] > summary {
+.details[open]>summary {
     font-weight: bold;
 }
 
-.details > summary {
+.details>summary {
     background-color: unset;
     padding: .25em 3em .25em 0;
     width: fit-content;
 }
 
-.details > summary:hover {
+.details>summary:hover {
     font-weight: bold;
 }
 
-.details > summary:hover::marker{
+.details>summary:hover::marker {
     color: black;
 }
 
-.details > summary::marker {
+.details>summary::marker {
     color: gray;
 }
 
-.details[open] > summary::marker {
+.details[open]>summary::marker {
     color: black;
 }
 
 /* Links */
 
-.link, .link > span {
+.link,
+.link>span {
     color: black;
     text-decoration: none;
     width: fit-content;
     padding-right: 3em;
 }
 
-ul > li:nth-child(1) > .link {
+ul>li:nth-child(1)>.link {
     margin-top: 1em;
 }
 
-.link:hover, .link.focus {
+.link:hover,
+.link.focus {
     text-decoration: underline;
 }
 
@@ -51,7 +53,7 @@ ul > li:nth-child(1) > .link {
     position: relative;
 }
 
-.radioImageWrapper > input[type="radio"] {
+.radioImageWrapper>input[type="radio"] {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -61,8 +63,8 @@ ul > li:nth-child(1) > .link {
     cursor: pointer;
 }
 
-.radioImageWrapper > input[type="radio"]:hover ~ .radioImage, 
-.radioImageWrapper > input[type="radio"]:checked ~ .radioImage {
+.radioImageWrapper>input[type="radio"]:hover~.radioImage,
+.radioImageWrapper>input[type="radio"]:checked~.radioImage {
     outline: 3px solid #0066b2;
 }
 
@@ -85,7 +87,7 @@ ul > li:nth-child(1) > .link {
     padding: 1em;
 }
 
-.tableHeader > h2 {
+.tableHeader>h2 {
     margin: 0;
     font-size: 1.25rem;
 }
@@ -94,19 +96,22 @@ ul > li:nth-child(1) > .link {
     table-layout: auto;
     width: 100%;
     text-align: left;
-    overflow: hidden;
     border-collapse: collapse;
     border-spacing: 0;
-    background-color: var(--gray-90);
-} 
-  
-.table th, .table td {
+}
+
+.table th,
+.table td {
     padding: 1em;
     font-weight: 500;
 }
 
 .table th {
     text-wrap: nowrap;
+    position: sticky;
+    background-color: var(--gray-90);
+    top: 0;
+    z-index: 1;
 }
 
 .table td {
@@ -115,7 +120,7 @@ ul > li:nth-child(1) > .link {
     border-bottom: 1px solid var(--gray);
 }
 
-  
+
 .table tbody {
     background-color: #fefefe;
 }
@@ -129,4 +134,38 @@ ul > li:nth-child(1) > .link {
 .newRoadmap:hover {
     text-decoration: underline;
     text-decoration-thickness: 2px;
+}
+
+/* Wrapper */
+
+.tableWrapper {
+    overflow-y: scroll;
+    max-height: 500px;
+    width: calc(100% + .5rem + 3px);
+    padding-right: 3px;
+    scrollbar-color: var(--gray-80) #f1f1f1;
+    scrollbar-width: thin;
+}
+
+/* width */
+.tableWrapper::-webkit-scrollbar {
+    width: .5rem;
+}
+
+/* Track */
+.tableWrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 9999px;
+
+}
+
+/* Handle */
+.tableWrapper::-webkit-scrollbar-thumb {
+    background: var(--gray-80);
+    border-radius: 9999px;
+}
+
+/* Handle on hover */
+.tableWrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-70);
 }

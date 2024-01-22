@@ -14,6 +14,7 @@ import getOneGoal from "@/fetchers/getOneGoal";
 import { Goal, DataSeries } from "@prisma/client";
 import Comments from "@/components/comments/comments";
 import { Fragment } from "react";
+import styles from './page.module.css'
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -69,19 +70,15 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           ))}
         </>
       }
-      <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
-      <br />
       {goal.dataSeries?.scale &&
         <>
           <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
         </>
       }
       <GraphGraph goal={goal} nationalGoal={nationalGoal} />
-      <br />
       <CombinedGraph roadmap={roadmap} goal={goal} />
-      <br />
       <ActionGraph actions={goal.actions} />
-      <br />
+      <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
       <Comments comments={goal.comments} objectId={goal.id} />
     </>
   )

@@ -21,8 +21,10 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return (
     <>
-      <p><BackButton href="../" /></p>
-      <h1>Skapa ny målbana{roadmap?.metaRoadmap.name ? ` under "${roadmap.metaRoadmap.name}"` : null}</h1>
+      <div className='display-flex align-items-center gap-100 margin-y-100'>
+        <p><BackButton href="../" /></p>
+        <h1>Skapa ny målbana{roadmap?.metaRoadmap.name ? ` under "${roadmap.metaRoadmap.name}"` : null}</h1>
+      </div>
       <GoalForm roadmapId={params.roadmapId} />
     </>
   )

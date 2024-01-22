@@ -69,7 +69,6 @@ export default function MainRelativeGraph({
     yaxis: {
       title: { text: "procent relativt basår" },
       labels: { formatter: floatSmoother },
-      min: 0,
     },
     tooltip: {
       x: { format: 'yyyy' },

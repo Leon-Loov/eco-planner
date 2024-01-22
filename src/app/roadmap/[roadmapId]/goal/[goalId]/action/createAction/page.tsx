@@ -30,8 +30,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <p><BackButton href="../" /></p>
-      <h1>Skapa ny åtgärd {`under målbanan "${goal?.name || goal.indicatorParameter}"`}</h1>
+      <div className='display-flex align-items-center gap-100 margin-y-100'>
+        <p><BackButton href="../" /></p>
+        <h1>Skapa ny åtgärd {`under målbanan "${goal?.name || goal.indicatorParameter}"`}</h1>
+      </div>
       <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} />
     </>
   )

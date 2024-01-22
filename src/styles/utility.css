@@ -1,8 +1,8 @@
-.display-flex {
+.display-flex, .flex {
     display: flex;
 }
 
-.display-grid {
+.display-grid, .grid {
     display: grid;
 }
 
