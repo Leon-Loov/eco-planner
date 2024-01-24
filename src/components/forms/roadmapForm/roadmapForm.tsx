@@ -2,32 +2,22 @@
 
 import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
-import countiesAndMunicipalities from "@/lib/countiesAndMunicipalities.json" with { type: "json" }
 import { Data } from "@/lib/session"
 import { AccessControlled, RoadmapInput } from "@/types"
-import { MetaRoadmap, Roadmap, RoadmapType } from "@prisma/client"
+import { MetaRoadmap, Roadmap } from "@prisma/client"
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 
 export default function RoadmapForm({
   user,
   userGroups,
-  nationalRoadmaps,
+  metaRoadmapAlternatives,
   currentRoadmap,
 }: {
   user: Data['user'],
   userGroups: string[],
-  nationalRoadmaps?: (Roadmap & {
-    goals: {
-      id: string,
-      name: string | null,
-      indicatorParameter: string,
-    }[],
-    metaRoadmap: {
-      id: string,
-      name: string,
-      actor: string | null,
-    }
+  metaRoadmapAlternatives?: (MetaRoadmap & {
+    roadmapVersions: { id: string, version: number }[],
   })[],
   currentRoadmap?: Roadmap & AccessControlled & { metaRoadmap: MetaRoadmap },
 }) {
@@ -112,15 +102,15 @@ export default function RoadmapForm({
         <textarea name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined}></textarea>
 
         {/* TODO: Change to meta roadmaps instead */}
-        {!!nationalRoadmaps &&
+        {!!metaRoadmapAlternatives &&
           <>
-            <label htmlFor="copyFrom">Nationell färdplan denna färdplan är baserad på </label>
-            <select name="parentRoadmap" id="copyFrom" defaultValue={defaultParentRoadmap}>
-              <option value="">Ingen nationell färdplan</option>
+            <label htmlFor="copyFrom">Meta-färdplan som detta är en ny version av</label>
+            <select name="parentRoadmap" id="copyFrom" defaultValue={defaultParentRoadmap} required>
+              <option value="">Inget alternativ valt</option>
               {
-                nationalRoadmaps.map((roadmap) => {
+                metaRoadmapAlternatives.map((roadmap) => {
                   return (
-                    <option key={roadmap.id} value={roadmap.id}>{`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}</option>
+                    <option key={roadmap.id} value={roadmap.id}>{`${roadmap.name}`}</option>
                   )
                 })
               }

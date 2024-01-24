@@ -3,18 +3,31 @@ import RoadmapForm from '@/components/forms/roadmapForm/roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/buttons/redirectButtons';
-import getNationals from '@/fetchers/getNationals';
+import getMetaRoadmaps from '@/fetchers/getMetaRoadmaps';
 
 export default async function Page() {
-  const [session, nationalRoadmaps] = await Promise.all([
+  let [session, metaRoadmapAlternatives] = await Promise.all([
     getSessionData(cookies()),
-    getNationals(),
+    getMetaRoadmaps(),
   ]);
 
   // User must be signed in
   if (!session.user) {
     return notFound();
   }
+
+  metaRoadmapAlternatives = metaRoadmapAlternatives.filter(metaRoadmap => {
+    if (metaRoadmap.author.id === session.user?.id) {
+      return true
+    }
+    if (metaRoadmap.editors.some(editor => editor.id === session.user?.id)) {
+      return true
+    }
+    if (metaRoadmap.editGroups.some(editGroup => session.user?.userGroups.some(userGroup => userGroup === editGroup.name))) {
+      return true
+    }
+    return false
+  })
 
   return (
     <>
@@ -25,7 +38,7 @@ export default async function Page() {
       <RoadmapForm
         user={session.user}
         userGroups={session.user?.userGroups}
-        nationalRoadmaps={nationalRoadmaps}
+        metaRoadmapAlternatives={metaRoadmapAlternatives}
       />
     </>
   )

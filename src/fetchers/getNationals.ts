@@ -71,7 +71,6 @@ const getCachedRoadmaps = unstable_cache(
     // If user is logged in, get all roadmaps they have access to
     if (session.user?.isLoggedIn) {
       try {
-        // Get all roadmaps authored by the user
         roadmaps = await prisma.roadmap.findMany({
           where: {
             metaRoadmap: { type: RoadmapType.NATIONAL },
