@@ -21,6 +21,9 @@ The current server also skips tracking changes to the `next.config.mjs` file, so
 ## Backend notes
 We use the function unstable_cache from Next.js, which currently returns cached `Date`s in stringified form (See this [GitHub issue](https://github.com/vercel/next.js/issues/51613)). Remember to always create a `new Date()` from the date value whenever you use one, until this problem is fixed.
 
+## Database structure
+See image, or refer to [schema.prisma](/prisma/schema.prisma) for full schema.
+![Database Schema](/public/images/eco-planner.png "Database Schema")
 
 ## Components
 
