@@ -4,15 +4,17 @@ import { SecondaryLink, PrimaryLink } from '../links/links'
 import { getSessionData } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
-    <header className={styles.header}>
-      <div className='layout-main display-flex justify-content-space-between'>
-        <Link href='/' className='display-flex'>
-          <img src='/icons/leaf.svg' /> 
-        </Link>
+    <aside className={styles.header}>
+      <div className={`display-flex flex-direction-column justify-content-space-between`}>
+        <div className={styles.menuToggleContainer}>
+          <input type="checkbox" className={styles.menuToggle} />
+          <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' /> 
+        </div>
         <nav>
           <Link href="/" className={styles.headerLink}> Hem </Link>
           { // Link to login and signup if not logged in
@@ -32,7 +34,7 @@ export async function Header() {
           }
         </nav>
       </div>
-    </header>
+    </aside>
   </>
 }
                 

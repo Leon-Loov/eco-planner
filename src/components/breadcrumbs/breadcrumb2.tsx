@@ -54,7 +54,7 @@ export default function Breadcrumb({
   }
 
   return <>
-    <nav className="display-flex align-items-center gap-25 flex-wrap-wrap" style={{ margin: '1em 0 0 0' }}>
+    <nav className="display-flex align-items-center gap-25 flex-wrap-wrap">
       <span className='display-flex align-items-center gap-25'>
         <Link href='/' className={styles.breadCrumb}>
           Hem

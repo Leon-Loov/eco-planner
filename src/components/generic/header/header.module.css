@@ -2,18 +2,54 @@
 
 .header {
     position: sticky;
-    top: 0;
-    padding: 1em 0;
-    background-color: white;
+    top: 1rem;
+    height: calc(100dvh - 2rem);
+    box-shadow: 0 0 .5rem -3px var(--gray);
+    border-radius: .5rem;
+    padding: 1rem;
     z-index: 9997;
 }
-    
+
 .header nav {
   display: flex;
-  gap: 1em;
-  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 1rem;
+  margin-top: 5rem;
+  width: 10rem;
+  @media (max-width: 750px) {
+    display: none;
+  }
+}
+
+.menuToggleContainer {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: fit-content;
+  transition: background-color .2s ease;
+  padding: .25rem;
+  border-radius: 9999px;
 }
   
+.menuToggle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.menuToggleContainer:has(.menuToggle:hover) {
+  background-color: var(--gray);
+}
+
+.menuToggleContainer:has(.menuToggle:checked) ~ nav {
+  width: 0;
+}
+
 .headerLink{
   text-decoration: unset;
   color: black;
@@ -23,10 +59,4 @@
 .headerLink:hover {
   border-bottom: 3px solid var(--accent-color);
   margin-bottom: -3px;
-}
-
-@media (max-width: 500px) {
-  .headerLink {
-    display: none;
-  }
 }
