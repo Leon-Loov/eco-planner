@@ -15,8 +15,29 @@ export default async function RootLayout({
   let goals = roadmaps.flatMap(roadmap => roadmap.goals)
   let actions = goals.flatMap(goal => goal.actions)
 
+  type GenericObject = (
+    {
+      id: string,
+      name: string,
+      indicatorParameter: never,
+      metaRoadmap: never,
+    } |
+    {
+      id: string,
+      name?: string | null,
+      indicatorParameter: string,
+      metaRoadmap: never,
+    } |
+    {
+      id: string,
+      name: never,
+      indicatorParameter: never,
+      metaRoadmap: { name: string },
+    }
+  )
+
   // Filter out nulls
-  let objects = [...roadmaps, ...goals, ...actions].filter(object => object != null) as { id: string; name?: string | null | undefined; indicatorParameter?: string | null | undefined; }[]
+  let objects = [...metaRoadmaps, ...roadmaps, ...goals, ...actions].filter(object => object != null) as GenericObject[]
 
   return (
     <html lang="sv">

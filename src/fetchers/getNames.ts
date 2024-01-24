@@ -29,6 +29,10 @@ const getCachedNames = unstable_cache(
       roadmapVersions: {
         version: number,
         id: string,
+        metaRoadmap: {
+          name: string,
+          id: string,
+        },
         goals: {
           name: string | null,
           indicatorParameter: string,
@@ -52,6 +56,12 @@ const getCachedNames = unstable_cache(
               select: {
                 version: true,
                 id: true,
+                metaRoadmap: {
+                  select: {
+                    name: true,
+                    id: true,
+                  },
+                },
                 goals: {
                   select: {
                     name: true,
@@ -110,6 +120,12 @@ const getCachedNames = unstable_cache(
               select: {
                 version: true,
                 id: true,
+                metaRoadmap: {
+                  select: {
+                    name: true,
+                    id: true,
+                  },
+                },
                 goals: {
                   select: {
                     name: true,
@@ -152,6 +168,12 @@ const getCachedNames = unstable_cache(
             select: {
               version: true,
               id: true,
+              metaRoadmap: {
+                select: {
+                  name: true,
+                  id: true,
+                },
+              },
               goals: {
                 select: {
                   name: true,

@@ -8,11 +8,26 @@ import { usePathname } from "next/navigation"
 export default function Breadcrumb({
   relevantObjects,
 }: {
-  relevantObjects?: {
-    id: string,
-    name?: string | null,
-    indicatorParameter?: string | null,
-  }[]
+  relevantObjects?: (
+    {
+      id: string,
+      name: string,
+      indicatorParameter: never,
+      metaRoadmap: never,
+    } |
+    {
+      id: string,
+      name?: string | null,
+      indicatorParameter: string,
+      metaRoadmap: never,
+    } |
+    {
+      id: string,
+      name: never,
+      indicatorParameter: never,
+      metaRoadmap: { name: string },
+    }
+  )[]
 }) {
   /** Regex for UUIDs */
   let regexUUID = /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/
@@ -30,10 +45,10 @@ export default function Breadcrumb({
     if (sectionNames[i].match(regexUUID)) {
       let thing = relevantObjects?.find(object => object.id === sectionNames[i])
       if (thing) {
-        if (!thing.name && !thing.indicatorParameter) {
-          throw new Error('Breadcrumb: relevantObjects must have either a name or an indicatorParameter')
+        if (!thing.name && !thing.indicatorParameter && !thing.metaRoadmap?.name) {
+          throw new Error('Breadcrumb: relevantObjects must have either a name, an indicatorParameter or a metaRoadmap with a name')
         }
-        sectionNames[i] = (thing.name || thing.indicatorParameter) as string
+        sectionNames[i] = (thing.name || thing.indicatorParameter || thing.metaRoadmap.name) as string
       }
     }
   }
