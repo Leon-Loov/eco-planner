@@ -17,18 +17,21 @@ export default async function RootLayout({
 
   type GenericObject = (
     {
+      // Action or MetaRoadmap
       id: string,
       name: string,
       indicatorParameter: never,
       metaRoadmap: never,
     } |
     {
+      // Goal
       id: string,
       name?: string | null,
       indicatorParameter: string,
       metaRoadmap: never,
     } |
     {
+      // Roadmap
       id: string,
       name: never,
       indicatorParameter: never,
