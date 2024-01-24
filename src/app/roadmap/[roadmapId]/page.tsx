@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
           <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
         </Link>
       }
-      {roadmap.metaRoadmap.name}
+      {`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}
     </h1>
     <span style={{ color: "gray" }}>Färdplan</span>
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
