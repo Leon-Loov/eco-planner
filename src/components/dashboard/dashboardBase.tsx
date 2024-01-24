@@ -4,14 +4,13 @@ import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import GoalTable from "../tables/goalTables/goalTable";
 import { Action } from "@prisma/client";
-import { AccessControlled } from "@/types";
 import ActionTable from "../tables/actionTables/actionTable";
 import RoadmapTable from "../tables/roadmapTable";
 
-export default async function DashboardBase({ county, municipality }: { county: string, municipality?: string }) {
+export default async function DashboardBase({ actor }: { actor: string }) {
   let [session, roadmaps] = await Promise.all([
     getSessionData(cookies()),
-    getRoadmapSubset(county, municipality)
+    getRoadmapSubset(actor)
   ]);
 
   let goalIds: string[] = []
@@ -34,16 +33,16 @@ export default async function DashboardBase({ county, municipality }: { county: 
   }
 
   // Get a list of actions
-  let actions: (Action & AccessControlled & { goals: { id: string, roadmaps: { id: string }[] }[] })[] = [];
+  let actions: (Action & { goal: { id: string, roadmap: { id: string } } })[] = [];
   for (let goal of goals) {
     if (!goal) continue;
     for (let action of goal.actions) {
-      actions.push({ ...action, goals: [{ id: goal.id, roadmaps: [{ id: goal.roadmaps[0].id }] }] })
+      actions.push({ ...action, goal: { id: goal.id, roadmap: { id: goal.roadmap.id } } })
     }
   }
 
   return <>
-    <RoadmapTable title={municipality || county} roadmaps={roadmaps} user={session.user} />
+    <RoadmapTable title={actor} roadmaps={roadmaps} user={session.user} />
     <GoalTable goals={goals} />
     <ActionTable actions={actions} />
   </>

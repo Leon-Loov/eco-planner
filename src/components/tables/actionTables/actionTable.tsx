@@ -3,7 +3,7 @@
 // TODO: Move to actions.tsx
 import styles from '../tables.module.css' with { type: "css" };
 import { Action, Goal } from "@prisma/client"
-import { AccessControlled, AccessLevel } from '@/types'
+import { AccessLevel } from '@/types'
 import Image from "next/image";
 import Link from 'next/link';
 
@@ -12,21 +12,17 @@ interface ActionTableCommonProps {
 }
 
 interface ActionTableWithGoal extends ActionTableCommonProps {
-  goal: Goal & AccessControlled & {
-    actions: (Action & AccessControlled)[]
+  goal: Goal & {
+    actions: (Action)[]
   },
-  roadmapId: string,
   actions?: never,
-  goalId: string, // TODO: Checka med leon om dessa typer
 }
 
 interface ActionTableWithActions extends ActionTableCommonProps {
   goal?: never,
-  roadmapId?: never,
-  actions: (Action & AccessControlled & {
-    goals: { id: string, roadmaps: { id: string }[] }[]
+  actions: (Action & {
+    goal: { id: string, roadmap: { id: string } }
   })[],
-  goalId: string,
 }
 
 type ActionTableProps = ActionTableWithGoal | ActionTableWithActions;
@@ -42,8 +38,6 @@ export default function ActionTable({
   goal,
   actions,
   accessLevel,
-  roadmapId,
-  goalId,
 }: ActionTableProps) {
   // Failsafe in case wrong props are passed
   if ((!actions && !goal) || (actions && goal)) throw new Error('ActionTable: Either `goal` XOR `actions` must be provided');
@@ -51,12 +45,10 @@ export default function ActionTable({
   // If a goal is provided, extract the actions from it
   if (!actions) {
     actions = goal.actions.map((action) => {
-      let goals = [{ id: goal.id, roadmaps: [{ id: roadmapId }] }];
-      return { ...action, goals };
+      let fakeGoal = { id: goal.id, roadmap: { id: goal.roadmapId } };
+      return { ...action, goal: fakeGoal };
     });
   }
-  console.log(roadmapId)
-  console.log(goalId)
 
   // If no actions are found, return a message
   if (!actions.length) return (<p>Det har inte tillgång till några åtgärder i denna målbana, eller så har målbanan inga åtgärder.</p>);
@@ -65,9 +57,9 @@ export default function ActionTable({
     <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>
       <h2>Åtgärder</h2>
       <nav className='display-flex align-items-center gap-100'>
-        { // Only show the button if the user has edit access to the goal
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
-          <Link className={`${styles.newRoadmap} display-flex gap-50`} href={`/roadmap/${roadmapId}/goal/${goalId}/action/createAction`}>
+        { // Only show the button if the user has edit access to the goal and a goal is provided
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) && goal &&
+          <Link className={`${styles.newRoadmap} display-flex gap-50`} href={`/roadmap/${goal.roadmapId}/goal/${goal.id}/action/createAction`}>
             Skapa ny åtgärd
             <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new action"></Image>
           </Link>
@@ -96,11 +88,11 @@ export default function ActionTable({
                 { // Only show the edit link if the user has edit access to the goal
                   // Should technically be if the user has edit access to the action, but that could build up a lot of checks
                   (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
-                  <Link href={`/roadmap/${action.goals[0].roadmaps[0].id}/goal/${action.goals[0].id}/action/${action.id}/editAction`}>
+                  <Link href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}/editAction`}>
                     <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} />
                   </Link>
                 }
-                <a href={`/roadmap/${action.goals[0].roadmaps[0].id}/goal/${action.goals[0].id}/action/${action.id}`}>{action.name}</a>
+                <a href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}`}>{action.name}</a>
               </td>
               <td>{action.description}</td>
               <td>{action.costEfficiency}</td>

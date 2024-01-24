@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     <>
       <div className='display-flex align-items-center gap-100 margin-y-100'>
         <p><BackButton href={`/roadmap/${roadmap.id}`} /></p>
-        <h1>Redigera färdplanen {`"${roadmap.name}"`}</h1>
+        <h1>Redigera färdplanen {`"${roadmap.metaRoadmap.name}"`}</h1>
       </div>
       <RoadmapForm
         user={session.user}

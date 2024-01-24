@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import accessChecker from "@/lib/accessChecker";
 import { BackButton } from '@/components/buttons/redirectButtons';
 import getOneAction from "@/fetchers/getOneAction";
-import { AccessLevel } from "@/types";
+import { AccessControlled, AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string, actionId: string } }) {
   const [session, action] = await Promise.all([
@@ -13,8 +13,19 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     getOneAction(params.actionId)
   ]);
 
+  let actionAccessData: AccessControlled | null = null;
+  if (action) {
+    actionAccessData = {
+      author: action.author,
+      editors: action.goal.roadmap.editors,
+      viewers: action.goal.roadmap.viewers,
+      editGroups: action.goal.roadmap.editGroups,
+      viewGroups: action.goal.roadmap.viewGroups,
+    }
+  }
+
   // User must be signed in and have edit access to the action, and the action must exist
-  if (!action || !session.user || !accessChecker(action, session.user) || accessChecker(action, session.user) === AccessLevel.View) {
+  if (!action || !session.user || !accessChecker(actionAccessData, session.user) || accessChecker(actionAccessData, session.user) === AccessLevel.View) {
     return notFound();
   }
 
@@ -22,9 +33,9 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     <>
       <div className='display-flex align-items-center gap-100 margin-y-100'>
         <p><BackButton href="./" /></p>
-        <h1>Redigera åtgärden {`"${action.name}" under målbanan "${action.goals[0]?.name || action.goals[0]?.indicatorParameter || "ERROR"}"`}</h1>
+        <h1>Redigera åtgärden {`"${action.name}" under målbanan "${action.goal.name || action.goal.indicatorParameter || "ERROR"}"`}</h1>
       </div>
-      <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} user={session.user} currentAction={action} />
+      <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} currentAction={action} />
     </>
   )
 }

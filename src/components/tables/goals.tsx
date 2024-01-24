@@ -19,16 +19,8 @@ export default function Goals({
       _count: { actions: number }
       dataSeries: DataSeries | null,
       author: { id: string, username: string },
-      editors: { id: string, username: string }[],
-      viewers: { id: string, username: string }[],
-      editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-      viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
     })[],
     author: { id: string, username: string },
-    editors: { id: string, username: string }[],
-    viewers: { id: string, username: string }[],
-    editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
-    viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
   },
   accessLevel?: AccessLevel
 }) {

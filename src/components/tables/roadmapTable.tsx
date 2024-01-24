@@ -1,6 +1,6 @@
 import { Data } from '@/lib/session';
 import styles from './tables.module.css' with { type: "css" };
-import { Roadmap } from "@prisma/client";
+import { MetaRoadmap, Roadmap } from "@prisma/client";
 import Image from 'next/image';
 import Link from 'next/link';
 import { RoadmapActionButton } from './tableActions/roadmapActions';
@@ -11,7 +11,7 @@ export default function RoadmapTable({
   user,
 }: {
   title: String,
-  roadmaps: (Roadmap & { _count: { goals: number } })[],
+  roadmaps: (Roadmap & { _count: { goals: number }, metaRoadmap: MetaRoadmap })[],
   user: Data['user']
 }) {
   return <>
@@ -41,14 +41,14 @@ export default function RoadmapTable({
         <tbody>
           {roadmaps.map(roadmap => (
             <tr key={roadmap.id}>
-              <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.name}</a></td>
+              <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.metaRoadmap.name}</a></td>
               <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
               <td>
                 <RoadmapActionButton
                   addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
                   editHref={`/roadmap/${roadmap.id}/editRoadmap`}
                   id={roadmap.id}
-                  tableName={roadmap.name}
+                  tableName={roadmap.metaRoadmap.name}
                 />
               </td>
             </tr>

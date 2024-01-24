@@ -6,25 +6,27 @@ import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
 /**
- * Gets specified roadmap and all goals for that roadmap.
+ * Gets a roadmap from a meta roadmap ID and version number.
  * 
  * Returns null if roadmap is not found or user does not have access to it. Also returns null on error.
- * @param id ID of the roadmap to get
+ * @param metaId ID of the meta roadmap to search for a specific version of
+ * @param version Version number of the roadmap to get
  * @returns Roadmap object with goals
  */
-export default async function getOneRoadmap(id: string) {
+export default async function getRoadmapByVersion(metaId: string, version: number) {
   const session = await getSessionData(cookies());
-  return getCachedRoadmap(id, session.user?.id ?? '')
+  return getCachedRoadmap(metaId, version, session.user?.id ?? '')
 }
 
 /**
  * Caches the specified roadmap and all goals for that roadmap.
  * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap', 'goal']`, which is done in relevant API routes.
- * @param id ID of the roadmap to cache
+ * @param metaId ID of the meta roadmap to search for a specific version of
+ * @param version Version number of the roadmap to cache
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedRoadmap = unstable_cache(
-  async (id, userId) => {
+  async (metaId, version, userId) => {
     const session = await getSessionData(cookies());
 
     let roadmap: Roadmap & {
@@ -46,7 +48,7 @@ const getCachedRoadmap = unstable_cache(
     if (session.user?.isAdmin) {
       try {
         roadmap = await prisma.roadmap.findUnique({
-          where: { id },
+          where: { meta_version: { metaRoadmapId: metaId, version } },
           include: {
             metaRoadmap: true,
             goals: {
@@ -84,7 +86,7 @@ const getCachedRoadmap = unstable_cache(
       try {
         roadmap = await prisma.roadmap.findUnique({
           where: {
-            id,
+            meta_version: { metaRoadmapId: metaId, version },
             OR: [
               { authorId: session.user.id },
               { editors: { some: { id: session.user.id } } },
@@ -125,7 +127,7 @@ const getCachedRoadmap = unstable_cache(
     try {
       roadmap = await prisma.roadmap.findUnique({
         where: {
-          id,
+          meta_version: { metaRoadmapId: metaId, version },
           viewGroups: { some: { name: 'Public' } },
         },
         include: {
@@ -154,6 +156,6 @@ const getCachedRoadmap = unstable_cache(
 
     return roadmap;
   },
-  ['getOneRoadmap'],
+  ['roadmapByVersion'],
   { revalidate: 600, tags: ['database', 'roadmap', 'goal'] },
 );

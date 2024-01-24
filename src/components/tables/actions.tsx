@@ -12,15 +12,15 @@ export default function Actions({
   params,
 }: {
   title: String,
-  goal: Goal & AccessControlled & {
-    actions: (Action & AccessControlled)[]
+  goal: Goal & {
+    actions: (Action)[]
   },
   accessLevel?: AccessLevel,
   params: { roadmapId: string, goalId: string },
 }) {
   return <>
-    <div style={{marginTop: '1.5rem'}}> {/* TODO: Remove this div (replace with layout in parent page) */}
-      <ActionTable goal={goal} accessLevel={accessLevel} roadmapId={params.roadmapId} goalId={params.goalId} />
+    <div style={{ marginTop: '1.5rem' }}> {/* TODO: Remove this div (replace with layout in parent page) */}
+      <ActionTable goal={goal} accessLevel={accessLevel} />
     </div>
   </>
 

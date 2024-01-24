@@ -1,7 +1,7 @@
 import { getSessionData } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { roadmapSorter } from "@/lib/sorters";
-import { Roadmap } from "@prisma/client";
+import { MetaRoadmap, Roadmap, RoadmapType } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -18,7 +18,7 @@ export default async function getNationals() {
 
 /**
  * Caches all national roadmaps the user has access to.
- * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap']`, which is done in relevant API routes.
+ * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap', 'goal']`, which is done in relevant API routes.
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedRoadmaps = unstable_cache(
@@ -27,6 +27,7 @@ const getCachedRoadmaps = unstable_cache(
 
     let roadmaps: (
       Roadmap & {
+        metaRoadmap: MetaRoadmap
         goals: {
           id: string,
           name: string | null,
@@ -44,8 +45,9 @@ const getCachedRoadmaps = unstable_cache(
     if (session.user?.isAdmin) {
       try {
         roadmaps = await prisma.roadmap.findMany({
-          where: { isNational: true },
+          where: { metaRoadmap: { type: RoadmapType.NATIONAL } },
           include: {
+            metaRoadmap: true,
             goals: { select: { id: true, name: true, indicatorParameter: true } },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -72,7 +74,7 @@ const getCachedRoadmaps = unstable_cache(
         // Get all roadmaps authored by the user
         roadmaps = await prisma.roadmap.findMany({
           where: {
-            isNational: true,
+            metaRoadmap: { type: RoadmapType.NATIONAL },
             OR: [
               { authorId: session.user.id },
               { editors: { some: { id: session.user.id } } },
@@ -83,17 +85,8 @@ const getCachedRoadmaps = unstable_cache(
             ]
           },
           include: {
+            metaRoadmap: true,
             goals: {
-              where: {
-                OR: [
-                  { authorId: session.user.id },
-                  { editors: { some: { id: session.user.id } } },
-                  { viewers: { some: { id: session.user.id } } },
-                  { editGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
-                ]
-              },
               select: { id: true, name: true, indicatorParameter: true }
             },
             author: { select: { id: true, username: true } },
@@ -119,12 +112,12 @@ const getCachedRoadmaps = unstable_cache(
     try {
       roadmaps = await prisma.roadmap.findMany({
         where: {
-          isNational: true,
+          metaRoadmap: { type: RoadmapType.NATIONAL },
           viewGroups: { some: { name: 'Public' } }
         },
         include: {
+          metaRoadmap: true,
           goals: {
-            where: { viewGroups: { some: { name: 'Public' } } },
             select: { id: true, name: true, indicatorParameter: true }
           },
           author: { select: { id: true, username: true } },

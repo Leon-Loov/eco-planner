@@ -1,34 +1,24 @@
 'use client'
 
-import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
-import { Data } from "@/lib/session"
-import { AccessControlled } from "@/types"
 import { Action } from "@prisma/client"
 
 export default function ActionForm({
   roadmapId,
   goalId,
-  user,
   currentAction
 }: {
   roadmapId: string,
   goalId: string,
-  user: Data['user'],
-  currentAction?: Action & AccessControlled & { links: { url: string, description: string | null }[] },
+  currentAction?: Action & {
+    links: { url: string, description: string | null }[],
+  },
 }) {
   // Submit the form to the API
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const form = event.target.elements
-
-    const { editUsers, viewUsers, editGroups, viewGroups } = getAccessData(
-      form.namedItem("editUsers"),
-      form.namedItem("viewUsers"),
-      form.namedItem("editGroups"),
-      form.namedItem("viewGroups")
-    )
 
     const links = getLinks(event.target)
 
@@ -46,10 +36,6 @@ export default function ActionForm({
       isRenewables: (form.namedItem("isRenewables") as HTMLInputElement)?.checked,
       goalId: goalId,
       actionId: currentAction?.id || null,
-      editors: editUsers,
-      viewers: viewUsers,
-      editGroups,
-      viewGroups,
       links,
       timestamp,
     })
@@ -75,17 +61,6 @@ export default function ActionForm({
   }
 
   const timestamp = Date.now();
-
-  let currentAccess: AccessControlled | undefined = undefined;
-  if (currentAction) {
-    currentAccess = {
-      author: currentAction.author,
-      editors: currentAction.editors,
-      viewers: currentAction.viewers,
-      editGroups: currentAction.editGroups,
-      viewGroups: currentAction.viewGroups,
-    }
-  }
 
   return (
     <>
@@ -144,13 +119,6 @@ export default function ActionForm({
           <LinkInput links={currentAction?.links} />
         </div>
         <br />
-        { // Only show the access selector if a new action is being created, the useris an admin, or the user is the author of the action
-          (!currentAction || user?.isAdmin || user?.id === currentAction.authorId) &&
-          <>
-            <AccessSelector groupOptions={user?.userGroups || []} currentAccess={currentAccess} />
-            <br />
-          </>
-        }
         <input type="submit" value={currentAction ? "Spara" : "Skapa åtgärd"} className="call-to-action-primary" />
         <br />
       </form>

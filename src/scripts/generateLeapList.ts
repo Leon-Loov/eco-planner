@@ -1,5 +1,6 @@
 import fs from 'fs';
 import prisma from '../prismaClient.ts'
+import { RoadmapType } from '@prisma/client';
 /**
  * This script generates a json file containing all indicator parameters from public, national roadmaps.
  * The file is used to generate suggestions for indicator parameters when creating a new goal.
@@ -9,7 +10,7 @@ async function generateLeapList() {
   // Get the indicator parameters
   let rawData = await prisma.roadmap.findMany({
     where: {
-      isNational: true,
+      metaRoadmap: { type: RoadmapType.NATIONAL },
       viewGroups: { some: { name: 'public' } },
     },
     select: {
@@ -19,7 +20,12 @@ async function generateLeapList() {
         },
       },
     },
-  });
+  }).catch((err) => { });
+
+  if (rawData?.length === 0 || !rawData) {
+    console.log("No public, national roadmaps found; LEAP list not touched.")
+    return
+  }
 
   // Flatten the data
   let leapList = [];

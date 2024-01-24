@@ -4,8 +4,9 @@ import AccessSelector, { getAccessData } from "@/components/forms/accessSelector
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import countiesAndMunicipalities from "@/lib/countiesAndMunicipalities.json" with { type: "json" }
 import { Data } from "@/lib/session"
-import { AccessControlled } from "@/types"
-import { Roadmap } from "@prisma/client"
+import { AccessControlled, RoadmapInput } from "@/types"
+import { MetaRoadmap, Roadmap, RoadmapType } from "@prisma/client"
+import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 
 export default function RoadmapForm({
@@ -22,8 +23,13 @@ export default function RoadmapForm({
       name: string | null,
       indicatorParameter: string,
     }[],
+    metaRoadmap: {
+      id: string,
+      name: string,
+      actor: string | null,
+    }
   })[],
-  currentRoadmap?: Roadmap & AccessControlled,
+  currentRoadmap?: Roadmap & AccessControlled & { metaRoadmap: MetaRoadmap },
 }) {
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -38,14 +44,10 @@ export default function RoadmapForm({
       form.namedItem("viewGroups")
     )
 
-    const parentRoadmapId = (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
+    const metaRoadmapId = (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
 
-    const formJSON = JSON.stringify({
-      name: (form.namedItem("roadmapName") as HTMLInputElement)?.value,
-      description: (form.namedItem("description") as HTMLInputElement)?.value || undefined,
-      county: (form.namedItem("county") as HTMLInputElement)?.value == "National" ? undefined : (form.namedItem("county") as HTMLInputElement)?.value || undefined,
-      municipality: (form.namedItem("municipality") as HTMLInputElement)?.value == "Regional" ? undefined : (form.namedItem("municipality") as HTMLInputElement)?.value || undefined,
-      isNational: (form.namedItem("county") as HTMLInputElement)?.value == "National",
+    const formData: RoadmapInput & { roadmapId?: string, goals?: any, timestamp: number } = {
+      description: (form.namedItem("description") as HTMLTextAreaElement)?.value || undefined,
       editors: editUsers,
       viewers: viewUsers,
       editGroups,
@@ -54,9 +56,12 @@ export default function RoadmapForm({
       goals: [
         ...(currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : [])
       ],
-      parentRoadmapId,
+      metaRoadmapId,
+      inheritFromId: (form.namedItem('inheritFromId') as HTMLSelectElement)?.value || undefined,
       timestamp,
-    })
+    }
+
+    const formJSON = JSON.stringify(formData)
 
     fetch('/api/createRoadmap', {
       // If a roadmap is being edited, use PUT instead of POST
@@ -80,7 +85,6 @@ export default function RoadmapForm({
     })
   }
 
-  const [selectedCounty, setSelectedCounty] = useState<string | null>(currentRoadmap?.county || null)
   const [currentFile, setCurrentFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const timestamp = Date.now()
@@ -96,71 +100,36 @@ export default function RoadmapForm({
     }
   }
 
+  let defaultParentRoadmap: string | undefined = useSearchParams().get('metaRoadmapId') || undefined
+
   return (
     <>
       <form onSubmit={handleSubmit} className="action-form">
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
-        <label htmlFor="name">Färdplansnamn </label>
-        <input type="text" name="roadmapName" required id="roadmapName" defaultValue={currentRoadmap?.name} />
 
-        <label htmlFor="description">Beskrivning av färdplanen </label>
+        <label htmlFor="description">Extra beskrivning av den här versionen av färdplanen </label>
         <textarea name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined}></textarea>
 
+        {/* TODO: Change to meta roadmaps instead */}
         {!!nationalRoadmaps &&
           <>
             <label htmlFor="copyFrom">Nationell färdplan denna färdplan är baserad på </label>
-            <select name="parentRoadmap" id="copyFrom">
+            <select name="parentRoadmap" id="copyFrom" defaultValue={defaultParentRoadmap}>
               <option value="">Ingen nationell färdplan</option>
               {
                 nationalRoadmaps.map((roadmap) => {
                   return (
-                    <option key={roadmap.id} value={roadmap.id}>{roadmap.name}</option>
+                    <option key={roadmap.id} value={roadmap.id}>{`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}</option>
                   )
                 })
               }
             </select>
+            {/* TODO: Add secondary dropdown to select target version */}
           </>
         }
 
-        <div className="display-flex align-items-center gap-100">
-          <div className="flex-grow-100" style={{maxWidth: "250px"}}>
-            <label htmlFor="county">Län</label>
-            <select name="county" id="county" required onChange={(e) => setSelectedCounty(e.target.value)} defaultValue={currentRoadmap?.isNational ? "National" : currentRoadmap?.county ?? undefined}>
-              <option value="">Välj län</option>
-              { // If the user is an admin, they can select the entire country to make a national roadmap
-                user?.isAdmin &&
-                <option value="National">Hela landet (nationell färdplan)</option>
-              }
-              {
-                Object.keys(countiesAndMunicipalities).map((county) => {
-                  return (
-                    <option key={county} value={county}>{county}</option>
-                  )
-                })
-              }
-            </select>
-          </div>
-          <div className="flex-grow-100" style={{maxWidth: "250px"}}>
-          { // If a county is selected, show a dropdown for municipalities in that county
-            selectedCounty && selectedCounty !== "National" &&
-            <>
-              <label htmlFor="municipality">Kommun</label>
-              <select name="municipality" id="municipality" required defaultValue={currentRoadmap?.municipality ?? undefined}>
-                <option value="">Välj kommun</option>
-                <option value="Regional">Hela länet</option>
-                {
-                  countiesAndMunicipalities[selectedCounty as keyof typeof countiesAndMunicipalities].map((municipality) => {
-                    return (
-                      <option key={municipality} value={municipality}>{municipality}</option>
-                    )
-                  })
-                }
-              </select>
-            </>
-          }
-          </div>
-        </div>
+        {/* TODO: Add selector for inheriting some/all goals from another roadmap */}
 
         <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> Notera att det här skapar nya målbanor även om det redan finns några. </label>
         <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />

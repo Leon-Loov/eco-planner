@@ -1,10 +1,11 @@
 import { NextRequest } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
-import { AccessLevel, GoalInput } from "@/types";
+import { AccessControlled, AccessLevel, GoalInput } from "@/types";
 import { Prisma } from "@prisma/client";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
+import dataSeriesPrep from "./dataSeriesPrep";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -29,19 +30,6 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
-  /*
-  else if (goal.dataSeries && goal.dataSeriesId) {
-    return createResponse(
-      response,
-      JSON.stringify({
-        message: 'Cannot create a new data series and reference an existing one at the same time'
-      }),
-      { status: 400 }
-    );
-  }
-  */
-  // dataSeriesId is currently disabled
-  // goal.dataSeriesId = goal.dataSeriesId || "";
 
   // Validate session
   if (!session.user?.isLoggedIn) {
@@ -52,58 +40,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Create lists of names for linking
-  let editors: { username: string }[] = [];
-  for (let name of goal.editors || []) {
-    editors.push({ username: name });
-  }
-
-  let viewers: { username: string }[] = [];
-  for (let name of goal.viewers || []) {
-    viewers.push({ username: name });
-  }
-
-  let editGroups: { name: string }[] = [];
-  for (let name of goal.editGroups || []) {
-    editGroups.push({ name: name });
-  }
-
-  let viewGroups: { name: string }[] = [];
-  for (let name of goal.viewGroups || []) {
-    viewGroups.push({ name: name });
-  }
-
-  // This code also exists in src/app/api/createRoadmap/roadmapGoalCreator.ts, if one changes the other should be changed as well
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
-    author: { connect: { id: session.user.id } },
-    unit: goal.dataUnit,
-    scale: goal.dataScale,
-  };
-
-  if (goal.dataSeries?.length && goal.dataSeries.length <= 31) {
-    // The keys for the data values are `val2020`, `val2021`, etc. up to `val2050
-    let keys = goal.dataSeries.map((_, index) => `val${index + 2020}`);
-    keys.forEach((key, index) => {
-      let value: number | null = parseFloat(goal.dataSeries![index]);
-      // If the value is empty, set it to null
-      if (!goal.dataSeries![index] && goal.dataSeries![index] != "0") {
-        value = null;
-      }
-      // If the value is a number or null, add it to the dataValues object
-      if (value === null || !isNaN(value)) {
-        // This mess assures TypeScript that we are not trying to assign numbers to any of the
-        // other fields in the dataSeries object.
-        dataValues[key as keyof Omit<
-          Prisma.DataSeriesCreateWithoutGoalsInput,
-          'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
-          'editors' | 'viewers' | 'editGroups' | 'viewGroups'
-        >] = value;
-      }
-    });
-  }
+  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
   // If the data series is invalid, return an error
-  else if (!goal.dataSeries?.length || goal.dataSeries!.length > 31) {
+  if (dataValues === null) {
     return createResponse(
       response,
       JSON.stringify({
@@ -119,37 +59,15 @@ export async function POST(request: NextRequest) {
       data: {
         name: goal.name,
         description: goal.description,
-        nationalRoadmapId: goal.nationalRoadmapId || undefined,
-        nationalGoalId: goal.nationalGoalId || undefined,
         indicatorParameter: goal.indicatorParameter,
         author: {
-          connect: {
-            id: session.user.id,
-          },
+          connect: { id: session.user.id },
         },
-        editors: {
-          connect: editors,
-        },
-        viewers: {
-          connect: viewers,
-        },
-        editGroups: {
-          connect: editGroups,
-        },
-        viewGroups: {
-          connect: viewGroups,
-        },
-        roadmaps: {
+        roadmap: {
           connect: { id: goal.roadmapId },
         },
         dataSeries: {
-          // The ability to connect to an existing data series is currently disabled
-          // connectOrCreate: {
-          //   where: {
-          //     id: goal.dataSeriesId,
-          //   },
           create: dataValues,
-          // }
         },
         links: {
           create: goal.links?.map(link => {
@@ -174,7 +92,7 @@ export async function POST(request: NextRequest) {
     if (e?.code == 'P2025') {
       return createResponse(
         response,
-        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        JSON.stringify({ message: 'Failed to connect records. Given roadmap might not exist' }),
         { status: 400 }
       );
     }
@@ -217,13 +135,29 @@ export async function PUT(request: NextRequest) {
       where: { id: goal.goalId },
       include: {
         author: { select: { id: true, username: true } },
-        editors: { select: { id: true, username: true } },
-        viewers: { select: { id: true, username: true } },
-        editGroups: { include: { users: { select: { id: true, username: true } } } },
-        viewGroups: { include: { users: { select: { id: true, username: true } } } },
+        roadmap: {
+          select: {
+            editors: { select: { id: true, username: true } },
+            viewers: { select: { id: true, username: true } },
+            editGroups: { include: { users: { select: { id: true, username: true } } } },
+            viewGroups: { include: { users: { select: { id: true, username: true } } } },
+          }
+        },
       }
     });
-    accessLevel = accessChecker(currentGoal!, session.user)
+
+    if (!currentGoal) {
+      throw new Error(accessDenied, { cause: 'goal' });
+    }
+
+    let accessFields: AccessControlled = {
+      author: currentGoal.author,
+      editors: currentGoal.roadmap.editors,
+      viewers: currentGoal.roadmap.viewers,
+      editGroups: currentGoal.roadmap.editGroups,
+      viewGroups: currentGoal.roadmap.viewGroups,
+    }
+    accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
       throw new Error(accessDenied, { cause: 'goal' });
     }
@@ -247,58 +181,10 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  // Create lists of names for linking
-  let editors: { username: string }[] = [];
-  for (let name of goal.editors || []) {
-    editors.push({ username: name });
-  }
-
-  let viewers: { username: string }[] = [];
-  for (let name of goal.viewers || []) {
-    viewers.push({ username: name });
-  }
-
-  let editGroups: { name: string }[] = [];
-  for (let name of goal.editGroups || []) {
-    editGroups.push({ name: name });
-  }
-
-  let viewGroups: { name: string }[] = [];
-  for (let name of goal.viewGroups || []) {
-    viewGroups.push({ name: name });
-  }
-
-  // This code also exists in src/app/api/createRoadmap/roadmapGoalCreator.ts, if one changes the other should be changed as well
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalsInput = {
-    author: { connect: { id: session.user!.id } },
-    unit: goal.dataUnit,
-    scale: goal.dataScale,
-  };
-
-  if (goal.dataSeries?.length && goal.dataSeries.length <= 31) {
-    // The keys for the data values are `val2020`, `val2021`, etc. up to `val2050
-    let keys = goal.dataSeries.map((_, index) => `val${index + 2020}`);
-    keys.forEach((key, index) => {
-      let value: number | null = parseFloat(goal.dataSeries![index]);
-      // If the value is empty, set it to null
-      if (!goal.dataSeries![index] && goal.dataSeries![index] != "0") {
-        value = null;
-      }
-      // If the value is a number or null, add it to the dataValues object
-      if (value === null || !isNaN(value)) {
-        // This mess assures TypeScript that we are not trying to assign numbers to any of the
-        // other fields in the dataSeries object.
-        dataValues[key as keyof Omit<
-          Prisma.DataSeriesCreateWithoutGoalsInput,
-          'author' | 'unit' | 'scale' | 'id' | 'createdAt' | 'updatedAt' |
-          'editors' | 'viewers' | 'editGroups' | 'viewGroups'
-        >] = value;
-      }
-    });
-  }
+  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
   // If the data series is invalid, return an error
-  else if (!goal.dataSeries?.length || goal.dataSeries!.length > 31) {
+  if (dataValues === null) {
     return createResponse(
       response,
       JSON.stringify({
@@ -310,54 +196,29 @@ export async function PUT(request: NextRequest) {
 
   // Edit goal
   try {
-    // Get list of IDs of goals under this goal
-    const goalContents = await prisma.goal.findUnique({
+    const editedGoal = await prisma.goal.update({
       where: { id: goal.goalId },
-      select: { actions: { select: { id: true } } }
-    });
-    const actionIds = goalContents?.actions.map(action => action.id) || [];
-
-    // Update goal and actions in a single transaction
-    const [editedGoal] = await prisma.$transaction([
-      prisma.goal.update({
-        where: { id: goal.goalId },
-        data: {
-          name: goal.name,
-          description: goal.description,
-          nationalRoadmapId: goal.nationalRoadmapId,
-          nationalGoalId: goal.nationalGoalId,
-          indicatorParameter: goal.indicatorParameter,
-          editors: { set: editors },
-          viewers: { set: viewers },
-          editGroups: { set: editGroups },
-          viewGroups: { set: viewGroups },
-          dataSeries: {
-            upsert: {
-              create: dataValues,
-              update: dataValues,
+      data: {
+        name: goal.name,
+        description: goal.description,
+        indicatorParameter: goal.indicatorParameter,
+        dataSeries: {
+          upsert: {
+            create: dataValues,
+            update: dataValues,
+          }
+        },
+        links: {
+          set: [],
+          create: goal.links?.map(link => {
+            return {
+              url: link.url,
+              description: link.description || undefined,
             }
-          },
-          links: {
-            set: [],
-            create: goal.links?.map(link => {
-              return {
-                url: link.url,
-                description: link.description || undefined,
-              }
-            })
-          },
-        }
-      }),
-      ...actionIds.map(actionId => prisma.action.update({
-        where: { id: actionId },
-        data: {
-          editors: { set: editors },
-          viewers: { set: viewers },
-          editGroups: { set: editGroups },
-          viewGroups: { set: viewGroups },
-        }
-      })),
-    ]);
+          })
+        },
+      }
+    });
     // Invalidate old cache
     revalidateTag('goal');
     // Return the edited goal's ID if successful
@@ -368,13 +229,6 @@ export async function PUT(request: NextRequest) {
     );
   } catch (e: any) {
     console.log(e);
-    if (e?.code == 'P2025') {
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
-        { status: 400 }
-      );
-    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),

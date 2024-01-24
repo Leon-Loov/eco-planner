@@ -6,26 +6,30 @@ import { Action, Comment, DataSeries, Goal, Link } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
+// TODO: Check if we need to include data series unit as a key to make sure we don't get the wrong goal
+
 /**
  * Gets specified goal and all actions for that goal.
  * 
  * Returns null if goal is not found or user does not have access to it. Also returns null on error.
- * @param id ID of the goal to get
+ * @param roadmapId ID of the roadmap to search for the goal in
+ * @param indicatorParameter Indicator parameter of the goal to get
  * @returns Goal object with actions
  */
-export default async function getOneGoal(id: string) {
+export default async function getGoalByIndicator(roadmapId: string, indicatorParameter: string) {
   const session = await getSessionData(cookies());
-  return getCachedGoal(id, session.user?.id ?? '')
+  return getCachedGoal(roadmapId, indicatorParameter, session.user?.id ?? '')
 }
 
 /**
  * Caches the specified goal and all actions for that goal.
  * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'goal', 'action', 'dataSeries']`, which is done in relevant API routes.
- * @param id ID of the goal to cache
+ * @param id ID of the roadmap to search for the goal in
+ * @param indicatorParameter Indicator parameter of the goal to cache
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedGoal = unstable_cache(
-  async (id, userId) => {
+  async (roadmapId, indicatorParameter, userId) => {
     const session = await getSessionData(cookies());
 
     let goal: Goal & {
@@ -43,8 +47,11 @@ const getCachedGoal = unstable_cache(
     // If user is admin, always get the goal
     if (session.user?.isAdmin) {
       try {
-        goal = await prisma.goal.findUnique({
-          where: { id },
+        goal = await prisma.goal.findFirst({
+          where: {
+            indicatorParameter: indicatorParameter,
+            roadmap: { id: roadmapId },
+          },
           include: {
             _count: { select: { actions: true } },
             dataSeries: true,
@@ -95,10 +102,11 @@ const getCachedGoal = unstable_cache(
     // If user is logged in, get the goal if they have access to it
     if (session.user?.isLoggedIn) {
       try {
-        goal = await prisma.goal.findUnique({
+        goal = await prisma.goal.findFirst({
           where: {
-            id,
+            indicatorParameter: indicatorParameter,
             roadmap: {
+              id: roadmapId,
               OR: [
                 { authorId: session.user.id },
                 { editors: { some: { id: userId } } },
@@ -153,10 +161,13 @@ const getCachedGoal = unstable_cache(
 
     // If user is not logged in, get the goal if it is public
     try {
-      goal = await prisma.goal.findUnique({
+      goal = await prisma.goal.findFirst({
         where: {
-          id,
-          roadmap: { viewGroups: { some: { name: 'Public' } } }
+          indicatorParameter: indicatorParameter,
+          roadmap: {
+            id: roadmapId,
+            viewGroups: { some: { name: 'Public' } }
+          }
         },
         include: {
           _count: { select: { actions: true } },
@@ -199,6 +210,6 @@ const getCachedGoal = unstable_cache(
 
     return goal;
   },
-  ['getOneGoal'],
+  ['goalByIndicator'],
   { revalidate: 600, tags: ['database', 'goal', 'action', 'dataSeries'] }
 );

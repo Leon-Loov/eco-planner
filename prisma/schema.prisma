@@ -10,90 +10,104 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Action {
-  // UUID of the action
-  id        String   @id @default(uuid())
-  // Timestamp of when action was created
-  createdAt DateTime @default(now()) @map("created_at")
-  // Timestamp of when action was last updated
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Name of action, preferably a short summary
-  name            String
-  // Longer description of action
-  description     String? @db.Text
-  // The year the action is planned to start
-  startYear       Int?    @map("start_year")
-  // The year the action is planned to end
-  endYear         Int?    @map("end_year")
-  // Cost efficiency, dunno what more to say, it's a text field
-  costEfficiency  String? @map("cost_efficiency") @db.Text
-  // Expected outcome, describe what you expect to happen
-  expectedOutcome String? @map("expected_outcome") @db.Text
-  // The person responsible for the action
-  // ONLY show to the author, because of GDPR
-  projectManager  String? @map("project_manager")
-  // Currently a text field, but might change to a many-to-many relationship with an actor table instead
-  // Might be an organisation, group, company, region, etc.
-  // relevantActors actor[]
-  relevantActors  String? @map("relevant_actors") @db.Text
-
-  // Different types of actions
-  // Sufficiency generally means reducing consumption
-  isSufficiency Boolean @default(false) @map("is_sufficiency")
-  // Efficiency generally means increasing efficiency
-  isEfficiency  Boolean @default(false) @map("is_efficiency")
-  // Renewables generally means increasing the use of renewables
-  isRenewables  Boolean @default(false) @map("is_renewables")
-
-  // Notes related to this action
-  notes      Notes[]     @relation("action_notes")
-  // Links related to this action
-  links      Link[]      @relation("action_link")
-  // Comments related to this action
-  comments   Comment[]   @relation("action_comment")
-  // UUID of the action this action is inherited from, if any
-  parentId   String?     @map("parent_id")
-  // Reference to parent action
-  parent     Action?     @relation("action_inheritance", fields: [parentId], references: [id])
-  // Reference to children actions
-  children   Action[]    @relation("action_inheritance")
-  // Goals related to this action
-  goals      Goal[]      @relation("action_goal")
-  // The person who created this action (implicitly allowed to edit)
-  authorId   String      @map("author_id")
-  author     User        @relation("action_author", fields: [authorId], references: [id])
-  // Specific users who are allowed to edit this action
-  editors    User[]      @relation("action_editors")
-  // Groups of users who are allowed to edit this action
-  editGroups UserGroup[] @relation("action_edit_groups")
-  // Specific users who are allowed to view this action
-  viewers    User[]      @relation("action_viewers")
-  // Groups of users who are allowed to view this action
-  viewGroups UserGroup[] @relation("action_view_groups")
-
-  @@map("action")
+enum RoadmapType {
+  NATIONAL
+  REGIONAL
+  MUNICIPAL
+  LOCAL
+  OTHER
 }
 
-// This should have been called "Note", but I guess I misnamed it. Don't want to change it now though.
-model Notes {
-  // UUID of the note
-  id        String   @id @default(uuid())
-  // Timestamp of when note was created
-  createdAt DateTime @default(now()) @map("created_at")
-  // Timestamp of when note was last updated
-  updatedAt DateTime @updatedAt @map("updated_at")
+// Meta roadmaps are used for the highest level of roadmaps and reference multiple versions of the same roadmap
+model MetaRoadmap {
+  // UUID of the meta roadmap
+  id          String      @id @default(uuid())
+  // Timestamp of when meta roadmap was created
+  createdAt   DateTime    @default(now()) @map("created_at")
+  // Timestamp of when meta roadmap was last updated
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  // Name of roadmap
+  name        String
+  // Description of meta roadmap
+  description String      @db.Text
+  // The type of roadmap, for example national, regional, or local
+  type        RoadmapType @default(OTHER)
+  // The target of this roadmap, for example a country, region, municipality or organisation
+  actor       String?
 
-  // The note itself
-  note     String @db.Text
-  // The action this note is related to
-  actionId String @map("action_id")
-  action   Action @relation("action_notes", fields: [actionId], references: [id])
-  // The user who created this note
-  authorId String @map("author_id")
-  author   User   @relation("note_author", fields: [authorId], references: [id])
+  // The different versions of the roadmap
+  roadmapVersions Roadmap[] @relation("meta_roadmap")
 
-  @@map("notes")
+  // Parent meta roadmap
+  parentRoadmapId String?       @map("parent_roadmap_id")
+  parentRoadmap   MetaRoadmap?  @relation("meta_roadmap_relation", fields: [parentRoadmapId], references: [id], onDelete: SetNull)
+  // Child meta roadmaps
+  childRoadmaps   MetaRoadmap[] @relation("meta_roadmap_relation")
+
+  // Comments related to this meta roadmap
+  comments Comment[] @relation("meta_roadmap_comment")
+  // Links related to this meta roadmap
+  links    Link[]    @relation("meta_roadmap_link")
+
+  // Author of this meta roadmap
+  authorId   String      @map("author_id")
+  author     User        @relation("meta_roadmap_author", fields: [authorId], references: [id])
+  // Editors and viewers (both individuals and groups) are inherited from here when creating a new roadmap version,
+  // but existing versions are not affected by changes to these. Meta roadmap author is added as an editor by default.
+  // Specific users who are allowed to edit this meta roadmap
+  editors    User[]      @relation("meta_roadmap_editors")
+  // Groups of users who are allowed to edit this meta roadmap
+  editGroups UserGroup[] @relation("meta_roadmap_edit_groups")
+  // Specific users who are allowed to view this meta roadmap
+  viewers    User[]      @relation("meta_roadmap_viewers")
+  // Groups of users who are allowed to view this meta roadmap
+  viewGroups UserGroup[] @relation("meta_roadmap_view_groups")
+
+  @@map("meta_roadmap")
+}
+
+model Roadmap {
+  // UUID of the roadmap
+  id          String   @id @default(uuid())
+  // Timestamp of when roadmap was created
+  createdAt   DateTime @default(now()) @map("created_at")
+  // Timestamp of when roadmap was last updated
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  // Optional description of this specific roadmap version
+  description String?  @db.Text
+
+  // Parent meta roadmap
+  // This is the meta roadmap that this roadmap is a version of
+  metaRoadmapId String      @map("meta_roadmap_id")
+  metaRoadmap   MetaRoadmap @relation("meta_roadmap", fields: [metaRoadmapId], references: [id], onDelete: Cascade)
+  // The version of the roadmap
+  version       Int
+  // If the parent meta roadmap relates to another meta roadmap, targetVersion defines which version of the related meta roadmap this roadmap version relates to
+  // If target version is not found in the related meta roadmap, use the latest version available instead
+  targetVersion Int?        @map("target_version")
+
+  // Comments related to this roadmap
+  comments Comment[] @relation("roadmap_comment")
+  // Goals related to this roadmap
+  goals    Goal[]    @relation("roadmap_goal")
+
+  // Anyone listed here can edit/view all goals and actions in this roadmap
+  // Author of this roadmap version
+  authorId   String      @map("author_id")
+  author     User        @relation("roadmap_author", fields: [authorId], references: [id])
+  // Specific users who are allowed to edit this roadmap
+  editors    User[]      @relation("roadmap_editors")
+  // Groups of users who are allowed to edit this roadmap
+  editGroups UserGroup[] @relation("roadmap_edit_groups")
+  // Specific users who are allowed to view this roadmap
+  viewers    User[]      @relation("roadmap_viewers")
+  // Groups of users who are allowed to view this roadmap
+  viewGroups UserGroup[] @relation("roadmap_view_groups")
+
+  // Two roadmaps may not have the same meta roadmap AND version
+  // Also allows for querying a roadmap by meta roadmap and version
+  @@unique(name: "meta_version", [metaRoadmapId, version])
+  @@map("roadmap")
 }
 
 model Goal {
@@ -109,39 +123,23 @@ model Goal {
   name               String?
   // Longer description of goal
   description        String? @db.Text
-  // The ID of the national roadmap this goal is related to
-  // TODO: check where these are hosted or if we need to host them ourselves
-  nationalRoadmapId  String? @map("national_roadmap_id")
-  // The ID of the national goal this goal is related to
-  nationalGoalId     String? @map("national_goal_id")
   // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas", as defined by LEAP
-  // TODO: Add a list of predefined categories to choose from, in addition to allowing custom categories
   indicatorParameter String  @map("indicator_parameter") @db.Text
-  // There was an idea to use an ´isNationalGoal´ field to indicate if the goal is part of a national roadmap or not,
-  // but it's probably better to just check if it has a relation to any national roadmap if we want to know that
 
   // A series of datapoints for the goal
-  dataSeriesId String?     @map("data_series_id")
-  dataSeries   DataSeries? @relation("data_series", fields: [dataSeriesId], references: [id])
+  dataSeries DataSeries? @relation("data_series")
   // Links related to this goal
-  links        Link[]      @relation("goal_link")
+  links      Link[]      @relation("goal_link")
   // Comments related to this goal
-  comments     Comment[]   @relation("goal_comment")
-  // The person who created this goal (implicitly allowed to edit)
-  authorId     String      @map("author_id")
-  author       User        @relation("goal_author", fields: [authorId], references: [id])
-  // Specific users who are allowed to edit this goal
-  editors      User[]      @relation("goal_editors")
-  // Groups of users who are allowed to edit this goal
-  editGroups   UserGroup[] @relation("goal_edit_groups")
-  // Specific users who are allowed to view this goal
-  viewers      User[]      @relation("goal_viewers")
-  // Groups of users who are allowed to view this goal
-  viewGroups   UserGroup[] @relation("goal_view_groups")
-  // Actions which use this goal
-  actions      Action[]    @relation("action_goal")
-  // Roadmaps which use this goal
-  roadmaps     Roadmap[]   @relation("roadmap_goal")
+  comments   Comment[]   @relation("goal_comment")
+  // The person who created this goal
+  authorId   String      @map("author_id")
+  author     User        @relation("goal_author", fields: [authorId], references: [id])
+  // Child Actions
+  actions    Action[]    @relation("action_goal")
+  // Parent Roadmap
+  roadmapId  String      @map("roadmap_id")
+  roadmap    Roadmap     @relation("roadmap_goal", fields: [roadmapId], references: [id], onDelete: Cascade)
 
   @@map("goal")
 }
@@ -192,138 +190,86 @@ model DataSeries {
   val2049 Float?  @map("val_2049")
   val2050 Float?  @map("val_2050")
 
-  // Golas that use this data series
-  goals      Goal[]      @relation("data_series")
+  // Parent goal
+  goalId   String @unique @map("goal_id")
+  goal     Goal   @relation("data_series", fields: [goalId], references: [id], onDelete: Cascade)
   // Author of the data series
-  authorId   String      @map("author_id")
-  author     User        @relation("data_series_author", fields: [authorId], references: [id])
-  // Users allowed to edit the data series
-  editors    User[]      @relation("data_series_editors")
-  // Users allowed to view the data series
-  viewers    User[]      @relation("data_series_viewers")
-  // User groups allowed to edit the data series
-  editGroups UserGroup[] @relation("data_series_edit_groups")
-  // User groups allowed to view the data series
-  viewGroups UserGroup[] @relation("data_series_view_groups")
+  authorId String @map("author_id")
+  author   User   @relation("data_series_author", fields: [authorId], references: [id])
 
   @@map("data_series")
 }
 
-model Roadmap {
-  // UUID of the roadmap
-  id          String   @id @default(uuid())
-  // Timestamp of when roadmap was created
-  createdAt   DateTime @default(now()) @map("created_at")
-  // Timestamp of when roadmap was last updated
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  // Name of roadmap
-  name        String
-  // Optional description of roadmap
-  description String?  @db.Text
-  // Whether the roadmap is a national roadmap (true) or a local roadmap (false)
-  isNational  Boolean  @default(false) @map("is_national")
+model Action {
+  // UUID of the action
+  id        String   @id @default(uuid())
+  // Timestamp of when action was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when action was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  // The county the roadmap targets (if local)
-  county       String? @map("county")
-  // The municipality the roadmap targets (if local)
-  municipality String? @map("municipality")
+  // Name of action, preferably a short summary
+  name            String
+  // Longer description of action
+  description     String? @db.Text
+  // The year the action is planned to start
+  startYear       Int?    @map("start_year")
+  // The year the action is planned to end
+  endYear         Int?    @map("end_year")
+  // Cost efficiency, dunno what more to say, it's a text field
+  costEfficiency  String? @map("cost_efficiency") @db.Text
+  // Expected outcome, describe what you expect to happen
+  expectedOutcome String? @map("expected_outcome") @db.Text
+  // The person responsible for the action
+  // ONLY show to the author, because of GDPR
+  projectManager  String? @map("project_manager")
+  // Currently a text field, but might change to a many-to-many relationship with an actor table instead
+  // Might be an organisation, group, company, region, etc.
+  // relevantActors actor[]
+  relevantActors  String? @map("relevant_actors") @db.Text
 
-  // Comments related to this roadmap
-  comments   Comment[]   @relation("roadmap_comment")
-  // Goals related to this roadmap
-  goals      Goal[]      @relation("roadmap_goal")
-  // Author of this roadmap
-  authorId   String      @map("author_id")
-  author     User        @relation("roadmap_author", fields: [authorId], references: [id])
-  // Specific users who are allowed to edit this roadmap
-  editors    User[]      @relation("roadmap_editors")
-  // Groups of users who are allowed to edit this roadmap
-  editGroups UserGroup[] @relation("roadmap_edit_groups")
-  // Specific users who are allowed to view this roadmap
-  viewers    User[]      @relation("roadmap_viewers")
-  // Groups of users who are allowed to view this roadmap
-  viewGroups UserGroup[] @relation("roadmap_view_groups")
+  // Different types of actions
+  // Sufficiency generally means reducing consumption
+  isSufficiency Boolean @default(false) @map("is_sufficiency")
+  // Efficiency generally means increasing efficiency
+  isEfficiency  Boolean @default(false) @map("is_efficiency")
+  // Renewables generally means increasing the use of renewables
+  isRenewables  Boolean @default(false) @map("is_renewables")
 
-  @@map("roadmap")
+  // Notes related to this action
+  notes    Note[]    @relation("action_notes")
+  // Links related to this action
+  links    Link[]    @relation("action_link")
+  // Comments related to this action
+  comments Comment[] @relation("action_comment")
+  // Parent Goal
+  goalId   String    @map("goal_id")
+  goal     Goal      @relation("action_goal", fields: [goalId], references: [id], onDelete: Cascade)
+  // The person who created this action
+  authorId String    @map("author_id")
+  author   User      @relation("action_author", fields: [authorId], references: [id])
+
+  @@map("action")
 }
 
-model User {
-  // UUID of the user
-  id String @id @default(uuid())
+model Note {
+  // UUID of the note
+  id        String   @id @default(uuid())
+  // Timestamp of when note was created
+  createdAt DateTime @default(now()) @map("created_at")
+  // Timestamp of when note was last updated
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  // Username of the user
-  username String  @unique
-  // Email of the user
-  email    String  @unique
-  // User's password in hashed form
-  // In this implementation, the password is hashed using bcrypt
-  password String
-  // Whether or not the user is an admin
-  isAdmin  Boolean @default(false) @map("is_admin")
+  // The note itself
+  note     String @db.Text
+  // The action this note is related to
+  actionId String @map("action_id")
+  action   Action @relation("action_notes", fields: [actionId], references: [id], onDelete: Cascade)
+  // The user who created this note
+  authorId String @map("author_id")
+  author   User   @relation("note_author", fields: [authorId], references: [id])
 
-  // Actions the user created
-  authoredActions  Action[]     @relation("action_author")
-  // Goals the user created
-  authoredGoals    Goal[]       @relation("goal_author")
-  // Roadmaps the user created
-  authoredRoadmaps Roadmap[]    @relation("roadmap_author")
-  // Data series the user created
-  authoredData     DataSeries[] @relation("data_series_author")
-  // Notes the user created
-  authoredNotes    Notes[]      @relation("note_author")
-  // Comments the user created
-  authoredComments Comment[]    @relation("comment_author")
-  // Actions the user is explicitly allowed to edit
-  editActions      Action[]     @relation("action_editors")
-  // Actions the user is explicitly allowed to view
-  viewActions      Action[]     @relation("action_viewers")
-  // Goals the user is explicitly allowed to edit
-  editGoals        Goal[]       @relation("goal_editors")
-  // Goals the user is explicitly allowed to view
-  viewGoals        Goal[]       @relation("goal_viewers")
-  // Roadmaps the user is explicitly allowed to edit
-  editRoadmaps     Roadmap[]    @relation("roadmap_editors")
-  // Roadmaps the user is explicitly allowed to view
-  viewRoadmaps     Roadmap[]    @relation("roadmap_viewers")
-  // Data series the user is explicitly allowed to edit
-  editData         DataSeries[] @relation("data_series_editors")
-  // Data series the user is explicitly allowed to view
-  viewData         DataSeries[] @relation("data_series_viewers")
-  // Groups the user is a member of
-  userGroups       UserGroup[]  @relation("user_group")
-
-  @@map("user")
-}
-
-// There should be a default user group that all users are a member of, in addition to user-defined groups
-// The default group should be used when a user wants to make their goal/action/roadmap/data series public
-// There should also be a restriction in place to prevent giving edit permissions to the default group
-model UserGroup {
-  // UUID of the user group
-  id   String @id @default(uuid())
-  // Name of the user group
-  name String @unique
-
-  // Users in the group
-  users       User[]       @relation("user_group")
-  // Actions all users in the group are allowed to edit
-  editActions Action[]     @relation("action_edit_groups")
-  // Actions all users in the group are allowed to view
-  viewActions Action[]     @relation("action_view_groups")
-  // Goals all users in the group are allowed to edit
-  editGoals   Goal[]       @relation("goal_edit_groups")
-  // Goals all users in the group are allowed to view
-  viewGoals   Goal[]       @relation("goal_view_groups")
-  // Roadmaps all users in the group are allowed to edit
-  editRoadmap Roadmap[]    @relation("roadmap_edit_groups")
-  // Roadmaps all users in the group are allowed to view
-  viewRoadmap Roadmap[]    @relation("roadmap_view_groups")
-  // Data series all users in the group are allowed to edit
-  editData    DataSeries[] @relation("data_series_edit_groups")
-  // Data series all users in the group are allowed to view
-  viewData    DataSeries[] @relation("data_series_view_groups")
-
-  @@map("user_group")
+  @@map("note")
 }
 
 // Links are used to link to external resources, such as websites, documents, etc.
@@ -336,13 +282,18 @@ model Link {
   // Description of the link
   description String?
 
-  // A link should be related to either an action or a goal, not both; if both, create two links
+  // A link should be related to either an action, a goal, XOR a meta roadmap.
+  // Has to be enforced in the code, as prisma does not support custom constraints and many SQL implementations
+  // do not support check constraints on columns with referential actions.
   // Any action this link is related to
-  actionId String? @map("action_id")
-  action   Action? @relation("action_link", fields: [actionId], references: [id])
+  actionId      String?      @map("action_id")
+  action        Action?      @relation("action_link", fields: [actionId], references: [id], onDelete: Cascade)
   // Any goal this link is related to
-  goalId   String? @map("goal_id")
-  goal     Goal?   @relation("goal_link", fields: [goalId], references: [id])
+  goalId        String?      @map("goal_id")
+  goal          Goal?        @relation("goal_link", fields: [goalId], references: [id], onDelete: Cascade)
+  // Any meta roadmap this link is related to
+  metaRoadmapId String?      @map("meta_roadmap_id")
+  metaRoadmap   MetaRoadmap? @relation("meta_roadmap_link", fields: [metaRoadmapId], references: [id], onDelete: Cascade)
 
   @@map("link")
 }
@@ -360,35 +311,92 @@ model Comment {
   commentText String @map("comment_text") @db.Text
 
   // The user who created this comment
-  authorId  String   @map("author_id")
-  author    User     @relation("comment_author", fields: [authorId], references: [id])
-  // A comment should be related to either an action, a goal, or a roadmap.
+  authorId String @map("author_id")
+  author   User   @relation("comment_author", fields: [authorId], references: [id])
+
+  // A comment should be related to either an action, a goal, a roadmap, XOR a meta roadmap.
+  // Has to be enforced in the code, as prisma does not support custom constraints and many SQL implementations
+  // do not support check constraints on columns with referential actions.
   // Any action this comment is related to
-  actionId  String?  @map("action_id")
-  action    Action?  @relation("action_comment", fields: [actionId], references: [id])
+  actionId      String?      @map("action_id")
+  action        Action?      @relation("action_comment", fields: [actionId], references: [id], onDelete: Cascade)
   // Any goal this comment is related to
-  goalId    String?  @map("goal_id")
-  goal      Goal?    @relation("goal_comment", fields: [goalId], references: [id])
+  goalId        String?      @map("goal_id")
+  goal          Goal?        @relation("goal_comment", fields: [goalId], references: [id], onDelete: Cascade)
   // Any roadmap this comment is related to
-  roadmapId String?  @map("roadmap_id")
-  roadmap   Roadmap? @relation("roadmap_comment", fields: [roadmapId], references: [id])
+  roadmapId     String?      @map("roadmap_id")
+  roadmap       Roadmap?     @relation("roadmap_comment", fields: [roadmapId], references: [id], onDelete: Cascade)
+  // Any meta roadmap this comment is related to
+  metaRoadmapId String?      @map("meta_roadmap_id")
+  metaRoadmap   MetaRoadmap? @relation("meta_roadmap_comment", fields: [metaRoadmapId], references: [id], onDelete: Cascade)
 
   @@map("comment")
 }
 
-// model Organization {
-//   // UUID of the organization
-//   id        String   @id @default(uuid())
-//   // Timestamp of when organization was created
-//   createdAt DateTime @default(now()) @map("created_at")
-//   // Timestamp of when organization was last updated
-//   updatedAt DateTime @updatedAt @map("updated_at")
+model User {
+  // UUID of the user
+  id String @id @default(uuid())
 
-//   // Name of the organization
-//   name String @unique
-//   // Organization number
-//   orgNumber String @map("org_number") @unique
-//   // NUTS 2021 code for the organization's county, equivelent to NUTS level 3
-//   // For example, SE110 for Stockholms län or SE121 for Uppsala län
-//   nutsCode String @map("nuts_code")
-// }
+  // Username of the user
+  username String  @unique
+  // Email of the user
+  email    String  @unique
+  // User's password in hashed form
+  // In this implementation, the password is hashed using bcrypt
+  password String
+  // Whether or not the user is an admin
+  isAdmin  Boolean @default(false) @map("is_admin")
+
+  // Actions the user created
+  authoredActions      Action[]      @relation("action_author")
+  // Goals the user created
+  authoredGoals        Goal[]        @relation("goal_author")
+  // Roadmap versions the user created
+  authoredRoadmaps     Roadmap[]     @relation("roadmap_author")
+  // Meta roadmaps the user created
+  authoredMetaRoadmaps MetaRoadmap[] @relation("meta_roadmap_author")
+  // Data series the user created
+  authoredData         DataSeries[]  @relation("data_series_author")
+  // Notes the user created
+  authoredNotes        Note[]        @relation("note_author")
+  // Comments the user created
+  authoredComments     Comment[]     @relation("comment_author")
+
+  // Roadmap versions the user is explicitly allowed to edit
+  editRoadmaps     Roadmap[]     @relation("roadmap_editors")
+  // Roadmap versions the user is explicitly allowed to view
+  viewRoadmaps     Roadmap[]     @relation("roadmap_viewers")
+  // Meta roadmaps the user is explicitly allowed to edit
+  editMetaRoadmaps MetaRoadmap[] @relation("meta_roadmap_editors")
+  // Meta roadmaps the user is explicitly allowed to view
+  viewMetaRoadmaps MetaRoadmap[] @relation("meta_roadmap_viewers")
+
+  // Groups the user is a member of
+  userGroups UserGroup[] @relation("user_group")
+
+  @@map("user")
+}
+
+// There should be a default user group that all users are a member of, in addition to user-defined groups
+// The default group should be used when a user wants to make their goal/action/roadmap/data series public
+// There should also be a restriction in place to prevent giving edit permissions to the default group
+model UserGroup {
+  // UUID of the user group
+  id   String @id @default(uuid())
+  // Name of the user group
+  name String @unique
+
+  // Users in the group
+  users User[] @relation("user_group")
+
+  // Roadmap versions all users in the group are allowed to edit
+  editRoadmap     Roadmap[]     @relation("roadmap_edit_groups")
+  // Roadmap versions all users in the group are allowed to view
+  viewRoadmap     Roadmap[]     @relation("roadmap_view_groups")
+  // Meta roadmaps all users in the group are allowed to edit
+  editMetaRoadmap MetaRoadmap[] @relation("meta_roadmap_edit_groups")
+  // Meta roadmaps all users in the group are allowed to view
+  viewMetaRoadmap MetaRoadmap[] @relation("meta_roadmap_view_groups")
+
+  @@map("user_group")
+}
