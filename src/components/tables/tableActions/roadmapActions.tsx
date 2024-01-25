@@ -48,11 +48,11 @@ export function RoadmapActionButton(
           <Image src='/icons/dotsVertical.svg' width={24} height={24} alt=""></Image>
         </button>
         <dialog className={styles.menu} id={`${id}-menu`} onBlur={closeMenu} ref={menu} onKeyUp={closeMenu}>
-          <div className={`display-flex align-items-center justify-content-space-between ${styles.menuHeading}`}>
-            <Link href={`/roadmap/${id}`} className={styles.menuHeadingTitle}>{tableName}</Link>
+          <div className={`display-flex flex-direction-row-reverse align-items-center justify-content-space-between ${styles.menuHeading}`}>
             <button onClick={closeMenu} className={styles.button} autoFocus >
               <Image src='/icons/close.svg' alt="" width={18} height={18} />
             </button>
+            <Link href={`/roadmap/${id}`} className={styles.menuHeadingTitle}>{tableName}</Link>
           </div>
           <Link href={addGoalHref} className={styles.menuAction}>
             <span>Ny målbana</span>

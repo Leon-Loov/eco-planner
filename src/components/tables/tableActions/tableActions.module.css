@@ -1,7 +1,5 @@
 .actionButton {
-    padding: .5rem;
     width: fit-content;
-    margin: none;
     background-color: transparent;
     border: none;
     border-radius: 9999px;
@@ -34,13 +32,14 @@
     position: absolute;
     right: 100%;
     top: 50%;
-    transform: translate(0, -50%);
+    transform: translate(-100%, -50%);
     background-color: #fefefe;
-    border-radius: 1px;
     box-shadow: 0 0 .5rem var(--gray-90);
     border-radius: 3px;
     z-index: 9999;
-}
+    border: 0;
+    padding: 0;
+ }
 
 .menuHeading {
     padding: .5rem;

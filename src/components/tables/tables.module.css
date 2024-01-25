@@ -84,7 +84,9 @@ ul>li:nth-child(1)>.link {
     background-color: var(--blue);
     color: white;
     border-radius: 3px 3px 0 0;
-    padding: 1em;
+    padding: 1rem;
+    z-index: 1;
+    position: relative;
 }
 
 .tableHeader>h2 {
@@ -140,6 +142,7 @@ ul>li:nth-child(1)>.link {
 
 .tableWrapper {
     overflow-y: scroll;
+    min-height: 300px;
     max-height: 500px;
     width: calc(100% + .5rem + 3px);
     padding-right: 3px;
