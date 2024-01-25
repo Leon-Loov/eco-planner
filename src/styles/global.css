@@ -168,32 +168,32 @@ input[type="file"]:focus {
 .call-to-action-primary, .call-to-action-secondary {
   text-align: center;
   background-color: transparent;
-  border: 3px solid var(--accent-color);
+  border: none;
   text-decoration: unset;
   color: black;
-  border-radius: 3px;
+  border-radius: .5rem;
   padding: .5rem 1rem;
   cursor: pointer;
   font-weight: bold;
   font-size: 1rem;
   line-height: 1.5;
   white-space: nowrap;
+  width: 100%;
+  outline: 0;
+  transition: background-color .2s ease;
 }
 
 .call-to-action-primary {
-  background-color: var(--accent-color);
+  background-color: var(--seagreen);
   color: white;
 }
-
+ 
 .call-to-action-primary:hover, .call-to-action-primary:focus {
-  background-color: var(--accent-color-dark);
-  border-color: var(--accent-color-dark);
-  outline: 0;
+  background-color: var(--seagreen-30);
 }
 
-.call-to-action-secondary:hover, .call-to-action-primary:focus {
-  border-color: var(--accent-color-dark);
-  outline: 0; 
+.call-to-action-secondary:hover, .call-to-action-secondary:focus {
+  background-color: var(--gray);
 }
 
 .call-to-action-primary > input[type="submit"], .call-to-action-secondary > input[type="submit"] {
