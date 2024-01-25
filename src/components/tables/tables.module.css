@@ -81,7 +81,7 @@ ul>li:nth-child(1)>.link {
 /* Table styling*/
 
 .tableHeader {
-    background-color: var(--blue);
+    background-color: var(--blue-20);
     color: white;
     border-radius: 3px 3px 0 0;
     padding: 1rem;

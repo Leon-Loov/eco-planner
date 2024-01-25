@@ -51,7 +51,20 @@ export default function ActionTable({
   }
 
   // If no actions are found, return a message
-  if (!actions.length) return (<p>Det har inte tillgång till några åtgärder i denna målbana, eller så har målbanan inga åtgärder.</p>);
+  if (!actions.length) return (
+    <>
+      <p>Målbanan har inga åtgärder. 
+      { // Only show the button if the user has edit access to the goal and a goal is provided
+        (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) && goal &&
+        <span> Vill du skapa en?&nbsp;
+          <Link href={`/roadmap/${goal.roadmapId}/goal/${goal.id}/action/createAction`}>
+            Skapa ny åtgärd
+          </Link>
+        </span>
+      }
+      </p>
+    </>
+  );
 
   return <>
     <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>

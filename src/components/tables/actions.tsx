@@ -3,8 +3,7 @@
 import { Action, Goal } from "@prisma/client"
 import { AccessControlled, AccessLevel } from '@/types'
 import ActionTable from './actionTables/actionTable'
-import { PrimaryLink } from "../generic/links/links"
-
+ 
 export default function Actions({
   title,
   goal,

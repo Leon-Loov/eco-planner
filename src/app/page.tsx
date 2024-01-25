@@ -40,8 +40,8 @@ export default async function Page() {
 
   return <>
     <div style={{ width: '100%', height: '350px', marginTop: '1.5em', }}>
-      <AttributedImage src="/images/roadmap.webp" alt="" borderRadius=".5em">
-        Photo by <a href="https://unsplash.com/@alvarordesign?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Alvaro Reyes</a> on <a href="https://unsplash.com/photos/person-working-on-blue-and-white-paper-on-board-qWwpHwip31M?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+      <AttributedImage src="/images/solarpanels.jpg" alt="" borderRadius=".5em">
+        Photo by <a href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Spiske</a> on <a href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
       </AttributedImage>
     </div>
     <h1>Färdplaner</h1>
