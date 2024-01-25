@@ -11,7 +11,7 @@ export default function RoadmapTable({
   user,
 }: {
   title: String,
-  roadmaps: (Roadmap & { _count: { goals: number }, metaRoadmap: MetaRoadmap })[],
+  roadmaps: ({ id: string, version: number, _count: { goals: number }, metaRoadmap: MetaRoadmap })[],
   user: Data['user']
 }) {
   return <>
@@ -41,7 +41,7 @@ export default function RoadmapTable({
         <tbody>
           {roadmaps.map(roadmap => (
             <tr key={roadmap.id}>
-              <td><a href={`/roadmap/${roadmap.id}`}>{roadmap.metaRoadmap.name}</a></td>
+              <td><a href={`/roadmap/${roadmap.id}`}>{`${roadmap.metaRoadmap.name}`}</a></td>
               <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
               <td>
                 <RoadmapActionButton
