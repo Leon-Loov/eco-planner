@@ -20,6 +20,10 @@ export async function Header() {
             <Image src='/icons/home.svg' alt='Hem' width={24} height={24} /> 
             Hem 
           </Link>
+          <Link href="/info" className={styles.headerLink}>
+            <Image src='/icons/info.svg' alt='Information' width={24} height={24} /> 
+            Information
+          </Link>
           { // Link to login and signup if not logged in
             !user?.isLoggedIn &&
             <>
