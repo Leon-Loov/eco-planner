@@ -31,6 +31,8 @@ const getCachedMetaRoadmaps = unstable_cache(
           select: {
             version: true,
             id: true,
+            metaRoadmap: true,
+            _count: { select: { goals: true } },
           }
         },
         comments: true,
@@ -52,6 +54,8 @@ const getCachedMetaRoadmaps = unstable_cache(
               select: {
                 version: true,
                 id: true,
+                metaRoadmap: true,
+                _count: { select: { goals: true } },
               }
             },
             comments: true,
@@ -102,6 +106,8 @@ const getCachedMetaRoadmaps = unstable_cache(
               select: {
                 version: true,
                 id: true,
+                metaRoadmap: true,
+                _count: { select: { goals: true } },
               },
             },
             comments: true,
@@ -139,6 +145,8 @@ const getCachedMetaRoadmaps = unstable_cache(
             select: {
               version: true,
               id: true,
+              metaRoadmap: true,
+              _count: { select: { goals: true } },
             },
           },
           comments: true,

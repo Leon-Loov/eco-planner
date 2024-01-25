@@ -4,16 +4,39 @@ import { cookies } from "next/headers";
 import RoadmapTable from "@/components/tables/roadmapTable";
 import AttributedImage from "@/components/generic/images/attributedImage";
 import { RoadmapType } from "@prisma/client";
+import getMetaRoadmaps from "@/fetchers/getMetaRoadmaps";
 
 export default async function Page() {
-  const [session, roadmaps] = await Promise.all([
+  const [session, metaRoadmaps] = await Promise.all([
     getSessionData(cookies()),
-    getRoadmaps()
+    getMetaRoadmaps()
   ]);
 
   // TODO: Filter into more categories based on `RoadmapType`
-  let nationalRoadmaps = roadmaps.filter(roadmap => roadmap.metaRoadmap.type === RoadmapType.NATIONAL)
-  let regionalRoadmaps = roadmaps.filter(roadmap => roadmap.metaRoadmap.type !== RoadmapType.NATIONAL)
+  let nationalMetaRoadmaps = metaRoadmaps.filter(metaRoadmap => metaRoadmap.type === RoadmapType.NATIONAL)
+  let regionalMetaRoadmaps = metaRoadmaps.filter(metaRoadmap => metaRoadmap.type !== RoadmapType.NATIONAL)
+
+  // Latest version of every national roadmap
+  let nationalRoadmaps: typeof metaRoadmaps[number]['roadmapVersions'] = [];
+  nationalMetaRoadmaps.forEach(metaRoadmap => {
+    if (metaRoadmap.roadmapVersions.length) {
+      let foundRoadmap = metaRoadmap.roadmapVersions.find(roadmap => roadmap.version === Math.max(...metaRoadmap.roadmapVersions.map(roadmap => roadmap.version)))
+      if (foundRoadmap) {
+        nationalRoadmaps.push(foundRoadmap)
+      }
+    }
+  })
+
+  // Latest version of every non-national roadmap
+  let regionalRoadmaps: typeof metaRoadmaps[number]['roadmapVersions'] = [];
+  regionalMetaRoadmaps.forEach(metaRoadmap => {
+    if (metaRoadmap.roadmapVersions.length) {
+      let foundRoadmap = metaRoadmap.roadmapVersions.find(roadmap => roadmap.version === Math.max(...metaRoadmap.roadmapVersions.map(roadmap => roadmap.version)))
+      if (foundRoadmap) {
+        regionalRoadmaps.push(foundRoadmap)
+      }
+    }
+  })
 
   return <>
     <div style={{ width: '100%', height: '350px', marginTop: '1.5em', }}>
@@ -32,11 +55,11 @@ export default async function Page() {
     <section className="grid-auto-rows">
       <div>
         <RoadmapTable user={session.user} title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
-        {!roadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
+        {!metaRoadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
       <div>
         <RoadmapTable user={session.user} title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
-        {!roadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
+        {!metaRoadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
     </section>
   </>
