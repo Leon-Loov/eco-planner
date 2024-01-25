@@ -3,9 +3,8 @@
 .header {
     position: sticky;
     top: 1rem;
-    height: calc(100dvh - 2rem);
+    height: 100dvh;
     box-shadow: 0 0 .5rem -3px var(--gray);
-    border-radius: .5rem;
     padding: 1rem;
     z-index: 9997;
 }
@@ -17,6 +16,7 @@
   gap: 1rem;
   margin-top: 5rem;
   width: 10rem;
+  transition: width .2s ease-in-out;
   @media (max-width: 750px) {
     display: none;
   }
@@ -47,16 +47,20 @@
 }
 
 .menuToggleContainer:has(.menuToggle:checked) ~ nav {
-  width: 0;
+  width: calc(24px + 1rem);
 }
 
 .headerLink{
   text-decoration: unset;
   color: black;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem;
+  border-radius: .5rem;
 }
   
 .headerLink:hover {
-  border-bottom: 3px solid var(--accent-color);
-  margin-bottom: -3px;
+  background-color: var(--gray-90);
 }

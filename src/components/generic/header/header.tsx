@@ -16,7 +16,10 @@ export async function Header() {
           <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' /> 
         </div>
         <nav>
-          <Link href="/" className={styles.headerLink}> Hem </Link>
+          <Link href="/" className={styles.headerLink}>
+            <Image src='/icons/home.svg' alt='Hem' width={24} height={24} /> 
+            Hem 
+          </Link>
           { // Link to login and signup if not logged in
             !user?.isLoggedIn &&
             <>

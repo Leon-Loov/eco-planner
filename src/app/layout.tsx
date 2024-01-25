@@ -79,9 +79,9 @@ export default async function RootLayout({
 
       </head>
       <body>
-        <div className='display-flex gap-100 padding-100'>
+        <div className='display-flex'>
           <Header />
-          <div className='flex-grow-100' style={{minWidth: '0'}}>
+          <div className='flex-grow-100 padding-100' style={{minWidth: '0'}}>
             <Breadcrumb relevantObjects={objects} />
             <GlobalContextProvider>
               {children}
