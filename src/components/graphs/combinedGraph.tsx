@@ -22,11 +22,11 @@ export default function CombinedGraph({
       for (let j of dataSeriesDataFieldNames) {
         mainSeries.push({
           x: new Date(j.replace('val', '')).getTime(),
-          y: siblings[i].dataSeries![j as keyof DataSeriesDataFields] ?? null
+          y: siblings[i].dataSeries![j as keyof DataSeriesDataFields] ?? null,
         })
       }
     }
-    // If the series is only null/0, don't add it to the graph
+    // Only add the series to the graph if it isn't all null/0
     if (mainSeries.filter((entry) => entry.y).length > 0) {
       dataPoints.push({
         name: (siblings[i].name || siblings[i].indicatorParameter).split('\\').slice(-1)[0],
@@ -40,9 +40,9 @@ export default function CombinedGraph({
     chart: {
       type: 'area',
       stacked: true,
+      stackOnlyBar: false,
       animations: { enabled: false, dynamicAnimation: { enabled: false } }
     },
-    stroke: { curve: 'straight' },
     xaxis: {
       type: 'datetime',
       labels: { format: 'yyyy' },
