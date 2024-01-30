@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       <GraphGraph goal={goal} nationalGoal={parentGoal} />
       <CombinedGraph roadmap={roadmap} goal={goal} />
       <ActionGraph actions={goal.actions} />
-      <Actions title='Åtgärder' goal={goal} accessLevel={accessLevel} params={params} />
+      <Actions goal={goal} accessLevel={accessLevel} />
       <Comments comments={goal.comments} objectId={goal.id} />
     </>
   )
