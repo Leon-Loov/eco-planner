@@ -1,7 +1,10 @@
+'use client';
+
 import findSiblings from "@/functions/findSiblings";
 import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal, Roadmap } from "@prisma/client";
+import { useState } from "react";
 
 
 export default function CombinedGraph({
@@ -15,6 +18,8 @@ export default function CombinedGraph({
 }) {
   const siblings = findSiblings(roadmap, goal);
   const dataPoints: ApexAxisChartSeries = [];
+
+  const [isStacked, setIsStacked] = useState(true);
 
   for (let i in siblings) {
     let mainSeries = []
@@ -31,15 +36,16 @@ export default function CombinedGraph({
       dataPoints.push({
         name: (siblings[i].name || siblings[i].indicatorParameter).split('\\').slice(-1)[0],
         data: mainSeries,
-        type: 'area',
+        type: isStacked ? 'area' : 'line',
       })
     }
   }
 
   let chartOptions: ApexCharts.ApexOptions = {
     chart: {
-      type: 'area',
-      stacked: true,
+      id: 'combinedGraph',
+      type: isStacked ? 'area' : 'line',
+      stacked: isStacked,
       stackOnlyBar: false,
       animations: { enabled: false, dynamicAnimation: { enabled: false } }
     },
@@ -56,7 +62,9 @@ export default function CombinedGraph({
     },
     tooltip: {
       x: { format: 'yyyy' },
+      inverseOrder: isStacked,
     },
+    dataLabels: { enabled: false },
   }
 
   let indicatorCategory: string;
@@ -73,11 +81,13 @@ export default function CombinedGraph({
       <h2>Kombinerad graf</h2>
       <h3>{indicatorCategory}</h3>
       {additionalInfo && <p>{additionalInfo}</p>}
+      <button type="button" onClick={() => setIsStacked(!isStacked)}><p>Byt typ av graf</p></button>
       <div style={{ height: "500px", width: "100%" }}>
         <WrappedChart
+          key={"combinedGraph"}
           options={chartOptions}
           series={dataPoints}
-          type="line"
+          type={isStacked ? 'area' : 'line'}
           width="100%"
           height="100%"
         />
