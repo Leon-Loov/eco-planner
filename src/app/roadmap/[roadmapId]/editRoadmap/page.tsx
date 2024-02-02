@@ -4,6 +4,8 @@ import { getSessionData } from '@/lib/session';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/buttons/redirectButtons';
+import accessChecker from "@/lib/accessChecker";
+import { AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -11,8 +13,10 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     getOneRoadmap(params.roadmapId),
   ]);
 
+  const access = accessChecker(roadmap, session.user)
+
   // User must be signed in and have edit access to the roadmap, which must exist
-  if (!session.user || !roadmap) {
+  if (!session.user || !roadmap || access == AccessLevel.None || access == AccessLevel.View) {
     return notFound();
   }
 

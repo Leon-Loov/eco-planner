@@ -33,7 +33,7 @@ export default async function Page() {
     <>
       <div className='display-flex align-items-center gap-100 margin-y-100'>
         <BackButton href="../" />
-        <h1>Skapa en ny färdplan</h1>
+        <h1>Skapa en ny version av en färdplan</h1>
       </div>
       <RoadmapForm
         user={session.user}

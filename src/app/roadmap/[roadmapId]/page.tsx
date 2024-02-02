@@ -37,6 +37,10 @@ export default async function Page({ params }: { params: { roadmapId: string } }
       {`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}
     </h1>
     <span style={{ color: "gray" }}>Färdplan</span>
+
+    <br />
+    <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>Länk till metadata och fler versioner</a>
+    
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Comments comments={roadmap.comments} objectId={roadmap.id} />
     <Tooltip anchorSelect="#goalName">

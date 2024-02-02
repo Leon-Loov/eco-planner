@@ -93,6 +93,14 @@ export default function Breadcrumb({
           )
         }
 
+        if (section.toLowerCase() == 'metaroadmap') {
+          return (
+            <span key={index} className={`display-flex align-items-center gap-25 ${styles.breadCrumbTitle}`}>
+              Metadata:
+            </span>
+          )
+        }
+
         const isLastItem = index === sectionNames.length - 1;
 
         return (
