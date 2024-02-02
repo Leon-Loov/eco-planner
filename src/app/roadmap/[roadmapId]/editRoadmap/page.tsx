@@ -26,6 +26,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         <p><BackButton href={`/roadmap/${roadmap.id}`} /></p>
         <h1>Redigera färdplanen {`"${roadmap.metaRoadmap.name}"`}</h1>
       </div>
+      <p>Menade de att redigera den gemensamma metadatan för alla versioner av den här färdplanen? I så fall kan du gå <a href={`/metaRoadmap/${roadmap.metaRoadmapId}/editMetaRoadmap`}>hit</a> istället</p>
       <RoadmapForm
         user={session.user}
         userGroups={session.user?.userGroups}
