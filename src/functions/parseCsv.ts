@@ -1,4 +1,5 @@
 import { GoalInput } from "@/types"
+import dataSeriesDataFieldNames from "@/lib/dataSeriesDataFieldNames.json" with { type: "json" }
 
 export default function parseCsv(csv: ArrayBuffer): string[][] {
   // Windows-1252 (sometimes called ANSI) is the default encoding for CSV files exported from Excel. Is a superset of ISO-8859-1 (Latin-1).
@@ -28,8 +29,8 @@ export function csvToGoalList(csv: string[][], roadmapId: string) {
     "dataScale": "Scale",
   }
   let numericHeaders = []
-  for (let i = 2020; i <= 2050; i++) {
-    numericHeaders.push(i.toString())
+  for (let year of dataSeriesDataFieldNames) {
+    numericHeaders.push(year.replace("val", ""))
   }
 
   let headerIndex: { [key: string]: number } = {}
