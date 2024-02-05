@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/buttons/redirectButtons';
 import accessChecker from "@/lib/accessChecker";
 import { AccessLevel } from "@/types";
+import Link from "next/link";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -26,7 +27,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         <p><BackButton href={`/roadmap/${roadmap.id}`} /></p>
         <h1>Redigera färdplanen {`"${roadmap.metaRoadmap.name}"`}</h1>
       </div>
-      <p>Menade de att redigera den gemensamma metadatan för alla versioner av den här färdplanen? I så fall kan du gå <a href={`/metaRoadmap/${roadmap.metaRoadmapId}/editMetaRoadmap`}>hit</a> istället</p>
+      <p>Menade de att redigera den gemensamma metadatan för alla versioner av den här färdplanen? I så fall kan du <Link href={`/metaRoadmap/${roadmap.metaRoadmapId}/editMetaRoadmap`}>gå hit</Link> för att redigera metadatan.</p>
       <RoadmapForm
         user={session.user}
         userGroups={session.user?.userGroups}

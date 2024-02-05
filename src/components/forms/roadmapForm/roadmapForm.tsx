@@ -5,6 +5,7 @@ import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { Data } from "@/lib/session"
 import { AccessControlled, RoadmapInput } from "@/types"
 import { MetaRoadmap, Roadmap } from "@prisma/client"
+import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 
@@ -115,7 +116,8 @@ export default function RoadmapForm({
                 })
               }
             </select>
-            {/* TODO: Add secondary dropdown to select target version */}
+            <p>Saknas meta-färdplanen du söker efter? Kolla att du har tillgång till den eller <Link href={`/metaRoadmap/createMetaRoadmap`}>skapa en ny meta-färdplan</Link></p>
+            {/* TODO: Add secondary dropdown to select target version if parent meta-roadmap targets another meta-roadmap*/}
           </>
         }
 
