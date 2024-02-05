@@ -7,7 +7,7 @@ import { AccessControlled, GoalInput, RoadmapInput } from "@/types"
 import { MetaRoadmap, Roadmap } from "@prisma/client"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 export default function RoadmapForm({
   user,
@@ -58,7 +58,8 @@ export default function RoadmapForm({
       roadmapId: currentRoadmap?.id || undefined,
       goals: goals,
       metaRoadmapId,
-      inheritFromId: (form.namedItem('inheritFromId') as HTMLSelectElement)?.value || undefined,
+      inheritFromId: (form.namedItem('inheritFromId') as HTMLSelectElement)?.value || null,
+      targetVersion: parseInt((form.namedItem('targetVersion') as HTMLSelectElement)?.value) || null,
       timestamp,
     }
 
@@ -90,6 +91,7 @@ export default function RoadmapForm({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const timestamp = Date.now()
 
+
   let currentAccess: AccessControlled | undefined = undefined;
   if (currentRoadmap) {
     currentAccess = {
@@ -102,6 +104,10 @@ export default function RoadmapForm({
   }
 
   let defaultParentRoadmap: string | undefined = useSearchParams().get('metaRoadmapId') || undefined
+  const [metaRoadmapId, setMetaId] = useState<string | undefined>(defaultParentRoadmap)
+  const metaRoadmapTarget = useMemo(() => {
+    return metaRoadmapAlternatives?.find((parentRoadmap) => parentRoadmap.id === metaRoadmapAlternatives?.find((roadmap) => roadmap.id === metaRoadmapId)?.parentRoadmapId)
+  }, [metaRoadmapId, metaRoadmapAlternatives])
 
   return (
     <>
@@ -115,8 +121,8 @@ export default function RoadmapForm({
         {/* TODO: Change to meta roadmaps instead */}
         {!!metaRoadmapAlternatives &&
           <>
-            <label htmlFor="copyFrom">Meta-färdplan som detta är en ny version av</label>
-            <select name="parentRoadmap" id="copyFrom" defaultValue={defaultParentRoadmap} required>
+            <label htmlFor="parentRoadmap">Meta-färdplan som detta är en ny version av</label>
+            <select name="parentRoadmap" id="parentRoadmap" defaultValue={defaultParentRoadmap} required onChange={(e) => setMetaId(e.target.value)}>
               <option value="">Inget alternativ valt</option>
               {
                 metaRoadmapAlternatives.map((roadmap) => {
@@ -128,10 +134,23 @@ export default function RoadmapForm({
             </select>
             <p>Saknas meta-färdplanen du söker efter? Kolla att du har tillgång till den eller <Link href={`/metaRoadmap/createMetaRoadmap`}>skapa en ny meta-färdplan</Link></p>
             {/* TODO: Add secondary dropdown to select target version if parent meta-roadmap targets another meta-roadmap*/}
+            {metaRoadmapTarget && (
+              <>
+                <label htmlFor="targetVersion">Version av färdplanen {`"${metaRoadmapTarget.name}"`} den här färdplanen arbetar mot</label>
+                <select name="targetVersion" id="targetVersion" required defaultValue={currentRoadmap?.targetVersion || ""}>
+                  <option value="">Alltid senaste versionen</option>
+                  {metaRoadmapTarget.roadmapVersions.map((version) => {
+                    return (
+                      <option key={version.version} value={version.version}>{`Version ${version.version}`}</option>
+                    )
+                  })}
+                </select>
+              </>
+            )}
           </>
         }
 
-        {/* TODO: Add selector for inheriting some/all goals from another roadmap */}
+        {/* TODO: Add selector for inheriting some/all goals from another roadmap with `inheritFromID` */}
 
         <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> Notera att det här skapar nya målbanor även om det redan finns några. </label>
         <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />

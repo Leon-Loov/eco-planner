@@ -49,7 +49,7 @@ export type RoadmapInput = Omit<
   // UUID for the meta roadmap this roadmap belongs to
   metaRoadmapId: string;
   // To be used in API to copy the goals and actions from given roadmap
-  inheritFromId?: string | undefined;
+  inheritFromId?: string | null | undefined;
   // Version numbers are assigned by the API
 };
 

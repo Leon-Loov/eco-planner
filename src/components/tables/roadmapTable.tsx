@@ -41,7 +41,7 @@ export default function RoadmapTable({
         <tbody>
           {roadmaps.map(roadmap => (
             <tr key={roadmap.id}>
-              <td><a href={`/roadmap/${roadmap.id}`}>{`${roadmap.metaRoadmap.name}`}</a></td>
+              <td><a href={`/roadmap/${roadmap.id}`}>{`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}</a></td>
               <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
               <td>
                 <RoadmapActionButton
