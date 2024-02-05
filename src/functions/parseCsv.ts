@@ -10,7 +10,7 @@ export default function parseCsv(csv: ArrayBuffer): string[][] {
 }
 
 /**
- * Requires headers to be on the first row and throws if any of the required headers are missing
+ * Requires headers to be on the first or third row and throws if any of the required headers are missing
  * @param csv A 2D array of strings
  */
 export function csvToGoalList(csv: string[][], roadmapId: string) {

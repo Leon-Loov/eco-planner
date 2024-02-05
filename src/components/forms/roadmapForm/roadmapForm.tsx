@@ -3,7 +3,7 @@
 import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { Data } from "@/lib/session"
-import { AccessControlled, RoadmapInput } from "@/types"
+import { AccessControlled, GoalInput, RoadmapInput } from "@/types"
 import { MetaRoadmap, Roadmap } from "@prisma/client"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -37,16 +37,26 @@ export default function RoadmapForm({
 
     const metaRoadmapId = (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
 
-    const formData: RoadmapInput & { roadmapId?: string, goals?: any, timestamp: number } = {
+    let goals: GoalInput[] = [];
+    if (currentFile) {
+      try {
+        goals = csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0")
+      }
+      catch (e: any) {
+        setIsLoading(false)
+        alert(`Färdplan kunde inte skapas.\nAnledning: ${e.message || "Okänt fel"}`)
+        return
+      }
+    }
+
+    const formData: RoadmapInput & { roadmapId?: string, goals?: GoalInput[], timestamp: number } = {
       description: (form.namedItem("description") as HTMLTextAreaElement)?.value || undefined,
       editors: editUsers,
       viewers: viewUsers,
       editGroups,
       viewGroups,
       roadmapId: currentRoadmap?.id || undefined,
-      goals: [
-        ...(currentFile ? csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0") : [])
-      ],
+      goals: goals,
       metaRoadmapId,
       inheritFromId: (form.namedItem('inheritFromId') as HTMLSelectElement)?.value || undefined,
       timestamp,
