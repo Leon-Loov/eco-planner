@@ -1,3 +1,7 @@
+form {
+    width: min(90ch, 100%);
+}
+
 textarea {
     border-radius: 3px;
     border: none;

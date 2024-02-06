@@ -126,11 +126,13 @@ label:has(+input:not(:required), +select:not(:required), +textarea:not(:required
 }
 
 input:focus:not(input[type="checkbox"], input[type="file"], input[type="submit"]), textarea:focus {
-  outline: 3px solid var(--accent-color);
+  outline: 2px solid var(--accent-color);
+  box-shadow: 0 0 .5rem -3px var(--accent-color);
 }
 
 select:focus {
-  outline: 3px solid var(--accent-color);
+  outline: 2px solid var(--accent-color);
+  box-shadow: 0 0 .5rem -3px var(--blue);
 }
 
 input[type="file"] {

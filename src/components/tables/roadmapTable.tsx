@@ -21,7 +21,7 @@ export default function RoadmapTable({
         { // Only show the new roadmap button if the user is logged in
           user &&
           <>
-            <Link className={`${styles.newRoadmap} display-flex gap-50`} href='./roadmap/createRoadmap'>
+            <Link className={`${styles.newRoadmap} display-flex gap-50`} href='./metaRoadmap/createMetaRoadmap'>
               Skapa Färdplan
               <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new roadmap"></Image>
             </Link>

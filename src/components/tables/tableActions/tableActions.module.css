@@ -20,6 +20,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    transition: background-color .2s ease;
 }
 
 .button:hover {
