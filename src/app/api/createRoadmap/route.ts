@@ -5,8 +5,8 @@ import { AccessLevel, GoalInput, RoadmapInput } from "@/types";
 import roadmapGoalCreator from "./roadmapGoalCreator";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
-import goalInputFromRoadmap from "@/functions/goalInputFromRoadmap.ts";
-import getOneRoadmap from "@/fetchers/getOneRoadmap";
+import goalInputFromGoalArray from "@/functions/goalInputFromGoalArray";
+import getOneGoal from "@/fetchers/getOneGoal";
 
 export async function POST(request: NextRequest) {
   const response = new Response();
@@ -33,11 +33,12 @@ export async function POST(request: NextRequest) {
   }
 
   // If a parent roadmap is defined to be inherited from, append its goals to the new roadmap's goals
-  if (roadmap.inheritFromId) {
+  if (roadmap.inheritFromIds) {
     try {
-      const parentRoadmap = await getOneRoadmap(roadmap.inheritFromId);
-      if (parentRoadmap) {
-        roadmap.goals = [...(roadmap.goals || []), ...goalInputFromRoadmap(parentRoadmap)];
+      const goalArray = await Promise.all(roadmap.inheritFromIds.map(async (id) => await getOneGoal(id)));
+      //getOneRoadmap(roadmap.inheritFromId);
+      if (goalArray) {
+        roadmap.goals = [...(roadmap.goals || []), ...goalInputFromGoalArray(goalArray)];
       }
     } catch (e) {
       console.log(e);

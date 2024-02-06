@@ -2,11 +2,11 @@ import { GoalInput } from "@/types";
 import { DataSeries, Goal, Roadmap } from "@prisma/client";
 
 
-export default function goalInputFromRoadmap(roadmap: Roadmap & { goals?: (Goal & { dataSeries: DataSeries | null })[] }) {
+export default function goalInputFromGoalArray(goals: (Goal & { dataSeries: DataSeries | null } | null)[]) {
   let output: GoalInput[] = [];
 
-  for (let goal of roadmap.goals || []) {
-    if (!goal.dataSeries) {
+  for (let goal of goals || []) {
+    if (!goal || !goal.dataSeries) {
       continue;
     }
     let dataSeries: string[] = [];
@@ -22,7 +22,6 @@ export default function goalInputFromRoadmap(roadmap: Roadmap & { goals?: (Goal 
       dataSeries: dataSeries,
       dataUnit: goal.dataSeries.unit,
       dataScale: goal.dataSeries.scale ?? undefined,
-      roadmapId: roadmap.id,
     })
   }
 
