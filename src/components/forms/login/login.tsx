@@ -37,13 +37,13 @@ export default function Login() {
         <main className={`flex-grow-100 ${styles.userInfo}`}>
           <h1>Logga In</h1>
           <form onSubmit={handleSubmit} className={styles.form}>
-            <label htmlFor="username">Användarnamn </label>
-            <div className="display-flex">
+            <label htmlFor="username">Användarnamn</label>
+            <div className={`display-flex ${styles.inputField}`}>
               <ImageIcon src="/icons/user.svg" alt="lösenord" />
               <input className="flex-grow-100" type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
             <label htmlFor="password">Lösenord</label>
-            <div className="display-flex">
+            <div className={`display-flex ${styles.inputField}`}>
               <ImageIcon src="/icons/password.svg" alt="lösenord" />
               <input className="flex-grow-100" type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
             </div>

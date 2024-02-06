@@ -1,5 +1,5 @@
 .userInfo {
-    padding: 2em;
+    padding: 2rem;
     @media (max-width: 500px) {
         padding: 0;
     }
@@ -11,11 +11,11 @@
     border: 3px solid var(--accent-color);
     color: white;
     text-decoration: unset;
-    border-radius: 3px;
-    padding: .5em 2em;
+    border-radius: .5rem;
+    padding: .5rem 2rem;
     cursor: pointer;
     font-weight: bold;
-    font-size: 1em;
+    font-size: 1rem;
 }
 
 .form > input[type="submit"]:hover, .form > input[type="submit"]:focus {
@@ -28,15 +28,27 @@
     border: none;
     border-radius: 0 3px 3px 0;
     z-index: 1;
-    padding: 1rem;
-    background-color: lightgray;
+    padding: .75rem;
 } 
 
 .form label {
     display: block;
-    margin: 2rem 0 .5rem 0;
 }
 
 .submitButton {
     margin: 3rem 0 .75rem 0;
+}
+
+.inputField {
+    border-radius: 3px;
+}
+
+.inputField input {
+    outline: unset !important;
+    box-shadow: unset !important;
+}
+
+.inputField:has(input:focus) {
+    outline: 2px solid var(--accent-color);
+    box-shadow: 0 0 .5rem -3px var(--accent-color);
 }

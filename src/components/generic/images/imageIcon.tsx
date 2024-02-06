@@ -12,7 +12,7 @@ export default function imageIcon({
   return (
       <>
       <div className={styles.imageIcon}>
-        <Image src={src} alt={alt} layout="fill" objectFit='scale-down' />
+        <Image src={src} alt={alt} width={24} height={24} />
       </div>
       </>
       )

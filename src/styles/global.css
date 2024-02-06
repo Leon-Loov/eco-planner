@@ -132,7 +132,7 @@ input:focus:not(input[type="checkbox"], input[type="file"], input[type="submit"]
 
 select:focus {
   outline: 2px solid var(--accent-color);
-  box-shadow: 0 0 .5rem -3px var(--blue);
+  box-shadow: 0 0 .5rem -3px var(--accent-color);
 }
 
 input[type="file"] {
@@ -241,20 +241,18 @@ li ul {
 /* For login and signup page */ 
 
 .card {
-  margin: 5em 0;
-  border-radius: .5em 0 0 .5em;
-  box-shadow: 0 0 1em lightgray;
+  margin: 5rem 0;
+  border-radius: .5rem 0 0 .5rem;
   box-sizing: border-box;
 }
 
 @media (max-width: 500px) {
   .card {
       box-shadow: unset;
-      margin: 1em 0;
-      border-radius: .5em;
+      margin: 1rem 0;
+      border-radius: .5rem;
   }
 }
-
 
 @media (max-width: 750px) {
   aside {
