@@ -144,31 +144,5 @@ ul>li:nth-child(1)>.link {
     overflow-y: scroll;
     min-height: 300px;
     max-height: 500px;
-    width: calc(100% + .5rem + 3px);
-    padding-right: 3px;
-    scrollbar-color: var(--gray-80) #f1f1f1;
-    scrollbar-width: thin;
-}
-
-/* width */
-.tableWrapper::-webkit-scrollbar {
-    width: .5rem;
-}
-
-/* Track */
-.tableWrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 9999px;
-
-}
-
-/* Handle */
-.tableWrapper::-webkit-scrollbar-thumb {
-    background: var(--gray-80);
-    border-radius: 9999px;
-}
-
-/* Handle on hover */
-.tableWrapper::-webkit-scrollbar-thumb:hover {
-    background: var(--gray-70);
+    scrollbar-width: none;
 }

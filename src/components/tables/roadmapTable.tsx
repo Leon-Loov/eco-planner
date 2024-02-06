@@ -29,32 +29,34 @@ export default function RoadmapTable({
         }
       </div>
     </div>
-    <div className={styles.tableWrapper}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Namn</th>
-            <th style={{ textAlign: 'center' }}>Antal målbanor</th>
-            <th style={{ textAlign: 'center' }}>Redigera</th>
-          </tr>
-        </thead>
-        <tbody>
-          {roadmaps.map(roadmap => (
-            <tr key={roadmap.id}>
-              <td><a href={`/roadmap/${roadmap.id}`}>{`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}</a></td>
-              <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
-              <td>
-                <RoadmapActionButton
-                  addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
-                  editHref={`/roadmap/${roadmap.id}/editRoadmap`}
-                  id={roadmap.id}
-                  tableName={roadmap.metaRoadmap.name}
-                />
-              </td>
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Namn</th>
+              <th style={{ textAlign: 'center' }}>Antal målbanor</th>
+              <th style={{ textAlign: 'center' }}>Redigera</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+        {roadmaps.length ?
+          <tbody>
+            {roadmaps.map(roadmap => (
+              <tr key={roadmap.id}>
+                <td><a href={`/roadmap/${roadmap.id}`}>{`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}</a></td>
+                <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
+                <td>
+                  <RoadmapActionButton
+                    addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
+                    editHref={`/roadmap/${roadmap.id}/editRoadmap`}
+                    id={roadmap.id}
+                    tableName={roadmap.metaRoadmap.name}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        : <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p> }
+        </table>
+      </div>
   </>
 }
