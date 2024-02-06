@@ -48,8 +48,8 @@ export type RoadmapInput = Omit<
   viewGroups?: string[] | undefined;
   // UUID for the meta roadmap this roadmap belongs to
   metaRoadmapId: string;
-  // To be used in API to copy the goals and actions from given roadmap
-  inheritFromId?: string | null | undefined;
+  // Used in API to inherit the goals with the given IDs from other roadmaps
+  inheritFromIds?: string[] | null | undefined;
   // Version numbers are assigned by the API
 };
 
@@ -65,8 +65,6 @@ export type GoalInput = Omit<
   dataUnit: string;
   dataScale?: string | undefined;
   links?: { url: string, description?: string }[] | undefined;
-  // UUID for the roadmap this goal belongs to
-  roadmapId: string;
 };
 
 /** The format of the data needed to create a new action. */
