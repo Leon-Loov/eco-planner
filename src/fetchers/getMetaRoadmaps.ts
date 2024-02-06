@@ -90,6 +90,7 @@ const getCachedMetaRoadmaps = unstable_cache(
               { viewers: { some: { id: userId } } },
               { editGroups: { some: { users: { some: { id: userId } } } } },
               { viewGroups: { some: { users: { some: { id: userId } } } } },
+              { viewGroups: { some: { name: 'Public' } } },
             ]
           },
           include: {
@@ -101,6 +102,7 @@ const getCachedMetaRoadmaps = unstable_cache(
                   { viewers: { some: { id: userId } } },
                   { editGroups: { some: { users: { some: { id: userId } } } } },
                   { viewGroups: { some: { users: { some: { id: userId } } } } },
+                  { viewGroups: { some: { name: 'Public' } } },
                 ]
               },
               select: {
