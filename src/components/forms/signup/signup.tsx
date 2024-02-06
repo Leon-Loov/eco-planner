@@ -65,8 +65,8 @@ export default function Signup() {
           </form>
         </main>
         <aside style={{ width: '40%' }}>
-          <AttributedImage src="/images/charging_car.webp" alt="" borderRadius="0 .5em .5em 0">
-            Photo by <a href="https://unsplash.com/@juice_world?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">JUICE</a> on <a href="https://unsplash.com/photos/a-man-and-a-woman-are-charging-their-cars-cBHAhaGK_zU?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+          <AttributedImage src="/images/hydroelectric.jpg" alt="" borderRadius="0 .5em .5em 0">
+            Photo by <a href="https://unsplash.com/@dmey503?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Dan Meyers</a> on <a href="https://unsplash.com/photos/aerial-photography-of-body-of-water-w6X7XaolqA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>
         </aside>
       </div>

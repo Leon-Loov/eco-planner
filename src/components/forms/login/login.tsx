@@ -48,12 +48,12 @@ export default function Login() {
               <input className="flex-grow-100" type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
             </div>
             <input type="submit" className={styles.submitButton} value={'Logga In'} style={{ display: 'block' }} />
-            <Link href='/signup' >Skapa konto</Link>
+            <Link href='/signup'>Skapa konto</Link>
           </form>
         </main>
         <aside style={{ width: '40%' }}>
-          <AttributedImage src="/images/cyclists.webp" alt="" borderRadius="0 .5em .5em 0">
-            Photo by <a href="https://unsplash.com/@samtekiefte?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sam te Kiefte</a> on <a href="https://unsplash.com/photos/man-in-red-long-sleeve-shirt-riding-bicycle-on-street-during-daytime-NMeO6NIUOcA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+          <AttributedImage src="/images/windturbines.jpg" alt="" borderRadius="0 .5em .5em 0">
+            Photo by <a href="https://unsplash.com/@nrdoherty?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Nicholas Doherty</a> on <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>
         </aside>
       </div>
