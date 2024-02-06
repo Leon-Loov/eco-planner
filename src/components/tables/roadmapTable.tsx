@@ -29,6 +29,7 @@ export default function RoadmapTable({
         }
       </div>
     </div>
+    {roadmaps.length ?
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -38,7 +39,6 @@ export default function RoadmapTable({
               <th style={{ textAlign: 'center' }}>Redigera</th>
             </tr>
           </thead>
-        {roadmaps.length ?
           <tbody>
             {roadmaps.map(roadmap => (
               <tr key={roadmap.id}>
@@ -55,8 +55,8 @@ export default function RoadmapTable({
               </tr>
             ))}
           </tbody>
-        : <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p> }
         </table>
       </div>
+    : <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p> }
   </>
 }
