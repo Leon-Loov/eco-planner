@@ -246,6 +246,10 @@ li ul {
   box-sizing: border-box;
 }
 
+.card main {
+  padding: 0;
+}
+
 @media (max-width: 500px) {
   .card {
       box-shadow: unset;
@@ -254,8 +258,16 @@ li ul {
   }
 }
 
-@media (max-width: 750px) {
-  aside {
-      display: none;
+@media (max-width: 1250px) {
+  .card {
+    flex-direction: column-reverse;
+  }
+  .card aside {
+    width: min(90ch, 100%) !important;
+    border-radius: .5rem .5rem 0 0;
+    height: 300px;
+  }
+  .card aside img {
+    border-radius: .5rem .5rem 0 0 !important;
   }
 }
