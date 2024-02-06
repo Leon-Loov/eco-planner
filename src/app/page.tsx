@@ -48,11 +48,9 @@ export default async function Page() {
     <section className="grid-auto-rows">
       <div>
         <RoadmapTable user={session.user} title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
-        {!metaRoadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
       <div>
         <RoadmapTable user={session.user} title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
-        {!metaRoadmaps.length && <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
       </div>
     </section>
   </>
