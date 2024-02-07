@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let goal: GoalInput = await request.json();
+  let goal: GoalInput & {roadmapId: string} = await request.json();
 
   // Validate request body
   if (!goal.indicatorParameter || !goal.dataUnit || !goal.dataSeries) {

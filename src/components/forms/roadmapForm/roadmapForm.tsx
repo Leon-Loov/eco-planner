@@ -41,7 +41,7 @@ export default function RoadmapForm({
     let goals: GoalInput[] = [];
     if (currentFile) {
       try {
-        goals = csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })), "0")
+        goals = csvToGoalList(parseCsv(await currentFile.arrayBuffer().then((buffer) => { return buffer })))
       }
       catch (e: any) {
         setIsLoading(false)

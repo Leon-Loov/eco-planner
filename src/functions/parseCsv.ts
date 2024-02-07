@@ -13,7 +13,7 @@ export default function parseCsv(csv: ArrayBuffer): string[][] {
  * Requires headers to be on the first or third row and throws if any of the required headers are missing
  * @param csv A 2D array of strings
  */
-export function csvToGoalList(csv: string[][], roadmapId: string) {
+export function csvToGoalList(csv: string[][]) {
   // Remove first two rows if the second row is empty (as it should be, with first row containing metadata and third row containing headers)
   if (!csv[1][0]) {
     csv = csv.slice(2)
@@ -70,7 +70,6 @@ export function csvToGoalList(csv: string[][], roadmapId: string) {
       dataUnit: csv[i][headerIndex.dataUnit],
       dataScale: csv[i][headerIndex.dataScale] || undefined,
       dataSeries,
-      roadmapId,
     })
   }
 
