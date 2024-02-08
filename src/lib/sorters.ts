@@ -68,3 +68,19 @@ export function actionSorter(a: Action, b: Action) {
 export function commentSorter(a: Comment, b: Comment) {
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 }
+
+/**
+ * Sorts areas alphabetically by name, but putting the national area (code: "00") first
+ */
+export function areaSorter(a: [name: string, code: string], b: [name: string, code: string]) {
+  if (a[1] === "00" && b[1] === "00") {
+    return collator.compare(a[0], b[0]);
+  }
+  else if (a[1] === "00") {
+    return -1;
+  } else if (b[1] === "00") {
+    return 1;
+  } else {
+    return collator.compare(a[0], b[0]);
+  }
+}

@@ -80,7 +80,7 @@ export default async function scbAreaQuery(areaCode: string, parentAreaCode?: st
 
   const areaData = data.data;
   const area = areaData.find((data) => data.key[0] == areaCode)?.values[0];
-  const parentArea = (parentAreaCode && areaData.find((data) => data.key[0] == parentAreaCode)?.values[0]) || null;
+  const parentArea = parentAreaCode && areaData.find((data) => data.key[0] == parentAreaCode)?.values[0];
 
   return {
     area,

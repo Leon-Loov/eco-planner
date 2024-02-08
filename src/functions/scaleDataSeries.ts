@@ -3,6 +3,7 @@
 import { Data, getSessionData } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 /**
@@ -17,7 +18,7 @@ export default async function scaleDataSeries(
   if (!session.user) return "Not logged in";
 
   // Create an object with the yearly dataSeries fields as keys, and each value is an object with a multiply key and the scaleFactor as the value
-  const multiplierObject: { [key in keyof DataSeriesDataFields]: { multiply: number } } = Object.assign({}, ...Object.keys(dataSeriesDataFieldNames).map((key) => ({ [key]: { multiply: scaleFactor } })));
+  const multiplierObject: { [key in keyof DataSeriesDataFields]: { multiply: number } } = Object.assign({}, ...dataSeriesDataFieldNames.map((key: keyof DataSeriesDataFields) => ({ [key]: { multiply: scaleFactor } })));
 
   if (session.user?.isAdmin) {
     try {
@@ -46,6 +47,7 @@ export default async function scaleDataSeries(
         },
         data: multiplierObject,
       });
+      revalidateTag('dataSeries');
       return "";
     } catch (error: any) {
       return error.message || "Error scaling data series";

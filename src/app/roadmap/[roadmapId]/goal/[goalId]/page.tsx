@@ -18,6 +18,7 @@ import styles from './page.module.css'
 import getGoalByIndicator from "@/fetchers/getGoalByIndicator";
 import getRoadmapByVersion from "@/fetchers/getRoadmapByVersion";
 import prisma from "@/prismaClient";
+import DataSeriesScaler from "@/components/DataSeriesScaler";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -94,6 +95,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <>
           <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
         </>
+      }
+      <br />
+      {(accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
+        <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
       }
       <GraphGraph goal={goal} nationalGoal={parentGoal} />
       <CombinedGraph roadmap={roadmap} goal={goal} />
