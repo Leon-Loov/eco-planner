@@ -51,7 +51,7 @@ export default function RoadmapForm({
     }
 
     const inheritGoalIds: string[] = [];
-    (form.namedItem('inheritGoals') as RadioNodeList).forEach((checkbox) => {
+    (form.namedItem('inheritGoals') as RadioNodeList|null)?.forEach((checkbox) => {
       if ((checkbox as HTMLInputElement).checked) {
         inheritGoalIds.push((checkbox as HTMLInputElement).value)
       }
