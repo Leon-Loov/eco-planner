@@ -80,7 +80,7 @@ const getCachedNames = unstable_cache(
           },
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching admin names');
         return [];
       }
@@ -144,7 +144,7 @@ const getCachedNames = unstable_cache(
           },
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching user names');
         return [];
       }
@@ -192,7 +192,7 @@ const getCachedNames = unstable_cache(
         },
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       console.log('Error fetching public names');
       return [];
     }

@@ -82,7 +82,7 @@ const getCachedGoal = unstable_cache(
           }
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching admin goal');
         return null
       }
@@ -141,7 +141,7 @@ const getCachedGoal = unstable_cache(
           }
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching user goal');
         return null
       }
@@ -190,7 +190,7 @@ const getCachedGoal = unstable_cache(
         }
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       console.log('Error fetching public goal');
       return null
     }

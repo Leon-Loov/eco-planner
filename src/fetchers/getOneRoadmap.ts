@@ -71,7 +71,7 @@ const getCachedRoadmap = unstable_cache(
           }
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching admin roadmap');
         return null
       }
@@ -113,7 +113,7 @@ const getCachedRoadmap = unstable_cache(
           }
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching user roadmap');
         return null
       }
@@ -147,7 +147,7 @@ const getCachedRoadmap = unstable_cache(
         }
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       console.log('Error fetching public roadmap');
       return null
     }

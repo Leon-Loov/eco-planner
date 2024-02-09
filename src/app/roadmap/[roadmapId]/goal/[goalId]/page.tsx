@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       }
     } catch (error) {
       parentGoal = null;
-      console.error(error);
+      console.log(error);
     }
   }
 

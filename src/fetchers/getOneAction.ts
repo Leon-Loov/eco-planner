@@ -65,7 +65,7 @@ const getCachedAction = unstable_cache(
           },
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching admin action');
         return null;
       }
@@ -116,7 +116,7 @@ const getCachedAction = unstable_cache(
           },
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching action');
         return null;
       }
@@ -155,7 +155,7 @@ const getCachedAction = unstable_cache(
         }
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       console.log('Error fetching public action');
       return null;
     }

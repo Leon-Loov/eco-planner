@@ -68,7 +68,7 @@ const getCachedMetaRoadmaps = unstable_cache(
           },
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching admin meta roadmaps');
         return [];
       }
@@ -122,7 +122,7 @@ const getCachedMetaRoadmaps = unstable_cache(
           },
         });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         console.log('Error fetching meta roadmaps');
         return [];
       }
@@ -161,7 +161,7 @@ const getCachedMetaRoadmaps = unstable_cache(
         },
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       console.log('Error fetching public meta roadmaps');
       return [];
     }
