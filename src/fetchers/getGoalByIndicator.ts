@@ -16,9 +16,9 @@ import { cookies } from "next/headers";
  * @param indicatorParameter Indicator parameter of the goal to get
  * @returns Goal object with actions
  */
-export default async function getGoalByIndicator(roadmapId: string, indicatorParameter: string) {
+export default async function getGoalByIndicator(roadmapId: string, indicatorParameter: string, unit?: string) {
   const session = await getSessionData(cookies());
-  return getCachedGoal(roadmapId, indicatorParameter, session.user?.id ?? '')
+  return getCachedGoal(roadmapId, indicatorParameter, unit, session.user?.id ?? '')
 }
 
 /**
@@ -29,7 +29,7 @@ export default async function getGoalByIndicator(roadmapId: string, indicatorPar
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
  */
 const getCachedGoal = unstable_cache(
-  async (roadmapId, indicatorParameter, userId) => {
+  async (roadmapId: string, indicatorParameter: string, unit: string | undefined, userId) => {
     const session = await getSessionData(cookies());
 
     let goal: Goal & {
@@ -50,6 +50,8 @@ const getCachedGoal = unstable_cache(
         goal = await prisma.goal.findFirst({
           where: {
             indicatorParameter: indicatorParameter,
+            // If unit is specified, get a goal with the specified unit
+            ...(unit ? { dataSeries: { unit: unit } } : {}),
             roadmap: { id: roadmapId },
           },
           include: {
@@ -105,6 +107,7 @@ const getCachedGoal = unstable_cache(
         goal = await prisma.goal.findFirst({
           where: {
             indicatorParameter: indicatorParameter,
+            ...(unit ? { dataSeries: { unit: unit } } : {}),
             roadmap: {
               id: roadmapId,
               OR: [
@@ -164,6 +167,7 @@ const getCachedGoal = unstable_cache(
       goal = await prisma.goal.findFirst({
         where: {
           indicatorParameter: indicatorParameter,
+          ...(unit ? { dataSeries: { unit: unit } } : {}),
           roadmap: {
             id: roadmapId,
             viewGroups: { some: { name: 'Public' } }

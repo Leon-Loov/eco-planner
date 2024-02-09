@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
       // If there is a parent roadmap, look for a goal with the same indicator parameter in it
       if (parentRoadmap) {
-        parentGoal = await getGoalByIndicator(parentRoadmap.id, goal.indicatorParameter);
+        parentGoal = await getGoalByIndicator(parentRoadmap.id, goal.indicatorParameter, goal.dataSeries?.unit);
       }
     } catch (error) {
       parentGoal = null;
