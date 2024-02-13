@@ -5,7 +5,7 @@ import Image from "next/image";
 export function PrimaryLink({ href, children  }: { href: string; children: React.ReactNode }) {
   return (
     <>
-      <Link href={`/${href}`} className="call-to-action-primary">
+      <Link href={`${href}`} className="call-to-action-primary">
         {children}
       </Link>
     </>
@@ -13,10 +13,10 @@ export function PrimaryLink({ href, children  }: { href: string; children: React
 }
 
 // Kinda important Link (Might make sense to turn into one and let classname be a prop)
-export function SecondaryLink({ href, children  }: { href: string; children: React.ReactNode }) {
+export function SecondaryLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <>
-      <Link href={`/${href}`} className="call-to-action-secondary">
+      <Link href={`${href}`} className="call-to-action-secondary">
         {children}
       </Link>
     </>

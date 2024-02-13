@@ -33,7 +33,7 @@ export default function Goals({
           <TableSelector />
           { // Only show the button if the user has edit access to the roadmap
             (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
-            <PrimaryLink href={`./roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</PrimaryLink>
+            <PrimaryLink href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</PrimaryLink>
           }
         </nav>
       </label>
