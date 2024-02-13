@@ -9,11 +9,18 @@ export default function RoadmapTable({
   title,
   roadmaps,
   user,
+  metaRoadmapId,
 }: {
   title: String,
   roadmaps: ({ id: string, version: number, _count: { goals: number }, metaRoadmap: MetaRoadmap })[],
-  user: Data['user']
+  user: Data['user'],
+  metaRoadmapId?: string,
 }) {
+  let creationLink = '/metaRoadmap/createMetaRoadmap';
+  if (metaRoadmapId) {
+    creationLink = `/roadmap/createRoadmap?metaRoadmapId=${metaRoadmapId}`
+  }
+
   return <>
     <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>
       <h2>{title}</h2>
@@ -21,7 +28,7 @@ export default function RoadmapTable({
         { // Only show the new roadmap button if the user is logged in
           user &&
           <>
-            <Link className={`${styles.newRoadmap} display-flex gap-50`} href='./metaRoadmap/createMetaRoadmap'>
+            <Link className={`${styles.newRoadmap} display-flex gap-50`} href={creationLink}>
               Skapa Färdplan
               <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new roadmap"></Image>
             </Link>
@@ -57,6 +64,6 @@ export default function RoadmapTable({
           </tbody>
         </table>
       </div>
-    : <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p> }
+      : <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
   </>
 }
