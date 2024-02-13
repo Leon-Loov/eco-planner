@@ -26,6 +26,7 @@ export default async function scaleDataSeries(
         where: { id: dataSeriesId },
         data: multiplierObject,
       });
+      revalidateTag('dataSeries');
       return "";
     } catch (error: any) {
       return error.message || "Error scaling data series (Admin)";
