@@ -1,6 +1,5 @@
-import { AccessControlled } from '@/types';
 import styles from '../tables.module.css' with { type: "css" };
-import { DataSeries, Goal, Roadmap } from "@prisma/client"
+import { DataSeries, Goal } from "@prisma/client";
 
 interface GoalTableCommonProps { }
 
@@ -15,7 +14,14 @@ interface GoalTableWithGoals extends GoalTableCommonProps {
 
 interface GoalTableWithRoadmap extends GoalTableCommonProps {
   goals?: never,
-  roadmap: { id: string, metaRoadmap: { name: string, id: string }, goals: (Goal & { _count: { actions: number }, dataSeries: DataSeries | null })[] },
+  roadmap: {
+    id: string,
+    metaRoadmap: { name: string, id: string },
+    goals: (Goal & {
+      _count: { actions: number },
+      dataSeries: DataSeries | null,
+    })[]
+  },
 }
 
 type GoalTableProps = GoalTableWithGoals | GoalTableWithRoadmap;
