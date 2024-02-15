@@ -5,8 +5,6 @@ import styles from './tableActions.module.css' with { type: "css" }
 import Link from "next/link";
 import { useRef } from "react";
 
-//TODO: Close menu when pressing anywhere, also add close button
-
 export function RoadmapActionButton(
   {
     addGoalHref,
