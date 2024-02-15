@@ -42,7 +42,7 @@ export default function Goals({
         <GoalTable roadmap={roadmap} />
       ) : null}
       {tableType == 'listTree' ? (
-        <LinkTree goals={roadmap.goals} roadmapId={roadmap.id} />
+        <LinkTree roadmap={roadmap} />
       ) : null}
     </>
   )
