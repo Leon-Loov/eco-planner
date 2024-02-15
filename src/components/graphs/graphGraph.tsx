@@ -18,11 +18,11 @@ export default function GraphGraph({
   const { graphType } = useGlobalContext();
 
   return (
-    <>
+    <div>
       { // TODO: Make a proper toggle
         graphType == 'mainGraph' ?
           <>
-            <h2 className="display-flex align-items-center justify-content-space-between padding-y-50">Målbana
+            <h2 className="display-flex align-items-center justify-content-space-between">Målbana
               <nav className="display-flex align-items-center gap-50">
                 <GraphSelector goal={goal} />
               </nav>
@@ -33,7 +33,7 @@ export default function GraphGraph({
       {
         graphType == 'mainRelativeGraph' ?
           <>
-            <h2 className="display-flex align-items-center justify-content-space-between padding-y-50">Procent relativt basår
+            <h2 className="display-flex align-items-center justify-content-space-between">Procent relativt basår
               <nav className="display-flex align-items-center gap-50">
                 <GraphSelector goal={goal} />
               </nav>
@@ -44,7 +44,7 @@ export default function GraphGraph({
       {
         graphType == 'mainDeltaGraph' ?
           <>
-            <h2 className="display-flex align-items-center justify-content-space-between padding-y-50">Årlig förändring
+            <h2 className="display-flex align-items-center justify-content-space-between">Årlig förändring
               <nav className="display-flex align-items-center gap-50">
                 <GraphSelector goal={goal} />
               </nav>
@@ -52,6 +52,6 @@ export default function GraphGraph({
             <MainDeltaGraph goal={goal} nationalGoal={nationalGoal} />
           </> : null
       }
-    </>
+    </div>
   )
 }

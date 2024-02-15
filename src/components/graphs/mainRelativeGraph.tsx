@@ -7,7 +7,7 @@ export default function MainRelativeGraph({
   nationalGoal,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
-  nationalGoal: Goal & { dataSeries: DataSeries | null } | null, 
+  nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
 }) {
   if (!goal.dataSeries || goal.dataSeries.unit.toLowerCase() == "procent" || goal.dataSeries.unit.toLowerCase() == "andel") {
     return null
@@ -54,9 +54,9 @@ export default function MainRelativeGraph({
   }
 
   let chartOptions: ApexCharts.ApexOptions = {
-    chart: { 
+    chart: {
       type: 'line',
-      animations: { enabled: false, dynamicAnimation: { enabled: false }}
+      animations: { enabled: false, dynamicAnimation: { enabled: false } }
     },
     stroke: { curve: 'straight' },
     xaxis: {
@@ -77,14 +77,16 @@ export default function MainRelativeGraph({
 
   return (
     <>
-      <div style={{height: "500px", width: "100%"}}>
-        <WrappedChart
-          options={chartOptions}
-          series={chart}
-          type="line"
-          width="100%"
-          height="100%"
-        />
+      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
+        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
+          <WrappedChart
+            options={chartOptions}
+            series={chart}
+            type="line"
+            width="100%"
+            height="100%"
+          />
+        </div>
       </div>
     </>
   )

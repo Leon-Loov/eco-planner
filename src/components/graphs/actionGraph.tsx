@@ -27,15 +27,15 @@ export default function ActionGraph({
   })
 
   let chartOptions: ApexCharts.ApexOptions = {
-    chart: { 
+    chart: {
       type: 'rangeBar',
-      animations: { enabled: false, dynamicAnimation: { enabled: false }}
+      animations: { enabled: false, dynamicAnimation: { enabled: false } }
     },
     plotOptions: {
       bar: {
         horizontal: true,
         barHeight: "90%",
-        
+
       }
     },
     xaxis: {
@@ -50,17 +50,19 @@ export default function ActionGraph({
   }
 
   return (actions.length > 0 &&
-    <>
+    <div>
       <h2>Åtgärdsgraf</h2>
-      <div style={{height: "500px", width: "100%"}}>
-        <WrappedChart
-          options={chartOptions}
-          series={series}
-          type="rangeBar"
-          width="100%"
-          height="100%"
-        />
+      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
+        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
+          <WrappedChart
+            options={chartOptions}
+            series={series}
+            type="rangeBar"
+            width="100%"
+            height="100%"
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }
