@@ -20,16 +20,14 @@ export default async function DashboardBase({ actor }: { actor: string }) {
     }
   }
 
-  let goals: Awaited<ReturnType<typeof getOneGoal>>[] = []
+  let goals: Exclude<Awaited<ReturnType<typeof getOneGoal>>, null>[] = []
 
   if (roadmaps) {
-    // Get all goals
-    goals = await Promise.all(goalIds.map((goalId) => {
+    // Get all goals and filter out any null values
+    goals = (await Promise.all(goalIds.map((goalId) => {
       return getOneGoal(goalId).catch((e: any) => { return null })
-    }))
+    }))).filter((goal): goal is Exclude<typeof goal, null> => goal != null)
 
-    // Remove null values
-    goals = goals.filter((goal) => goal != null)
   }
 
   // Get a list of actions

@@ -9,8 +9,7 @@ import { cookies } from "next/headers";
  * Gets a subset of roadmaps the user has access to, based on the parameters passed to the function.
  * 
  * Returns an empty array if no roadmaps are found or user does not have access to any. Also returns an empty array on error.
- * @param county County to filter by
- * @param municipality Municipality to filter by
+ * @param actor Actor to filter by
  * @returns Array of roadmaps
  */
 export default async function getRoadmapSubset(actor?: string) {
@@ -22,8 +21,7 @@ export default async function getRoadmapSubset(actor?: string) {
  * Caches a subset of roadmaps the user has access to, based on the parameters passed to the function.
  * Cache is invalidated when `revalidateTag()` is called on one of its tags `['database', 'roadmap']`, which is done in relevant API routes.
  * @param userId ID of user. Isn't passed in, but is used to associate the cache with the user.
- * @param county County to filter by
- * @param municipality Municipality to filter by
+ * @param actor Actor to filter by
  */
 const getCachedRoadmapSubset = unstable_cache(
   async (userId: any, actor?: string) => {

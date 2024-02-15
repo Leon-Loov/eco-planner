@@ -20,6 +20,7 @@ export default function Goals({
       dataSeries: DataSeries | null,
       author: { id: string, username: string },
     })[],
+    metaRoadmap: { name: string, id: string },
     author: { id: string, username: string },
   },
   accessLevel?: AccessLevel
@@ -38,7 +39,7 @@ export default function Goals({
         </nav>
       </label>
       {tableType == 'table' ? (
-        <GoalTable goals={roadmap.goals} roadmapId={roadmap.id} />
+        <GoalTable roadmap={roadmap} />
       ) : null}
       {tableType == 'listTree' ? (
         <LinkTree goals={roadmap.goals} roadmapId={roadmap.id} />
