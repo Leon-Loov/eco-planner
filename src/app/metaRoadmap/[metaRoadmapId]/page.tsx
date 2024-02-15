@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { metaRoadmapId: string
         {`${metaRoadmap.name}`}
       </h1>
       <span style={{ color: "gray" }}>Metadata för en färdplan</span>
-      <RoadmapTable title="Versioner av målbanan" roadmaps={metaRoadmap.roadmapVersions} user={session.user} metaRoadmapId={metaRoadmap.id} />
+      <RoadmapTable title="Versioner av målbanan" user={session.user} metaRoadmap={metaRoadmap} />
     </>
   )
 }

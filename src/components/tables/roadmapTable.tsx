@@ -5,20 +5,46 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { RoadmapActionButton } from './tableActions/roadmapActions';
 
+interface RoadmapTableCommonProps {
+  title: String,
+  user: Data['user'],
+}
+
+interface RoadmapTableWithMetaRoadmap extends RoadmapTableCommonProps {
+  roadmaps?: never,
+  metaRoadmap: MetaRoadmap & { roadmapVersions: { id: string, version: number, _count: { goals: number } }[] }
+}
+
+interface RoadmapTableWithRoadmaps extends RoadmapTableCommonProps {
+  roadmaps: ({ id: string, version: number, _count: { goals: number }, metaRoadmap: MetaRoadmap })[],
+  metaRoadmap?: never,
+}
+
+type RoadmapTableProps = RoadmapTableWithMetaRoadmap | RoadmapTableWithRoadmaps;
+
 export default function RoadmapTable({
   title,
   roadmaps,
   user,
-  metaRoadmapId,
-}: {
-  title: String,
-  roadmaps: ({ id: string, version: number, _count: { goals: number }, metaRoadmap: MetaRoadmap })[],
-  user: Data['user'],
-  metaRoadmapId?: string,
-}) {
+  metaRoadmap,
+}: RoadmapTableProps) {
+  // Failsafe in case wrong props are passed
+  if ((!roadmaps && !metaRoadmap) || (roadmaps && metaRoadmap)) throw new Error('RoadmapTable: Either `roadmaps` XOR `metaRoadmap` must be provided');
+
   let creationLink = '/metaRoadmap/createMetaRoadmap';
-  if (metaRoadmapId) {
-    creationLink = `/roadmap/createRoadmap?metaRoadmapId=${metaRoadmapId}`
+
+  if (!roadmaps) {
+    roadmaps = metaRoadmap.roadmapVersions.map((version) => {
+      return {
+        id: version.id,
+        version: version.version,
+        _count: { goals: version._count.goals },
+        // Sets the metaRoadmap to the parent metaRoadmap, excluding the versions array
+        metaRoadmap: (({ roadmapVersions, ...data }) => data)(metaRoadmap)
+      }
+    })
+    // Set the creation link to create a new roadmap version for the specified meta roadmap instead
+    creationLink = `/roadmap/createRoadmap?metaRoadmapId=${metaRoadmap.id}`
   }
 
   return <>
