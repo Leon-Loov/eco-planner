@@ -42,12 +42,16 @@ export default async function Page() {
   })
 
   return <>
-    <div style={{ width: '100%', height: '350px', marginTop: '1.5em', }}>
+    <div style={{ width: '100%', height: '350px', margin: '1.5rem 0', }}>
       <AttributedImage src="/images/solarpanels.jpg" alt="" borderRadius=".5em">
-        Photo by <a href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Spiske</a> on <a href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+        <div className="flex" style={{background: 'linear-gradient(180deg, transparent, rgba(0, 0, 0, .75)', height: '100%', alignItems: 'flex-end', padding: '1rem', borderRadius: '.5rem'}}>
+          <div>
+            <h1 style={{marginBottom: '.5rem'}}>Färdplaner</h1>
+            <p style={{color: 'white', margin: '0'}}>Photo by <a href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" style={{color: 'white'}}>Markus Spiske</a> on <a href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" style={{color: 'white'}}>Unsplash</a></p>
+          </div>
+        </div>
       </AttributedImage>
     </div>
-    <h1>Färdplaner</h1>
     <section className="grid-auto-rows">
       <div>
         <RoadmapTable user={session.user} title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
