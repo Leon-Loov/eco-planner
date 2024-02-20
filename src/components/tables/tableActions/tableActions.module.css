@@ -35,7 +35,7 @@
     top: 50%;
     transform: translate(-100%, -50%);
     background-color: #fefefe;
-    box-shadow: 0 0 .5rem var(--gray-90);
+    box-shadow: 0 0 .5rem -3px var(--gray);
     border-radius: .5rem;
     z-index: 9999;
     border: 0;

@@ -45,50 +45,27 @@ export default function RoadmapTable({
     })
     // Set the creation link to create a new roadmap version for the specified meta roadmap instead
     creationLink = `/roadmap/createRoadmap?metaRoadmapId=${metaRoadmap.id}`
+
   }
 
   return <>
-    <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>
-      <h2>{title}</h2>
-      <div>
-        { // Only show the new roadmap button if the user is logged in
-          user &&
-          <>
-            <Link className={`${styles.newRoadmap} display-flex gap-50`} href={creationLink}>
-              Skapa Färdplan
-              <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new roadmap"></Image>
-            </Link>
-          </>
-        }
-      </div>
-    </div>
     {roadmaps.length ?
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Namn</th>
-              <th style={{ textAlign: 'center' }}>Antal målbanor</th>
-              <th style={{ textAlign: 'center' }}>Redigera</th>
-            </tr>
-          </thead>
-          <tbody>
-            {roadmaps.map(roadmap => (
-              <tr key={roadmap.id}>
-                <td><a href={`/roadmap/${roadmap.id}`}>{`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}</a></td>
-                <td style={{ textAlign: 'center' }}>{roadmap._count.goals}</td>
-                <td>
-                  <RoadmapActionButton
-                    addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
-                    editHref={`/roadmap/${roadmap.id}/editRoadmap`}
-                    id={roadmap.id}
-                    tableName={roadmap.metaRoadmap.name}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div>
+        {roadmaps.map(roadmap => (
+          <div className='flex gap-100 justify-content-space-between align-items-center' key={roadmap.id}>
+            <a href={`/roadmap/${roadmap.id}`} className={`${styles.roadmapLink} flex-grow-100`}>
+              <span className={styles.linkTitle}>{roadmap.metaRoadmap.name}</span>
+              <span className={styles.linkInfo}>{roadmap.metaRoadmap.type} • {roadmap._count.goals} Målbanor</span>
+            </a>
+            <RoadmapActionButton
+              addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
+              editHref={`/roadmap/${roadmap.id}/editRoadmap`}
+              id={roadmap.id}
+              tableName={roadmap.metaRoadmap.name}
+            />
+            <span>v.{roadmap.version}</span> {/* TODO: Turn into link */}
+          </div>
+        ))}
       </div>
       : <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
   </>

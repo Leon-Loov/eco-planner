@@ -43,22 +43,17 @@ export default async function Page() {
 
   return <>
     <div style={{ width: '100%', height: '350px', margin: '1.5rem 0', }}>
-      <AttributedImage src="/images/solarpanels.jpg" alt="" borderRadius=".5em">
-        <div className="flex" style={{background: 'linear-gradient(180deg, transparent, rgba(0, 0, 0, .75))', height: '100%', alignItems: 'flex-end', padding: '1rem', borderRadius: '.5rem'}}>
+      <AttributedImage src="/images/solarpanels.jpg" alt="" borderRadius=".5rem">
+        <div className="flex flex-wrap-wrap align-items-flex-end justify-content-space-between padding-100" style={{background: 'linear-gradient(180deg, transparent, rgba(0, 0, 0, .65))', height: '100%', borderRadius: '.5rem'}}>
           <div>
-            <h1 style={{marginBottom: '.5rem'}}>Färdplaner</h1>
+            <h1 style={{marginBottom: '.5rem', fontSize: '3rem'}}>Färdplaner</h1>
             <p style={{color: 'white', margin: '0'}}>Photo by <a href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" style={{color: 'white'}}>Markus Spiske</a> on <a href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" style={{color: 'white'}}>Unsplash</a></p>
           </div>
+          <a href="/metaRoadmap/createMetaRoadmap" style={{color: 'black', textDecoration: 'none', padding: '.5rem 1rem', backgroundColor: 'white', borderRadius: '9999px'}}>Skapa ny färdplan</a>
         </div>
       </AttributedImage>
     </div>
-    <section className="grid-auto-rows">
-      <div>
-        <RoadmapTable user={session.user} title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
-      </div>
-      <div>
-        <RoadmapTable user={session.user} title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
-      </div>
-    </section>
+    <RoadmapTable user={session.user} title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
+    <RoadmapTable user={session.user} title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
   </>
 }

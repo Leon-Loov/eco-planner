@@ -146,3 +146,32 @@ ul>li:nth-child(1)>.link {
     max-height: 500px;
     scrollbar-width: none;
 }
+
+/* New styles as of: 2024-02-20 */
+
+.roadmapLink {
+    border-radius: .5rem;
+    padding: .5rem;
+    margin-block: 3px;
+    display: block;
+    color: black;
+    text-decoration: none;
+    transition: background-color .2s ease;
+}
+
+.roadmapLink:hover {
+    background-color: var(--gray-90);
+}
+
+.roadmapLink > span {
+    display: block;
+}
+
+.linkTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.linkInfo {
+    text-transform: lowercase;
+}
