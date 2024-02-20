@@ -69,7 +69,7 @@ export default function LinkTree({
     }
   };
 
-  const NestedKeysRenderer = ({ data }: { data: any }) => {
+  const NestedKeysRenderer = ({ data, previousKeys = "" }: { data: any, previousKeys?: string }) => {
     return (
       <ul style={{ listStyleType: "none" }}>
         {Object.keys(data).map((key) => (
@@ -85,10 +85,10 @@ export default function LinkTree({
                   </span>
                 </a>
               ) : (
-                <details style={{ margin: "1em 0" }} className={styles.details} open={openCategories?.includes(key)} onToggle={(e) => handleToggle(e, key)}>
+                <details style={{ margin: "1em 0" }} className={styles.details} open={openCategories?.includes(previousKeys + "\\" + key)} onToggle={(e) => handleToggle(e, previousKeys + "\\" + key)}>
                   <summary>{key}</summary>
                   {Object.keys(data[key]).length > 0 && (
-                    <NestedKeysRenderer data={data[key]} />
+                    <NestedKeysRenderer data={data[key]} previousKeys={previousKeys + "\\" + key} />
                   )}
                 </details>
               )}
