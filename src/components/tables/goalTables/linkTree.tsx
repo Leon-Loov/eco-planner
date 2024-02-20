@@ -2,6 +2,8 @@ import styles from '../tables.module.css' with { type: "css" };
 import { DataSeries, Goal } from "@prisma/client";
 import Image from 'next/image';
 import goalsToTree from '@/functions/goalsToTree';
+import { SyntheticEvent } from 'react';
+import { getLocalStorage, setLocalStorage } from '@/functions/localStorage';
 
 interface LinkTreeCommonProps { }
 
@@ -46,6 +48,27 @@ export default function LinkTree({
 
   if (!goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
 
+  const openCategories = getLocalStorage(roadmap?.id || "") || [];
+
+  // TODO: Make sure keys are unique to avoid things like luftfart/inrikes and sjöfart/inrikes sharing the same open state in localStorage
+  const handleToggle = (e: SyntheticEvent<HTMLDetailsElement, Event>, key: string) => {
+    if (!roadmap) return;
+    let currentStorage: string[] = getLocalStorage(roadmap.id);
+    if (!(currentStorage instanceof Array)) {
+      setLocalStorage(roadmap.id, []);
+      currentStorage = [];
+    }
+
+    if (e.currentTarget.open) {
+      // Don't add the same category twice
+      if (currentStorage.includes(key))
+        return;
+      setLocalStorage(roadmap.id, [...currentStorage, key]);
+    } else {
+      setLocalStorage(roadmap.id, currentStorage.filter(cat => cat != key));
+    }
+  };
+
   const NestedKeysRenderer = ({ data }: { data: any }) => {
     return (
       <ul style={{ listStyleType: "none" }}>
@@ -62,7 +85,7 @@ export default function LinkTree({
                   </span>
                 </a>
               ) : (
-                <details style={{ margin: "1em 0" }} className={styles.details}>
+                <details style={{ margin: "1em 0" }} className={styles.details} open={openCategories?.includes(key)} onToggle={(e) => handleToggle(e, key)}>
                   <summary>{key}</summary>
                   {Object.keys(data[key]).length > 0 && (
                     <NestedKeysRenderer data={data[key]} />
