@@ -203,6 +203,7 @@ export const allowedDomains = [
   "ragunda.se",
   "rattvik.se",
   "gotland.se",
+  "ri.se",
   "robertsfors.se",
   "ronneby.se",
   "saffle.se",
