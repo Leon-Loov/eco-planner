@@ -58,7 +58,12 @@ export default async function Page() {
       <section className="margin-y-100 padding-y-100" style={{borderBottom: '2px solid var(--gray-90)'}}>
         <label className="margin-y-25" style={{width: 'min(60ch, 100%)'}}>
           Sök färdplan
-          <input type="search" className="block margin-y-50" style={{borderRadius: '3px', border: 'none', width: '100%', backgroundColor: 'var(--gray-90)'}} />
+          <div className="flex">
+            <input type="search" className="block margin-y-50" style={{appearance: 'none', borderRadius: '3px 0 0 3px', border: 'none', width: '100%', backgroundColor: 'var(--gray-90)'}} />
+            <div className="margin-y-50 padding-50" style={{backgroundColor: 'var(--gray-90)', display: 'grid', placeItems: 'center', borderRadius: '0 3px 3px 0'}}>
+              <Image src='/icons/search.svg' alt="" width={24} height={24}/>
+            </div>
+          </div>
         </label>
         <div className="flex gap-100 align-items-flex-end justify-content-space-between">
           <label style={{marginTop: '1rem'}}>
