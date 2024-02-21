@@ -152,7 +152,7 @@ ul>li:nth-child(1)>.link {
 .roadmapLink {
     border-radius: .5rem;
     padding: .5rem;
-    margin-block: 3px;
+    margin-block: .5rem;
     display: block;
     color: black;
     text-decoration: none;

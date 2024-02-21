@@ -1,12 +1,9 @@
 import { Data } from '@/lib/session';
 import styles from './tables.module.css' with { type: "css" };
 import { MetaRoadmap, Roadmap } from "@prisma/client";
-import Image from 'next/image';
-import Link from 'next/link';
 import { RoadmapActionButton } from './tableActions/roadmapActions';
 
 interface RoadmapTableCommonProps {
-  title: String,
   user: Data['user'],
 }
 
@@ -23,7 +20,6 @@ interface RoadmapTableWithRoadmaps extends RoadmapTableCommonProps {
 type RoadmapTableProps = RoadmapTableWithMetaRoadmap | RoadmapTableWithRoadmaps;
 
 export default function RoadmapTable({
-  title,
   roadmaps,
   user,
   metaRoadmap,
@@ -67,6 +63,6 @@ export default function RoadmapTable({
           </div>
         ))}
       </div>
-      : <p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>}
+      : null } {/*<p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>*/}
   </>
 }

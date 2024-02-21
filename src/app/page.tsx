@@ -5,6 +5,7 @@ import RoadmapTable from "@/components/tables/roadmapTable";
 import AttributedImage from "@/components/generic/images/attributedImage";
 import { RoadmapType } from "@prisma/client";
 import getMetaRoadmaps from "@/fetchers/getMetaRoadmaps";
+import Image from "next/image";
 
 export default async function Page() {
   const [session, metaRoadmaps] = await Promise.all([
@@ -42,7 +43,7 @@ export default async function Page() {
   })
 
   return <>
-    <div style={{ width: '100%', height: '350px', margin: '1.5rem 0', }}>
+    <div style={{ width: '100%', height: '350px', margin: '1.5rem 0 0 0', }}>
       <AttributedImage src="/images/solarpanels.jpg" alt="" borderRadius=".5rem">
         <div className="flex flex-wrap-wrap align-items-flex-end justify-content-space-between padding-100" style={{background: 'linear-gradient(180deg, transparent, rgba(0, 0, 0, .65))', height: '100%', borderRadius: '.5rem'}}>
           <div>
@@ -53,7 +54,42 @@ export default async function Page() {
         </div>
       </AttributedImage>
     </div>
-    <RoadmapTable user={session.user} title="Nationella färdplaner" roadmaps={nationalRoadmaps} />
-    <RoadmapTable user={session.user} title="Regionala färdplaner" roadmaps={regionalRoadmaps} />
+    <section>
+      <section className="margin-y-100 padding-y-100 flex gap-100 align-items-flex-end justify-content-space-between" style={{borderBottom: '2px solid var(--gray)'}}>
+        <label className="margin-y-25" style={{width: 'min(60ch, 100%)'}}>
+          Sök färdplan
+          <input type="search" className="block margin-y-50" style={{borderRadius: '3px', border: 'none', width: '100%', backgroundColor: 'var(--gray)'}} />
+        </label>
+        <label className="flex gap-50 margin-y-100">
+          <span>Filtrera</span>
+          <div style={{position: 'relative'}}> 
+            <input type="checkbox" style={{position: 'absolute', margin: '0', left: '0', top: '0', height: '100%', width: '100%', opacity: '0'}} />
+            <Image src="/icons/filter.svg" alt="" width="24" height="24" />
+          </div>
+        </label>
+      </section>
+      <section className="margin-y-100 padding-100" style={{backgroundColor: 'var(--gray)', borderRadius: '.5rem',}}>
+        <label className="margin-y-25">
+          Sortera på:
+          <select style={{width: 'unset', backgroundColor: 'unset', padding: 'unset'}}>
+            <option>Namn (A-Ö)</option>
+            <option>Namn (Ö-A)</option>
+            <option>Antal målbanor (stigande)</option>
+            <option>Antal målbanor (fallande)</option>
+          </select>
+        </label>
+        <p><b>Visa</b></p>
+        <label className="flex align-items-center gap-25 margin-y-50" style={{fontWeight: 'normal'}}>
+        <input type="checkbox" style={{padding: '0', margin: '0', height: '16px', width: '16px'}} />
+          Nationella färdplaner
+        </label>
+        <label className="flex align-items-center gap-25 margin-y-50" style={{fontWeight: 'normal'}}>
+          <input type="checkbox" style={{padding: '0', margin: '0', height: '16px', width: '16px'}} />
+          Regionala färdplaner
+        </label>
+      </section>
+    </section>
+    <RoadmapTable user={session.user} roadmaps={nationalRoadmaps} />
+    <RoadmapTable user={session.user} roadmaps={regionalRoadmaps} />
   </>
 }

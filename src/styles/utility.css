@@ -6,6 +6,10 @@
     display: grid;
 }
 
+.display-block, .block {
+    display: block;
+}
+
 .flex-direction-row {
     flex-direction: row;
 }
