@@ -84,7 +84,7 @@ export default async function Page() {
           </label>
         </div>
       </section>
-      <section className="margin-y-100 padding-100" style={{backgroundColor: 'var(--gray-90)', borderRadius: '.5rem',}}>
+      <section id="roadmapFilters" className="margin-y-100 padding-100" style={{backgroundColor: 'var(--gray-90)', borderRadius: '.5rem',}}>
         <p style={{marginTop: '0'}}><b>Visa</b></p>
         <label className="flex align-items-center gap-25 margin-y-50" style={{fontWeight: 'normal'}}>
         <input type="checkbox" style={{padding: '0', margin: '0', height: '16px', width: '16px'}} />

@@ -271,3 +271,13 @@ li ul {
     border-radius: .5rem .5rem 0 0 !important;
   }
 }
+
+/* Temporary while rewriting */
+
+#roadmapFilters {
+  display: none;
+}
+
+section:has(input[type="checkbox"]:checked) + #roadmapFilters {
+  display: block;
+}
