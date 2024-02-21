@@ -55,30 +55,32 @@ export default async function Page() {
       </AttributedImage>
     </div>
     <section>
-      <section className="margin-y-100 padding-y-100 flex gap-100 align-items-flex-end justify-content-space-between" style={{borderBottom: '2px solid var(--gray)'}}>
+      <section className="margin-y-100 padding-y-100" style={{borderBottom: '2px solid var(--gray-90)'}}>
         <label className="margin-y-25" style={{width: 'min(60ch, 100%)'}}>
           Sök färdplan
-          <input type="search" className="block margin-y-50" style={{borderRadius: '3px', border: 'none', width: '100%', backgroundColor: 'var(--gray)'}} />
+          <input type="search" className="block margin-y-50" style={{borderRadius: '3px', border: 'none', width: '100%', backgroundColor: 'var(--gray-90)'}} />
         </label>
-        <label className="flex gap-50 margin-y-100">
-          <span>Filtrera</span>
-          <div style={{position: 'relative'}}> 
-            <input type="checkbox" style={{position: 'absolute', margin: '0', left: '0', top: '0', height: '100%', width: '100%', opacity: '0'}} />
-            <Image src="/icons/filter.svg" alt="" width="24" height="24" />
-          </div>
-        </label>
+        <div className="flex gap-100 align-items-flex-end justify-content-space-between">
+          <label style={{marginTop: '1rem'}}>
+            Sortera på:
+            <select style={{width: 'unset', backgroundColor: 'unset', padding: 'unset'}}>
+              <option>Namn (A-Ö)</option>
+              <option>Namn (Ö-A)</option>
+              <option>Antal målbanor (stigande)</option>
+              <option>Antal målbanor (fallande)</option>
+            </select>
+          </label>
+          <label className="flex gap-50" style={{marginTop: '1rem'}}>
+            <span>Filtrera</span>
+            <div style={{position: 'relative', display: 'grid'}}> 
+              <input type="checkbox" style={{position: 'absolute', margin: '0', left: '0', top: '0', height: '100%', width: '100%', opacity: '0'}} />
+              <Image src="/icons/filter.svg" alt="" width="24" height="24" />
+            </div>
+          </label>
+        </div>
       </section>
-      <section className="margin-y-100 padding-100" style={{backgroundColor: 'var(--gray)', borderRadius: '.5rem',}}>
-        <label className="margin-y-25">
-          Sortera på:
-          <select style={{width: 'unset', backgroundColor: 'unset', padding: 'unset'}}>
-            <option>Namn (A-Ö)</option>
-            <option>Namn (Ö-A)</option>
-            <option>Antal målbanor (stigande)</option>
-            <option>Antal målbanor (fallande)</option>
-          </select>
-        </label>
-        <p><b>Visa</b></p>
+      <section className="margin-y-100 padding-100" style={{backgroundColor: 'var(--gray-90)', borderRadius: '.5rem',}}>
+        <p style={{marginTop: '0'}}><b>Visa</b></p>
         <label className="flex align-items-center gap-25 margin-y-50" style={{fontWeight: 'normal'}}>
         <input type="checkbox" style={{padding: '0', margin: '0', height: '16px', width: '16px'}} />
           Nationella färdplaner
