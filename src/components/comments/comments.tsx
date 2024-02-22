@@ -65,7 +65,7 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
     <>
       <section>
         <h2>Kommentarer</h2>
-        <form onSubmit={handleSubmit} style={{width: '100%'}}>
+        <form onSubmit={handleSubmit} style={{width: 'min(1250px, 100%)'}}>
           <span className={styles.textarea} role="textbox" id="comment-text" contentEditable aria-placeholder="Skriv Kommentar" onInput={handleInput} onBlur={handleInput} ref={spanRef}></span>
           <input type="hidden" name="comment" id="comment" value={editedContent} />
           <div className="display-flex justify-content-flex-end gap-50 padding-y-50">
