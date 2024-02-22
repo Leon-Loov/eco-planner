@@ -6,11 +6,11 @@
     font-weight: bold;
     font-size: 1rem;
     line-height: 1.5;
+    transition: background-color .2s;
 }
   
 .cancel {
     background-color: transparent;
-    transition: background-color .1s;
 }
   
 .cancel:hover {
@@ -18,7 +18,6 @@
 }
 
 .comment {
-    transition: background-color .1s;
     background-color: var(--darkblue-30);
     color: white;
 }
