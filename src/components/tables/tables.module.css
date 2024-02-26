@@ -155,7 +155,7 @@ ul>li:nth-child(1)>.link {
     display: block;
     color: black;
     text-decoration: none;
-    transition: background-color .2s ease;
+    transition: background-color .1s ease;
 }
 
 .roadmapLink:hover {

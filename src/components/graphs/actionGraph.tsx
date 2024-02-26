@@ -26,6 +26,8 @@ export default function ActionGraph({
     type: 'rangeBar',
   })
 
+  let height = `${100 + (series[0].data.length * 32)}px`
+
   let chartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: 'rangeBar',
@@ -34,9 +36,13 @@ export default function ActionGraph({
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "90%",
+        barHeight: "24px",
+        borderRadius: 3,
 
-      }
+      },
+    },
+    grid: {
+      show: false,
     },
     xaxis: {
       type: 'datetime',
@@ -51,9 +57,8 @@ export default function ActionGraph({
 
   return (actions.length > 0 &&
     <div>
-      <h2>Åtgärdsgraf</h2>
-      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
-        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
+      <h2>Åtgärdsgraf</h2> 
+        <div style={{height: `${height}`}}>
           <WrappedChart
             options={chartOptions}
             series={series}
@@ -62,7 +67,6 @@ export default function ActionGraph({
             height="100%"
           />
         </div>
-      </div>
     </div>
   );
 }
