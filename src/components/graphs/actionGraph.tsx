@@ -31,12 +31,20 @@ export default function ActionGraph({
   let chartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: 'rangeBar',
-      animations: { enabled: false, dynamicAnimation: { enabled: false } }
+      animations: { 
+        enabled: false, 
+        dynamicAnimation: { 
+          enabled: false 
+        } 
+      },
+      toolbar: {
+        show: false,
+      },
     },
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "24px",
+        barHeight: "24",
         borderRadius: 3,
 
       },
@@ -46,9 +54,27 @@ export default function ActionGraph({
     },
     xaxis: {
       type: 'datetime',
-      labels: { format: 'yyyy' },
+      labels: { 
+        format: 'yyyy',
+        style: {
+          fontSize: '.75rem',
+          fontFamily: 'system-ui',
+          colors: 'black'
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
       min: new Date("2020").getTime(),
       max: new Date("2050").getTime(),
+    },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: '1rem',
+          colors: 'black'
+        },
+      },
     },
     tooltip: {
       x: { format: 'yyyy' }
@@ -57,7 +83,6 @@ export default function ActionGraph({
 
   return (actions.length > 0 &&
     <div>
-      <h2>Åtgärdsgraf</h2> 
         <div style={{height: `${height}`}}>
           <WrappedChart
             options={chartOptions}

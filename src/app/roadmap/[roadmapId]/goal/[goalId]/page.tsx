@@ -100,7 +100,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       {(accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
         <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
       }
-      <section className={`grid ${styles.graphLayout}`}>
+      <section>
         <GraphGraph goal={goal} nationalGoal={parentGoal} />
         <CombinedGraph roadmap={roadmap} goal={goal} />
         <ActionGraph actions={goal.actions} />
