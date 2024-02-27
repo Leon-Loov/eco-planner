@@ -385,3 +385,221 @@
 .circular {
     border-radius: 100%;
 }
+
+/* Forms */
+/* TODO: Updae color to use accent*/
+
+/* Text inputs (text, email, password, search, url) */
+:where(
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="url"]
+) {
+    background-color: #e0e6eb;
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    border-radius: 3px;
+}
+
+:where(
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="search"]:focus,
+    input[type="url"]:focus 
+) {
+    outline: 2px solid #0075FF;
+    box-shadow: 0 0 .5rem -3px #0075FF;
+    background-color: transparent;
+}
+
+/* If the element has a border, this should target the border instead of an outline (and only change color so that file selection keeps dashed line) */
+
+/* Number inputs (number, tel) */
+:where(
+    input[type="number"],
+    input[type="tel"] 
+) {
+    background-color: #e0e6eb;
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    border-radius: 3px;
+}
+
+:where(
+    input[type="number"]:focus,
+    input[type="tel"]:focus
+) {
+    outline: 2px solid #0075FF;
+    box-shadow: 0 0 .5rem -3px #0075FF;
+    background-color: transparent;
+}
+
+/* Button inputs (button, reset, submit, image) */
+:where(
+    input[type="button"],
+    input[type="reset"], 
+    input[type="submit"],
+    input[type="image"]
+) {
+    background-color: #e0e6eb;
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    border-radius: 3px;
+    transition: box-shadow .1s ease;
+}
+
+:where(
+    input[type="button"]:focus,
+    input[type="reset"]:focus, 
+    input[type="submit"]:focus,
+    input[type="image"]:focus
+) { 
+    outline: 2px solid #0075FF;
+    box-shadow: 0 0 .5rem -3px #0075FF;
+}
+
+:where(
+    input[type="button"]:hover,
+    input[type="reset"]:hover, 
+    input[type="submit"]:hover,
+    input[type="image"]:hover 
+) {
+    box-shadow: inset 0 0 9999px rgba(0, 0, 0, .1);
+}
+
+/* Date inputs (datetimeLocal, date, month, week, time) */
+:where(
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"]
+ ) {
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    font-family: inherit;
+    border-radius: 3px;
+    border: 0;
+    background-color: #e0e6eb;
+}
+
+:where(
+    input[type="date"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="month"]:focus,
+    input[type="time"]:focus,
+    input[type="week"]:focus
+) {
+    outline: 2px solid #0075FF;
+    box-shadow: 0 0 .5rem -3px #0075FF;
+    background-color: transparent;
+}
+
+/* File inputs (file) */
+
+:where(
+    input[type="file"]
+) {
+    display: block;
+    width: 100%;
+    padding: 1em;
+    border-radius: 3px;
+    border: 2px dashed #e0e6eb;
+    outline: none;
+}
+
+input[type="file"]::file-selector-button { /* TODO: :where() for pseudo elements not supported? */
+    background-color: #e0e6eb;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 3px;
+    margin: 0 .5rem;
+    cursor: pointer;
+}
+
+:where(
+    input[type="file"]:focus
+) {
+    border: 2px dashed #0075FF;
+}
+
+input[type="file"]:focus::file-selector-button { /* TODO: :where() for pseudo elements not supported? */
+    background-color: #0075FF;
+    color: white;
+}
+
+/* Selection inputs (checkbox, radio, range color) */
+
+:where(
+    input[type="radio"],
+    input[type="checkbox"] 
+) {
+    margin: 0;
+}
+    
+:where(
+    input[type="range"] 
+) {
+    display: block;
+    width: 100%;
+}
+
+:where(
+    input[type="color"] 
+) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: 100%;
+    border: 3px;
+    background-color: #e0e6eb;
+}
+
+input[type="color"]::-webkit-color-swatch { /* TODO: :where() for pseudo elements not supported? */
+    border-radius: 100%;
+    border: none;
+}
+
+input[type="color"]::-moz-color-swatch { /* TODO: :where() for pseudo elements not supported? */
+    border-radius: 100%;
+    border: none;
+}
+
+/* Hidden inputs (hidden) */
+
+/* Button */
+
+:where(
+    button
+) {
+    background-color: #e0e6eb;
+    border: 0;
+    border-radius: 3px;
+    padding-block: .5rem;
+    padding-inline: 1rem;
+    transition: box-shadow .1s ease;
+}
+
+:where(
+    button:hover
+) {
+    box-shadow: inset 0 0 999px rgba(0, 0, 0, .1);
+}
+
+:where(
+    button:active
+) {
+    transform: scale(.95);
+}
