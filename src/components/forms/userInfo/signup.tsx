@@ -1,11 +1,9 @@
 'use client'
 
-//TODO: Move signup and loginforms into the same folder
-
 import AttributedImage from "@/components/generic/images/attributedImage";
 import Link from "next/link";
 import ImageIcon from "@/components/generic/images/imageIcon";
-import styles from './signup.module.css'
+import styles from './userInfo.module.css'
 
 function handleSubmit(event: any) {
   event.preventDefault()

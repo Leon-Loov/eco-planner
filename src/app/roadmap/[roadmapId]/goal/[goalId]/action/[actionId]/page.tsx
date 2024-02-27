@@ -76,8 +76,8 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <p>
           Kategorier:
           <span className="margin-x-100">
-            {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables)) &&}
-            {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables) &&}
+            {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables))}
+            {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables)}
             {action.isRenewables && 'Renewables'}
           </span>
         </p>

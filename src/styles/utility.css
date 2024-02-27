@@ -1,3 +1,5 @@
+/* Utility classes */
+
 .display-flex, .flex {
     display: flex;
 }
@@ -317,3 +319,5 @@
 .padding-x-500 {
     padding: 0 5rem;
 }
+
+/* Semantic elements */

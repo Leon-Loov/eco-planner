@@ -3,7 +3,7 @@
 import Link from "next/link";
 import AttributedImage from "@/components/generic/images/attributedImage";
 import ImageIcon from "@/components/generic/images/imageIcon";
-import styles from './login.module.css'
+import styles from './userInfo.module.css'
 
 function handleSubmit(event: any) {
   event.preventDefault()
