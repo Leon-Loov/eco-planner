@@ -77,17 +77,13 @@ export default function MainRelativeGraph({
 
   return (
     <>
-      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
-        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
-          <WrappedChart
-            options={chartOptions}
-            series={chart}
-            type="line"
-            width="100%"
-            height="100%"
-          />
-        </div>
-      </div>
+      <WrappedChart
+        options={chartOptions}
+        series={chart}
+        type="line"
+        width="100%"
+        height="100%"
+      />
     </>
   )
 }

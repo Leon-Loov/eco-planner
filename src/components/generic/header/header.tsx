@@ -10,7 +10,7 @@ export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
     <aside className={styles.header}>
-      <div className={`display-flex flex-direction-column justify-content-space-between`} style={{ height: '100%' }}>
+      <div className={`display-flex flex-direction-column justify-content-space-between`}>
         <div className={styles.menuToggleContainer}>
           <input type="checkbox" className={styles.menuToggle} />
           <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
@@ -26,7 +26,7 @@ export async function Header() {
               Information
             </Link>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
+          <div>
             { // Link to login and signup if not logged in
               !user?.isLoggedIn &&
               <>

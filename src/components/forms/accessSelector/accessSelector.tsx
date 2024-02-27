@@ -16,11 +16,8 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
           <span>Redigera behörigheter</span>
           <Image src="/icons/plus.svg" alt="expand" width={24} height={24}></Image>
         </summary>
-        <p>
-          För att lägga till en användare/grupp, skriv in namnet och tryck på enter.<br />
-          För att ta bort en användare/grupp, checka ur rutan bredvid namnet.<br />
-        </p>
-
+        <p>För att lägga till en användare/grupp, skriv in namnet och tryck på enter.</p>
+        <p>För att ta bort en användare/grupp, checka ur rutan bredvid namnet.</p>
         <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
         <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
         <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />

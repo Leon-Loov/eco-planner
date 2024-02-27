@@ -81,9 +81,8 @@ export default function CombinedGraph({
       <h2>Kombinerad graf</h2>
       <h3>{indicatorCategory}</h3>
       {additionalInfo && <p>{additionalInfo}</p>}
-      <button type="button" onClick={() => setIsStacked(!isStacked)}><p>Byt typ av graf</p></button>
-      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
-        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
+      <button type="button" onClick={() => setIsStacked(!isStacked)}>Byt typ av graf</button>
+        <div>
           <WrappedChart
             key={"combinedGraph"}
             options={chartOptions}
@@ -93,7 +92,6 @@ export default function CombinedGraph({
             height="100%"
           />
         </div>
-      </div>
     </div>
   )
 }

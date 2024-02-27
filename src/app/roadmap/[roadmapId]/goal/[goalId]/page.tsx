@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
+      <h1 className="display-flex align-items-center gap-25 flex-wrap-wrap">
         { // Only show the edit link if the user has edit access to the roadmap
           (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
           <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`}>
@@ -76,17 +76,15 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         {goal.name ? goal.name : goal.indicatorParameter}
       </h1>
       {goal.name && <>
-        <span style={{ color: "gray" }}> {`${goal.indicatorParameter}, `} </span>
-        <br />
+        <span> {`${goal.indicatorParameter}, `} </span>
       </>}
-      <span style={{ color: "gray" }}>Målbana</span>
+      <span>Målbana</span>
       {goal.links.length > 0 &&
         <>
           <h2>Länkar</h2>
           {goal.links.map((link) => (
             <Fragment key={link.id}>
               <a href={link.url}>{link.description || link.url}</a>
-              <br />
             </Fragment>
           ))}
         </>
@@ -96,7 +94,6 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
         </>
       }
-      <br />
       {(accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
         <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
       }

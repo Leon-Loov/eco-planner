@@ -65,18 +65,18 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
     <>
       <section>
         <h2>Kommentarer</h2>
-        <form onSubmit={handleSubmit} style={{width: 'min(1250px, 100%)'}}>
+        <form onSubmit={handleSubmit}>
           <span className={styles.textarea} role="textbox" id="comment-text" contentEditable aria-placeholder="Skriv Kommentar" onInput={handleInput} onBlur={handleInput} ref={spanRef}></span>
           <input type="hidden" name="comment" id="comment" value={editedContent} />
           <div className="display-flex justify-content-flex-end gap-50 padding-y-50">
             <button type="button" className={`${styles.button} ${styles.cancel}`} onClick={removeText}>Avbryt</button>
-            <input type="submit" value="Skicka" disabled={!editedContent} className={`${styles.button} ${styles.comment}`} style={{height: "100%"}} />
+            <input type="submit" value="Skicka" disabled={!editedContent} className={`${styles.button} ${styles.comment}`} />
           </div>
         </form>
         {comments?.map((comment) => (
           <div key={comment.id}>
-            <p style={{marginBottom: "0", textTransform: "capitalize"}}><b>{comment.author.username}</b></p>
-            <span style={{fontSize: ".75em"}}>{new Date(comment.createdAt).toLocaleString('sv-SE')}</span>
+            <p><b>{comment.author.username}</b></p>
+            <span>{new Date(comment.createdAt).toLocaleString('sv-SE')}</span>
             <p>
             {expandedComments.includes(comment.id) ? comment.commentText : comment.commentText.length > 300 ? `${comment.commentText.substring(0, 300)}...` : comment.commentText}
             </p>  

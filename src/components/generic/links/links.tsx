@@ -28,7 +28,7 @@ export function SecondaryLink({ href, children }: { href: string; children: Reac
 export function BackButton({ href }: { href: string }) {
   return (
     <>
-      <Link href={href} style={{display: "flex"}}>
+      <Link href={href}>
         <Image src="/icons/back.svg" alt="back" width={24} height={24}></Image>
       </Link>
     </>

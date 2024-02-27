@@ -83,17 +83,13 @@ export default function MainGraph({
 
   return (
     <>
-      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
-        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
-          <WrappedChart
-            options={mainChartOptions}
-            series={mainChart}
-            type="line"
-            width="100%"
-            height="100%"
-          />
-        </div>
-      </div>
+      <WrappedChart
+        options={mainChartOptions}
+        series={mainChart}
+        type="line"
+        width="100%"
+        height="100%"
+      />
     </>
   )
 }

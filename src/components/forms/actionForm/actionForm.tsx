@@ -92,17 +92,17 @@ export default function ActionForm({
         <label htmlFor="relevantActors">Relevanta aktörer: </label>
         <input type="text" name="relevantActors" id="relevantActors" defaultValue={currentAction?.relevantActors ?? undefined} />
         <p>Vilka kategorier faller åtgärden under?</p>
-        <div className="display-flex gap-25 align-items-center" style={{ margin: ".5em 0" }}>
-          <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} style={{ cursor: "pointer" }} />
-          <label htmlFor="isSufficiency" style={{ cursor: "pointer" }}>Sufficiency</label>
+        <div className="display-flex gap-25 align-items-center">
+          <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} />
+          <label htmlFor="isSufficiency">Sufficiency</label>
         </div>
-        <div className="display-flex gap-25 align-items-center" style={{ margin: ".5em 0" }}>
-          <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} style={{ cursor: "pointer" }} />
-          <label htmlFor="isEfficiency" style={{ cursor: "pointer" }}>Efficiency</label>
+        <div className="display-flex gap-25 align-items-center">
+          <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} />
+          <label htmlFor="isEfficiency">Efficiency</label>
         </div>
-        <div className="display-flex gap-25 align-items-center" style={{ margin: ".5em 0" }}>
-          <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} style={{ cursor: "pointer" }} />
-          <label htmlFor="isRenewables" style={{ cursor: "pointer" }}>Renewables</label>
+        <div className="display-flex gap-25 align-items-center">
+          <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} />
+          <label htmlFor="isRenewables">Renewables</label>
         </div>
         <div>
           <LinkInput links={currentAction?.links} />

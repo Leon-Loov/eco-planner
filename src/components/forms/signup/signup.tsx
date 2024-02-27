@@ -47,24 +47,21 @@ export default function Signup() {
               <ImageIcon src="/icons/user.svg" alt="lösenord" />
               <input className="flex-grow-100" type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
             </div>
-            <br />
             <label htmlFor="email">E-post </label>
             <div className={`display-flex ${styles.inputField}`}>
               <ImageIcon src="/icons/email.svg" alt="lösenord" />
               <input className="flex-grow-100" type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
             </div>
-            <br />
             <label htmlFor="password">Lösenord </label>
             <div className={`display-flex ${styles.inputField}`}>
               <ImageIcon src="/icons/password.svg" alt="lösenord" />
               <input className="flex-grow-100" type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
             </div>
-            <br />
-            <input type="submit" className={styles.submitButton} value={'Skapa Konto'} style={{ display: 'block' }} />
+            <input type="submit" className={styles.submitButton} value={'Skapa Konto'} />
             <Link href='/login'>Logga in</Link>
           </form>
         </main>
-        <aside style={{ width: '40%' }}>
+        <aside>
           <AttributedImage src="/images/hydroelectric.jpg" alt="" borderRadius="0 .5em .5em 0">
             Photo by <a href="https://unsplash.com/@dmey503?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Dan Meyers</a> on <a href="https://unsplash.com/photos/aerial-photography-of-body-of-water-w6X7XaolqA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>

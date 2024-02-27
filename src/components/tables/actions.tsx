@@ -14,8 +14,6 @@ export default function Actions({
   accessLevel?: AccessLevel,
 }) {
   return <>
-    <div style={{ marginTop: '1.5rem' }}> {/* TODO: Remove this div (replace with layout in parent page) */}
-      <ActionTable goal={goal} accessLevel={accessLevel} />
-    </div>
+    <ActionTable goal={goal} accessLevel={accessLevel} />
   </>
 }

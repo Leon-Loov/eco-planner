@@ -48,7 +48,7 @@ export default function LinkTree({
 
   const NestedKeysRenderer = ({ data }: { data: any }) => {
     return (
-      <ul style={{ listStyleType: "none" }}>
+      <ul>
         {Object.keys(data).map((key) => (
           <li key={key}>
             { // If the current object is a goal (has an id), render a link to the goal
@@ -62,7 +62,7 @@ export default function LinkTree({
                   </span>
                 </a>
               ) : (
-                <details style={{ margin: "1em 0" }} className={styles.details}>
+                <details className={styles.details}>
                   <summary>{key}</summary>
                   {Object.keys(data[key]).length > 0 && (
                     <NestedKeysRenderer data={data[key]} />
