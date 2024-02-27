@@ -34,12 +34,11 @@ export default async function Page({ params }: { params: { roadmapId: string } }
           <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
         </Link>
       }
-      {`${roadmap.metaRoadmap.name}, version ${roadmap.version}`}
+      {roadmap.metaRoadmap.name}
     </h1>
-    <span style={{ color: "gray" }}>Färdplan</span>
-
-    <br />
-    <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>Länk till metadata och fler versioner</a>
+    <span style={{ color: "gray" }}>
+      Färdplan • <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>{`v.${roadmap.version}`}</a>
+    </span>
     
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Comments comments={roadmap.comments} objectId={roadmap.id} />

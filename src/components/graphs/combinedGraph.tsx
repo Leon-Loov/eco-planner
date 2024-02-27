@@ -78,21 +78,21 @@ export default function CombinedGraph({
 
   return (siblings.length > 1 &&
     <div>
-      <h2>Kombinerad graf</h2>
+      <div className="flex margin-y-200 align-items-center justify-content-space-between">
+        <h2>Kombinerad graf</h2>
+        <button className="call-to-action-primary" style={{width: 'fit-content'}} type="button" onClick={() => setIsStacked(!isStacked)}>Byt typ av graf</button>
+      </div>
       <h3>{indicatorCategory}</h3>
       {additionalInfo && <p>{additionalInfo}</p>}
-      <button type="button" onClick={() => setIsStacked(!isStacked)}><p>Byt typ av graf</p></button>
-      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
-        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
-          <WrappedChart
-            key={"combinedGraph"}
-            options={chartOptions}
-            series={dataPoints}
-            type={isStacked ? 'area' : 'line'}
-            width="100%"
-            height="100%"
-          />
-        </div>
+      <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem', border: '3px solid var(--gray-90)' }}>
+        <WrappedChart
+          key={"combinedGraph"}
+          options={chartOptions}
+          series={dataPoints}
+          type={isStacked ? 'area' : 'line'}
+          width="100%"
+          height="100%"
+        />
       </div>
     </div>
   )

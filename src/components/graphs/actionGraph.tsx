@@ -50,10 +50,9 @@ export default function ActionGraph({
   }
 
   return (actions.length > 0 &&
-    <div>
+    <>
       <h2>Åtgärdsgraf</h2>
-      <div style={{ backgroundColor: 'var(--blue-20)', padding: '.5rem', borderRadius: '1rem' }}>
-        <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem' }}>
+      <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem', border: '3px solid var(--gray-90)' }}>
           <WrappedChart
             options={chartOptions}
             series={series}
@@ -62,7 +61,6 @@ export default function ActionGraph({
             height="100%"
           />
         </div>
-      </div>
-    </div>
+    </>
   );
 }
