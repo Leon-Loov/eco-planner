@@ -321,3 +321,67 @@
 }
 
 /* Semantic elements */
+
+.smooth {
+    border-radius: .25rem;
+}
+
+.smooth-top {
+    border-radius: .25rem .25rem 0 0;
+}
+
+.smooth-right {
+    border-radius: 0 .25rem .25rem 0;
+}
+
+.smooth-bottom {
+    border-radius: 0 0 .25rem .25rem;
+}
+
+.smooth-left {
+    border-radius: .25rem 0 0 .25rem;
+}
+
+.rounded {
+    border-radius: .5rem;
+}
+
+.rounded-top {
+    border-radius: .5rem .5rem 0 0;
+}
+
+.rounded-right {
+    border-radius: 0 .5rem .5rem 0;
+}
+
+.rounded-bottom {
+    border-radius: 0 0 .5rem .5rem;
+}
+
+.rounded-left {
+    border-radius: .5rem 0 0 .5rem;
+}
+
+.round {
+    border-radius: 9999px;   
+}
+
+.round-top {
+    border-radius: 9999px 9999px 0 0;
+}
+
+.round-right {
+    border-radius: 0 9999px 9999px 0;
+}
+
+.round-bottom {
+    border-radius: 0 0 9999px 9999px;
+}
+
+.round-left {
+    border-radius: 9999px 0 0 9999px;
+}
+
+.circular {
+    border-radius: 100%;
+}
