@@ -93,7 +93,7 @@ export default function GoalForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="action-form">
+      <form onSubmit={handleSubmit}>
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
@@ -130,7 +130,7 @@ export default function GoalForm({
         <br />
         <LinkInput links={currentGoal?.links} />
         <br />
-        <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} className="call-to-action-primary" />
+        <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} />
       </form>
 
       <datalist id="LEAPOptions">

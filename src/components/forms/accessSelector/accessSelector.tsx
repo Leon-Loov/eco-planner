@@ -21,12 +21,10 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
           För att ta bort en användare/grupp, checka ur rutan bredvid namnet.<br />
         </p>
 
-        <div className="grid-auto-rows">
-          <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
-          <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
-          <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
-          <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
-        </div>
+        <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
+        <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
+        <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
+        <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
       </details>
     </>
   )

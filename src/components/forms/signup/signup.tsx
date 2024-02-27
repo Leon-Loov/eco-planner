@@ -38,7 +38,7 @@ function handleSubmit(event: any) {
 export default function Signup() {
   return (
     <>
-      <div className="card display-flex">
+      <div className="display-flex">
         <main className={`${styles.userInfo} flex-grow-100`}>
           <h1>Skapa Konto</h1>
           <form onSubmit={handleSubmit} className={styles.form}>

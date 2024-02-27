@@ -144,7 +144,7 @@ export default function RoadmapForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="action-form">
+      <form onSubmit={handleSubmit}>
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
 
@@ -211,27 +211,11 @@ export default function RoadmapForm({
             <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
           </>
         }
-        {isLoading ? (
-          // Show spinner or loading indicator when isLoading is true
-          <div className="call-to-action-primary justify-contentcenter align-items-center gap-100" style={{ margin: "1em 0", position: "relative", display: "flex", width: "fit-content", border: "3px solid var(--accent-color-dark)", backgroundColor: "var(--accent-color-dark)" }}>
-            <input
-              className="call-to-action-primary"
-              type="submit"
-              value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
-              style={{ opacity: "0", height: "0", margin: "unset", cursor: "not-allowed", padding: ".5em 0" }}
-              disabled={isLoading}
-            />
-            <div className="loading" />
-          </div>
-        ) : (
-          // Show the button or input element when isLoading is false
-          <input
-            className="call-to-action-primary"
-            type="submit"
-            value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
-            disabled={isLoading}
-          />
-        )}
+        <input
+          type="submit"
+          value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
+          disabled={isLoading}
+        />
       </form>
     </>
   )
