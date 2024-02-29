@@ -41,7 +41,7 @@ export default function Goals({
     }
     else {
       // Default to tree view
-      console.log("Invalid view mode in storage, defaulting to tree view.")
+      storedViewMode != null && console.log("Invalid view mode in storage, defaulting to tree view.")
       setViewMode(ViewMode.Tree)
     }
   }, [roadmap.id]);

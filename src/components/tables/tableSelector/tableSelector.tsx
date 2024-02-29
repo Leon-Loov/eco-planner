@@ -15,7 +15,7 @@ export default function TableSelector({ id, setter }: { id?: string, setter?: Di
     }
     else {
       // Default to tree view
-      console.log("Invalid view mode in storage, defaulting to tree view.")
+      storedTableType != null && console.log("Invalid view mode in storage, defaulting to tree view.")
       setTableType(ViewMode.Tree)
     }
   }, [id]);
