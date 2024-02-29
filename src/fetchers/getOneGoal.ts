@@ -112,6 +112,11 @@ const getCachedGoal = unstable_cache(
           include: {
             _count: { select: { actions: true } },
             dataSeries: true,
+            comments: {
+              include: {
+                author: { select: { id: true, username: true } },
+              },
+            },
             actions: {
               include: {
                 author: { select: { id: true, username: true } },
@@ -161,6 +166,11 @@ const getCachedGoal = unstable_cache(
         include: {
           _count: { select: { actions: true } },
           dataSeries: true,
+          comments: {
+            include: {
+              author: { select: { id: true, username: true } },
+            },
+          },
           actions: {
             include: {
               author: { select: { id: true, username: true } },
