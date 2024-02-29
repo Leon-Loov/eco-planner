@@ -1,18 +1,22 @@
 'use client';
 
-import { useEffect } from "react";
+// Silently fail if localStorage is not available, but log an error to the user
 
+/** Stringifies `value` and stores it in localStorage under `key`. */
 export function setLocalStorage(key: string, value: any) {
   if (!localStorage) {
-    throw new Error('No localStorage available');
+    console.error('No localStorage available');
+    return;
   }
 
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function getLocalStorage(key: string) {
+/** Retrieves the value stored under `key` in localStorage, parsed as JSON. */
+export function getLocalStorage(key: string): any {
   if (!localStorage) {
-    throw new Error('No localStorage available');
+    console.error('No localStorage available');
+    return null;
   }
 
   const value = localStorage.getItem(key);
@@ -22,9 +26,11 @@ export function getLocalStorage(key: string) {
   return null;
 }
 
+/** Removes the value stored under `key` in localStorage. */
 export function removeLocalStorage(key: string) {
   if (!localStorage) {
-    throw new Error('No localStorage available');
+    console.error('No localStorage available');
+    return;
   }
 
   localStorage.removeItem(key);

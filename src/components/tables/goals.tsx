@@ -5,10 +5,15 @@ import { PrimaryLink } from "../generic/links/links"
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
-import { useGlobalContext } from '@/app/context/store'
 import LinkTree from './goalTables/linkTree'
-import { getLocalStorage, setLocalStorage } from "@/functions/localStorage"
+import { getLocalStorage } from "@/functions/localStorage"
 import { useEffect, useState } from "react"
+
+/** Enum for the different view modes for the goal table. */
+export enum ViewMode {
+  Table = "TABLE",
+  Tree = "TREE",
+};
 
 export default function Goals({
   title,
@@ -27,11 +32,18 @@ export default function Goals({
   },
   accessLevel?: AccessLevel
 }) {
-  const { tableType } = useGlobalContext();
-  const [viewMode, setViewMode] = useState("")
+  const [viewMode, setViewMode] = useState<ViewMode | "">("")
 
   useEffect(() => {
-    setViewMode(getLocalStorage(roadmap.id + "_viewMode"))
+    const storedViewMode = getLocalStorage(roadmap.id + "_viewMode")
+    if (Object.values(ViewMode).includes(storedViewMode)) {
+      setViewMode(storedViewMode)
+    }
+    else {
+      // Default to tree view
+      console.log("Invalid view mode in storage, defaulting to tree view.")
+      setViewMode(ViewMode.Tree)
+    }
   }, [roadmap.id]);
 
   return (
@@ -46,12 +58,17 @@ export default function Goals({
           }
         </nav>
       </label>
-      {viewMode == 'table' ? (
+      {viewMode == ViewMode.Table && (
         <GoalTable roadmap={roadmap} />
-      ) : null}
-      {viewMode == 'listTree' ? (
+      )}
+      {viewMode == ViewMode.Tree && (
         <LinkTree roadmap={roadmap} />
-      ) : null}
+      )}
+      {(viewMode != ViewMode.Table && viewMode != ViewMode.Tree) && (
+        <p>
+          Laddar vyn... Om vyn inte laddar efter någon sekund, testa att byta vy med knapparna uppe till höger.
+        </p>
+      )}
     </>
   )
 }
