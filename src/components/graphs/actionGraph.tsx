@@ -1,4 +1,5 @@
 import WrappedChart from "@/lib/chartWrapper";
+import { actionGraphSorter } from "@/lib/sorters";
 import { Action } from "@prisma/client";
 
 export default function ActionGraph({
@@ -20,6 +21,8 @@ export default function ActionGraph({
     })
   }
 
+  actionData.sort(actionGraphSorter)
+
   series.push({
     name: 'Åtgärder',
     data: actionData,
@@ -31,11 +34,11 @@ export default function ActionGraph({
   let chartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: 'rangeBar',
-      animations: { 
-        enabled: false, 
-        dynamicAnimation: { 
-          enabled: false 
-        } 
+      animations: {
+        enabled: false,
+        dynamicAnimation: {
+          enabled: false
+        }
       },
       toolbar: {
         show: false,
@@ -54,7 +57,7 @@ export default function ActionGraph({
     },
     xaxis: {
       type: 'datetime',
-      labels: { 
+      labels: {
         format: 'yyyy',
         style: {
           fontSize: '.75rem',
@@ -83,15 +86,15 @@ export default function ActionGraph({
 
   return (actions.length > 0 &&
     <div>
-        <div style={{height: `${height}`}}>
-          <WrappedChart
-            options={chartOptions}
-            series={series}
-            type="rangeBar"
-            width="100%"
-            height="100%"
-          />
-        </div>
+      <div style={{ height: `${height}` }}>
+        <WrappedChart
+          options={chartOptions}
+          series={series}
+          type="rangeBar"
+          width="100%"
+          height="100%"
+        />
+      </div>
     </div>
   );
 }
