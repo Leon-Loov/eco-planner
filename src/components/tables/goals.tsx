@@ -6,8 +6,8 @@ import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
 import LinkTree from './goalTables/linkTree'
-import { getSessionStorage } from "@/functions/localStorage"
 import { useEffect, useState } from "react"
+import { getStoredViewMode } from "./tableFunctions"
 
 /** Enum for the different view modes for the goal table. */
 export enum ViewMode {
@@ -35,15 +35,7 @@ export default function Goals({
   const [viewMode, setViewMode] = useState<ViewMode | "">("")
 
   useEffect(() => {
-    const storedViewMode = getSessionStorage(roadmap.id + "_viewMode")
-    if (Object.values(ViewMode).includes(storedViewMode)) {
-      setViewMode(storedViewMode)
-    }
-    else {
-      // Default to tree view
-      storedViewMode != null && console.log("Invalid view mode in storage, defaulting to tree view.")
-      setViewMode(ViewMode.Tree)
-    }
+    setViewMode(getStoredViewMode(roadmap.id))
   }, [roadmap.id]);
 
   return (

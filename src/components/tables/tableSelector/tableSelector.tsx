@@ -1,12 +1,12 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import RadioImage from './radioImage';
-import { setSessionStorage } from "@/functions/localStorage";
 import { ViewMode } from '../goals';
+import { setStoredViewMode } from '../tableFunctions';
 
 export default function TableSelector({ id, current, setter }: { id: string, current: ViewMode | "", setter: Dispatch<SetStateAction<ViewMode | "">> }) {
 
   const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSessionStorage(id + "_viewMode", event.target.value);
+    setStoredViewMode(event.target.value, id);
     if (Object.values(ViewMode).includes(event.target.value as ViewMode)) {
       setter(event.target.value as ViewMode);
     }
