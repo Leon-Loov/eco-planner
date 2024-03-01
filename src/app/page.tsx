@@ -43,7 +43,7 @@ export default async function Page() {
   })
 
   return <>
-    <div className="rounded width-100 margin-y-100 position-relative" style={{height: '350px', overflow: 'hidden'}}>
+    <div className="rounded width-100 margin-y-100 position-relative overflow-hidden" style={{height: '350px'}}>
       <AttributedImage src="/images/solarpanels.jpg" alt="" >
         <div className="flex flex-wrap-wrap align-items-flex-end justify-content-space-between padding-100 width-100">
           <div>
@@ -56,14 +56,12 @@ export default async function Page() {
     </div>
     <section>
       <section className="margin-y-100 padding-y-100">
-        <label className="margin-y-25">
+        <label className=" font-weight-bold margin-y-25 container-text">
           Sök färdplan
-          <div className="flex">
-            <input type="search" className="block margin-y-50"/>
-            <div className="margin-y-50 padding-50">
+            <div className="margin-y-50 flex align-items-center gray-90 padding-50 smooth focusable">
               <Image src='/icons/search.svg' alt="" width={24} height={24}/>
+              <input type="search" className="padding-0 margin-x-50" />
             </div>
-          </div>
         </label>
         <div className="flex gap-100 align-items-flex-end justify-content-space-between">
           <label>

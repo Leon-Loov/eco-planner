@@ -1,5 +1,19 @@
 /* Utility classes */
 
+.container {
+    display: block;
+    width: min(1250px, 100%);
+}
+
+.container-text {
+    display: block;
+    width: min(90ch, 100%);
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
 .display-flex, .flex {
     display: flex;
 }
@@ -228,6 +242,10 @@
     margin: 0 5rem;
 }
 
+.padding-0 {
+    padding: 0;
+}
+
 .padding-25 {
     padding: .25rem;
 }
@@ -404,13 +422,37 @@
     position: sticky;
 }
 
+.font-weight-normal {
+    font-weight: normal;
+}
+
+.font-weight-bold {
+    font-weight: bold;
+}
+
 .width-100 {
     width: 100%;
+}
+
+.focusable:focus-within {
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
+}
+
+.focusable input {
+    outline: none;
+    box-shadow: none;
 }
 
 /* Forms */
 
 /* Text inputs (text, email, password, search, url) */
+
+input {
+    font-size: 1rem;
+}
+
 :where(
     input[type="text"],
     input[type="email"],
