@@ -1,37 +1,37 @@
 'use client';
 
-// Silently fail if localStorage is not available, but log an error to the user
+// Silently fail if sessionStorage is not available, but log an error to the user
 
-/** Stringifies `value` and stores it in localStorage under `key`. */
-export function setLocalStorage(key: string, value: any) {
-  if (!localStorage) {
-    console.error('No localStorage available');
+/** Stringifies `value` and stores it in sessionStorage under `key`. */
+export function setSessionStorage(key: string, value: any) {
+  if (!sessionStorage) {
+    console.error('No sessionStorage available');
     return;
   }
 
-  localStorage.setItem(key, JSON.stringify(value));
+  sessionStorage.setItem(key, JSON.stringify(value));
 }
 
-/** Retrieves the value stored under `key` in localStorage, parsed as JSON. */
-export function getLocalStorage(key: string): any {
-  if (!localStorage) {
-    console.error('No localStorage available');
+/** Retrieves the value stored under `key` in sessionStorage, parsed as JSON. */
+export function getSessionStorage(key: string): any {
+  if (!sessionStorage) {
+    console.error('No sessionStorage available');
     return null;
   }
 
-  const value = localStorage.getItem(key);
+  const value = sessionStorage.getItem(key);
   if (value) {
     return JSON.parse(value);
   }
   return null;
 }
 
-/** Removes the value stored under `key` in localStorage. */
-export function removeLocalStorage(key: string) {
-  if (!localStorage) {
-    console.error('No localStorage available');
+/** Removes the value stored under `key` in sessionStorage. */
+export function removeSessionStorage(key: string) {
+  if (!sessionStorage) {
+    console.error('No sessionStorage available');
     return;
   }
 
-  localStorage.removeItem(key);
+  sessionStorage.removeItem(key);
 }

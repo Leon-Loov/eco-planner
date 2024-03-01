@@ -4,7 +4,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } fro
 import RadioImage from './radioImage';
 import { DataSeries, Goal } from "@prisma/client";
 import { GraphType } from "../graphGraph";
-import { getLocalStorage, setLocalStorage } from '@/functions/localStorage';
+import { getSessionStorage, setSessionStorage } from '@/functions/localStorage';
 
 export default function GraphSelector({
   goal,
@@ -16,7 +16,7 @@ export default function GraphSelector({
   const [graphType, setGraphType] = useState("");
 
   useEffect(() => {
-    const storedGraphType = getLocalStorage(goal.id + "_graphType");
+    const storedGraphType = getSessionStorage(goal.id + "_graphType");
     if (Object.values(GraphType).includes(storedGraphType)) {
       setGraphType(storedGraphType);
     }
@@ -29,7 +29,7 @@ export default function GraphSelector({
 
   const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
     setGraphType(event.target.value);
-    setLocalStorage(goal.id + "_graphType", event.target.value);
+    setSessionStorage(goal.id + "_graphType", event.target.value);
     if (setter) {
       if (Object.values(GraphType).includes(event.target.value as GraphType)) {
         setter(event.target.value as GraphType);

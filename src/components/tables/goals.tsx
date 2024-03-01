@@ -6,7 +6,7 @@ import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
 import LinkTree from './goalTables/linkTree'
-import { getLocalStorage } from "@/functions/localStorage"
+import { getSessionStorage } from "@/functions/localStorage"
 import { useEffect, useState } from "react"
 
 /** Enum for the different view modes for the goal table. */
@@ -35,7 +35,7 @@ export default function Goals({
   const [viewMode, setViewMode] = useState<ViewMode | "">("")
 
   useEffect(() => {
-    const storedViewMode = getLocalStorage(roadmap.id + "_viewMode")
+    const storedViewMode = getSessionStorage(roadmap.id + "_viewMode")
     if (Object.values(ViewMode).includes(storedViewMode)) {
       setViewMode(storedViewMode)
     }

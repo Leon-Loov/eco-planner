@@ -6,7 +6,7 @@ import MainRelativeGraph from "./mainRelativeGraph";
 import { DataSeries, Goal } from "@prisma/client";
 import GraphSelector from "./graphselector/graphSelector";
 import { useEffect, useState } from "react";
-import { getLocalStorage } from "@/functions/localStorage";
+import { getSessionStorage } from "@/functions/localStorage";
 
 export enum GraphType {
   Main = "MAIN",
@@ -24,7 +24,7 @@ export default function GraphGraph({
   const [graphType, setGraphType] = useState<GraphType | "">("");
 
   useEffect(() => {
-    const storedGraphType = getLocalStorage(goal.id + "_graphType");
+    const storedGraphType = getSessionStorage(goal.id + "_graphType");
     if (Object.values(GraphType).includes(storedGraphType)) {
       setGraphType(storedGraphType);
     }

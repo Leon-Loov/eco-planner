@@ -3,7 +3,7 @@ import { DataSeries, Goal } from "@prisma/client";
 import Image from 'next/image';
 import goalsToTree from '@/functions/goalsToTree';
 import { SyntheticEvent } from 'react';
-import { getLocalStorage, setLocalStorage } from '@/functions/localStorage';
+import { getSessionStorage, setSessionStorage } from '@/functions/localStorage';
 
 interface LinkTreeCommonProps { }
 
@@ -48,14 +48,14 @@ export default function LinkTree({
 
   if (!goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
 
-  const openCategories = getLocalStorage(roadmap?.id || "") || [];
+  const openCategories = getSessionStorage(roadmap?.id || "") || [];
 
   // TODO: Make sure keys are unique to avoid things like luftfart/inrikes and sjöfart/inrikes sharing the same open state in localStorage
   const handleToggle = (e: SyntheticEvent<HTMLDetailsElement, Event>, key: string) => {
     if (!roadmap) return;
-    let currentStorage: string[] = getLocalStorage(roadmap.id);
+    let currentStorage: string[] = getSessionStorage(roadmap.id);
     if (!(currentStorage instanceof Array)) {
-      setLocalStorage(roadmap.id, []);
+      setSessionStorage(roadmap.id, []);
       currentStorage = [];
     }
 
@@ -63,9 +63,9 @@ export default function LinkTree({
       // Don't add the same category twice
       if (currentStorage.includes(key))
         return;
-      setLocalStorage(roadmap.id, [...currentStorage, key]);
+      setSessionStorage(roadmap.id, [...currentStorage, key]);
     } else {
-      setLocalStorage(roadmap.id, currentStorage.filter(cat => cat != key));
+      setSessionStorage(roadmap.id, currentStorage.filter(cat => cat != key));
     }
   };
 

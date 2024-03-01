@@ -2,14 +2,14 @@
 
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import RadioImage from './radioImage';
-import { getLocalStorage, setLocalStorage } from "@/functions/localStorage";
+import { getSessionStorage, setSessionStorage } from "@/functions/localStorage";
 import { ViewMode } from '../goals';
 
 export default function TableSelector({ id, setter }: { id?: string, setter?: Dispatch<SetStateAction<ViewMode | "">> }) {
   const [tableType, setTableType] = useState("");
 
   useEffect(() => {
-    const storedTableType = getLocalStorage(id + "_viewMode")
+    const storedTableType = getSessionStorage(id + "_viewMode")
     if (Object.values(ViewMode).includes(storedTableType as ViewMode)) {
       setTableType(storedTableType as ViewMode)
     }
@@ -22,7 +22,7 @@ export default function TableSelector({ id, setter }: { id?: string, setter?: Di
 
   const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTableType(event.target.value);
-    setLocalStorage(id + "_viewMode", event.target.value);
+    setSessionStorage(id + "_viewMode", event.target.value);
     if (setter) {
       if (Object.values(ViewMode).includes(event.target.value as ViewMode)) {
         setter(event.target.value as ViewMode);
