@@ -41,7 +41,7 @@ export default function GraphGraph({
         return <div>
           <h2 className="display-flex align-items-center justify-content-space-between">Målbana
             <nav className="display-flex align-items-center gap-50">
-              <GraphSelector goal={goal} setter={setGraphType} />
+              <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
             </nav>
           </h2>
           <MainGraph goal={goal} nationalGoal={nationalGoal} />
@@ -50,7 +50,7 @@ export default function GraphGraph({
         return <div>
           <h2 className="display-flex align-items-center justify-content-space-between">Procent relativt basår
             <nav className="display-flex align-items-center gap-50">
-              <GraphSelector goal={goal} setter={setGraphType} />
+              <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
             </nav>
           </h2>
           <MainRelativeGraph goal={goal} nationalGoal={nationalGoal} />
@@ -59,7 +59,7 @@ export default function GraphGraph({
         return <div>
           <h2 className="display-flex align-items-center justify-content-space-between">Årlig förändring
             <nav className="display-flex align-items-center gap-50">
-              <GraphSelector goal={goal} setter={setGraphType} />
+              <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
             </nav>
           </h2>
           <MainDeltaGraph goal={goal} nationalGoal={nationalGoal} />

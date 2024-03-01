@@ -51,7 +51,7 @@ export default function Goals({
       <label htmlFor="goalTable" className="display-flex justify-content-space-between align-items-center flex-wrap-wrap">
         <h2>{title}</h2>
         <nav className='display-flex align-items-center gap-100'>
-          <TableSelector id={roadmap.id} setter={setViewMode} />
+          <TableSelector id={roadmap.id} current={viewMode} setter={setViewMode} />
           { // Only show the button if the user has edit access to the roadmap
             (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
             <PrimaryLink href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</PrimaryLink>
