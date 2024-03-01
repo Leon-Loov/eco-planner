@@ -1,6 +1,5 @@
 import '@/styles/global.css'
 import { Header } from '@/components/generic/header/header'
-import { GlobalContextProvider } from "./context/store"
 import Breadcrumb from '@/components/breadcrumbs/breadcrumb2';
 import getNames from '@/fetchers/getNames';
 
@@ -81,11 +80,9 @@ export default async function RootLayout({
       <body>
         <div className='display-flex'>
           <Header />
-          <div className='flex-grow-100 padding-100' style={{minWidth: '0'}}>
+          <div className='flex-grow-100 padding-100' style={{ minWidth: '0' }}>
             <Breadcrumb relevantObjects={objects} />
-            <GlobalContextProvider>
-              {children}
-            </GlobalContextProvider>
+            {children}
           </div>
         </div>
       </body>
