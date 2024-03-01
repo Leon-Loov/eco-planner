@@ -2,7 +2,7 @@
 
 import AttributedImage from "@/components/generic/images/attributedImage";
 import Link from "next/link";
-import ImageIcon from "@/components/generic/images/imageIcon";
+import Image from "next/image";
 import styles from './userInfo.module.css'
 
 function handleSubmit(event: any) {
@@ -36,34 +36,46 @@ function handleSubmit(event: any) {
 export default function Signup() {
   return (
     <>
-      <div className="display-flex">
-        <main className={`${styles.userInfo} flex-grow-100`}>
+      <div className="display-flex gap-100 align-items-center container">
+        <main className="container-text">
           <h1>Skapa Konto</h1>
           <form onSubmit={handleSubmit} className={styles.form}>
-            <label htmlFor="username">Användarnam </label>
-            <div className={`display-flex ${styles.inputField}`}>
-              <ImageIcon src="/icons/user.svg" alt="lösenord" />
-              <input className="flex-grow-100" type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
-            </div>
-            <label htmlFor="email">E-post </label>
-            <div className={`display-flex ${styles.inputField}`}>
-              <ImageIcon src="/icons/email.svg" alt="lösenord" />
-              <input className="flex-grow-100" type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
-            </div>
-            <label htmlFor="password">Lösenord </label>
-            <div className={`display-flex ${styles.inputField}`}>
-              <ImageIcon src="/icons/password.svg" alt="lösenord" />
-              <input className="flex-grow-100" type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
-            </div>
-            <input type="submit" className={styles.submitButton} value={'Skapa Konto'} />
+
+          <label className="block margin-y-100">
+              Användarnamn
+              <div className="margin-y-50 padding-50 flex align-items-center gray-90 smooth focusable">
+                <Image src="/icons/user.svg" alt="lösenord" width={24} height={24} />
+                <input className="padding-0 margin-x-50" type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
+              </div>
+            </label>
+
+            <label className="block margin-y-100">
+              E-post
+              <div className="margin-y-50 padding-50 flex align-items-center gray-90 smooth focusable">
+                <Image src="/icons/email.svg" alt="lösenord" width={24} height={24} />
+                <input className="padding-0 margin-x-50" type="email" placeholder="email" name="email" required id="email" autoComplete="email" />
+              </div>
+            </label>
+
+            <label className="block margin-y-100">
+              Lösenord
+              <div className="margin-y-50 padding-50 flex align-items-center gray-90 smooth focusable">
+                <Image src="/icons/password.svg" alt="lösenord" width={24} height={24} />
+                <input className="padding-0 margin-x-50" type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
+              </div>
+            </label>
+
+            <button className="block margin-y-25 font-weight-bold seagreen color-purewhite" type="submit"> Skapa Konto </button>
             <Link href='/login'>Logga in</Link>
           </form>
         </main>
-        <aside>
-          <AttributedImage src="/images/hydroelectric.jpg" alt="" borderRadius="0 .5em .5em 0">
-            Photo by <a href="https://unsplash.com/@dmey503?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Dan Meyers</a> on <a href="https://unsplash.com/photos/aerial-photography-of-body-of-water-w6X7XaolqA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+        <div className="position-relative width-100 rounded overflow-hidden" style={{height: '500px'}}>
+          <AttributedImage src="/images/hydroelectric.jpg" alt="">
+            <div className="width-100 padding-100">
+              Photo by <a className="color-purewhite" href="https://unsplash.com/@dmey503?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Dan Meyers</a> on <a className="color-purewhite" href="https://unsplash.com/photos/aerial-photography-of-body-of-water-w6X7XaolqA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+            </div>
           </AttributedImage>
-        </aside>
+        </div>
       </div>
     </>
   )

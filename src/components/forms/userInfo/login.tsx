@@ -51,8 +51,8 @@ export default function Login() {
             <Link href='/signup'>Skapa konto</Link>
           </form>
         </main>
-        <aside>
-          <AttributedImage src="/images/windturbines.jpg" alt="" borderRadius="0 .5em .5em 0">
+        <aside className="position-relative" style={{height: '350px', width: '350px'}} >
+          <AttributedImage src="/images/windturbines.jpg" alt="">
             Photo by <a href="https://unsplash.com/@nrdoherty?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Nicholas Doherty</a> on <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>
         </aside>
