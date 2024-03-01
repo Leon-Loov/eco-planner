@@ -6,7 +6,7 @@ import MainRelativeGraph from "./mainRelativeGraph";
 import { DataSeries, Goal } from "@prisma/client";
 import GraphSelector from "./graphselector/graphSelector";
 import { useEffect, useState } from "react";
-import { getSessionStorage } from "@/functions/localStorage";
+import { getStoredGraphType } from "./graphFunctions";
 
 export enum GraphType {
   Main = "MAIN",
@@ -24,15 +24,7 @@ export default function GraphGraph({
   const [graphType, setGraphType] = useState<GraphType | "">("");
 
   useEffect(() => {
-    const storedGraphType = getSessionStorage(goal.id + "_graphType");
-    if (Object.values(GraphType).includes(storedGraphType)) {
-      setGraphType(storedGraphType);
-    }
-    else {
-      // Default to main graph
-      storedGraphType != null && console.log("Invalid graph type in storage, defaulting to main graph.");
-      setGraphType(GraphType.Main);
-    }
+    setGraphType(getStoredGraphType(goal.id));
   }, [goal.id]);
 
   function graphSwitch(graphType: string) {
