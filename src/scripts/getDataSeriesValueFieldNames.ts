@@ -10,7 +10,7 @@ import { DataSeriesDataFields } from '@/types.ts';
  */
 async function getDataSeriesValueFieldNames() {
   // Get a data series. From it we can extract the names of the numeric data fields.
-  let exampleSeries = await prisma.dataSeries.findFirst()
+  let exampleSeries = await prisma.dataSeries.findFirst().catch((e) => null)
 
   // If there are no data series, for example because the database is empty, don't do anything.
   if (!exampleSeries) {
