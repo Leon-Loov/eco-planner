@@ -43,14 +43,14 @@ export default async function Page() {
   })
 
   return <>
-    <div>
-      <AttributedImage src="/images/solarpanels.jpg" alt="" borderRadius=".5rem">
-        <div className="flex flex-wrap-wrap align-items-flex-end justify-content-space-between padding-100">
+    <div className="rounded width-100 margin-y-100 position-relative" style={{height: '350px', overflow: 'hidden'}}>
+      <AttributedImage src="/images/solarpanels.jpg" alt="" >
+        <div className="flex flex-wrap-wrap align-items-flex-end justify-content-space-between padding-100 width-100">
           <div>
-            <h1>Färdplaner</h1>
-            <p>Photo by <a href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Spiske</a> on <a href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></p>
+            <h1 className="margin-y-25">Färdplaner</h1>
+            <p className="margin-0">Photo by <a className="color-purewhite" href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Spiske</a> on <a className="color-purewhite" href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></p>
           </div>
-          <a href="/metaRoadmap/createMetaRoadmap">Skapa ny färdplan</a>
+          <a href="/metaRoadmap/createMetaRoadmap" className="button purewhite round block" >Skapa ny färdplan</a>
         </div>
       </AttributedImage>
     </div>

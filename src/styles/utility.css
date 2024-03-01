@@ -128,6 +128,10 @@
     gap: 5rem;
 }
 
+.margin-0 {
+    margin: 0;
+}
+ 
 .margin-25 {
     margin: .25rem;
 }
@@ -320,8 +324,6 @@
     padding: 0 5rem;
 }
 
-/* Semantic elements */
-
 .smooth {
     border-radius: .25rem;
 }
@@ -386,8 +388,27 @@
     border-radius: 100%;
 }
 
+.position-absolute {
+    position: absolute;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.position-fixed {
+    position: fixed;
+}
+
+.position-sticky {
+    position: sticky;
+}
+
+.width-100 {
+    width: 100%;
+}
+
 /* Forms */
-/* TODO: Updae color to use accent*/
 
 /* Text inputs (text, email, password, search, url) */
 :where(
@@ -412,8 +433,8 @@
     input[type="search"]:focus,
     input[type="url"]:focus 
 ) {
-    outline: 2px solid #0075FF;
-    box-shadow: 0 0 .5rem -3px #0075FF;
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
     background-color: transparent;
 }
 
@@ -436,8 +457,8 @@
     input[type="number"]:focus,
     input[type="tel"]:focus
 ) {
-    outline: 2px solid #0075FF;
-    box-shadow: 0 0 .5rem -3px #0075FF;
+    outline: 2px solid ;
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
     background-color: transparent;
 }
 
@@ -463,8 +484,8 @@
     input[type="submit"]:focus,
     input[type="image"]:focus
 ) { 
-    outline: 2px solid #0075FF;
-    box-shadow: 0 0 .5rem -3px #0075FF;
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
 }
 
 :where(
@@ -500,8 +521,8 @@
     input[type="time"]:focus,
     input[type="week"]:focus
 ) {
-    outline: 2px solid #0075FF;
-    box-shadow: 0 0 .5rem -3px #0075FF;
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
     background-color: transparent;
 }
 
@@ -530,11 +551,11 @@ input[type="file"]::file-selector-button { /* TODO: :where() for pseudo elements
 :where(
     input[type="file"]:focus
 ) {
-    border: 2px dashed #0075FF;
+    border: 2px dashed var(--seagreen);
 }
 
 input[type="file"]:focus::file-selector-button { /* TODO: :where() for pseudo elements not supported? */
-    background-color: #0075FF;
+    background-color: var(--seagreen);
     color: white;
 }
 
