@@ -18,6 +18,12 @@ export enum AccessLevel {
   Admin = "ADMIN",
 };
 
+export enum ClientError {
+  AccessDenied = "You either don't have access to this entry or are trying to edit an entry that doesn't exist",
+  StaleData = "Stale data; please refresh and try again",
+  BadSession = "Bad session cookie; you have been logged out. Please log in and try again.",
+};
+
 /** The format of the data needed to create new roadmap metadata. */
 export type MetaRoadmapInput = Omit<
   Prisma.MetaRoadmapCreateInput,

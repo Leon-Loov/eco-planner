@@ -42,23 +42,31 @@ export default function GoalForm({
       timestamp,
     })
 
-    fetch('/api/createGoal', {
+    fetch('/api/goal', {
       // If a goal is being edited, use PUT instead of POST
       method: currentGoal ? 'PUT' : 'POST',
       body: formJSON,
       headers: { 'Content-Type': 'application/json' },
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.ok) {
-        return res.json()
+        return { body: await res.json(), location: res.headers.get('Location') }
       } else {
-        return res.json().then((data) => {
-          throw new Error(data.message)
-        })
+        if (res.status >= 400) {
+          const data = await res.json()
+          // Throw the massage and any location provided by the API
+          throw { message: data.message, location: res.headers.get('Location') }
+        } else {
+          throw new Error('Något gick fel')
+        }
       }
     }).then(data => {
-      window.location.href = `/roadmap/${roadmapId}/goal/${data.id}`
+      window.location.href = data.location ?? `/roadmap/${roadmapId}/goal/${data.body.id}`
     }).catch((err) => {
       alert(`Målbana kunde inte skapas.\nAnledning: ${err.message}`)
+      // If a new location is provided, redirect to it
+      if (err.location) {
+        window.location.href = err.location
+      }
     })
   }
 
