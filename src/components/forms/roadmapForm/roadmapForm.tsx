@@ -74,7 +74,7 @@ export default function RoadmapForm({
 
     const formJSON = JSON.stringify(formData)
 
-    fetch('/api/createRoadmap', {
+    fetch('/api/roadmap', {
       // If a roadmap is being edited, use PUT instead of POST
       method: currentRoadmap ? 'PUT' : 'POST',
       body: formJSON,

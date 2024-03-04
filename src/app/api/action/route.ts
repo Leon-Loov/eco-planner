@@ -4,7 +4,6 @@ import prisma from "@/prismaClient";
 import { AccessControlled, AccessLevel, ActionInput } from "@/types";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
-import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const response = new Response();

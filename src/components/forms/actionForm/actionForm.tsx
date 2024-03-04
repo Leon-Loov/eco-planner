@@ -40,7 +40,7 @@ export default function ActionForm({
       timestamp,
     })
 
-    fetch('/api/createAction', {
+    fetch('/api/action', {
       // PUT if editing, POST if creating
       method: currentAction ? 'PUT' : 'POST',
       body: formJSON,

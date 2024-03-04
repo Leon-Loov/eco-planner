@@ -1,6 +1,6 @@
 import { RoadmapInput, GoalInput } from "@/types";
 import { Prisma } from "@prisma/client";
-import dataSeriesPrep from "@/app/api/createGoal/dataSeriesPrep";
+import dataSeriesPrep from "@/app/api/goal/dataSeriesPrep";
 
 export default function roadmapGoalCreator(
   roadmap: Omit<RoadmapInput, 'version'> & { goals?: GoalInput[]; },
@@ -13,7 +13,6 @@ export default function roadmapGoalCreator(
   let output: Prisma.GoalCreateWithoutRoadmapInput[] = [];
 
   roadmap.goals.forEach((goal, goalIndex) => {
-    // The code for data series also exists in src/app/api/createGoal/route.ts, if one changes the other should be changed as well
     // Create data series
     let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, author);
     // If the data series is invalid, throw an error
