@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
       return createResponse(
         response,
         JSON.stringify({ message: ClientError.AccessDenied }),
-        { status: 500 }
+        { status: 403 }
       );
     } else {
       // If non-error is thrown, log it and return a generic error message
