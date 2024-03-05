@@ -10,9 +10,10 @@ import { revalidateTag } from "next/cache";
  */
 export async function POST(request: NextRequest) {
   const response = new Response();
-  const session = await getSession(request, response);
-
-  const action: ActionInput = await request.json();
+  const [session, action] = await Promise.all([
+    getSession(request, response),
+    request.json() as Promise<ActionInput>,
+  ]);
 
   // Validate request body
   if (!action.name) {
@@ -42,36 +43,37 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Get user by ID in session cookie
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { id: true, username: true, isAdmin: true, userGroups: true }
-    })
+    // Get user and goal
+    const [user, goal] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      prisma.goal.findUnique({
+        where: { id: action.goalId },
+        include: {
+          roadmap: {
+            select: {
+              author: { select: { id: true, username: true } },
+              editors: { select: { id: true, username: true } },
+              viewers: { select: { id: true, username: true } },
+              editGroups: { include: { users: { select: { id: true, username: true } } } },
+              viewGroups: { include: { users: { select: { id: true, username: true } } } },
+            }
+          }
+        }
+      })
+    ]);
+
     // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
     if (!user || (session.user.isAdmin && !user.isAdmin)) {
       throw new Error(ClientError.BadSession, { cause: 'action' });
     }
 
-    // Get the goal to check if the user has access to it
-    const goal = await prisma.goal.findUnique({
-      where: { id: action.goalId },
-      include: {
-        roadmap: {
-          select: {
-            author: { select: { id: true, username: true } },
-            editors: { select: { id: true, username: true } },
-            viewers: { select: { id: true, username: true } },
-            editGroups: { include: { users: { select: { id: true, username: true } } } },
-            viewGroups: { include: { users: { select: { id: true, username: true } } } },
-          }
-        }
-      }
-    });
-
+    // If no goal is found or the user has no access to the goal, return IllegalParent
     if (!goal) {
       throw new Error(ClientError.IllegalParent, { cause: 'action' });
     }
-
     const accessFields: AccessControlled = {
       author: goal.roadmap.author,
       editors: goal.roadmap.editors,
@@ -187,9 +189,10 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   const response = new Response();
-  const session = await getSession(request, response);
-
-  const action: ActionInput & { actionId: string, timestamp?: number } = await request.json();
+  const [session, action] = await Promise.all([
+    getSession(request, response),
+    request.json() as Promise<ActionInput & { actionId: string, timestamp?: number }>
+  ]);
 
   // Validate request body
   if (!action.actionId || !action.name) {
@@ -197,6 +200,13 @@ export async function PUT(request: NextRequest) {
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
       { status: 400 }
+    );
+  }
+  if (!action.timestamp) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Potentially stale data. Please refresh and try again.' }),
+      { status: 409 }
     );
   }
 
@@ -210,39 +220,40 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { id: true, username: true, isAdmin: true, userGroups: true }
-    })
+    const [user, currentAction] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      prisma.action.findUnique({
+        where: { id: action.actionId },
+        select: {
+          updatedAt: true,
+          goal: {
+            select: {
+              roadmap: {
+                select: {
+                  author: { select: { id: true, username: true } },
+                  editors: { select: { id: true, username: true } },
+                  viewers: { select: { id: true, username: true } },
+                  editGroups: { include: { users: { select: { id: true, username: true } } } },
+                  viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                }
+              }
+            }
+          },
+        }
+      }),
+    ]);
     // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
     if (!user || (session.user.isAdmin && !user.isAdmin)) {
       throw new Error(ClientError.BadSession, { cause: 'goal' });
     }
 
-    const currentAction = await prisma.action.findUnique({
-      where: { id: action.actionId },
-      select: {
-        updatedAt: true,
-        goal: {
-          select: {
-            roadmap: {
-              select: {
-                author: { select: { id: true, username: true } },
-                editors: { select: { id: true, username: true } },
-                viewers: { select: { id: true, username: true } },
-                editGroups: { include: { users: { select: { id: true, username: true } } } },
-                viewGroups: { include: { users: { select: { id: true, username: true } } } },
-              }
-            }
-          }
-        },
-      }
-    });
-
+    // If no action is found or the user has no access to the action, return AccessDenied
     if (!currentAction) {
       throw new Error(ClientError.AccessDenied, { cause: 'action' });
     }
-
     const accessFields: AccessControlled = {
       author: currentAction.goal.roadmap.author,
       editors: currentAction.goal.roadmap.editors,
@@ -255,7 +266,8 @@ export async function PUT(request: NextRequest) {
       throw new Error(ClientError.AccessDenied, { cause: 'action' });
     }
 
-    if (!action.timestamp || (currentAction?.updatedAt?.getTime() || 0) > action.timestamp) {
+    // Check if the action has been updated since the client last fetched it
+    if ((currentAction?.updatedAt?.getTime() || 0) > action.timestamp) {
       throw new Error(ClientError.StaleData, { cause: 'action' });
     }
   } catch (e) {
