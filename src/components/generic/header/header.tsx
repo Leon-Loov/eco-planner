@@ -9,6 +9,15 @@ import Image from 'next/image'
 export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
+  <header className={`${styles.tempHeader} padding-100`}>
+    <div className={styles.menuToggleContainer}>
+      <input type="checkbox" className={styles.menuToggle} />
+      <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
+    </div>    
+  </header>
+  <aside className={`${styles.tempAside}`}>
+    
+  </aside>
     <aside className={styles.header}>
       <div className={`display-flex flex-direction-column justify-content-space-between`}>
         <div className={styles.menuToggleContainer}>

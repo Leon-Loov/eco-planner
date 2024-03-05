@@ -65,3 +65,27 @@
 .headerLink:hover {
   background-color: var(--gray-90);
 }
+
+/* Temp stuff */
+
+.tempHeader {
+  height: fit-content;
+  position: relative;
+  z-index: 9999;
+}
+
+.tempHeader:has(input[type="checkbox"]:checked) + aside {
+  transform: translate(0, 0);
+}
+
+.tempAside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-100%, 0);
+  height: 100dvh;
+  box-shadow: 0 0 .5rem -3px var(--gray);
+  padding: 2rem;
+  background-color: red;
+  transition: transform .2s ease-in-out;
+}
