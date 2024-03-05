@@ -1,15 +1,18 @@
 import { NextRequest } from "next/server";
 import { getSession, createResponse } from "@/lib/session"
 import prisma from "@/prismaClient";
-import { AccessControlled, AccessLevel, ActionInput } from "@/types";
+import { AccessControlled, AccessLevel, ClientError, ActionInput } from "@/types";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
 
+/**
+ * Handles POST requests to the action API
+ */
 export async function POST(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let action: ActionInput = await request.json();
+  const action: ActionInput = await request.json();
 
   // Validate request body
   if (!action.name) {
@@ -30,17 +33,86 @@ export async function POST(request: NextRequest) {
   }
 
   // Validate session
-  if (!session.user?.isLoggedIn) {
+  if (!session.user?.id) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Unauthorized' }),
-      { status: 401 }
+      { status: 401, headers: { 'Location': '/login' } }
     );
+  }
+
+  try {
+    // Get user by ID in session cookie
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true, username: true, isAdmin: true, userGroups: true }
+    })
+    // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
+    if (!user || (session.user.isAdmin && !user.isAdmin)) {
+      throw new Error(ClientError.BadSession, { cause: 'action' });
+    }
+
+    // Get the goal to check if the user has access to it
+    const goal = await prisma.goal.findUnique({
+      where: { id: action.goalId },
+      include: {
+        roadmap: {
+          select: {
+            author: { select: { id: true, username: true } },
+            editors: { select: { id: true, username: true } },
+            viewers: { select: { id: true, username: true } },
+            editGroups: { include: { users: { select: { id: true, username: true } } } },
+            viewGroups: { include: { users: { select: { id: true, username: true } } } },
+          }
+        }
+      }
+    });
+
+    if (!goal) {
+      throw new Error(ClientError.AccessDenied, { cause: 'action' });
+    }
+
+    const accessFields: AccessControlled = {
+      author: goal.roadmap.author,
+      editors: goal.roadmap.editors,
+      viewers: goal.roadmap.viewers,
+      editGroups: goal.roadmap.editGroups,
+      viewGroups: goal.roadmap.viewGroups,
+    }
+    const accessLevel = accessChecker(accessFields, session.user)
+    if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
+      throw new Error(ClientError.AccessDenied, { cause: 'action' });
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      if (e.message == ClientError.BadSession) {
+        // Remove session to log out. The client should redirect to login page.
+        await session.destroy();
+        return createResponse(
+          response,
+          JSON.stringify({ message: ClientError.BadSession }),
+          { status: 400, headers: { 'Location': '/login' } }
+        );
+      }
+      return createResponse(
+        response,
+        JSON.stringify({ message: ClientError.AccessDenied }),
+        { status: 403 }
+      );
+    } else {
+      // If non-error is thrown, log it and return a generic error message
+      console.log(e);
+      return createResponse(
+        response,
+        JSON.stringify({ message: "Unknown internal server error" }),
+        { status: 500 }
+      );
+    }
   }
 
   // Create the action
   try {
-    let newAction = await prisma.action.create({
+    const newAction = await prisma.action.create({
       data: {
         name: action.name,
         description: action.description,
@@ -70,6 +142,19 @@ export async function POST(request: NextRequest) {
             id: session.user.id
           }
         },
+      },
+      select: {
+        id: true,
+        goal: {
+          select: {
+            id: true,
+            roadmap: {
+              select: {
+                id: true,
+              }
+            }
+          }
+        }
       }
     });
     // Invalidate old cache
@@ -78,14 +163,14 @@ export async function POST(request: NextRequest) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Action created', id: newAction.id }),
-      { status: 200 }
+      { status: 201, headers: { 'Location': `/roadmap/${newAction.goal.roadmap.id}/goal/${newAction.goal.id}/action/${newAction.id}` } }
     );
   } catch (error: any) {
     console.log(error);
     if (error?.code == 'P2025') {
       return createResponse(
         response,
-        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+        JSON.stringify({ message: 'Failed to connect records. Given goal might not exist' }),
         { status: 400 }
       );
     }
@@ -95,20 +180,16 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-
-  // If we get here, something went wrong
-  return createResponse(
-    response,
-    JSON.stringify({ message: "Internal server error" }),
-    { status: 500 }
-  );
 }
 
+/**
+ * Handles PUT requests to the action API
+ */
 export async function PUT(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let action: ActionInput & { actionId: string, timestamp?: number } = await request.json();
+  const action: ActionInput & { actionId: string, timestamp?: number } = await request.json();
 
   // Validate request body
   if (!action.actionId || !action.name) {
@@ -120,18 +201,33 @@ export async function PUT(request: NextRequest) {
   }
 
   // Validate session
-  const accessDenied = "You either don't have access to this entry or are trying to edit an entry that doesn't exist";
-  const staleData = "Stale data; please refresh and try again";
+  if (!session.user?.id) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Unauthorized' }),
+      { status: 401, headers: { 'Location': '/login' } }
+    );
+  }
+
   try {
-    let accessLevel: AccessLevel = AccessLevel.None;
-    let currentAction = await prisma.action.findUnique({
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true, username: true, isAdmin: true, userGroups: true }
+    })
+    // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
+    if (!user || (session.user.isAdmin && !user.isAdmin)) {
+      throw new Error(ClientError.BadSession, { cause: 'goal' });
+    }
+
+    const currentAction = await prisma.action.findUnique({
       where: { id: action.actionId },
-      include: {
-        author: { select: { id: true, username: true } },
+      select: {
+        updatedAt: true,
         goal: {
           select: {
             roadmap: {
               select: {
+                author: { select: { id: true, username: true } },
                 editors: { select: { id: true, username: true } },
                 viewers: { select: { id: true, username: true } },
                 editGroups: { include: { users: { select: { id: true, username: true } } } },
@@ -144,43 +240,60 @@ export async function PUT(request: NextRequest) {
     });
 
     if (!currentAction) {
-      throw new Error(accessDenied, { cause: 'action' });
+      throw new Error(ClientError.AccessDenied, { cause: 'action' });
     }
 
-    let accessFields: AccessControlled = {
-      author: currentAction.author,
+    const accessFields: AccessControlled = {
+      author: currentAction.goal.roadmap.author,
       editors: currentAction.goal.roadmap.editors,
       viewers: currentAction.goal.roadmap.viewers,
       editGroups: currentAction.goal.roadmap.editGroups,
       viewGroups: currentAction.goal.roadmap.viewGroups,
     }
-    accessLevel = accessChecker(accessFields, session.user)
+    const accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
-      throw new Error(accessDenied, { cause: 'action' });
+      throw new Error(ClientError.AccessDenied, { cause: 'action' });
     }
 
     if (!action.timestamp || (currentAction?.updatedAt?.getTime() || 0) > action.timestamp) {
-      throw new Error(staleData, { cause: 'action' });
+      throw new Error(ClientError.StaleData, { cause: 'action' });
     }
   } catch (e) {
-    console.log(e);
-    if (e instanceof Error && e.message == staleData) {
+    if (e instanceof Error) {
+      if (e.message == ClientError.BadSession) {
+        // Remove session to log out. The client should redirect to login page.
+        await session.destroy();
+        return createResponse(
+          response,
+          JSON.stringify({ message: ClientError.BadSession }),
+          { status: 400, headers: { 'Location': '/login' } }
+        );
+      }
+      if (e.message == ClientError.StaleData) {
+        return createResponse(
+          response,
+          JSON.stringify({ message: ClientError.StaleData }),
+          { status: 409 }
+        );
+      }
       return createResponse(
         response,
-        JSON.stringify({ message: staleData }),
-        { status: 409 }
+        JSON.stringify({ message: ClientError.AccessDenied }),
+        { status: 403 }
+      );
+    } else {
+      console.log(e);
+      return createResponse(
+        response,
+        JSON.stringify({ message: "Unknown internal server error" }),
+        { status: 500 }
       );
     }
-    return createResponse(
-      response,
-      JSON.stringify({ message: accessDenied }),
-      { status: 403 }
-    );
   }
 
   // Update the action
   try {
-    let updatedAction = await prisma.action.update({
+    const updatedAction = await prisma.action.update({
       where: {
         id: action.actionId
       },
@@ -205,6 +318,19 @@ export async function PUT(request: NextRequest) {
             }
           })
         },
+      },
+      select: {
+        id: true,
+        goal: {
+          select: {
+            id: true,
+            roadmap: {
+              select: {
+                id: true,
+              }
+            }
+          }
+        }
       }
     });
     // Invalidate old cache
@@ -213,28 +339,14 @@ export async function PUT(request: NextRequest) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Action updated', id: updatedAction.id }),
-      { status: 200 }
+      { status: 200, headers: { 'Location': `/roadmap/${updatedAction.goal.roadmap.id}/goal/${updatedAction.goal.id}/action/${updatedAction.id}` } }
     );
   } catch (error: any) {
     console.log(error);
-    if (error?.code == 'P2025') {
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
-        { status: 400 }
-      );
-    }
     return createResponse(
       response,
       JSON.stringify({ message: "Internal server error" }),
       { status: 500 }
     );
   }
-
-  // If we get here, something went wrong
-  return createResponse(
-    response,
-    JSON.stringify({ message: "Internal server error" }),
-    { status: 500 }
-  );
 }
