@@ -51,7 +51,7 @@ export default function RoadmapForm({
     }
 
     const inheritGoalIds: string[] = [];
-    (form.namedItem('inheritGoals') as RadioNodeList|null)?.forEach((checkbox) => {
+    (form.namedItem('inheritGoals') as RadioNodeList | null)?.forEach((checkbox) => {
       if ((checkbox as HTMLInputElement).checked) {
         inheritGoalIds.push((checkbox as HTMLInputElement).value)
       }
@@ -79,20 +79,28 @@ export default function RoadmapForm({
       method: currentRoadmap ? 'PUT' : 'POST',
       body: formJSON,
       headers: { 'Content-Type': 'application/json' },
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.ok) {
-        return res.json()
+        return { body: await res.json(), location: res.headers.get('Location') }
       } else {
-        return res.json().then((data) => {
-          throw new Error(data.message)
-        })
+        if (res.status >= 400) {
+          const data = await res.json()
+          // Throw the massage and any location provided by the API
+          throw { message: data.message, location: res.headers.get('Location') }
+        } else {
+          throw new Error('Något gick fel')
+        }
       }
     }).then(data => {
       setIsLoading(false)
-      window.location.href = `/roadmap/${data.id}`
+      window.location.href = data.location ?? `/roadmap/${data.body.id}`
     }).catch((err) => {
       setIsLoading(false)
       alert(`Färdplan kunde inte skapas.\nAnledning: ${err.message}`)
+      // If a new location is provided, redirect to it
+      if (err.location) {
+        window.location.href = err.location
+      }
     })
   }
 
@@ -112,7 +120,7 @@ export default function RoadmapForm({
     }
   }
 
-  let defaultParentRoadmap: string | undefined = useSearchParams().get('metaRoadmapId') || undefined
+  const defaultParentRoadmap: string | undefined = useSearchParams().get('metaRoadmapId') || undefined
   const [metaRoadmapId, setMetaId] = useState<string | undefined>(defaultParentRoadmap)
   const [targetVersion, setTargetVersion] = useState<number | null>(0)
   const [inheritableGoals, setInheritableGoals] = useState<Goal[]>([])
