@@ -1,6 +1,7 @@
 'use client'
 
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
+import formSubmitter from "@/functions/formSubmitter"
 import { Action } from "@prisma/client"
 
 export default function ActionForm({
@@ -40,32 +41,7 @@ export default function ActionForm({
       timestamp,
     })
 
-    fetch('/api/action', {
-      // PUT if editing, POST if creating
-      method: currentAction ? 'PUT' : 'POST',
-      body: formJSON,
-      headers: { 'Content-Type': 'application/json' },
-    }).then(async (res) => {
-      if (res.ok) {
-        return { body: await res.json(), location: res.headers.get('Location') }
-      } else {
-        if (res.status >= 400) {
-          const data = await res.json()
-          // Throw the massage and any location provided by the API
-          throw { message: data.message, location: res.headers.get('Location') }
-        } else {
-          throw new Error('Något gick fel')
-        }
-      }
-    }).then(data => {
-      window.location.href = data.location ?? `/roadmap/${roadmapId}/goal/${goalId}/action/${data.body.id}`
-    }).catch((err) => {
-      alert(`Åtgärd kunde inte skapas.\nAnledning: ${err.message}`)
-      // If a new location is provided, redirect to it
-      if (err.location) {
-        window.location.href = err.location
-      }
-    })
+    formSubmitter('/api/action', formJSON, currentAction ? 'PUT' : 'POST');
   }
 
   const timestamp = Date.now();

@@ -2,6 +2,7 @@
 
 import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import getOneRoadmap from "@/fetchers/getOneRoadmap"
+import formSubmitter from "@/functions/formSubmitter"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { Data } from "@/lib/session"
 import { AccessControlled, GoalInput, RoadmapInput } from "@/types"
@@ -36,7 +37,7 @@ export default function RoadmapForm({
       form.namedItem("viewGroups")
     )
 
-    const metaRoadmapId = (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
+    const metaRoadmapId = currentRoadmap ? currentRoadmap.metaRoadmapId : (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
 
     let goals: GoalInput[] = [];
     if (currentFile) {
@@ -74,34 +75,7 @@ export default function RoadmapForm({
 
     const formJSON = JSON.stringify(formData)
 
-    fetch('/api/roadmap', {
-      // If a roadmap is being edited, use PUT instead of POST
-      method: currentRoadmap ? 'PUT' : 'POST',
-      body: formJSON,
-      headers: { 'Content-Type': 'application/json' },
-    }).then(async (res) => {
-      if (res.ok) {
-        return { body: await res.json(), location: res.headers.get('Location') }
-      } else {
-        if (res.status >= 400) {
-          const data = await res.json()
-          // Throw the massage and any location provided by the API
-          throw { message: data.message, location: res.headers.get('Location') }
-        } else {
-          throw new Error('Något gick fel')
-        }
-      }
-    }).then(data => {
-      setIsLoading(false)
-      window.location.href = data.location ?? `/roadmap/${data.body.id}`
-    }).catch((err) => {
-      setIsLoading(false)
-      alert(`Färdplan kunde inte skapas.\nAnledning: ${err.message}`)
-      // If a new location is provided, redirect to it
-      if (err.location) {
-        window.location.href = err.location
-      }
-    })
+    formSubmitter('/api/roadmap', formJSON, currentRoadmap ? 'PUT' : 'POST', setIsLoading);
   }
 
   const [currentFile, setCurrentFile] = useState<File | null>(null)
@@ -191,6 +165,7 @@ export default function RoadmapForm({
           </>
         }
 
+        {/* TODO: Add option to inherit some/all goals from previous versions of same roadmap */}
         {/* TODO: Add checkboxes for inheriting some/all goals from another roadmap with `inheritFromID` */}
         {/* TODO: Allow choosing which which goal to inherit from, might be different from target  */}
         {inheritableGoals.length > 0 && (
