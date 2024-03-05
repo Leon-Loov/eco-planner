@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     })
     // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
     if (!user || (session.user.isAdmin && !user.isAdmin)) {
-      throw new Error(ClientError.BadSession, { cause: 'goal' });
+      throw new Error(ClientError.BadSession, { cause: 'roadmap' });
     }
 
     // Get the parent metaRoadmap to check if the user has access to it
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!metaRoadmap) {
-      throw new Error(ClientError.AccessDenied, { cause: 'goal' });
+      throw new Error(ClientError.AccessDenied, { cause: 'roadmap' });
     }
 
     originalAuthor = metaRoadmap.author;
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
     const accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
-      throw new Error(ClientError.AccessDenied, { cause: 'goal' });
+      throw new Error(ClientError.AccessDenied, { cause: 'roadmap' });
     }
   } catch (e) {
     if (e instanceof Error) {
@@ -212,6 +212,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * Handles PUT requests to the roadmap API
+ */
 export async function PUT(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
