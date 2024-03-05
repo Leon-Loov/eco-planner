@@ -313,7 +313,8 @@ export async function PUT(request: NextRequest) {
           })
         },
       },
-      include: {
+      select: {
+        id: true,
         roadmap: {
           select: { id: true }
         }
@@ -324,7 +325,7 @@ export async function PUT(request: NextRequest) {
     // Return the edited goal's ID if successful
     return createResponse(
       response,
-      JSON.stringify({ message: "Goal edited", id: editedGoal.id }),
+      JSON.stringify({ message: "Goal updated", id: editedGoal.id }),
       { status: 200, headers: { 'Location': `/roadmap/${editedGoal.roadmap.id}/goal/${editedGoal.id}` } }
     );
   } catch (e: any) {
