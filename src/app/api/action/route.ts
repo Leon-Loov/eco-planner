@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!goal) {
-      throw new Error(ClientError.AccessDenied, { cause: 'action' });
+      throw new Error(ClientError.IllegalParent, { cause: 'action' });
     }
 
     const accessFields: AccessControlled = {
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     }
     const accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
-      throw new Error(ClientError.AccessDenied, { cause: 'action' });
+      throw new Error(ClientError.IllegalParent, { cause: 'action' });
     }
   } catch (e) {
     if (e instanceof Error) {
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       }
       return createResponse(
         response,
-        JSON.stringify({ message: ClientError.AccessDenied }),
+        JSON.stringify({ message: ClientError.IllegalParent }),
         { status: 403 }
       );
     } else {
