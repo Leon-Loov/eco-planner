@@ -146,6 +146,10 @@
     margin: 0;
 }
  
+.margin-auto {
+    margin: auto;
+}
+
 .margin-25 {
     margin: .25rem;
 }
@@ -451,6 +455,16 @@
 
 input {
     font-size: 1rem;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: inset 0 0 0 9999px #e0e6eb !important;
+}
+
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: inset 0 0 0 9999px white !important;
 }
 
 :where(

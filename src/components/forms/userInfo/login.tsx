@@ -33,7 +33,6 @@ function handleSubmit(event: any) {
 export default function Login() {
   return (
     <>
-      <div className="display-flex">
         <main className={`flex-grow-100 ${styles.userInfo}`}>
           <h1>Logga In</h1>
           <form onSubmit={handleSubmit} className={styles.form}>
@@ -56,7 +55,6 @@ export default function Login() {
             Photo by <a href="https://unsplash.com/@nrdoherty?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Nicholas Doherty</a> on <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
           </AttributedImage>
         </aside>
-      </div>
     </>
   )
 }
