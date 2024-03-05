@@ -13,9 +13,10 @@ import getOneGoal from "@/fetchers/getOneGoal";
  */
 export async function POST(request: NextRequest) {
   const response = new Response();
-  const session = await getSession(request, response);
-
-  const roadmap: RoadmapInput & { goals?: GoalInput[] } = await request.json();
+  const [session, roadmap] = await Promise.all([
+    getSession(request, response),
+    request.json() as Promise<RoadmapInput & { goals?: GoalInput[] }>,
+  ]);
 
   // Validate request body
   if (!roadmap.metaRoadmapId) {
@@ -38,34 +39,33 @@ export async function POST(request: NextRequest) {
   let originalAuthor: { id: string, username: string };
 
   try {
-    // Get user by ID in session cookie
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { id: true, username: true, isAdmin: true, userGroups: true }
-    })
+    // Get user and parent roadmap
+    const [user, metaRoadmap] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      prisma.metaRoadmap.findUnique({
+        where: { id: roadmap.metaRoadmapId },
+        include: {
+          author: { select: { id: true, username: true } },
+          editors: { select: { id: true, username: true } },
+          viewers: { select: { id: true, username: true } },
+          editGroups: { include: { users: { select: { id: true, username: true } } } },
+          viewGroups: { include: { users: { select: { id: true, username: true } } } },
+        }
+      })
+    ]);
     // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
     if (!user || (session.user.isAdmin && !user.isAdmin)) {
       throw new Error(ClientError.BadSession, { cause: 'roadmap' });
     }
 
-    // Get the parent metaRoadmap to check if the user has access to it
-    const metaRoadmap = await prisma.metaRoadmap.findUnique({
-      where: { id: roadmap.metaRoadmapId },
-      include: {
-        author: { select: { id: true, username: true } },
-        editors: { select: { id: true, username: true } },
-        viewers: { select: { id: true, username: true } },
-        editGroups: { include: { users: { select: { id: true, username: true } } } },
-        viewGroups: { include: { users: { select: { id: true, username: true } } } },
-      }
-    });
-
+    // Check if the parent roadmap exists and the user has access to it
     if (!metaRoadmap) {
       throw new Error(ClientError.IllegalParent, { cause: 'roadmap' });
     }
-
     originalAuthor = metaRoadmap.author;
-
     const accessFields: AccessControlled = {
       author: metaRoadmap.author,
       editors: metaRoadmap.editors,
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       editGroups: metaRoadmap.editGroups,
       viewGroups: metaRoadmap.viewGroups,
     }
-    const accessLevel = accessChecker(accessFields, session.user)
+    const accessLevel = accessChecker(accessFields, session.user);
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
       throw new Error(ClientError.IllegalParent, { cause: 'roadmap' });
     }
@@ -217,10 +217,11 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   const response = new Response();
-  const session = await getSession(request, response);
-
-  // The version number is not allowed to be changed
-  const roadmap: Omit<RoadmapInput, 'version'> & { goals?: GoalInput[], roadmapId: string, timestamp?: number } = await request.json();
+  const [session, roadmap] = await Promise.all([
+    getSession(request, response),
+    // The version number is not allowed to be changed
+    request.json() as Promise<Omit<RoadmapInput, 'version'> & { goals?: GoalInput[], roadmapId: string, timestamp?: number }>,
+  ]);
 
   // Validate request body
   if (!roadmap.metaRoadmapId) {
@@ -241,31 +242,36 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { id: true, username: true, isAdmin: true, userGroups: true }
-    })
+    // Get user and current roadmap
+    const [user, currentRoadmap] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      prisma.roadmap.findUnique({
+        where: { id: roadmap.roadmapId },
+        select: {
+          updatedAt: true,
+          author: { select: { id: true, username: true } },
+          editors: { select: { id: true, username: true } },
+          viewers: { select: { id: true, username: true } },
+          editGroups: { include: { users: { select: { id: true, username: true } } } },
+          viewGroups: { include: { users: { select: { id: true, username: true } } } },
+        }
+      })
+    ]);
     // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
     if (!user || (session.user.isAdmin && !user.isAdmin)) {
       throw new Error(ClientError.BadSession, { cause: 'roadmap' });
     }
 
-    const currentRoadmap = await prisma.roadmap.findUnique({
-      where: { id: roadmap.roadmapId },
-      select: {
-        updatedAt: true,
-        author: { select: { id: true, username: true } },
-        editors: { select: { id: true, username: true } },
-        viewers: { select: { id: true, username: true } },
-        editGroups: { include: { users: { select: { id: true, username: true } } } },
-        viewGroups: { include: { users: { select: { id: true, username: true } } } },
-      }
-    });
+    // Check if the roadmap exists and the user has access to it
     const access = accessChecker(currentRoadmap, session.user)
     if (access === AccessLevel.None || access === AccessLevel.View) {
       throw new Error(ClientError.AccessDenied, { cause: 'roadmap' });
     }
 
+    // Check if the client's data is stale
     if (!roadmap.timestamp || (currentRoadmap?.updatedAt?.getTime() || 0) > roadmap.timestamp) {
       throw new Error(ClientError.StaleData, { cause: 'roadmap' });
     }
