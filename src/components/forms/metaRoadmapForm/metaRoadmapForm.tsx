@@ -39,7 +39,7 @@ export default function MetaRoadmapForm({
       form.namedItem("viewGroups")
     );
 
-    let formData: MetaRoadmapInput & { id?: string, timestamp?: number } = {
+    const formData: MetaRoadmapInput & { id?: string, timestamp?: number } = {
       name: (form.namedItem("metaRoadmapName") as HTMLInputElement)?.value,
       description: (form.namedItem("description") as HTMLTextAreaElement)?.value,
       type: ((form.namedItem("type") as HTMLSelectElement)?.value as RoadmapType) || null,
