@@ -11,9 +11,10 @@ import accessChecker from "@/lib/accessChecker";
  */
 export async function POST(request: NextRequest) {
   const response = new Response();
-  const session = await getSession(request, response);
-
-  const metaRoadmap: MetaRoadmapInput = await request.json();
+  const [session, metaRoadmap] = await Promise.all([
+    getSession(request, response),
+    request.json() as Promise<MetaRoadmapInput>,
+  ]);
 
   // Validate request body
   if (!metaRoadmap.name || !metaRoadmap.description) {
@@ -39,11 +40,29 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Get user by ID in session cookie
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { id: true, username: true, isAdmin: true, userGroups: true }
-    })
+    // Get target metaRoadmap (if any) and user
+    const [user, targetRoadmap] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      ...(
+        metaRoadmap.parentRoadmapId ?
+          [
+            prisma.metaRoadmap.findUnique({
+              where: { id: metaRoadmap.parentRoadmapId },
+              include: {
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              }
+            })
+          ] :
+          []
+      )
+    ]);
     // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
     if (!user || (session.user.isAdmin && !user.isAdmin)) {
       throw new Error(ClientError.BadSession, { cause: 'meta roadmap' });
@@ -51,17 +70,6 @@ export async function POST(request: NextRequest) {
 
     // Get the target metaRoadmap (if any) to check if the user has access to it
     if (metaRoadmap.parentRoadmapId) {
-      const targetRoadmap = await prisma.metaRoadmap.findUnique({
-        where: { id: metaRoadmap.parentRoadmapId },
-        include: {
-          author: { select: { id: true, username: true } },
-          editors: { select: { id: true, username: true } },
-          viewers: { select: { id: true, username: true } },
-          editGroups: { include: { users: { select: { id: true, username: true } } } },
-          viewGroups: { include: { users: { select: { id: true, username: true } } } },
-        }
-      });
-
       if (!targetRoadmap) {
         throw new Error(ClientError.IllegalParent, { cause: 'meta roadmap' });
       }
@@ -158,7 +166,8 @@ export async function POST(request: NextRequest) {
         viewers: { connect: viewers },
         editGroups: { connect: editGroups },
         viewGroups: { connect: viewGroups },
-      }
+      },
+      select: { id: true }
     });
     // Invalidate old cache
     revalidateTag('roadmap');
@@ -191,9 +200,10 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   const response = new Response();
-  const session = await getSession(request, response);
-
-  const metaRoadmap: MetaRoadmapInput & { id: string, timestamp?: number } = await request.json();
+  const [session, metaRoadmap] = await Promise.all([
+    getSession(request, response),
+    request.json() as Promise<MetaRoadmapInput & { id: string, timestamp?: number }>,
+  ]);
 
   // Validate request body
   if (!metaRoadmap.id || !metaRoadmap.name || !metaRoadmap.description) {
@@ -218,36 +228,14 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    // Get user by ID in session cookie
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { id: true, username: true, isAdmin: true, userGroups: true }
-    })
-    // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
-    if (!user || (session.user.isAdmin && !user.isAdmin)) {
-      throw new Error(ClientError.BadSession, { cause: 'meta roadmap' });
-    }
-
-    // Get the current meta roadmap to check if the user has access to it
-    const currentRoadmap = await prisma.metaRoadmap.findUnique({
-      where: { id: metaRoadmap.id },
-      include: {
-        author: { select: { id: true, username: true } },
-        editors: { select: { id: true, username: true } },
-        viewers: { select: { id: true, username: true } },
-        editGroups: { include: { users: { select: { id: true, username: true } } } },
-        viewGroups: { include: { users: { select: { id: true, username: true } } } },
-      }
-    });
-    const currentAccess = accessChecker(currentRoadmap, session.user)
-    if (currentAccess === AccessLevel.None || currentAccess === AccessLevel.View) {
-      throw new Error(ClientError.AccessDenied, { cause: 'meta roadmap' });
-    }
-
-    // Get the target metaRoadmap (if any) to check if the user has access to it
-    if (metaRoadmap.parentRoadmapId) {
-      const targetRoadmap = await prisma.metaRoadmap.findUnique({
-        where: { id: metaRoadmap.parentRoadmapId },
+    // Get user, current meta roadmap, and target meta roadmap (if any)
+    const [user, currentRoadmap, targetRoadmap] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      prisma.metaRoadmap.findUnique({
+        where: { id: metaRoadmap.id },
         include: {
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },
@@ -255,13 +243,44 @@ export async function PUT(request: NextRequest) {
           editGroups: { include: { users: { select: { id: true, username: true } } } },
           viewGroups: { include: { users: { select: { id: true, username: true } } } },
         }
-      });
+      }),
+      ...(
+        metaRoadmap.parentRoadmapId ?
+          [
+            prisma.metaRoadmap.findUnique({
+              where: { id: metaRoadmap.parentRoadmapId },
+              include: {
+                author: { select: { id: true, username: true } },
+                editors: { select: { id: true, username: true } },
+                viewers: { select: { id: true, username: true } },
+                editGroups: { include: { users: { select: { id: true, username: true } } } },
+                viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              }
+            })
+          ] :
+          []
+      )
+    ]);
+    // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
+    if (!user || (session.user.isAdmin && !user.isAdmin)) {
+      throw new Error(ClientError.BadSession, { cause: 'meta roadmap' });
+    }
+
+    // Check if the user has access to the current meta roadmap (returns AccessLevel.None if no current roadmap is found)
+    const currentAccess = accessChecker(currentRoadmap, session.user)
+    if (currentAccess === AccessLevel.None || currentAccess === AccessLevel.View) {
+      throw new Error(ClientError.AccessDenied, { cause: 'meta roadmap' });
+    }
+
+    if (metaRoadmap.parentRoadmapId) {
+      // If the user is trying to set a parent roadmap, check if they have al least viewing access to it
       const targetAccess = accessChecker(targetRoadmap, session.user)
       if (targetAccess === AccessLevel.None) {
-        throw new Error(ClientError.IllegalParent);
+        throw new Error(ClientError.IllegalParent, { cause: 'meta roadmap' });
       }
     }
 
+    // Check if the client's data is stale
     if (!metaRoadmap.timestamp || (currentRoadmap?.updatedAt?.getTime() || 0) > metaRoadmap.timestamp) {
       throw new Error(ClientError.StaleData, { cause: 'meta roadmap' });
     }
@@ -359,7 +378,8 @@ export async function PUT(request: NextRequest) {
         viewers: { set: viewers },
         editGroups: { set: editGroups },
         viewGroups: { set: viewGroups },
-      }
+      },
+      select: { id: true }
     });
     // Invalidate old cache
     revalidateTag('roadmap');
