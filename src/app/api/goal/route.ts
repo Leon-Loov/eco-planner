@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let goal: GoalInput & { roadmapId: string } = await request.json();
+  const goal: GoalInput & { roadmapId: string } = await request.json();
 
   // Validate request body
   if (!goal.indicatorParameter || !goal.dataUnit || !goal.dataSeries) {
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
 
   try {
     // Get user by ID in session cookie
-    let user = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { id: true, username: true, isAdmin: true, userGroups: true }
     })
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get the roadmap to check if the user has access to it
-    let roadmap = await prisma.roadmap.findUnique({
+    const roadmap = await prisma.roadmap.findUnique({
       where: { id: goal.roadmapId },
       include: {
         author: { select: { id: true, username: true } },
@@ -69,14 +69,14 @@ export async function POST(request: NextRequest) {
       throw new Error(ClientError.AccessDenied, { cause: 'goal' });
     }
 
-    let accessFields: AccessControlled = {
+    const accessFields: AccessControlled = {
       author: roadmap.author,
       editors: roadmap.editors,
       viewers: roadmap.viewers,
       editGroups: roadmap.editGroups,
       viewGroups: roadmap.viewGroups,
     }
-    let accessLevel = accessChecker(accessFields, session.user)
+    const accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
       throw new Error(ClientError.AccessDenied, { cause: 'goal' });
     }
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
+  const dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
   // If the data series is invalid, return an error
   if (dataValues === null) {
     return createResponse(
@@ -178,7 +178,7 @@ export async function PUT(request: NextRequest) {
   const response = new Response();
   const session = await getSession(request, response);
 
-  let goal: GoalInput & { goalId: string, timestamp?: number } = await request.json();
+  const goal: GoalInput & { goalId: string, timestamp?: number } = await request.json();
 
   // Validate request body
   if (!goal.indicatorParameter || !goal.dataUnit || !goal.dataSeries || !goal.goalId) {
@@ -199,7 +199,7 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    let user = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { id: true, username: true, isAdmin: true, userGroups: true }
     })
@@ -208,7 +208,7 @@ export async function PUT(request: NextRequest) {
       throw new Error(ClientError.BadSession, { cause: 'goal' });
     }
 
-    let currentGoal = await prisma.goal.findUnique({
+    const currentGoal = await prisma.goal.findUnique({
       where: { id: goal.goalId },
       include: {
         roadmap: {
@@ -227,14 +227,14 @@ export async function PUT(request: NextRequest) {
       throw new Error(ClientError.AccessDenied, { cause: 'goal' });
     }
 
-    let accessFields: AccessControlled = {
+    const accessFields: AccessControlled = {
       author: currentGoal.roadmap.author,
       editors: currentGoal.roadmap.editors,
       viewers: currentGoal.roadmap.viewers,
       editGroups: currentGoal.roadmap.editGroups,
       viewGroups: currentGoal.roadmap.viewGroups,
     }
-    let accessLevel = accessChecker(accessFields, session.user)
+    const accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
       throw new Error(ClientError.AccessDenied, { cause: 'goal' });
     }
@@ -277,7 +277,7 @@ export async function PUT(request: NextRequest) {
   }
 
   // Prepare for creating data series
-  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
+  const dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
   // If the data series is invalid, return an error
   if (dataValues === null) {
     return createResponse(

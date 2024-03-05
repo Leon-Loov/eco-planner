@@ -87,9 +87,9 @@ export default function GoalForm({
   const timestamp = Date.now();
 
   // If there is a data series, convert it to an array of numbers to use as a default value for the form
-  let dataArray: (number | null)[] = []
+  const dataArray: (number | null)[] = []
   if (currentGoal?.dataSeries) {
-    for (let i in currentGoal.dataSeries) {
+    for (const i in currentGoal.dataSeries) {
       // All keys in dataSeries containing numbers are part of the data series itself and should be fine to push to the array
       if (i.match(/[0-9]+/)) {
         // This line *should* start complaining if we add any keys to DataSeries that are not part of the data series, unless the value is a number
