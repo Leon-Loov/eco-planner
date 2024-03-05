@@ -1,0 +1,16 @@
+.gridLayout {
+    grid-template-columns: 75ch 1fr;
+    @media (max-width: 1250px) {
+        grid-template-columns: unset;
+        gap: 0;
+        padding-top: 2rem;
+        .image {
+            grid-row: 1;
+            height: 175px;
+        }
+    }
+}
+
+.image {
+    height: 100%;
+}

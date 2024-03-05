@@ -1,9 +1,7 @@
 'use client'
 
-import AttributedImage from "@/components/generic/images/attributedImage";
 import Link from "next/link";
 import Image from "next/image";
-import styles from './userInfo.module.css'
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -59,8 +57,10 @@ export default function Signup() {
             <input className="padding-0 margin-x-50" type="password" placeholder="password" name="password" required id="password" autoComplete="new-password" />
           </div>
         </label>
-        <button className="block margin-y-50 font-weight-bold seagreen color-purewhite" type="submit"> Skapa Konto </button>
-        <Link href='/login'>Logga in</Link>
+        <button className="block margin-y-100 font-weight-bold seagreen color-purewhite" type="submit"> Skapa Konto </button>
+        <p className="padding-y-50" style={{borderTop: '1px solid var(--gray-90)'}}>
+          <small>Har du redan ett konto? <Link href='/login'>Logga in</Link></small>
+        </p>
       </form>
     </>
   )
