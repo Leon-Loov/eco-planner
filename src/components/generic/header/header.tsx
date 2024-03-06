@@ -20,20 +20,26 @@ export async function Header() {
         <nav className={styles.nav}>
           <div>
             <Link href="/" className={styles.headerLink}>
-              <Image src='/icons/home.svg' alt='Hem' width={24} height={24} />
+              <Image src='/icons/home.svg' alt='' width={24} height={24} />
               Hem
             </Link>
             <Link href="/info" className={styles.headerLink}>
-              <Image src='/icons/info.svg' alt='Information' width={24} height={24} />
+              <Image src='/icons/info.svg' alt='' width={24} height={24} />
               Information
             </Link>
           </div>
-          <div>
+          <div className='padding-y-200'>
             { // Link to login and signup if not logged in
               !user?.isLoggedIn &&
               <>
-                <PrimaryLink href='/signup'>Skapa Konto</PrimaryLink>
-                <SecondaryLink href='/login'>Logga In</SecondaryLink>
+                <Link href="/signup" className='flex gap-50 align-items-center padding-50 margin-y-25 rounded seagreen color-purewhite button' style={{whiteSpace: 'nowrap', fontWeight: '500',}}>
+                  <Image src='/icons/userAdd.svg' alt='' width={24} height={24} />
+                  Skapa Konto
+                </Link>
+                <Link href="/login" className={styles.headerLink}>
+                  <Image src='/icons/login.svg' alt='' width={24} height={24} />
+                  Logga In
+                </Link>
               </>
             }
             { // Link to admin page and a logout button if logged in

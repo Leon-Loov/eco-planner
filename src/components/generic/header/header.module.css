@@ -65,7 +65,7 @@
   cursor: pointer;
 }
 
-.menuToggleContainer:has(.menuToggle:hover, .menuToggle:focus) {
+.menuToggleContainer:has(.menuToggle:hover) {
   background-color: var(--gray);
 }
 
@@ -76,7 +76,7 @@
 .headerLink{
   text-decoration: unset;
   color: black;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: .5rem;
@@ -84,8 +84,9 @@
   border-radius: .5rem;
   outline: 0;
   transition: background-color .1s ease;
+  white-space: nowrap;
 }
   
-.headerLink:hover, .headerLink:focus {
+.headerLink:hover {
   background-color: var(--gray-90);
 }
