@@ -1,25 +1,47 @@
 /* Header */
 
-.header {
-    position: sticky;
-    top: 0;
-    height: 100dvh;
-    box-shadow: 0 0 .5rem -3px var(--gray);
-    padding: 1rem;
+.container {
+  position: sticky;
+  top: 0;
+  border-right: 1px solid var(--gray-90);
+  @media (max-width: 1250px) {
+    position: initial;
+  }
 }
 
-.header nav {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.tempHeader {
+  height: fit-content;
+  position: relative;
+  z-index: 9999;
+}
+
+.tempHeader:has(input[type="checkbox"]:checked) + aside {
+  width: calc(24px + 1rem + 2rem);
+  @media (max-width: 1250px) {
+    display: initial;
+  }
+}
+
+.tempAside {
+  width: 12rem;
+  padding: 1rem;
+  transition: transform .2s ease-in-out, width .2s ease-in-out;
   overflow: hidden;
-  gap: 1rem;
-  margin-top: 5rem;
-  width: 10rem;
-  transition: width .2s ease-in-out;
-  @media (max-width: 750px) {
+  z-index: 9998;
+  position: relative;
+  background-color: white;
+  @media (max-width: 1250px) {
     display: none;
+    .tempAside > nav {
+      padding: 1rem 0;
+    }
+  }
+}
+
+.nav {
+  overflow: hidden;
+  @media (max-width: 1250px) {
+    padding: 0 1rem;
   }
 }
 
@@ -43,7 +65,7 @@
   cursor: pointer;
 }
 
-.menuToggleContainer:has(.menuToggle:hover) {
+.menuToggleContainer:has(.menuToggle:hover, .menuToggle:focus) {
   background-color: var(--gray);
 }
 
@@ -60,41 +82,10 @@
   gap: .5rem;
   padding: .5rem;
   border-radius: .5rem;
+  outline: 0;
+  transition: background-color .1s ease;
 }
   
-.headerLink:hover {
+.headerLink:hover, .headerLink:focus {
   background-color: var(--gray-90);
-}
-
-/* Temp stuff */
-
-.tempHeader {
-  height: fit-content;
-  position: relative;
-  z-index: 9999;
-}
-
-.tempHeader:has(input[type="checkbox"]:checked) + aside {
-  width: calc(24px + 1rem + 2rem);
-  @media (max-width: 1250px) {
-    width: auto;
-    transform: translate(0, 0);
-  }
-}
-
-.tempAside {
-  width: 12rem;
-  padding: 1rem;
-  transition: transform .2s ease-in-out, width .2s ease-in-out;
-  overflow: hidden;
-  z-index: 9998;
-  position: relative;
-  background-color: white;
-  @media (max-width: 1250px) {
-    position: fixed;
-    top: 64px;
-    left: 0;
-    transform: translate(-100%, 0);
-    height: 100%;
-  }
 }

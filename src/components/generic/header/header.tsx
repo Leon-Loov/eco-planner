@@ -9,15 +9,15 @@ import Image from 'next/image'
 export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
-    <div style={{ position: 'relative', borderRight: '1px solid var(--gray-90)' }}>
+    <div className={styles.container}>
       <header className={`${styles.tempHeader} padding-100`}>
         <div className={styles.menuToggleContainer}>
           <input type="checkbox" className={styles.menuToggle} />
           <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
         </div>
       </header>
-      <aside className={`${styles.tempAside}`}>
-        <nav style={{ overflow: 'hidden' }}>
+      <aside className={styles.tempAside}>
+        <nav className={styles.nav}>
           <div>
             <Link href="/" className={styles.headerLink}>
               <Image src='/icons/home.svg' alt='Hem' width={24} height={24} />
