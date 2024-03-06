@@ -45,7 +45,7 @@ export default async function Page() {
   return <>
     <div className="rounded width-100 margin-y-100 position-relative overflow-hidden" style={{height: '350px'}}>
       <AttributedImage src="/images/solarpanels.jpg" alt="" >
-        <div className="flex flex-wrap-wrap align-items-flex-end justify-content-space-between padding-100 width-100">
+        <div className="flex gap-100 flex-wrap-wrap align-items-flex-end justify-content-space-between padding-100 width-100">
           <div>
             <h1 className="margin-y-25">Färdplaner</h1>
             <p className="margin-0">Photo by <a className="color-purewhite" href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Spiske</a> on <a className="color-purewhite" href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></p>
@@ -66,7 +66,7 @@ export default async function Page() {
         <div className="flex gap-100 align-items-flex-end justify-content-space-between">
           <label>
             Sortera på:
-            <select>
+            <select className="margin-x-25">
               <option>Namn (A-Ö)</option>
               <option>Namn (Ö-A)</option>
               <option>Antal målbanor (stigande)</option>
@@ -82,11 +82,11 @@ export default async function Page() {
           </label>
         </div>
       </section>
-      <section id="roadmapFilters" className="margin-y-100 padding-100">
+      <section id="roadmapFilters" className="margin-y-100 padding-100 gray-90 rounded">
         <p><b>Visa</b></p>
         <label className="flex align-items-center gap-25 margin-y-50">
-        <input type="checkbox"/>
-          Nationella färdplaner
+          <input type="checkbox"/>
+            Nationella färdplaner
         </label>
         <label className="flex align-items-center gap-25 margin-y-50">
           <input type="checkbox" />
