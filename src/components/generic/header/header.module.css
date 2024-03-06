@@ -30,6 +30,7 @@
   z-index: 9998;
   position: relative;
   background-color: white;
+  height: 100%;
   @media (max-width: 1250px) {
     display: none;
     .tempAside > nav {
@@ -40,6 +41,10 @@
 
 .nav {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   @media (max-width: 1250px) {
     padding: 0 1rem;
   }

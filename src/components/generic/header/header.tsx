@@ -28,11 +28,11 @@ export async function Header() {
               Information
             </Link>
           </div>
-          <div className='padding-y-200'>
+          <div>
             { // Link to login and signup if not logged in
               !user?.isLoggedIn &&
               <>
-                <Link href="/signup" className='flex gap-50 align-items-center padding-50 margin-y-25 rounded seagreen color-purewhite button' style={{whiteSpace: 'nowrap', fontWeight: '500',}}>
+                <Link href="/signup" className='flex gap-50 align-items-center padding-50 margin-y-25 smooth seagreen color-purewhite button' style={{whiteSpace: 'nowrap', fontWeight: '500',}}>
                   <Image src='/icons/userAdd.svg' alt='' width={24} height={24} />
                   Skapa Konto
                 </Link>

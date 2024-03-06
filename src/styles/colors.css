@@ -67,6 +67,10 @@
 }
 
 /* Background color */
+.transparent {
+    background-color: transparent;
+}
+
 .seagreen {
     background-color: var(--seagreen);
 }
