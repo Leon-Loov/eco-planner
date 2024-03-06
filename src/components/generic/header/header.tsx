@@ -1,6 +1,5 @@
 import styles from './header.module.css' with { type: "css" }
 import LogoutButton from '@/components/buttons/logoutButton'
-import { SecondaryLink, PrimaryLink } from '../links/links'
 import { getSessionData } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
@@ -10,20 +9,18 @@ export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
     <div className={styles.container}>
-      <header className={`${styles.tempHeader} padding-100`}>
-        <div className={styles.menuToggleContainer}>
-          <input type="checkbox" className={styles.menuToggle} />
-          <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
-        </div>
-      </header>
-      <aside className={`${styles.tempAside} flex-grow-100`}>
+      <div className={styles.menuToggleContainer}>
+        <input type="checkbox" className={styles.menuToggle} />
+        <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
+      </div>
+      <aside className={`${styles.aside} flex-grow-100`}>
         <nav className={styles.nav}>
           <div>
-            <Link href="/" className={styles.headerLink}>
+            <Link href="/" className={styles.link}>
               <Image src='/icons/home.svg' alt='' width={24} height={24} />
               Hem
             </Link>
-            <Link href="/info" className={styles.headerLink}>
+            <Link href="/info" className={styles.link}>
               <Image src='/icons/info.svg' alt='' width={24} height={24} />
               Information
             </Link>
@@ -36,7 +33,7 @@ export async function Header() {
                   <Image src='/icons/userAdd.svg' alt='' width={24} height={24} />
                   Skapa Konto
                 </Link>
-                <Link href="/login" className={styles.headerLink}>
+                <Link href="/login" className={styles.link}>
                   <Image src='/icons/login.svg' alt='' width={24} height={24} />
                   Logga In
                 </Link>

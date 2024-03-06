@@ -1,5 +1,4 @@
-/* Header */
-
+/* Container for navigation */
 .container {
   position: sticky;
   top: 0;
@@ -9,46 +8,17 @@
   flex-direction: column;
   @media (max-width: 1250px) {
     position: initial;
+    height: auto;
   }
 }
 
-.tempHeader {
-  height: fit-content;
-  position: relative;
-  z-index: 9999;
-}
+/* Toggle minimized/expanded */
 
-.tempHeader:has(input[type="checkbox"]:checked) + aside {
+.menuToggleContainer:has(input[type="checkbox"]:checked) + aside {
   width: calc(24px + 1rem + 2rem);
   @media (max-width: 1250px) {
     display: initial;
-  }
-}
-
-.tempAside {
-  width: 12rem;
-  padding: 1rem;
-  transition: transform .2s ease-in-out, width .2s ease-in-out;
-  overflow: hidden;
-  z-index: 9998;
-  position: relative;
-  background-color: white;
-  @media (max-width: 1250px) {
-    display: none;
-    .tempAside > nav {
-      padding: 1rem 0;
-    }
-  }
-}
-
-.nav {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  @media (max-width: 1250px) {
-    padding: 0 1rem;
+    width: 100%;
   }
 }
 
@@ -59,6 +29,7 @@
   width: fit-content;
   transition: background-color .2s ease;
   padding: .25rem;
+  margin: 1rem;
   border-radius: 9999px;
 }
   
@@ -80,7 +51,34 @@
   width: calc(24px + 1rem);
 }
 
-.headerLink{
+/* Navigation */
+
+.aside {
+  width: 12rem;
+  padding: 1rem;
+  transition: transform .2s ease-in-out, width .2s ease-in-out;
+  overflow: hidden;
+  z-index: 9998;
+  position: relative;
+  background-color: white;
+  @media (max-width: 1250px) {
+    display: none;
+    border-bottom: 1px solid var(--gray);
+  }
+}
+
+.nav {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  height: 100%;
+}
+
+/* Appearance of links in navigation */
+
+.link {
   text-decoration: unset;
   color: black;
   font-weight: 500;
@@ -94,6 +92,6 @@
   white-space: nowrap;
 }
   
-.headerLink:hover {
+.link:hover {
   background-color: var(--gray-90);
 }
