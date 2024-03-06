@@ -15,7 +15,16 @@ export async function Header() {
       </div>
       <aside className={`${styles.aside} flex-grow-100`}>
         <nav className={styles.nav}>
-          <div>
+          { // Link to signup if not logged in
+            !user?.isLoggedIn &&
+            <div>
+              <Link href="/signup" className='flex gap-50 align-items-center padding-50 margin-y-25 round seagreen color-purewhite button' style={{ whiteSpace: 'nowrap', fontWeight: '500', }}>
+                <Image src='/icons/userAdd.svg' alt='' width={24} height={24} />
+                Skapa Konto
+              </Link>
+            </div>
+          }
+          <div className='flex-grow-100'>
             <Link href="/" className={styles.link}>
               <Image src='/icons/home.svg' alt='' width={24} height={24} />
               Hem
@@ -29,10 +38,6 @@ export async function Header() {
             { // Link to login and signup if not logged in
               !user?.isLoggedIn &&
               <>
-                <Link href="/signup" className='flex gap-50 align-items-center padding-50 margin-y-25 round seagreen color-purewhite button' style={{whiteSpace: 'nowrap', fontWeight: '500',}}>
-                  <Image src='/icons/userAdd.svg' alt='' width={24} height={24} />
-                  Skapa Konto
-                </Link>
                 <Link href="/login" className={styles.link}>
                   <Image src='/icons/login.svg' alt='' width={24} height={24} />
                   Logga In

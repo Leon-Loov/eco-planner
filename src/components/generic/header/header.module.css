@@ -71,7 +71,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 3rem;
   height: 100%;
 }
