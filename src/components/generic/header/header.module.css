@@ -75,17 +75,25 @@
 }
 
 .tempHeader:has(input[type="checkbox"]:checked) + aside {
-  transform: translate(0, 0);
+  width: calc(24px + 1rem + 2rem);
+  @media (max-width: 1250px) {
+    width: auto;
+    transform: translate(0, 0);
+  }
 }
 
 .tempAside {
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: translate(-100%, 0);
+  width: 12rem;
   height: 100dvh;
   box-shadow: 0 0 .5rem -3px var(--gray);
-  padding: 2rem;
+  padding: 3rem 1rem;
   background-color: red;
-  transition: transform .2s ease-in-out;
+  transition: transform .2s ease-in-out, width .2s ease-in-out;
+  overflow: hidden;
+  @media (max-width: 1250px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-100%, 0);
+  }
 }
