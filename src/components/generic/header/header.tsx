@@ -16,7 +16,7 @@ export async function Header() {
           <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
         </div>
       </header>
-      <aside className={styles.tempAside}>
+      <aside className={`${styles.tempAside} flex-grow-100`}>
         <nav className={styles.nav}>
           <div>
             <Link href="/" className={styles.headerLink}>
@@ -32,7 +32,7 @@ export async function Header() {
             { // Link to login and signup if not logged in
               !user?.isLoggedIn &&
               <>
-                <Link href="/signup" className='flex gap-50 align-items-center padding-50 margin-y-25 smooth seagreen color-purewhite button' style={{whiteSpace: 'nowrap', fontWeight: '500',}}>
+                <Link href="/signup" className='flex gap-50 align-items-center padding-50 margin-y-25 round seagreen color-purewhite button' style={{whiteSpace: 'nowrap', fontWeight: '500',}}>
                   <Image src='/icons/userAdd.svg' alt='' width={24} height={24} />
                   Skapa Konto
                 </Link>

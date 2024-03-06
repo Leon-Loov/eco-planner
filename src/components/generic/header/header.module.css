@@ -5,6 +5,8 @@
   top: 0;
   border-right: 1px solid var(--gray-90);
   height: 100dvh;
+  display: flex;
+  flex-direction: column;
   @media (max-width: 1250px) {
     position: initial;
   }
@@ -44,6 +46,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
   @media (max-width: 1250px) {
     padding: 0 1rem;
   }
