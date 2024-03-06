@@ -3,6 +3,7 @@ import { Header } from '@/components/generic/header/header'
 import { GlobalContextProvider } from "./context/store"
 import Breadcrumb from '@/components/breadcrumbs/breadcrumb2';
 import getNames from '@/fetchers/getNames';
+import styles from './page.module.css' with { type: "css" }
 
 export default async function RootLayout({
   children,
@@ -79,7 +80,7 @@ export default async function RootLayout({
 
       </head>
       <body>
-        <div className='display-flex'>
+        <div className={`${styles.layout}`}>
           <Header />
           <div className='flex-grow-100 padding-100'>
             <Breadcrumb relevantObjects={objects} />

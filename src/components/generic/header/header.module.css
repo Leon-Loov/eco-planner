@@ -84,16 +84,17 @@
 
 .tempAside {
   width: 12rem;
-  height: 100dvh;
-  box-shadow: 0 0 .5rem -3px var(--gray);
-  padding: 3rem 1rem;
-  background-color: red;
+  padding: 1rem;
   transition: transform .2s ease-in-out, width .2s ease-in-out;
   overflow: hidden;
+  z-index: 9998;
+  position: relative;
+  background-color: white;
   @media (max-width: 1250px) {
     position: fixed;
-    top: 0;
+    top: 64px;
     left: 0;
     transform: translate(-100%, 0);
+    height: 100%;
   }
 }
