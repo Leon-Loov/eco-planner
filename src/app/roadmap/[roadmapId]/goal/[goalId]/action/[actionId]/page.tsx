@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     <>
       <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
         { // Only show the edit link if the user has edit access to the roadmap
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
           <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`}>
             <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${action.name}`} />
           </Link>
@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       }
       {action.costEfficiency && <p>Kostnadseffektivitet: {action.costEfficiency}</p>}
       {action.expectedOutcome && <p>Förväntad effekt: {action.expectedOutcome}</p>}
-      {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel == AccessLevel.Admin)) &&
+      {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel == AccessLevel.Admin)) &&
         <p>Projektledare: {action.projectManager}</p>
       }
       {action.relevantActors && <p>Relevanta aktörer: {action.relevantActors}</p>}

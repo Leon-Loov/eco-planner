@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { metaRoadmapId: string
     <>
       <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
         { // Only show the edit link if the user has edit access to the roadmap
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
           <Link href={`/metaRoadmap/${metaRoadmap.id}/editMetaRoadmap`}>
             <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${metaRoadmap.name}`} />
           </Link>

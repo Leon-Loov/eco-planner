@@ -15,6 +15,7 @@ export enum AccessLevel {
   None = "",
   View = "VIEW",
   Edit = "EDIT",
+  Author = "AUTHOR",
   Admin = "ADMIN",
 };
 

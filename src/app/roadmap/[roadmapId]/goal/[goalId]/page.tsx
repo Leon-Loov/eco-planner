@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     <>
       <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
         { // Only show the edit link if the user has edit access to the roadmap
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
           <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`}>
             <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
           </Link>
@@ -97,7 +97,8 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         </>
       }
       <br />
-      {(accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
+      { // Only allow scaling the values if the user has edit access to the goal
+        (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
         <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
       }
       <section>

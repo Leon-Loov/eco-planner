@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   return <>
     <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
       { // Only show the edit link if the user has edit access to the roadmap
-        (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
+        (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
         <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
           <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
         </Link>
@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     <span style={{ color: "gray" }}>
       Färdplan • <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>{`v.${roadmap.version}`}</a>
     </span>
-    
+
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Comments comments={roadmap.comments} objectId={roadmap.id} />
     <Tooltip anchorSelect="#goalName">
