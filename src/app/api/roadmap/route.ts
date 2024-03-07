@@ -383,3 +383,114 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
+
+/**
+ * Handles DELETE requests to the roadmap API
+ */
+export async function DELETE(request: NextRequest) {
+  const response = new Response();
+  const [session, roadmap] = await Promise.all([
+    getSession(request, response),
+    request.json() as Promise<{ roadmapId: string }>
+  ]);
+
+  // Validate request body
+  if (!roadmap.roadmapId) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Missing required input parameters' }),
+      { status: 400 }
+    );
+  }
+
+  // Validate session
+  if (!session.user?.id) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Unauthorized' }),
+      { status: 401, headers: { 'Location': '/login' } }
+    );
+  }
+
+  try {
+    const [user, currentRoadmap] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      prisma.roadmap.findUnique({
+        where: {
+          id: roadmap.roadmapId,
+          ...(session.user.isAdmin ? {} : {
+            OR: [
+              { authorId: session.user.id },
+              { metaRoadmap: { authorId: session.user.id } },
+            ]
+          })
+        },
+      }),
+    ]);
+
+    // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
+    if (!user || (session.user.isAdmin && !user.isAdmin)) {
+      throw new Error(ClientError.BadSession, { cause: 'roadmap' });
+    }
+
+    // If the roadmap is not found it eiter does not exist or the user has no access to it
+    if (!currentRoadmap) {
+      throw new Error(ClientError.AccessDenied, { cause: 'roadmap' });
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      if (e.message == ClientError.BadSession) {
+        // Remove session to log out. The client should redirect to login page.
+        await session.destroy();
+        return createResponse(
+          response,
+          JSON.stringify({ message: ClientError.BadSession }),
+          { status: 400, headers: { 'Location': '/login' } }
+        );
+      }
+      return createResponse(
+        response,
+        JSON.stringify({ message: ClientError.AccessDenied }),
+        { status: 403 }
+      );
+    } else {
+      console.log(e);
+      return createResponse(
+        response,
+        JSON.stringify({ message: "Unknown internal server error" }),
+        { status: 500 }
+      );
+    }
+  }
+
+  // Delete the roadmap
+  try {
+    const deletedRoadmap = await prisma.roadmap.delete({
+      where: {
+        id: roadmap.roadmapId
+      },
+      select: {
+        id: true,
+        metaRoadmapId: true,
+      }
+    });
+    // Invalidate old cache
+    revalidateTag('roadmap');
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Roadmap deleted', id: deletedRoadmap.id }),
+      // Redirect to the parent meta roadmap
+      { status: 200, headers: { 'Location': `/metaRoadmap/${deletedRoadmap.metaRoadmapId}` } }
+    );
+  } catch (e) {
+    console.log(e);
+    return createResponse(
+      response,
+      JSON.stringify({ message: "Internal server error" }),
+      { status: 500 }
+    );
+  }
+}

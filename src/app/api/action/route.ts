@@ -362,3 +362,126 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
+
+/**
+ * Handles DELETE requests to the action API
+ */
+export async function DELETE(request: NextRequest) {
+  const response = new Response();
+  const [session, action] = await Promise.all([
+    getSession(request, response),
+    request.json() as Promise<{ actionId: string }>
+  ]);
+
+  // Validate request body
+  if (!action.actionId) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Missing required input parameters' }),
+      { status: 400 }
+    );
+  }
+
+  // Validate session
+  if (!session.user?.id) {
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Unauthorized' }),
+      { status: 401, headers: { 'Location': '/login' } }
+    );
+  }
+
+  try {
+    const [user, currentAction] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, username: true, isAdmin: true, userGroups: true }
+      }),
+      prisma.action.findUnique({
+        where: {
+          id: action.actionId,
+          // The user must be admin, or have authored the action or one of its parents
+          ...(session.user.isAdmin ? {} : {
+            OR: [
+              { authorId: session.user.id },
+              { goal: { authorId: session.user.id } },
+              { goal: { roadmap: { authorId: session.user.id } } },
+              { goal: { roadmap: { metaRoadmap: { authorId: session.user.id } } } },
+            ]
+          })
+        },
+      }),
+    ]);
+
+    // If no user is found or the found user falsely claims to be an admin, they have a bad session cookie and should be logged out
+    if (!user || (session.user.isAdmin && !user.isAdmin)) {
+      throw new Error(ClientError.BadSession, { cause: 'action' });
+    }
+
+    // If the action is not found it eiter does not exist or the user has no access to it
+    if (!currentAction) {
+      throw new Error(ClientError.AccessDenied, { cause: 'action' });
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      if (e.message == ClientError.BadSession) {
+        // Remove session to log out. The client should redirect to login page.
+        await session.destroy();
+        return createResponse(
+          response,
+          JSON.stringify({ message: ClientError.BadSession }),
+          { status: 400, headers: { 'Location': '/login' } }
+        );
+      }
+      return createResponse(
+        response,
+        JSON.stringify({ message: ClientError.AccessDenied }),
+        { status: 403 }
+      );
+    } else {
+      console.log(e);
+      return createResponse(
+        response,
+        JSON.stringify({ message: "Unknown internal server error" }),
+        { status: 500 }
+      );
+    }
+  }
+
+  // Delete the action
+  try {
+    const deletedAction = await prisma.action.delete({
+      where: {
+        id: action.actionId
+      },
+      select: {
+        id: true,
+        goal: {
+          select: {
+            id: true,
+            roadmap: {
+              select: {
+                id: true,
+              }
+            }
+          }
+        }
+      }
+    });
+    // Invalidate old cache
+    revalidateTag('action');
+    return createResponse(
+      response,
+      JSON.stringify({ message: 'Action deleted', id: deletedAction.id }),
+      // Redirect to the parent goal
+      { status: 200, headers: { 'Location': `/roadmap/${deletedAction.goal.roadmap.id}/goal/${deletedAction.goal.id}` } }
+    );
+  } catch (e) {
+    console.log(e);
+    return createResponse(
+      response,
+      JSON.stringify({ message: "Internal server error" }),
+      { status: 500 }
+    );
+  }
+}
