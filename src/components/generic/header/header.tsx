@@ -8,7 +8,7 @@ import Image from 'next/image'
 export async function Header() {
   const { user } = await getSessionData(cookies())
   return <>
-    <div className={styles.container}>
+    <aside className={styles.container}>
       <div className={styles.menuToggleContainer}>
         <input type="checkbox" className={styles.menuToggle} />
         <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
@@ -55,6 +55,6 @@ export async function Header() {
           </div>
         </nav>
       </aside>
-    </div>
+    </aside>
   </>
 }

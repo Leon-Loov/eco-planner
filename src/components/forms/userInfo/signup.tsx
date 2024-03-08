@@ -35,7 +35,7 @@ export default function Signup() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <h1>Skapa Konto</h1>
+        <h1 className="margin-y-100">Skapa Konto</h1>
         <label className="block margin-y-100">
           Användarnamn
           <div className="margin-y-50 padding-50 flex align-items-center gray-90 smooth focusable">

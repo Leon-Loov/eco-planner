@@ -6,19 +6,23 @@
   height: 100dvh;
   display: flex;
   flex-direction: column;
+  z-index: 9999;
+  background-color: rgba(255, 255, 255, 0.9);
   @media (max-width: 1250px) {
-    position: initial;
     height: auto;
+    border-bottom: 1px solid var(--gray-90);
   }
 }
 
 /* Toggle minimized/expanded */
 
 .menuToggleContainer:has(input[type="checkbox"]:checked) + aside {
-  width: calc(24px + 1rem + 2rem);
+  @media (min-width: 1251px) {
+    width: calc(24px + 1rem + 2rem); 
+  }
+  
   @media (max-width: 1250px) {
-    display: initial;
-    width: 100%;
+    transform: translate(0, 0);
   }
 }
 
@@ -27,10 +31,13 @@
   display: grid;
   place-items: center;
   width: fit-content;
-  transition: background-color .2s ease;
+  transition: background-color .2s ease, 
+              transform .2s ease,
+  ;
   padding: .25rem;
   margin: 1rem;
   border-radius: 9999px;
+  z-index: 9999;
 }
   
 .menuToggle {
@@ -61,9 +68,13 @@
   z-index: 9998;
   position: relative;
   background-color: white;
+  display: flex;
   @media (max-width: 1250px) {
-    display: none;
-    border-bottom: 1px solid var(--gray);
+    transform: translate(-100%, 0);
+    position: absolute;
+    left: 0;
+    height: calc(100dvh);
+    border-right: 1px solid var(--gray-90);
   }
 }
 
@@ -72,7 +83,10 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  height: 100%;
+  flex-grow: 1;
+  @media (max-width: 1250px) {
+    margin-top: 64px;
+  }
 }
 
 /* Appearance of links in navigation */

@@ -32,7 +32,7 @@ export default function Login() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <h1>Logga In</h1>
+        <h1 className="margin-y-100">Logga In</h1>
 
         <label className="block margin-y-100">
           Användarnamn
