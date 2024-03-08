@@ -59,24 +59,15 @@ ul>li:nth-child(1)>.link {
     height: 100%;
     z-index: 2;
     margin: 0;
+    left: 0;
+    top: 0;
     opacity: 0;
     cursor: pointer;
 }
-
-.radioImageWrapper>input[type="radio"]:hover~.radioImage,
-.radioImageWrapper>input[type="radio"]:checked~.radioImage {
-    outline: 3px solid #0066b2;
+ 
+.radioImageWrapper:has(input[type="radio"]:checked) {
+    background-color: var(--gray-90);
 }
-
-.radioImage {
-    background-color: lightgray;
-    border-radius: 3px;
-    padding: .25em;
-    display: grid;
-    place-items: center;
-    position: relative;
-}
-
 
 /* Table styling*/
 
@@ -111,7 +102,8 @@ ul>li:nth-child(1)>.link {
 .table th {
     text-wrap: nowrap;
     position: sticky;
-    background-color: var(--gray-90);
+    background-color: var(--blue-20);
+    color: white;
     top: 0;
     z-index: 1;
 }

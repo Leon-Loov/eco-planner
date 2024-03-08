@@ -27,22 +27,31 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   }
 
   return <>
-    <h1 className="display-flex align-items-center gap-25 flex-wrap-wrap">
-      { // Only show the edit link if the user has edit access to the roadmap
-        (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-        <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
-          <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
-        </Link>
-      }
-      {roadmap.metaRoadmap.name}
-    </h1>
-    <span>Färdplan</span>
+    {/*
+    { // Only show the edit link if the user has edit access to the roadmap
+      (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+      <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
+        <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
+      </Link>
+    }
     <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>Länk till metadata och fler versioner</a>
+    */}
+
+    <section style={{borderBottom: '2px dashed var(--gray-90)', marginTop: '3rem'}}>
+      <span style={{color: 'gray'}}>Färdplan</span>
+      <h1 style={{fontSize: '2.5rem', margin: '0'}}>{roadmap.metaRoadmap.name}</h1>
+      <p style={{fontSize: '1.25rem', marginTop: '0'}}>
+        {(roadmap.metaRoadmap.actor) &&
+          <>{roadmap.metaRoadmap.actor} • </> 
+        }
+        {roadmap.goals.length} målbanor
+      </p>
+    </section>
 
     <p>{roadmap.description}</p>
 
     <section>
-      <section className="margin-y-100 padding-y-50" style={{ borderBottom: '1px solid var(--gray-90)' }}>
+      <section className="margin-y-100 padding-y-50" style={{ borderBottom: '2px solid var(--gray-90)' }}>
         <label className="font-weight-bold margin-y-25 container-text">
           Sök Målbana
           <div className="margin-y-50 flex align-items-center gray-90 padding-50 smooth focusable">
@@ -60,7 +69,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
               <option>Antal åtgärder (fallande)</option>
             </select>
           </label>
-          <label className='flex align-items-center gap-50 padding-25 button smooth transparent'>
+          <label className='flex align-items-center gap-50 padding-50 font-weight-bold button smooth transparent'>
             <span style={{ lineHeight: '1' }}>Filtrera</span>
             <div className='position-relative grid place-items-center'>
               <input type="checkbox" className="position-absolute width-100 height-100 hidden" />
