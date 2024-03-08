@@ -2,6 +2,7 @@
 
 import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector"
 import getOneRoadmap from "@/fetchers/getOneRoadmap"
+import formSubmitter from "@/functions/formSubmitter"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
 import { Data } from "@/lib/session"
 import { AccessControlled, GoalInput, RoadmapInput } from "@/types"
@@ -36,7 +37,7 @@ export default function RoadmapForm({
       form.namedItem("viewGroups")
     )
 
-    const metaRoadmapId = (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
+    const metaRoadmapId = currentRoadmap ? currentRoadmap.metaRoadmapId : (form.namedItem('parentRoadmap') as HTMLSelectElement)?.value
 
     let goals: GoalInput[] = [];
     if (currentFile) {
@@ -51,7 +52,7 @@ export default function RoadmapForm({
     }
 
     const inheritGoalIds: string[] = [];
-    (form.namedItem('inheritGoals') as RadioNodeList|null)?.forEach((checkbox) => {
+    (form.namedItem('inheritGoals') as RadioNodeList | null)?.forEach((checkbox) => {
       if ((checkbox as HTMLInputElement).checked) {
         inheritGoalIds.push((checkbox as HTMLInputElement).value)
       }
@@ -74,26 +75,7 @@ export default function RoadmapForm({
 
     const formJSON = JSON.stringify(formData)
 
-    fetch('/api/createRoadmap', {
-      // If a roadmap is being edited, use PUT instead of POST
-      method: currentRoadmap ? 'PUT' : 'POST',
-      body: formJSON,
-      headers: { 'Content-Type': 'application/json' },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json()
-      } else {
-        return res.json().then((data) => {
-          throw new Error(data.message)
-        })
-      }
-    }).then(data => {
-      setIsLoading(false)
-      window.location.href = `/roadmap/${data.id}`
-    }).catch((err) => {
-      setIsLoading(false)
-      alert(`Färdplan kunde inte skapas.\nAnledning: ${err.message}`)
-    })
+    formSubmitter('/api/createRoadmap', formJSON, currentRoadmap ? 'PUT' : 'POST', setIsLoading);
   }
 
   const [currentFile, setCurrentFile] = useState<File | null>(null)
@@ -112,7 +94,7 @@ export default function RoadmapForm({
     }
   }
 
-  let defaultParentRoadmap: string | undefined = useSearchParams().get('metaRoadmapId') || undefined
+  const defaultParentRoadmap: string | undefined = useSearchParams().get('metaRoadmapId') || undefined
   const [metaRoadmapId, setMetaId] = useState<string | undefined>(defaultParentRoadmap)
   const [targetVersion, setTargetVersion] = useState<number | null>(0)
   const [inheritableGoals, setInheritableGoals] = useState<Goal[]>([])
@@ -144,7 +126,7 @@ export default function RoadmapForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="action-form">
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
 
@@ -183,6 +165,7 @@ export default function RoadmapForm({
           </>
         }
 
+        {/* TODO: Add option to inherit some/all goals from previous versions of same roadmap */}
         {/* TODO: Add checkboxes for inheriting some/all goals from another roadmap with `inheritFromID` */}
         {/* TODO: Allow choosing which which goal to inherit from, might be different from target  */}
         {inheritableGoals.length > 0 && (
@@ -203,7 +186,7 @@ export default function RoadmapForm({
           </>
         )}
 
-        <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. Notera att det här skapar nya målbanor även om det redan finns några. </label>
+        <label htmlFor="csvUpload">Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> Notera att det här skapar nya målbanor även om det redan finns några. </label>
         <input type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />
         { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user has edit access to the roadmap
           (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
@@ -211,11 +194,27 @@ export default function RoadmapForm({
             <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
           </>
         }
-        <input
-          type="submit"
-          value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
-          disabled={isLoading}
-        />
+        {isLoading ? (
+          // Show spinner or loading indicator when isLoading is true
+          <div className="call-to-action-primary justify-contentcenter align-items-center gap-100" style={{ margin: "1em 0", position: "relative", display: "flex", width: "fit-content", border: "3px solid var(--accent-color-dark)", backgroundColor: "var(--accent-color-dark)" }}>
+            <input
+              className="call-to-action-primary"
+              type="submit"
+              value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
+              style={{ opacity: "0", height: "0", margin: "unset", cursor: "not-allowed", padding: ".5em 0" }}
+              disabled={isLoading}
+            />
+            <div className="loading" />
+          </div>
+        ) : (
+          // Show the button or input element when isLoading is false
+          <input
+            className="call-to-action-primary"
+            type="submit"
+            value={currentRoadmap ? 'Spara' : 'Skapa färdplan'}
+            disabled={isLoading}
+          />
+        )}
       </form>
     </>
   )
