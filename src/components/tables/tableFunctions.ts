@@ -1,4 +1,4 @@
-import { getLocalStorage, getSessionStorage, setLocalStorage } from "@/functions/localStorage";
+import { getLocalStorage, getSessionStorage, setLocalStorage, setSessionStorage } from "@/functions/localStorage";
 import { ViewMode } from "./goals";
 
 /** Retrieves the view mode for a roadmap from storage. */
@@ -24,7 +24,7 @@ export function getStoredViewMode(id?: string) {
 /** Stores the view mode for a roadmap in storage. */
 export function setStoredViewMode(viewMode: string, id?: string) {
   if (id) {
-    setLocalStorage(id + "_viewMode", viewMode)
+    setSessionStorage(id + "_viewMode", viewMode)
   };
   setLocalStorage("viewMode", viewMode);
 }
