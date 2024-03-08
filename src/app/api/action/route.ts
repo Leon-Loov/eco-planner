@@ -4,6 +4,7 @@ import prisma from "@/prismaClient";
 import { AccessControlled, AccessLevel, ClientError, ActionInput } from "@/types";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
+import pruneOrphans from "@/functions/pruneOrphans";
 
 /**
  * Handles POST requests to the action API
@@ -345,6 +346,8 @@ export async function PUT(request: NextRequest) {
         }
       }
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('action');
     // Return the new action's ID if successful
@@ -468,6 +471,8 @@ export async function DELETE(request: NextRequest) {
         }
       }
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('action');
     return createResponse(

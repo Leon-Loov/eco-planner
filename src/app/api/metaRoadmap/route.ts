@@ -5,6 +5,7 @@ import { RoadmapType } from "@prisma/client";
 import prisma from "@/prismaClient";
 import { revalidateTag } from "next/cache";
 import accessChecker from "@/lib/accessChecker";
+import pruneOrphans from "@/functions/pruneOrphans";
 
 /**
  * Handles POST requests to the metaRoadmap API
@@ -381,6 +382,8 @@ export async function PUT(request: NextRequest) {
       },
       select: { id: true }
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('roadmap');
     revalidateTag('metaRoadmap');
@@ -495,6 +498,8 @@ export async function DELETE(request: NextRequest) {
         id: true,
       }
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('roadmap');
     revalidateTag('metaRoadmap');

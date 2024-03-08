@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
 import dataSeriesPrep from "./dataSeriesPrep";
+import pruneOrphans from "@/functions/pruneOrphans";
 
 /**
  * Handles POST requests to the goal API
@@ -328,6 +329,8 @@ export async function PUT(request: NextRequest) {
         }
       }
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('goal');
     // Return the edited goal's ID if successful
@@ -445,6 +448,8 @@ export async function DELETE(request: NextRequest) {
         }
       }
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('goal');
     return createResponse(

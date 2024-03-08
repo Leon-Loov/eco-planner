@@ -7,6 +7,7 @@ import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
 import goalInputFromGoalArray from "@/functions/goalInputFromGoalArray";
 import getOneGoal from "@/fetchers/getOneGoal";
+import pruneOrphans from "@/functions/pruneOrphans";
 
 /**
  * Handles POST requests to the roadmap API
@@ -348,6 +349,8 @@ export async function PUT(request: NextRequest) {
       },
       select: { id: true },
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('roadmap');
     // Return the new roadmap's ID if successful
@@ -477,6 +480,8 @@ export async function DELETE(request: NextRequest) {
         metaRoadmapId: true,
       }
     });
+    // Prune any orphaned links and comments
+    await pruneOrphans();
     // Invalidate old cache
     revalidateTag('roadmap');
     return createResponse(
