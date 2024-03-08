@@ -3,7 +3,10 @@ import dataFieldArray from "./lib/dataSeriesDataFieldNames.json";
 
 /** An object that implements the AccessControlled interface can be checked with the accessChecker function. */
 export interface AccessControlled {
-  author: { id: string, username: string },
+  // Author is usually a single object, but allow for an array in case we need to check if the user is
+  // an author of any parent in an entry's ancestry
+  // For example, if a user is an author of a roadmap, they should be able to delete any goals in it, even if they didn't create them
+  author: { id: string, username: string } | { id: string, username: string }[],
   editors: { id: string, username: string }[],
   viewers: { id: string, username: string }[],
   editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
@@ -15,8 +18,43 @@ export enum AccessLevel {
   None = "",
   View = "VIEW",
   Edit = "EDIT",
+  Author = "AUTHOR",
   Admin = "ADMIN",
 };
+
+export enum ClientError {
+  AccessDenied = "You either don't have access to this entry or are trying to edit an entry that doesn't exist",
+  BadSession = "Bad session cookie; you have been logged out. Please log in and try again.",
+  IllegalParent = "You are trying to connect this object to a parent you don't have access to or that doesn't exist",
+  StaleData = "Stale data; please refresh and try again",
+};
+
+/**
+ * A type used by the breadcrumbs component to display the names of objects rather than their UUIDs.
+ */
+export type GenericEntry = (
+  {
+    // Action and MetaRoadmap
+    id: string,
+    name: string,
+    indicatorParameter?: never,
+    metaRoadmap?: never,
+  } |
+  {
+    // Goal
+    id: string,
+    name?: string | null,
+    indicatorParameter: string,
+    metaRoadmap?: never,
+  } |
+  {
+    // Roadmap
+    id: string,
+    name?: never,
+    indicatorParameter?: never,
+    metaRoadmap: { name: string },
+  }
+);
 
 /** The format of the data needed to create new roadmap metadata. */
 export type MetaRoadmapInput = Omit<

@@ -152,7 +152,7 @@ export default function DataSeriesScaler({ dataSeriesId }: { dataSeriesId: strin
 
   return (
     <>
-      <button type="button" onClick={openModal}>Skala alla värden i serien</button>
+      <button type="button" className="call-to-action-primary margin-y-200" style={{width: 'fit-content'}} onClick={openModal}>Skala alla värden i serien</button>
       <dialog ref={modal} aria-modal>
         <div className={`display-flex flex-direction-row-reverse align-items-center justify-content-space-between`}>
           <button disabled={isLoading} onClick={closeModal} autoFocus aria-label="Close" >

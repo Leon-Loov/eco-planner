@@ -35,7 +35,11 @@ const getCachedMetaRoadmap = unstable_cache(
             _count: { select: { goals: true } },
           }
         },
-        comments: true,
+        comments: {
+          include: {
+            author: { select: { id: true, username: true } },
+          },
+        },
         links: true,
         author: { select: { id: true, username: true } },
         editors: { select: { id: true, username: true } },
@@ -59,7 +63,11 @@ const getCachedMetaRoadmap = unstable_cache(
                 _count: { select: { goals: true } },
               }
             },
-            comments: true,
+            comments: {
+              include: {
+                author: { select: { id: true, username: true } },
+              },
+            },
             links: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -109,7 +117,11 @@ const getCachedMetaRoadmap = unstable_cache(
                 _count: { select: { goals: true } },
               },
             },
-            comments: true,
+            comments: {
+              include: {
+                author: { select: { id: true, username: true } },
+              },
+            },
             links: true,
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
@@ -146,7 +158,11 @@ const getCachedMetaRoadmap = unstable_cache(
               _count: { select: { goals: true } },
             },
           },
-          comments: true,
+          comments: {
+            include: {
+              author: { select: { id: true, username: true } },
+            },
+          },
           links: true,
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },

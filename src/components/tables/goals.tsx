@@ -5,8 +5,15 @@ import { PrimaryLink } from "../generic/links/links"
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
-import { useGlobalContext } from '@/app/context/store'
 import LinkTree from './goalTables/linkTree'
+import { useEffect, useState } from "react"
+import { getStoredViewMode } from "./tableFunctions"
+
+/** Enum for the different view modes for the goal table. */
+export enum ViewMode {
+  Table = "TABLE",
+  Tree = "TREE",
+};
 
 export default function Goals({
   title,
@@ -25,25 +32,35 @@ export default function Goals({
   },
   accessLevel?: AccessLevel
 }) {
-  const { tableType } = useGlobalContext();
+  const [viewMode, setViewMode] = useState<ViewMode | "">("")
+
+  useEffect(() => {
+    setViewMode(getStoredViewMode(roadmap.id))
+  }, [roadmap.id]);
+
   return (
     <>
       <label htmlFor="goalTable" className="display-flex justify-content-space-between align-items-center flex-wrap-wrap">
         <h2>{title}</h2>
         <nav className='display-flex align-items-center gap-100'>
-          <TableSelector />
+          <TableSelector id={roadmap.id} current={viewMode} setter={setViewMode} />
           { // Only show the button if the user has edit access to the roadmap
-            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Admin) &&
+            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
             <PrimaryLink href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</PrimaryLink>
           }
         </nav>
       </label>
-      {tableType == 'table' ? (
+      {viewMode == ViewMode.Table && (
         <GoalTable roadmap={roadmap} />
-      ) : null}
-      {tableType == 'listTree' ? (
+      )}
+      {viewMode == ViewMode.Tree && (
         <LinkTree roadmap={roadmap} />
-      ) : null}
+      )}
+      {(viewMode != ViewMode.Table && viewMode != ViewMode.Tree) && (
+        <p>
+          Laddar vyn... Om vyn inte laddar efter någon sekund, testa att byta vy med knapparna uppe till höger.
+        </p>
+      )}
     </>
   )
 }

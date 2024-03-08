@@ -148,6 +148,11 @@ const getCachedGoal = unstable_cache(
               },
             },
             links: true,
+            comments: {
+              include: {
+                author: { select: { id: true, username: true } },
+              },
+            },
             author: { select: { id: true, username: true } },
           }
         });
@@ -201,6 +206,11 @@ const getCachedGoal = unstable_cache(
             },
           },
           links: true,
+          comments: {
+            include: {
+              author: { select: { id: true, username: true } },
+            },
+          },
           author: { select: { id: true, username: true } },
         }
       });

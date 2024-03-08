@@ -1,6 +1,7 @@
 'use client'
 
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
+import formSubmitter from "@/functions/formSubmitter"
 import { Action } from "@prisma/client"
 
 export default function ActionForm({
@@ -40,24 +41,7 @@ export default function ActionForm({
       timestamp,
     })
 
-    fetch('/api/createAction', {
-      // PUT if editing, POST if creating
-      method: currentAction ? 'PUT' : 'POST',
-      body: formJSON,
-      headers: { 'Content-Type': 'application/json' },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json()
-      } else {
-        return res.json().then((data) => {
-          throw new Error(data.message)
-        })
-      }
-    }).then(data => {
-      window.location.href = `/roadmap/${roadmapId}/goal/${goalId}`
-    }).catch((err) => {
-      alert(`Åtgärd kunde inte skapas.\nAnledning: ${err.message}`)
-    })
+    formSubmitter('/api/action', formJSON, currentAction ? 'PUT' : 'POST');
   }
 
   const timestamp = Date.now();

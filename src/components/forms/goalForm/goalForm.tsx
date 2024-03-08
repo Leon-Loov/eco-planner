@@ -4,6 +4,7 @@ import parameterOptions from "@/lib/LEAPList.json" with { type: "json" }
 import { dataSeriesDataFieldNames } from "@/types"
 import { DataSeries, Goal } from "@prisma/client"
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
+import formSubmitter from "@/functions/formSubmitter"
 
 export default function GoalForm({
   roadmapId,
@@ -42,24 +43,7 @@ export default function GoalForm({
       timestamp,
     })
 
-    fetch('/api/createGoal', {
-      // If a goal is being edited, use PUT instead of POST
-      method: currentGoal ? 'PUT' : 'POST',
-      body: formJSON,
-      headers: { 'Content-Type': 'application/json' },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json()
-      } else {
-        return res.json().then((data) => {
-          throw new Error(data.message)
-        })
-      }
-    }).then(data => {
-      window.location.href = `/roadmap/${roadmapId}/goal/${data.id}`
-    }).catch((err) => {
-      alert(`Målbana kunde inte skapas.\nAnledning: ${err.message}`)
-    })
+    formSubmitter('/api/goal', formJSON, currentGoal ? 'PUT' : 'POST');
   }
 
   // The amount of years in the data series
@@ -79,9 +63,9 @@ export default function GoalForm({
   const timestamp = Date.now();
 
   // If there is a data series, convert it to an array of numbers to use as a default value for the form
-  let dataArray: (number | null)[] = []
+  const dataArray: (number | null)[] = []
   if (currentGoal?.dataSeries) {
-    for (let i in currentGoal.dataSeries) {
+    for (const i in currentGoal.dataSeries) {
       // All keys in dataSeries containing numbers are part of the data series itself and should be fine to push to the array
       if (i.match(/[0-9]+/)) {
         // This line *should* start complaining if we add any keys to DataSeries that are not part of the data series, unless the value is a number

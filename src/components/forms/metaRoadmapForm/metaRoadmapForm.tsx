@@ -7,6 +7,7 @@ import { MetaRoadmap, RoadmapType } from "@prisma/client";
 import { useState } from "react";
 import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector";
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
+import formSubmitter from "@/functions/formSubmitter";
 
 export default function MetaRoadmapForm({
   user,
@@ -39,7 +40,7 @@ export default function MetaRoadmapForm({
       form.namedItem("viewGroups")
     );
 
-    let formData: MetaRoadmapInput & { id?: string, timestamp?: number } = {
+    const formData: MetaRoadmapInput & { id?: string, timestamp?: number } = {
       name: (form.namedItem("metaRoadmapName") as HTMLInputElement)?.value,
       description: (form.namedItem("description") as HTMLTextAreaElement)?.value,
       type: ((form.namedItem("type") as HTMLSelectElement)?.value as RoadmapType) || null,
@@ -56,28 +57,7 @@ export default function MetaRoadmapForm({
 
     const formJSON = JSON.stringify(formData);
 
-    fetch('/api/metaRoadmap', {
-      // If a metaRoadmap is being edited, use PUT instead of POST
-      method: currentRoadmap ? 'PUT' : 'POST',
-      body: formJSON,
-      headers: { 'Content-Type': 'application/json' },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json()
-      } else {
-        return res.json().then((data) => {
-          throw new Error(data.message)
-        })
-      }
-    }).then(data => {
-      // TODO: Update this when/if changing folder structure
-      setIsLoading(false)
-      alert(`Färdplanen har skapats! \n Du kommer nu att skickas vidare till färdplanen för att lägga till målbanor och andra detaljer.`)
-      window.location.href = `/roadmap/createRoadmap?metaRoadmapId=${data.id}`
-    }).catch((err) => {
-      setIsLoading(false)
-      alert(`Färdplan kunde inte skapas.\nAnledning: ${err.message}`)
-    });
+    formSubmitter('/api/metaRoadmap', formJSON, currentRoadmap ? 'PUT' : 'POST', setIsLoading);
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(false)

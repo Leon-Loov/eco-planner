@@ -40,7 +40,7 @@ export default async function DashboardBase({ actor }: { actor: string }) {
   }
 
   return <>
-    <RoadmapTable title={actor} roadmaps={roadmaps} user={session.user} />
+    <RoadmapTable roadmaps={roadmaps} user={session.user} />
     <GoalTable goals={goals} />
     <ActionTable actions={actions} />
   </>

@@ -2,6 +2,8 @@ import styles from '../tables.module.css' with { type: "css" };
 import { DataSeries, Goal } from "@prisma/client";
 import Image from 'next/image';
 import goalsToTree from '@/functions/goalsToTree';
+import { SyntheticEvent } from 'react';
+import { getSessionStorage, setSessionStorage } from '@/functions/localStorage';
 
 interface LinkTreeCommonProps { }
 
@@ -46,7 +48,28 @@ export default function LinkTree({
 
   if (!goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
 
-  const NestedKeysRenderer = ({ data }: { data: any }) => {
+  const openCategories = getSessionStorage(roadmap?.id || "") || [];
+
+  // TODO: Make sure keys are unique to avoid things like luftfart/inrikes and sjöfart/inrikes sharing the same open state in localStorage
+  const handleToggle = (e: SyntheticEvent<HTMLDetailsElement, Event>, key: string) => {
+    if (!roadmap) return;
+    let currentStorage: string[] = getSessionStorage(roadmap.id);
+    if (!(currentStorage instanceof Array)) {
+      setSessionStorage(roadmap.id, []);
+      currentStorage = [];
+    }
+
+    if (e.currentTarget.open) {
+      // Don't add the same category twice
+      if (currentStorage.includes(key))
+        return;
+      setSessionStorage(roadmap.id, [...currentStorage, key]);
+    } else {
+      setSessionStorage(roadmap.id, currentStorage.filter(cat => cat != key));
+    }
+  };
+
+  const NestedKeysRenderer = ({ data, previousKeys = "" }: { data: any, previousKeys?: string }) => {
     return (
       <ul>
         {Object.keys(data).map((key) => (
@@ -62,10 +85,10 @@ export default function LinkTree({
                   </span>
                 </a>
               ) : (
-                <details className={styles.details}>
+                <details className={styles.details} open={openCategories?.includes(previousKeys + "\\" + key)} onToggle={(e) => handleToggle(e, previousKeys + "\\" + key)}>
                   <summary>{key}</summary>
                   {Object.keys(data[key]).length > 0 && (
-                    <NestedKeysRenderer data={data[key]} />
+                    <NestedKeysRenderer data={data[key]} previousKeys={previousKeys + "\\" + key} />
                   )}
                 </details>
               )}

@@ -105,6 +105,11 @@ const getCachedRoadmap = unstable_cache(
                 author: { select: { id: true, username: true } },
               }
             },
+            comments: {
+              include: {
+                author: { select: { id: true, username: true } },
+              },
+            },
             author: { select: { id: true, username: true } },
             editors: { select: { id: true, username: true } },
             viewers: { select: { id: true, username: true } },
@@ -138,6 +143,11 @@ const getCachedRoadmap = unstable_cache(
               dataSeries: true,
               author: { select: { id: true, username: true } },
             }
+          },
+          comments: {
+            include: {
+              author: { select: { id: true, username: true } },
+            },
           },
           author: { select: { id: true, username: true } },
           editors: { select: { id: true, username: true } },

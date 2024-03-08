@@ -95,6 +95,11 @@ const getCachedAction = unstable_cache(
           include: {
             notes: true,
             links: true,
+            comments: {
+              include: {
+                author: { select: { id: true, username: true } },
+              },
+            },
             goal: {
               select: {
                 id: true,
@@ -134,6 +139,11 @@ const getCachedAction = unstable_cache(
         include: {
           notes: true,
           links: true,
+          comments: {
+            include: {
+              author: { select: { id: true, username: true } },
+            },
+          },
           goal: {
             select: {
               id: true,

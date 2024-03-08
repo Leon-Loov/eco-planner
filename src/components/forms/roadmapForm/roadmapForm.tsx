@@ -75,7 +75,7 @@ export default function RoadmapForm({
 
     const formJSON = JSON.stringify(formData)
 
-    formSubmitter('/api/createRoadmap', formJSON, currentRoadmap ? 'PUT' : 'POST', setIsLoading);
+    formSubmitter('/api/roadmap', formJSON, currentRoadmap ? 'PUT' : 'POST', setIsLoading);
   }
 
   const [currentFile, setCurrentFile] = useState<File | null>(null)

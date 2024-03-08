@@ -1,21 +1,26 @@
-"use client";
-
-import { useGlobalContext } from "@/app/context/store";
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import RadioImage from './radioImage';
+import { ViewMode } from '../goals';
+import { setStoredViewMode } from '../tableFunctions';
 
-export default function TableSelector() {
-  const { tableType, setTableType } = useGlobalContext();
+export default function TableSelector({ id, current, setter }: { id: string, current: ViewMode | "", setter: Dispatch<SetStateAction<ViewMode | "">> }) {
 
   const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTableType(event.target.value);
+    setStoredViewMode(event.target.value, id);
+    if (Object.values(ViewMode).includes(event.target.value as ViewMode)) {
+      setter(event.target.value as ViewMode);
+    }
+    else {
+      console.log("Invalid view mode")
+      setter("");
+    }
   };
 
   // Set the selectedOption as the context value
   return (
     <>
-      <RadioImage value="listTree" src="/icons/listTree.svg" name="table" checked={tableType === 'listTree'} onChange={handleRadioChange} />
-      <RadioImage value="table" src="/icons/table.svg" name="table" checked={tableType === 'table'} onChange={handleRadioChange} />
+      <RadioImage value={ViewMode.Tree} src="/icons/listTree.svg" name="table" checked={current == ViewMode.Tree} onChange={handleRadioChange} />
+      <RadioImage value={ViewMode.Table} src="/icons/table.svg" name="table" checked={current == ViewMode.Table} onChange={handleRadioChange} />
     </>
   );
 }
