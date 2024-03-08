@@ -41,7 +41,7 @@ export default async function Page() {
       }
     }
   })
-
+  
   return <>
     <div className="rounded width-100 margin-y-100 position-relative overflow-hidden" style={{height: '350px'}}>
       <AttributedImage src="/images/solarpanels.jpg" alt="" >
@@ -50,7 +50,10 @@ export default async function Page() {
             <h1 className="margin-y-25">Färdplaner</h1>
             <p className="margin-0">Photo by <a className="color-purewhite" href="https://unsplash.com/@markusspiske?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Spiske</a> on <a className="color-purewhite" href="https://unsplash.com/photos/white-and-blue-solar-panels-pwFr_1SUXRo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></p>
           </div>
-          <a href="/metaRoadmap/createMetaRoadmap" className="button purewhite round block" >Skapa ny färdplan</a>
+          { // Link to create roadmap form if logged in
+            session.user &&
+            <a href="/metaRoadmap/createMetaRoadmap" className="button purewhite round block" >Skapa ny färdplan</a>
+          }
         </div>
       </AttributedImage>
     </div>

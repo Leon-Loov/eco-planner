@@ -680,3 +680,27 @@ input[type="color"]::-moz-color-swatch { /* TODO: :where() for pseudo elements n
 ) {
     transform: scale(.95);
 }
+
+/* Select */
+:where(select) {
+    padding: .5rem 2rem .5rem .5rem;
+    border: none;
+    border-radius: 3px;
+
+    background: url('/icons/chevronDown.svg')
+                no-repeat
+                95% center          
+                #e0e6eb  
+    ;
+
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+
+}
+
+:where(select):focus {
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
+}
