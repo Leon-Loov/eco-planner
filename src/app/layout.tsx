@@ -2,6 +2,7 @@ import '@/styles/global.css'
 import { Header } from '@/components/generic/header/header'
 import Breadcrumb from '@/components/breadcrumbs/breadcrumb2';
 import getNames from '@/fetchers/getNames';
+import { GenericEntry } from '@/types';
 
 export default async function RootLayout({
   children,
@@ -9,37 +10,14 @@ export default async function RootLayout({
   children: React.ReactNode,
 }) {
   // Get names and ids of all roadmaps, goals and actions
-  let metaRoadmaps = await getNames()
-  let roadmaps = metaRoadmaps.flatMap(metaRoadmap => metaRoadmap.roadmapVersions)
-  let goals = roadmaps.flatMap(roadmap => roadmap.goals)
-  let actions = goals.flatMap(goal => goal.actions)
 
-  type GenericObject = (
-    {
-      // Action or MetaRoadmap
-      id: string,
-      name: string,
-      indicatorParameter: never,
-      metaRoadmap: never,
-    } |
-    {
-      // Goal
-      id: string,
-      name?: string | null,
-      indicatorParameter: string,
-      metaRoadmap: never,
-    } |
-    {
-      // Roadmap
-      id: string,
-      name: never,
-      indicatorParameter: never,
-      metaRoadmap: { name: string },
-    }
-  )
+  const metaRoadmaps = await getNames()
+  const roadmaps = metaRoadmaps.flatMap(metaRoadmap => metaRoadmap.roadmapVersions)
+  const goals = roadmaps.flatMap(roadmap => roadmap.goals)
+  const actions = goals.flatMap(goal => goal.actions)
 
   // Filter out nulls
-  let objects = [...metaRoadmaps, ...roadmaps, ...goals, ...actions].filter(object => object != null) as GenericObject[]
+  const objects = [...metaRoadmaps, ...roadmaps, ...goals, ...actions].filter(object => object != null) as GenericEntry[]
 
   return (
     <html lang="sv">

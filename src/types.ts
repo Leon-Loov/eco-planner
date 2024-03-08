@@ -29,6 +29,33 @@ export enum ClientError {
   StaleData = "Stale data; please refresh and try again",
 };
 
+/**
+ * A type used by the breadcrumbs component to display the names of objects rather than their UUIDs.
+ */
+export type GenericEntry = (
+  {
+    // Action and MetaRoadmap
+    id: string,
+    name: string,
+    indicatorParameter?: never,
+    metaRoadmap?: never,
+  } |
+  {
+    // Goal
+    id: string,
+    name?: string | null,
+    indicatorParameter: string,
+    metaRoadmap?: never,
+  } |
+  {
+    // Roadmap
+    id: string,
+    name?: never,
+    indicatorParameter?: never,
+    metaRoadmap: { name: string },
+  }
+);
+
 /** The format of the data needed to create new roadmap metadata. */
 export type MetaRoadmapInput = Omit<
   Prisma.MetaRoadmapCreateInput,
