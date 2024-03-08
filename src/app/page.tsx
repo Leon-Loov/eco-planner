@@ -6,6 +6,7 @@ import AttributedImage from "@/components/generic/images/attributedImage";
 import { RoadmapType } from "@prisma/client";
 import getMetaRoadmaps from "@/fetchers/getMetaRoadmaps";
 import Image from "next/image";
+import styles from "./page.module.css" with { type: "css" };
 
 export default async function Page() {
   const [session, metaRoadmaps] = await Promise.all([
@@ -41,7 +42,7 @@ export default async function Page() {
       }
     }
   })
-  
+
   return <>
     <div className="rounded width-100 margin-y-100 position-relative overflow-hidden" style={{height: '350px'}}>
       <AttributedImage src="/images/solarpanels.jpg" alt="" >
@@ -59,27 +60,27 @@ export default async function Page() {
     </div>
     <section>
       <section className="margin-y-100 padding-y-100">
-        <label className=" font-weight-bold margin-y-25 container-text">
+        <label className="font-weight-bold margin-y-25 container-text">
           Sök färdplan
             <div className="margin-y-50 flex align-items-center gray-90 padding-50 smooth focusable">
               <Image src='/icons/search.svg' alt="" width={24} height={24}/>
               <input type="search" className="padding-0 margin-x-50" />
             </div>
         </label>
-        <div className="flex gap-100 align-items-flex-end justify-content-space-between">
-          <label>
+        <div className="flex gap-100 align-items-center justify-content-space-between">
+          <label className="margin-y-100 font-weight-bold">
             Sortera på:
-            <select className="margin-x-25">
+            <select className="font-weight-bold margin-y-50 block">
               <option>Namn (A-Ö)</option>
               <option>Namn (Ö-A)</option>
               <option>Antal målbanor (stigande)</option>
               <option>Antal målbanor (fallande)</option>
             </select>
           </label>
-          <label className="flex gap-50">
+          <label className='flex align-items-center gap-50 padding-25 button smooth transparent'>
             <span>Filtrera</span>
-            <div> 
-              <input type="checkbox"/>
+            <div className='position-relative grid place-items-center'> 
+              <input type="checkbox" className="position-absolute width-100 height-100 hidden"/>
               <Image src="/icons/filter.svg" alt="" width="24" height="24" />
             </div>
           </label>

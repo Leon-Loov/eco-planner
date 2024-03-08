@@ -438,6 +438,10 @@
     width: 100%;
 }
 
+.height-100 {
+    height: 100%;
+}
+
 .focusable:focus-within {
     outline: 2px solid var(--seagreen);
     box-shadow: 0 0 .5rem -3px var(--seagreen);
@@ -447,6 +451,14 @@
 .focusable input {
     outline: none;
     box-shadow: none;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 /* Forms */
