@@ -21,7 +21,7 @@
   padding: .25rem;
   margin: 1rem;
   border-radius: 9999px;
-  z-index: 9999;
+  z-index: 999;
 }
   
 .menuToggle {
@@ -50,10 +50,11 @@
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  z-index: 9999;
+  z-index: 998;
   background-color: rgba(255, 255, 255, 0.9);
   @media (max-width: 1250px) {
     height: auto;
+    border-right: unset;
     border-bottom: 1px solid var(--gray-90);
   }
 }

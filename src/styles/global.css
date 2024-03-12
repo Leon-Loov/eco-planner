@@ -32,16 +32,6 @@ p {
   display: none;
 }
 
-/* Lists */
-
-ul {
-  padding-inline-start: 0;
-}
-
-li ul {
-  padding-left: 40px;
-  margin-left: 5px;
-}
 
 /* Temporary while rewriting */
 

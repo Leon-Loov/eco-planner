@@ -8,13 +8,18 @@
     line-height: 1.5;
     transition: background-color .2s;
 }
-  
+
 .cancel {
     background-color: transparent;
 }
   
 .cancel:hover {
     background-color: var(--gray-90);
+}
+
+.cancel:disabled:hover {
+    box-shadow: none;
+    background-color: transparent;
 }
 
 .comment {
@@ -42,7 +47,7 @@
     padding: .25rem 0;
 }
   
-.textarea:focus {
+.textarea:focus, .textarea:not(:empty) {
     border-color: black;
 }
   
@@ -57,11 +62,13 @@
     background-color: transparent;
     border: none;
     padding: 0;
-    font-weight: bold;
     color: var(--gray-50);
+    font-weight: 600;
 }
 
 .readMoreButton:hover {
+    box-shadow: none;
+    background-color: transparent;
     text-decoration: underline;
     cursor: pointer;
 }
