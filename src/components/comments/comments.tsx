@@ -77,7 +77,7 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
         {comments?.map((comment) => (
           <div key={comment.id}>
             <p className="flex align-items-center gap-50" style={{marginBottom: '0'}}>
-              <b>{comment.author.username}</b>
+              <a className={styles.commentAuthor} href={`/user/${comment.author.username}`}>{comment.author.username}</a>
               <span style={{color: 'gray', fontWeight: '300', fontSize: '.75rem'}}>{`${timeSince(new Date(comment.createdAt))} sedan`}</span>
             </p>
             <p className="margin-0" style={{wordBreak: 'break-word',}}>

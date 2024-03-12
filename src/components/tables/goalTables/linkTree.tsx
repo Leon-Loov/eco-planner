@@ -71,7 +71,7 @@ export default function LinkTree({
 
   const NestedKeysRenderer = ({ data, previousKeys = "" }: { data: any, previousKeys?: string }) => {
     return (
-      <ul>
+      <ul className={styles.list}>
         {Object.keys(data).map((key) => (
           <li key={key}>
             { // If the current object is a goal (has an id), render a link to the goal

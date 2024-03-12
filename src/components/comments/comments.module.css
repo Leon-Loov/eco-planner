@@ -57,6 +57,12 @@
     cursor: text;
 }
 
+.commentAuthor {
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
 .readMoreButton {
     display: block;
     background-color: transparent;

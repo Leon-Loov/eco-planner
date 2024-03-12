@@ -5,7 +5,6 @@ import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
 import Goals from "@/components/tables/goals";
-import Link from "next/link";
 import Image from "next/image";
 import Comments from "@/components/comments/comments";
 import { AccessLevel } from "@/types";
