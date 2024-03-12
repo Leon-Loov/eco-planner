@@ -1,6 +1,7 @@
 import WrappedChart from "@/lib/chartWrapper";
 import { actionGraphSorter } from "@/lib/sorters";
 import { Action } from "@prisma/client";
+import styles from './graphs.module.css'
 
 export default function ActionGraph({
   actions,
@@ -88,16 +89,14 @@ export default function ActionGraph({
   }
 
   return (actions.length > 0 &&
-    <div>
-      <div style={{ height: `${height}` }}>
-        <WrappedChart
-          options={chartOptions}
-          series={series}
-          type="rangeBar"
-          width="100%"
-          height="100%"
-        />
-      </div>
+    <div className={styles.graphWrapper} style={{ height: `${height}` }}>
+      <WrappedChart
+        options={chartOptions}
+        series={series}
+        type="rangeBar"
+        width="100%"
+        height="100%"
+      />
     </div>
   );
 }

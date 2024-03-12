@@ -102,8 +102,14 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <GraphGraph goal={goal} nationalGoal={parentGoal} />
         <CombinedGraph roadmap={roadmap} goal={goal} />
       </section>
+      <section>
+        <h2 className="flex align-items-center justify-content-space-between">
+          Åtgärder
+          <Link href='/' className="button color-purewhite pureblack round">Skapa ny åtgärd</Link>
+        </h2>
         <ActionGraph actions={goal.actions} />
-      <Actions goal={goal} accessLevel={accessLevel} />
+        <Actions goal={goal} accessLevel={accessLevel} />
+      </section>
       <Comments comments={goal.comments} objectId={goal.id} />
     </>
   )

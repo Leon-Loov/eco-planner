@@ -67,19 +67,7 @@ export default function ActionTable({
   );
 
   return <>
-    <div className={`${styles.tableHeader} display-flex align-items-center justify-content-space-between`}>
-      <h2>Åtgärder</h2>
-      <nav className='display-flex align-items-center gap-100'>
-        { // Only show the button if the user has edit access to the goal and a goal is provided
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) && goal &&
-          <Link className={`${styles.newRoadmap} display-flex gap-50`} href={`/roadmap/${goal.roadmapId}/goal/${goal.id}/action/createAction`}>
-            Skapa ny åtgärd
-            <Image src="/icons/addToTable.svg" width={24} height={24} alt="Add new action"></Image>
-          </Link>
-        }
-      </nav>
-    </div>
-    <div className={styles.tableWrapper}>
+    <div className={`${styles.tableWrapper} smooth margin-y-200`}>
       <table id='action-table' className={styles.table}>
         <thead>
           <tr>
