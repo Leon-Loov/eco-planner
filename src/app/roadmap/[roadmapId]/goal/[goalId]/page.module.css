@@ -1,5 +1,6 @@
 .graphLayout {
-  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+  display: grid;
+  grid-template-columns: 60% 1fr;
   gap: 3rem;
   margin: 3rem 0;
 }
