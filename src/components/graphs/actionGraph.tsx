@@ -34,6 +34,9 @@ export default function ActionGraph({
   let chartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: 'rangeBar',
+      zoom: {
+        enabled: false,
+      },
       animations: {
         enabled: false,
         dynamicAnimation: {
