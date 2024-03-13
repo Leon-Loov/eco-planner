@@ -68,45 +68,30 @@ export default function ActionTable({
 
   return <>
     <div className={`${styles.tableWrapper} smooth margin-y-200`}>
-      <table id='action-table' className={styles.table}>
-        <thead>
-          <tr>
-            <th>Namn</th>
-            <th>Beskrivning</th>
-            <th>Kostnadseffektivitet</th>
-            <th>Förväntat utfall</th>
-            <th>Relevanta aktörer</th>
-            { // Only show project manager if the user has edit access to the goal
-              (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-              <th>Projektansvarig</th>
-            }
-          </tr>
-        </thead>
-        <tbody>
-          {actions.map(action => (
-            <tr key={action.id}>
-              <td className='display-flex gap-50 align-items-center'>
-                { // Only show the edit link if the user has edit access to the goal
-                  // Should technically be if the user has edit access to the action, but that could build up a lot of checks
-                  (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-                  <Link href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}/editAction`}>
-                    <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} />
-                  </Link>
-                }
-                <a href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}`}>{action.name}</a>
-              </td>
-              <td>{action.description}</td>
-              <td>{action.costEfficiency}</td>
-              <td>{action.expectedOutcome}</td>
-              <td>{action.relevantActors}</td>
-              { // Only show project manager if the user has edit access to the goal
-                (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-                <td>{action.projectManager}</td>
-              }
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      { /* Only show project manager if the user has edit access to the goal
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+          <th>Projektansvarig</th>
+      */}
+      { /* Only show the edit link if the user has edit access to the goal
+        // Should technically be if the user has edit access to the action, but that could build up a lot of checks
+        (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+        <Link href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}/editAction`}>
+          <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit action: ${action.name}`} />
+        </Link>
+      */}
+
+      {actions.map(action => (
+        <div key={action.id}>
+          <div className='display-flex gap-50 align-items-center'>
+            <a href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}`}>{action.name}</a>
+          </div>
+          <div>{action.description}</div>
+          <span>{action.costEfficiency}</span>
+          <span>{action.expectedOutcome}</span>
+          <span>{action.relevantActors}</span>
+        </div>
+      ))}
+
     </div>
   </>
 
