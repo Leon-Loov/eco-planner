@@ -6,6 +6,7 @@ import { Action, Goal } from "@prisma/client"
 import { AccessLevel } from '@/types'
 import Image from "next/image";
 import Link from 'next/link';
+import { RoadmapActionButton } from '../tableActions/roadmapActions';
 
 interface ActionTableCommonProps {
   accessLevel?: AccessLevel,
@@ -67,7 +68,6 @@ export default function ActionTable({
   );
 
   return <>
-    <div className={`${styles.tableWrapper} smooth margin-y-200`}>
       { /* Only show project manager if the user has edit access to the goal
           (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
           <th>Projektansvarig</th>
@@ -81,18 +81,24 @@ export default function ActionTable({
       */}
 
       {actions.map(action => (
-        <div key={action.id}>
-          <div className='display-flex gap-50 align-items-center'>
-            <a href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}`}>{action.name}</a>
-          </div>
-          <div>{action.description}</div>
-          <span>{action.costEfficiency}</span>
-          <span>{action.expectedOutcome}</span>
-          <span>{action.relevantActors}</span>
+        <div className='flex gap-100 justify-content-space-between align-items-center' key={action.id}>
+          <a href={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}`} className={`${styles.roadmapLink} flex-grow-100`}>
+            <span className={styles.linkTitle}>{action.name}</span>
+            <p className={styles.actionLinkInfo}>{action.description}</p>
+          </a>
+          <RoadmapActionButton 
+            id={action.id}
+            tableName={action.name}
+            editHref={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}/editAction`} 
+          />
+          {/*
+            <span>{action.costEfficiency}</span>
+            <span>{action.expectedOutcome}</span>
+            <span>{action.relevantActors}</span>
+          */}
         </div>
       ))}
 
-    </div>
   </>
 
 }

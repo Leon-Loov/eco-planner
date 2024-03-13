@@ -98,7 +98,9 @@ export default async function Page() {
         </label>
       </section>
     </section>
-    <RoadmapTable user={session.user} roadmaps={nationalRoadmaps} />
-    <RoadmapTable user={session.user} roadmaps={regionalRoadmaps} />
+    <section>
+      <RoadmapTable user={session.user} roadmaps={nationalRoadmaps} />
+      <RoadmapTable user={session.user} roadmaps={regionalRoadmaps} />
+    </section>
   </>
 }

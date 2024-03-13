@@ -46,7 +46,7 @@ export default function RoadmapTable({
 
   return <>
     {roadmaps.length ?
-      <div>
+      <>
         {roadmaps.map(roadmap => (
           <div className='flex gap-100 justify-content-space-between align-items-center' key={roadmap.id}>
             <a href={`/roadmap/${roadmap.id}`} className={`${styles.roadmapLink} flex-grow-100`}>
@@ -62,7 +62,7 @@ export default function RoadmapTable({
             <span>v.{roadmap.version}</span> {/* TODO: Turn into link */}
           </div>
         ))}
-      </div>
+      </>
       : null } {/*<p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>*/}
   </>
 }

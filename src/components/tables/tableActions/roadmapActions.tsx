@@ -5,6 +5,9 @@ import styles from './tableActions.module.css' with { type: "css" }
 import Link from "next/link";
 import { useRef } from "react";
 
+// TODO: This acts as a general purpose button for roadmaps, goals and actions. 
+// Update the name of the component to reflect this
+
 export function RoadmapActionButton(
   {
     addGoalHref,
@@ -12,7 +15,7 @@ export function RoadmapActionButton(
     id,
     tableName,
   }: {
-    addGoalHref: string,
+    addGoalHref?: string,
     editHref: string,
     id: string,
     tableName: string,
@@ -52,12 +55,14 @@ export function RoadmapActionButton(
             </button>
             <Link href={`/roadmap/${id}`} className={styles.menuHeadingTitle}>{tableName}</Link>
           </div>
-          <Link href={addGoalHref} className={styles.menuAction}>
-            <span>Ny målbana</span>
-            <Image src='/icons/plus-light.svg' alt="" width={24} height={24} className={styles.actionImage} />
-          </Link>
+          {addGoalHref  &&
+            <Link href={addGoalHref} className={styles.menuAction}>
+              <span>Ny målbana</span>
+              <Image src='/icons/plus-light.svg' alt="" width={24} height={24} className={styles.actionImage} />
+            </Link>
+          }
           <Link href={editHref} className={styles.menuAction}>
-            <span>Redigera färdplan</span>
+            <span>Redigera</span>
             <Image src='/icons/edit.svg' alt="" width={24} height={24} className={styles.actionImage} />
           </Link>
           {/*
