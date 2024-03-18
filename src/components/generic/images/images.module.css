@@ -17,14 +17,4 @@
     object-fit: cover;
 }
 
-/* Image icon */
-
-.imageIcon {
-    background-color: var(--gray-90);
-    border-radius: .25rem 0 0 .25rem;
-    display: grid;
-    place-items: center;
-    padding-left: .75rem;
-}
-
 
