@@ -107,11 +107,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <p style={{ width: 'min(120ch, 100%)' }}>{goal.description}</p>
       </section>
 
-
       <section className={styles.graphLayout}>
-        <GraphGraph goal={goal} nationalGoal={parentGoal} />
-        <CombinedGraph roadmap={roadmap} goal={goal} />
+          <GraphGraph goal={goal} nationalGoal={parentGoal} />
+          <CombinedGraph roadmap={roadmap} goal={goal} />
       </section>
+      
       <section>
 
         <div className="flex align-items-center justify-content-space-between">

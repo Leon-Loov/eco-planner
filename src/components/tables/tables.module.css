@@ -177,7 +177,7 @@
 
 .actionLinkInfo {
     margin: 0;
-    width: 50ch;
+    width: min(50ch, 100%);
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1; /* number of lines to show */
