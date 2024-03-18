@@ -4,7 +4,6 @@ import GoalForm from "@/components/forms/goalForm/goalForm";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
-import { BackButton } from '@/components/buttons/redirectButtons';
 import { AccessLevel } from "@/types";
 
 
@@ -21,11 +20,10 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return (
     <>
-      <div className='display-flex align-items-center gap-100 margin-y-100'>
-        <p><BackButton href="../" /></p>
-        <h1>Skapa ny målbana{roadmap?.metaRoadmap.name ? ` under "${roadmap.metaRoadmap.name}"` : null}</h1>
+      <div className="container-text">
+        <h1>Skapa ny målbana</h1>
+        <GoalForm roadmapId={params.roadmapId} />
       </div>
-      <GoalForm roadmapId={params.roadmapId} />
     </>
   )
 }

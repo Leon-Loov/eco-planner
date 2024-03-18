@@ -139,7 +139,7 @@ export default function MetaRoadmapForm({
           }
         </select>
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
-        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-y-100 " />
+        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-y-100 seagreen color-purewhite" />
       </form>
 
       <datalist id="actors">

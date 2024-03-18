@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import GoalForm from "@/components/forms/goalForm/goalForm";
 import accessChecker from "@/lib/accessChecker";
 import { notFound } from "next/navigation";
-import { BackButton } from '@/components/buttons/redirectButtons';
 import getOneGoal from "@/fetchers/getOneGoal";
 import { AccessControlled, AccessLevel } from "@/types";
 
@@ -29,14 +28,12 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     return notFound();
   }
 
-  // params.goalID WEIRD?!
   return (
     <>
-      <div className='display-flex align-items-center gap-100 margin-y-100'>
-        <p><BackButton href={`/roadmap/${params.roadmapId}/goal/${params.goalId}`} /></p>
-        <h1>Redigera målbanan &quot;{currentGoal.name ? currentGoal.name : currentGoal.indicatorParameter}&quot; {currentGoal.roadmap.metaRoadmap.name ? ` under färdplanen "${currentGoal.roadmap.metaRoadmap.name}"` : null}</h1>
+      <div className="container-text">
+        <h1>Redigera målbana: {currentGoal.name ? currentGoal.name : currentGoal.indicatorParameter}</h1>
+        <GoalForm roadmapId={params.roadmapId} currentGoal={currentGoal} />
       </div>
-      <GoalForm roadmapId={params.roadmapId} currentGoal={currentGoal} />
     </>
   )
 }

@@ -2,7 +2,6 @@ import { getSessionData } from '@/lib/session';
 import MetaRoadmapForm from '@/components/forms/metaRoadmapForm/metaRoadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { BackButton } from '@/components/buttons/redirectButtons';
 import getMetaRoadmaps from '@/fetchers/getMetaRoadmaps';
 import getOneMetaRoadmap from '@/fetchers/getOneMetaRoadmap';
 import accessChecker from '@/lib/accessChecker';
@@ -24,16 +23,15 @@ export default async function Page({ params }: { params: { metaRoadmapId: string
 
   return (
     <>
-      <div className='display-flex align-items-center gap-100 margin-y-100'>
-        <BackButton href="../" />
-        <h1>Redigera metadatan för färdplanen {`"${currentRoadmap.name}"`}</h1>
+      <div className='container-text'>
+        <h1>Redigera metadatan för färdplan: {`${currentRoadmap.name}`}</h1>
+        <MetaRoadmapForm
+          user={session.user}
+          userGroups={session.user?.userGroups}
+          parentRoadmapOptions={parentRoadmapOptions}
+          currentRoadmap={currentRoadmap}
+        />
       </div>
-      <MetaRoadmapForm
-        user={session.user}
-        userGroups={session.user?.userGroups}
-        parentRoadmapOptions={parentRoadmapOptions}
-        currentRoadmap={currentRoadmap}
-      />
     </>
   )
 }

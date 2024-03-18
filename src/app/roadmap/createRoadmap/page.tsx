@@ -2,7 +2,6 @@ import { getSessionData } from '@/lib/session';
 import RoadmapForm from '@/components/forms/roadmapForm/roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { BackButton } from '@/components/buttons/redirectButtons';
 import getMetaRoadmaps from '@/fetchers/getMetaRoadmaps';
 
 export default async function Page() {
@@ -31,15 +30,14 @@ export default async function Page() {
 
   return (
     <>
-      <div className='display-flex align-items-center gap-100 margin-y-100'>
-        <BackButton href="../" />
+      <div className='container-text'>
         <h1>Skapa en ny version av en färdplan</h1>
+        <RoadmapForm
+          user={session.user}
+          userGroups={session.user?.userGroups}
+          metaRoadmapAlternatives={metaRoadmapAlternatives}
+        />
       </div>
-      <RoadmapForm
-        user={session.user}
-        userGroups={session.user?.userGroups}
-        metaRoadmapAlternatives={metaRoadmapAlternatives}
-      />
     </>
   )
 }

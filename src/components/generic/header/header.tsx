@@ -55,7 +55,7 @@ export async function Header() {
               user?.isLoggedIn &&
               <>
                 {/* Admin pages don't currently exist */}
-                {/* <PrimaryLink href="/admin">To Admin Page</PrimaryLink> */}
+                {/* <Link href="/admin">To Admin Page</Link> */}
                 <LogoutButton />
               </>
             }
