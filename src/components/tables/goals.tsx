@@ -1,7 +1,6 @@
 "use client"
 
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
-import { PrimaryLink } from "../generic/links/links"
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
