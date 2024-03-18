@@ -4,6 +4,9 @@
     border-radius: .5rem;
     border: 2px solid var(--gray);
     padding: .5rem;
+    @media (max-width: 625px) {
+        height: 300px;
+    }
 }
  
 .radioImageWrapper {
