@@ -80,7 +80,7 @@ export default function CombinedGraph({
   return (siblings.length > 1 &&
     <div>
       <nav className="display-flex justify-content-flex-end margin-y-100">
-        <button className="call-to-action-primary" style={{width: 'fit-content', fontWeight: 'bold', fontSize: '1rem'}} type="button" onClick={() => setIsStacked(!isStacked)}>
+        <button className="call-to-action-primary display-flex align-items-center gap-50 transparent" style={{width: 'fit-content', fontWeight: 'bold', fontSize: '1rem'}} type="button" onClick={() => setIsStacked(!isStacked)}>
           Byt typ av graf
           <Image src='/icons/chartArea.svg' alt='Byt graf' width={24} height={24} />
 
