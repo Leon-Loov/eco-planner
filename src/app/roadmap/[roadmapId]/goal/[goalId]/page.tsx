@@ -101,11 +101,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         }
     */}
 
-    <section className="margin-y-100">
-      <span style={{color: 'gray'}}>Målbana</span>
-      <h2 style={{fontSize: '2.5rem', margin: '0'}}>{goal.name}</h2>
-      <p style={{width: 'min(120ch, 100%)'}}>{goal.description}</p>
-    </section>
+      <section className="margin-y-100">
+        <span style={{ color: 'gray' }}>Målbana</span>
+        <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
+        <p style={{ width: 'min(120ch, 100%)' }}>{goal.description}</p>
+      </section>
 
 
       <section className={styles.graphLayout}>
@@ -113,10 +113,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <CombinedGraph roadmap={roadmap} goal={goal} />
       </section>
       <section>
-        <h2 className="flex align-items-center justify-content-space-between">
-          Åtgärder
-          <Link href='/' className="button color-purewhite pureblack round">Skapa ny åtgärd</Link>
-        </h2>
+
+        <div className="flex align-items-center justify-content-space-between">
+          <h2>Åtgärder</h2>
+          <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/action/createAction`} className="button color-purewhite pureblack round">Skapa ny åtgärd</Link>
+        </div>
         <ActionGraph actions={goal.actions} />
 
         <section>
