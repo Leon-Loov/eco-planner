@@ -1,6 +1,7 @@
 import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { dataSeriesDataFieldNames } from "@/types";
 import { Goal, DataSeries } from "@prisma/client";
+import styles from './graphs.module.css';
 
 export default function MainDeltaGraph({
   goal,
@@ -78,13 +79,15 @@ export default function MainDeltaGraph({
 
   return (
     <>
-      <WrappedChart
-        options={chartOptions}
-        series={chart}
-        type="line"
-        width="100%"
-        height="100%"
-      />
+      <div className={styles.graphWrapper}>
+        <WrappedChart
+          options={chartOptions}
+          series={chart}
+          type="line"
+          width="100%"
+          height="100%"
+        />
+      </div>
     </>
   );
 }

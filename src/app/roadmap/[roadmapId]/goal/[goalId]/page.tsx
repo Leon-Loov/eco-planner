@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
         <div className="flex align-items-center justify-content-space-between">
           <h2>Åtgärder</h2>
-          <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/action/createAction`} className="button color-purewhite pureblack round">Skapa ny åtgärd</Link>
+          <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/action/createAction`} className="button color-purewhite pureblack round font-weight-bold">Skapa ny åtgärd</Link>
         </div>
         <ActionGraph actions={goal.actions} />
 

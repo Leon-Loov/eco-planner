@@ -6,6 +6,7 @@ import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal, Roadmap } from "@prisma/client";
 import { useState } from "react";
 import styles from './graphs.module.css'
+import Image from "next/image";
 
 export default function CombinedGraph({
   roadmap,
@@ -77,15 +78,24 @@ export default function CombinedGraph({
   }
 
   return (siblings.length > 1 &&
-    <div className={styles.graphWrapper}>
-      <WrappedChart
-        key={"combinedGraph"}
-        options={chartOptions}
-        series={dataPoints}
-        type={isStacked ? 'area' : 'line'}
-        width="100%"
-        height="100%"
-      />
+    <div>
+      <nav className="display-flex justify-content-flex-end margin-y-100">
+        <button className="call-to-action-primary" style={{width: 'fit-content', fontWeight: 'bold', fontSize: '1rem'}} type="button" onClick={() => setIsStacked(!isStacked)}>
+          Byt typ av graf
+          <Image src='/icons/chartArea.svg' alt='Byt graf' width={24} height={24} />
+
+        </button>
+      </nav>
+      <div className={styles.graphWrapper}>
+        <WrappedChart
+          key={"combinedGraph"}
+          options={chartOptions}
+          series={dataPoints}
+          type={isStacked ? 'area' : 'line'}
+          width="100%"
+          height="100%"
+        />
+      </div>
     </div>
   )
 }
