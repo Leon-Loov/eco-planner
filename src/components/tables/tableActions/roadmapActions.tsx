@@ -55,7 +55,7 @@ export function RoadmapActionButton(
             </button>
             <Link href={`/roadmap/${id}`} className={styles.menuHeadingTitle}>{tableName}</Link>
           </div>
-          {addGoalHref  &&
+          {addGoalHref &&
             <Link href={addGoalHref} className={styles.menuAction}>
               <span>Ny målbana</span>
               <Image src='/icons/plus-light.svg' alt="" width={24} height={24} className={styles.actionImage} />

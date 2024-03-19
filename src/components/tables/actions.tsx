@@ -78,13 +78,11 @@ export default function ActionTable({
           <span className={styles.linkTitle}>{action.name}</span>
           <p className={styles.actionLinkInfo}>{action.description}</p>
         </a>
-        {(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-          <RoadmapActionButton
-            id={action.id}
-            tableName={action.name}
-            editHref={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}/editAction`}
-          />
-        }
+        <RoadmapActionButton
+          id={action.id}
+          tableName={action.name}
+          editHref={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}/editAction`}
+        />
         {/*
           <span>{action.costEfficiency}</span>
           <span>{action.expectedOutcome}</span>

@@ -21,7 +21,6 @@ type RoadmapTableProps = RoadmapTableWithMetaRoadmap | RoadmapTableWithRoadmaps;
 
 export default function RoadmapTable({
   roadmaps,
-  user,
   metaRoadmap,
 }: RoadmapTableProps) {
   // Failsafe in case wrong props are passed
@@ -63,6 +62,6 @@ export default function RoadmapTable({
           </div>
         ))}
       </>
-      : null } {/*<p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>*/}
+      : null} {/*<p>Inga färdplaner hittades. Detta kan bero på ett problem med databasen</p>*/}
   </>
 }
