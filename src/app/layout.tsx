@@ -1,5 +1,5 @@
 import '@/styles/global.css'
-import { Header } from '@/components/generic/header/header'
+import Sidebar  from '@/components/generic/header/sidebar'
 import Breadcrumb from '@/components/breadcrumbs/breadcrumb2';
 import getNames from '@/fetchers/getNames';
 import { GenericEntry } from '@/types';
@@ -58,7 +58,7 @@ export default async function RootLayout({
       </head>
       <body>
         <div className={`${styles.layout}`}>
-          <Header />
+          <Sidebar />
           <div className='flex-grow-100 padding-100'>
             <Breadcrumb relevantObjects={objects} />
             {children}

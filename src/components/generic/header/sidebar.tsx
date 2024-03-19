@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import Image from 'next/image'
 
-export async function Header() {
+export default async function Sidebar() {
   const { user } = await getSessionData(cookies())
   return <>
     <aside className={styles.container}>
