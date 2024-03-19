@@ -6,7 +6,7 @@ import MainRelativeGraph from "./mainRelativeGraph";
 import { DataSeries, Goal } from "@prisma/client";
 import GraphSelector from "./graphselector/graphSelector";
 import { useEffect, useState } from "react";
-import { getStoredGraphType } from "./graphFunctions";
+import { getStoredGraphType } from "./functions/graphFunctions";
 
 export enum GraphType {
   Main = "MAIN",

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import RadioImage from './radioImage';
 import { ViewMode } from '../goals';
-import { setStoredViewMode } from '../tableFunctions';
+import { setStoredViewMode } from '../functions/tableFunctions';
 
 export default function TableSelector({ id, current, setter }: { id: string, current: ViewMode | "", setter: Dispatch<SetStateAction<ViewMode | "">> }) {
 

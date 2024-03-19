@@ -2,7 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } fro
 import RadioImage from './radioImage';
 import { DataSeries, Goal } from "@prisma/client";
 import { GraphType } from "../graphGraph";
-import { setStoredGraphType } from '../graphFunctions';
+import { setStoredGraphType } from '../functions/graphFunctions';
 
 export default function GraphSelector({
   goal,

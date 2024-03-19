@@ -1,5 +1,5 @@
 import { getLocalStorage, getSessionStorage, setLocalStorage, setSessionStorage } from "@/functions/localStorage";
-import { GraphType } from "./graphGraph";
+import { GraphType } from "../graphGraph";
 
 /** Retrieves the graph type for a goal from storage. */
 export function getStoredGraphType(goalId?: string) {

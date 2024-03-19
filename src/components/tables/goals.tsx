@@ -6,7 +6,7 @@ import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
 import LinkTree from './goalTables/linkTree'
 import { useEffect, useState } from "react"
-import { getStoredViewMode } from "./tableFunctions"
+import { getStoredViewMode } from "./functions/tableFunctions"
 import Link from "next/link"
 
 /** Enum for the different view modes for the goal table. */
