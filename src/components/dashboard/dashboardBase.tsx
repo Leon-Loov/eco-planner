@@ -4,8 +4,8 @@ import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import GoalTable from "../tables/goalTables/goalTable";
 import { Action } from "@prisma/client";
-import ActionTable from "../tables/actionTables/actionTable";
 import RoadmapTable from "../tables/roadmapTable";
+import ActionTable from "../tables/actions";
 
 export default async function DashboardBase({ actor }: { actor: string }) {
   let [session, roadmaps] = await Promise.all([
