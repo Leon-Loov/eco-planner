@@ -1,7 +1,7 @@
 import { Data } from '@/lib/session';
 import styles from './tables.module.css' with { type: "css" };
-import { MetaRoadmap, Roadmap } from "@prisma/client";
-import { TableMenu } from './tableActions/roadmapActions';
+import { MetaRoadmap } from "@prisma/client";
+import { TableMenu } from './tableMenu/tableMenu';
 
 interface RoadmapTableCommonProps {
   user: Data['user'],

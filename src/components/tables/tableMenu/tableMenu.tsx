@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import styles from './tableActions.module.css' with { type: "css" }
+import styles from './tableMenu.module.css' with { type: "css" }
 import Link from "next/link";
 import { useRef } from "react";
 import { Action, DataSeries, Goal, MetaRoadmap } from "@prisma/client";

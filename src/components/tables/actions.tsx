@@ -5,7 +5,7 @@ import styles from './tables.module.css' with { type: "css" };
 import { Action, Goal } from "@prisma/client"
 import { AccessLevel } from '@/types'
 import Link from 'next/link';
-import { TableMenu } from './tableActions/roadmapActions';
+import { TableMenu } from './tableMenu/tableMenu';
 
 interface ActionTableCommonProps {
   accessLevel?: AccessLevel,
