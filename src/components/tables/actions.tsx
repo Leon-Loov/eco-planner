@@ -79,6 +79,7 @@ export default function ActionTable({
           <p className={styles.actionLinkInfo}>{action.description}</p>
         </a>
         <TableMenu
+          accessLevel={accessLevel}
           object={action}
         />
         {/*
