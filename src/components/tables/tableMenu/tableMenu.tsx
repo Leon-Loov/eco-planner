@@ -17,14 +17,18 @@ export function TableMenu(
       // Action
       (Action & {
         goal: { id: string, roadmap: { id: string } },
+        roadmapVersions?: never,
         metaRoadmap?: never,
+        roadmap?: never,
       })
       // Goal
       | (Goal & {
         _count: { actions: number }
         dataSeries: DataSeries | null,
         roadmap: { id: string, metaRoadmap: { name: string, id: string } },
+        roadmapVersions?: never,
         metaRoadmap?: never,
+        goal?: never,
       })
       // Roadmap
       | ({
@@ -32,32 +36,51 @@ export function TableMenu(
         version: number,
         _count: { goals: number },
         metaRoadmap: MetaRoadmap,
+        roadmapVersions?: never,
+        roadmap?: never,
+        goal?: never,
         name?: never,
       })
-      // TODO: Add MetaRoadmap?
+      // MetaRoadmap
+      | (MetaRoadmap & {
+        roadmapVersions: { id: string, version: number, _count: { goals: number } }[],
+        metaRoadmap?: never,
+        roadmap?: never,
+        goal?: never,
+        name?: never,
+      })
     )
   }) {
   const menu = useRef<HTMLDialogElement | null>(null);
 
-  // TODO: Add access checks
   let selfLink: string | undefined;
   let creationLink: string | undefined;
+  let creationDescription: string | undefined;
   let editLink: string | undefined;
   // TODO: Add function for deleting object
+  // MetaRoadmaps
+  if (object.roadmapVersions != undefined) {
+    selfLink = `/metaRoadmap/${object.id}`;
+    creationLink = `roadmap/createRoadmap?metaRoadmapId=${object.id}`;
+    creationDescription = 'Ny färdplan';
+    editLink = `/metaRoadmap/${object.id}/editMetaRoadmap`;
+  }
   // Roadmaps
-  if (object.metaRoadmap != undefined) {
+  else if (object.metaRoadmap != undefined) {
     selfLink = `/roadmap/${object.id}`
     creationLink = `/roadmap/${object.id}/goal/createGoal`;
+    creationDescription = 'Ny målbana';
     editLink = `/roadmap/${object.id}/editRoadmap`;
   }
   // Goals
-  else if ('dataSeries' in object) {
+  else if (object.roadmap != undefined) {
     selfLink = `/roadmap/${object.roadmap.id}/goal/${object.id}`;
     creationLink = `/roadmap/${object.roadmap.id}/goal/${object.id}/action/createAction`;
+    creationDescription = 'Ny åtgärd';
     editLink = `/roadmap/${object.roadmap.id}/goal/${object.id}/editGoal`;
   }
   // Actions
-  else if ('goal' in object) {
+  else if (object.goal != undefined) {
     selfLink = `/roadmap/${object.goal.roadmap.id}/goal/${object.goal.id}/action/${object.id}`;
     editLink = `/roadmap/${object.goal.roadmap.id}/goal/${object.goal.id}/action/${object.id}/editAction`;
   }
@@ -102,7 +125,7 @@ export function TableMenu(
           </div>
           {creationLink &&
             <Link href={creationLink} className={styles.menuAction}>
-              <span>Ny målbana</span>
+              <span>{creationDescription}</span>
               <Image src='/icons/plus-light.svg' alt="" width={24} height={24} className={styles.actionImage} />
             </Link>
           }
