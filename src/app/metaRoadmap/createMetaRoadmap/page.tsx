@@ -17,7 +17,7 @@ export default async function Page() {
 
   return (
     <>
-      <div className='container-text'>
+      <div className='container-text' style={{marginInline: 'auto'}}>
         <h1>Skapa en ny färdplan</h1>
         <MetaRoadmapForm
           user={session.user}

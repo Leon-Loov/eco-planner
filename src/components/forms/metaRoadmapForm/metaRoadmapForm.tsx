@@ -92,21 +92,25 @@ export default function MetaRoadmapForm({
         <label htmlFor="metaRoadmapName">Namn för den nya färdplanen</label>
         <input id="metaRoadmapName" name="metaRoadmapName" type="text" defaultValue={currentRoadmap?.name ?? undefined} required />
 
-        <label htmlFor="description">Beskrivning av färdplanen</label>
-        <textarea name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} required></textarea>
+        <label className="block margin-y-75">
+          Beskrivning av färdplanen
+          <textarea className="block smooth" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} required></textarea>
+        </label>
 
-        <label htmlFor="type">Typ av färdplan</label>
-        <select name="type" id="type" defaultValue={currentRoadmap?.type ?? ""} required>
-          <option value="">Välj en typ</option>
-          {
-            Object.values(RoadmapType).map((value) => {
-              if (value == RoadmapType.NATIONAL && !user?.isAdmin) return null;
-              return (
-                <option key={value} value={value}>{value in customRoadmapTypes ? customRoadmapTypes[value] : value}</option>
-              )
-            })
-          }
-        </select>
+        <label className="block margin-y-75">
+          Typ av färdplan
+          <select className="block margin-y-25" name="type" id="type" defaultValue={currentRoadmap?.type ?? ""} required>
+            <option value="">Välj en typ</option>
+            {
+              Object.values(RoadmapType).map((value) => {
+                if (value == RoadmapType.NATIONAL && !user?.isAdmin) return null;
+                return (
+                  <option key={value} value={value}>{value in customRoadmapTypes ? customRoadmapTypes[value] : value}</option>
+                )
+              })
+            }
+          </select>
+          </label>
 
         <label htmlFor="actor">Aktör för färdplanen</label>
         <input list="actors" id="actor" name="actor" type="text" defaultValue={currentRoadmap?.actor ?? undefined} />
