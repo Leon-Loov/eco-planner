@@ -1,6 +1,7 @@
 'use client';
 
 import { commentSorter } from "@/lib/sorters";
+import timeSince from "@/functions/timeSince";
 import { Comment } from "@prisma/client";
 import styles from './comments.module.css'
 import { ChangeEvent, useRef, useState } from "react";
@@ -63,25 +64,27 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
 
   return (
     <>
-      <section>
-        <h2>Kommentarer</h2>
-        <form onSubmit={handleSubmit} style={{width: '100%'}}>
+      <section className="container-text margin-y-300">
+        <h2>{comments?.length} Kommentarer</h2>
+        <form onSubmit={handleSubmit}>
           <span className={styles.textarea} role="textbox" id="comment-text" contentEditable aria-placeholder="Skriv Kommentar" onInput={handleInput} onBlur={handleInput} ref={spanRef}></span>
           <input type="hidden" name="comment" id="comment" value={editedContent} />
           <div className="display-flex justify-content-flex-end gap-50 padding-y-50">
-            <button type="button" className={`${styles.button} ${styles.cancel}`} onClick={removeText}>Avbryt</button>
-            <input type="submit" value="Skicka" disabled={!editedContent} className={`${styles.button} ${styles.comment}`} style={{height: "100%"}} />
+            <button type="button" disabled={!editedContent} className={`${styles.button} ${styles.cancel}`} onClick={removeText}>Avbryt</button>
+            <button type="submit" disabled={!editedContent} className={`${styles.button} ${styles.comment}`}>Skicka</button>
           </div>
         </form>
         {comments?.map((comment) => (
           <div key={comment.id}>
-            <p style={{marginBottom: "0", textTransform: "capitalize"}}><b>{comment.author.username}</b></p>
-            <span style={{fontSize: ".75em"}}>{new Date(comment.createdAt).toLocaleString('sv-SE')}</span>
-            <p>
-            {expandedComments.includes(comment.id) ? comment.commentText : comment.commentText.length > 300 ? `${comment.commentText.substring(0, 300)}...` : comment.commentText}
+            <p className="flex align-items-center gap-50" style={{marginBottom: '0'}}>
+              <a className={styles.commentAuthor} href={`/user/${comment.author.username}`}>{comment.author.username}</a>
+              <span style={{color: 'gray', fontWeight: '300', fontSize: '.75rem'}}>{`${timeSince(new Date(comment.createdAt))} sedan`}</span>
+            </p>
+            <p className="margin-0" style={{wordBreak: 'break-word',}}>
+              {expandedComments.includes(comment.id) ? comment.commentText : comment.commentText.length > 300 ? `${comment.commentText.substring(0, 300)}...` : comment.commentText}
             </p>  
             {comment.commentText.length > 300 ? 
-              <button className={styles.readMoreButton} onClick={() => expandComment(comment.id)}>  
+              <button className={`margin-y-25 ${styles.readMoreButton}`} onClick={() => expandComment(comment.id)}>  
                 {expandedComments.includes(comment.id) ? 'Visa mindre' : 'Visa mer'}
               </button>
             :  null}

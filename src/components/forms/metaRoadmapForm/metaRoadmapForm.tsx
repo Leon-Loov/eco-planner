@@ -85,7 +85,7 @@ export default function MetaRoadmapForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="action-form" >
+      <form onSubmit={handleSubmit}>
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
 
@@ -139,7 +139,7 @@ export default function MetaRoadmapForm({
           }
         </select>
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
-        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="call-to-action-primary margin-y-100 " />
+        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-y-100 seagreen color-purewhite" />
       </form>
 
       <datalist id="actors">

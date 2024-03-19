@@ -1,25 +1,12 @@
-/* Header */
+/* Toggle minimized/expanded */
 
-.header {
-    position: sticky;
-    top: 0;
-    height: 100dvh;
-    box-shadow: 0 0 .5rem -3px var(--gray);
-    padding: 1rem;
-}
-
-.header nav {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-  gap: 1rem;
-  margin-top: 5rem;
-  width: 10rem;
-  transition: width .2s ease-in-out;
-  @media (max-width: 750px) {
-    display: none;
+.menuToggleContainer:has(input[type="checkbox"]:checked) + aside {
+  @media (min-width: 1251px) {
+    width: calc(24px + 1rem + 2rem); 
+  }
+  
+  @media (max-width: 1250px) {
+    transform: translate(0, 0);
   }
 }
 
@@ -28,9 +15,13 @@
   display: grid;
   place-items: center;
   width: fit-content;
-  transition: background-color .2s ease;
+  transition: background-color .2s ease, 
+              transform .2s ease,
+  ;
   padding: .25rem;
+  margin: 1rem;
   border-radius: 9999px;
+  z-index: 999;
 }
   
 .menuToggle {
@@ -51,17 +42,70 @@
   width: calc(24px + 1rem);
 }
 
-.headerLink{
+/* Container for navigation */
+.container {
+  position: sticky;
+  top: 0;
+  border-right: 1px solid var(--gray-90);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  z-index: 998;
+  background-color: rgba(255, 255, 255, 0.9);
+  @media (max-width: 1250px) {
+    height: auto;
+    border-right: unset;
+    border-bottom: 1px solid var(--gray-90);
+  }
+}
+
+/* Navigation */
+
+.aside {
+  width: 12rem;
+  padding: 1rem;
+  transition: transform .2s ease-in-out, width .2s ease-in-out;
+  overflow: hidden;
+  z-index: 998;
+  position: relative;
+  background-color: white;
+  display: flex;
+  @media (max-width: 1250px) {
+    transform: translate(-100%, 0);
+    position: absolute;
+    left: 0;
+    height: calc(100dvh);
+    border-right: 1px solid var(--gray-90);
+  }
+}
+
+.nav {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  flex-grow: 1;
+  @media (max-width: 1250px) {
+    margin-top: 64px;
+  }
+}
+
+/* Appearance of links in navigation */
+
+.link {
   text-decoration: unset;
   color: black;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: .5rem;
   padding: .5rem;
   border-radius: .5rem;
+  outline: 0;
+  transition: background-color .1s ease;
+  white-space: nowrap;
 }
   
-.headerLink:hover {
+.link:hover {
   background-color: var(--gray-90);
 }

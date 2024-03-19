@@ -66,47 +66,101 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
-        { // Only show the edit link if the user has edit access to the roadmap
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-          <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`}>
-            <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
-          </Link>
+      {/* 
+        <h1 className="display-flex align-items-center gap-25 flex-wrap-wrap">
+          { // Only show the edit link if the user has edit access to the roadmap
+            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`}>
+              <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
+            </Link>
+          }
+          {goal.name ? goal.name : goal.indicatorParameter}
+        </h1>
+        {goal.name && <>
+          <span> {`${goal.indicatorParameter}, `} </span>
+        </>}
+        <span>Målbana</span>
+        {goal.links.length > 0 &&
+          <>
+            <h2>Länkar</h2>
+            {goal.links.map((link) => (
+              <Fragment key={link.id}>
+                <a href={link.url}>{link.description || link.url}</a>
+              </Fragment>
+            ))}
+          </>
         }
-        {goal.name ? goal.name : goal.indicatorParameter}
-      </h1>
-      {goal.name && <>
-        <span style={{ color: "gray" }}> {`${goal.indicatorParameter}, `} </span>
-        <br />
-      </>}
-      <span style={{ color: "gray" }}>Målbana</span>
-      {goal.links.length > 0 &&
-        <>
-          <h2>Länkar</h2>
-          {goal.links.map((link) => (
-            <Fragment key={link.id}>
-              <a href={link.url}>{link.description || link.url}</a>
-              <br />
-            </Fragment>
-          ))}
-        </>
-      }
-      {goal.dataSeries?.scale &&
-        <>
-          <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
-        </>
-      }
-      <br />
-      { // Only allow scaling the values if the user has edit access to the goal
-        (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
-        <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
-      }
-      <section>
-        <GraphGraph goal={goal} nationalGoal={parentGoal} />
-        <CombinedGraph roadmap={roadmap} goal={goal} />
-        <ActionGraph actions={goal.actions} />
+        {goal.dataSeries?.scale &&
+          <>
+            <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
+          </>
+        }
+        { // Only allow scaling the values if the user has edit access to the goal
+          (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
+          <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
+        }
+    */}
+
+      <section className="margin-y-100">
+        <span style={{ color: 'gray' }}>Målbana</span>
+        <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
+        <p style={{ width: 'min(120ch, 100%)' }}>{goal.description}</p>
       </section>
-      <Actions goal={goal} accessLevel={accessLevel} />
+
+      <section className={styles.graphLayout}>
+          <GraphGraph goal={goal} nationalGoal={parentGoal} />
+          <CombinedGraph roadmap={roadmap} goal={goal} />
+      </section>
+      
+      <section>
+
+        <div className="flex align-items-center justify-content-space-between">
+          <h2>Åtgärder</h2>
+          <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/action/createAction`} className="button color-purewhite pureblack round font-weight-bold">Skapa ny åtgärd</Link>
+        </div>
+        <ActionGraph actions={goal.actions} />
+
+        <section>
+          <section className="margin-y-100 padding-y-50" style={{ borderBottom: '2px solid var(--gray-90)' }}>
+            <label className="font-weight-bold margin-y-25 container-text">
+              Sök åtgärd
+              <div className="margin-y-50 flex align-items-center gray-90 padding-50 smooth focusable">
+                <Image src='/icons/search.svg' alt="" width={24} height={24} />
+                <input type="search" className="padding-0 margin-x-50" />
+              </div>
+            </label>
+            <div className="flex gap-100 align-items-center justify-content-space-between">
+              <label className="margin-y-100 font-weight-bold">
+                Sortera på:
+                <select className="font-weight-bold margin-y-50 block">
+                  <option>Namn (A-Ö)</option>
+                  <option>Namn (Ö-A)</option>
+                </select>
+              </label>
+              <label className='flex align-items-center gap-50 padding-50 font-weight-bold button smooth transparent'>
+                <span style={{ lineHeight: '1' }}>Filtrera</span>
+                <div className='position-relative grid place-items-center'>
+                  <input type="checkbox" className="position-absolute width-100 height-100 hidden" />
+                  <Image src="/icons/filter.svg" alt="" width="24" height="24" />
+                </div>
+              </label>
+            </div>
+          </section>
+          <section id="roadmapFilters" className="margin-y-200 padding-100 gray-90 rounded">
+            <b>Enhet</b>
+            <label className="flex align-items-center gap-25 margin-y-50">
+              <input type="checkbox" />
+              Enhet 1
+            </label>
+            <label className="flex align-items-center gap-25 margin-y-50">
+              <input type="checkbox" />
+              Enhet 2
+            </label>
+          </section>
+        </section>
+
+        <Actions goal={goal} accessLevel={accessLevel} />
+      </section>
       <Comments comments={goal.comments} objectId={goal.id} />
     </>
   )

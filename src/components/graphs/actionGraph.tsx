@@ -1,5 +1,7 @@
 import WrappedChart from "@/lib/chartWrapper";
+import { actionGraphSorter } from "@/lib/sorters";
 import { Action } from "@prisma/client";
+import styles from './graphs.module.css'
 
 export default function ActionGraph({
   actions,
@@ -20,29 +22,66 @@ export default function ActionGraph({
     })
   }
 
+  actionData.sort(actionGraphSorter)
+
   series.push({
     name: 'Åtgärder',
     data: actionData,
     type: 'rangeBar',
   })
 
+  let height = `${100 + (series[0].data.length * 32)}px`
+
   let chartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: 'rangeBar',
-      animations: { enabled: false, dynamicAnimation: { enabled: false } }
+      zoom: {
+        enabled: false,
+      },
+      animations: {
+        enabled: false,
+        dynamicAnimation: {
+          enabled: false
+        }
+      },
+      toolbar: {
+        show: false,
+      },
     },
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "90%",
+        barHeight: "24px",
+        borderRadius: 3,
 
-      }
+      },
+    },
+    grid: {
+      show: false,
     },
     xaxis: {
       type: 'datetime',
-      labels: { format: 'yyyy' },
+      labels: {
+        format: 'yyyy',
+        style: {
+          fontSize: '.75rem',
+          fontFamily: 'system-ui',
+          colors: 'black'
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
       min: new Date("2020").getTime(),
       max: new Date("2050").getTime(),
+    },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: '1rem',
+          colors: 'black'
+        },
+      },
     },
     tooltip: {
       x: { format: 'yyyy' }
@@ -50,17 +89,14 @@ export default function ActionGraph({
   }
 
   return (actions.length > 0 &&
-    <>
-      <h2>Åtgärdsgraf</h2>
-      <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem', border: '3px solid var(--gray-90)' }}>
-          <WrappedChart
-            options={chartOptions}
-            series={series}
-            type="rangeBar"
-            width="100%"
-            height="100%"
-          />
-        </div>
-    </>
+    <div className={styles.graphWrapper} style={{ height: `${height}` }}>
+      <WrappedChart
+        options={chartOptions}
+        series={series}
+        type="rangeBar"
+        width="100%"
+        height="100%"
+      />
+    </div>
   );
 }

@@ -1,8 +1,9 @@
 import '@/styles/global.css'
-import { Header } from '@/components/generic/header/header'
-import Breadcrumb from '@/components/breadcrumbs/breadcrumb2';
+import Sidebar  from '@/components/generic/header/sidebar'
+import Breadcrumbs from '@/components/breadcrumbs/breadcrumbs';
 import getNames from '@/fetchers/getNames';
 import { GenericEntry } from '@/types';
+import styles from './page.module.css' with { type: "css" }
 
 export default async function RootLayout({
   children,
@@ -56,10 +57,10 @@ export default async function RootLayout({
 
       </head>
       <body>
-        <div className='display-flex'>
-          <Header />
-          <div className='flex-grow-100 padding-100' style={{ minWidth: '0' }}>
-            <Breadcrumb relevantObjects={objects} />
+        <div className={`${styles.layout}`}>
+          <Sidebar />
+          <div className='flex-grow-100 padding-100'>
+            <Breadcrumbs relevantObjects={objects} />
             {children}
           </div>
         </div>

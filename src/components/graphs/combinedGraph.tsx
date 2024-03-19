@@ -5,7 +5,8 @@ import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal, Roadmap } from "@prisma/client";
 import { useState } from "react";
-
+import styles from './graphs.module.css'
+import Image from "next/image";
 
 export default function CombinedGraph({
   roadmap,
@@ -78,13 +79,14 @@ export default function CombinedGraph({
 
   return (siblings.length > 1 &&
     <div>
-      <div className="flex margin-y-200 align-items-center justify-content-space-between">
-        <h2>Kombinerad graf</h2>
-        <button className="call-to-action-primary" style={{width: 'fit-content'}} type="button" onClick={() => setIsStacked(!isStacked)}>Byt typ av graf</button>
-      </div>
-      <h3>{indicatorCategory}</h3>
-      {additionalInfo && <p>{additionalInfo}</p>}
-      <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem', border: '3px solid var(--gray-90)' }}>
+      <nav className="display-flex justify-content-flex-end margin-y-100">
+        <button className="call-to-action-primary display-flex align-items-center gap-50 transparent" style={{width: 'fit-content', fontWeight: 'bold', fontSize: '1rem'}} type="button" onClick={() => setIsStacked(!isStacked)}>
+          Byt typ av graf
+          <Image src='/icons/chartArea.svg' alt='Byt graf' width={24} height={24} />
+
+        </button>
+      </nav>
+      <div className={styles.graphWrapper}>
         <WrappedChart
           key={"combinedGraph"}
           options={chartOptions}

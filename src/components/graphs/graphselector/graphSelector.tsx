@@ -2,7 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } fro
 import RadioImage from './radioImage';
 import { DataSeries, Goal } from "@prisma/client";
 import { GraphType } from "../graphGraph";
-import { setStoredGraphType } from '../graphFunctions';
+import { setStoredGraphType } from '../functions/graphFunctions';
 
 export default function GraphSelector({
   goal,
@@ -27,12 +27,12 @@ export default function GraphSelector({
   // Set the selectedOption as the context value
   return (
     <>
-      <RadioImage value={GraphType.Main} src="/icons/chart.svg" name="graph" checked={current == GraphType.Main} onChange={handleRadioChange} />
+      <RadioImage text='Målbana' value={GraphType.Main} src="/icons/line.svg" name="graph" checked={current == GraphType.Main} onChange={handleRadioChange} />
+      <RadioImage text='Årlig förändring' value={GraphType.Delta} src="/icons/calendarStats.svg" name="graph" checked={current == GraphType.Delta} onChange={handleRadioChange} />
       { // Don't allow relative graph if the main graph is already percent or fraction
         goal.dataSeries?.unit.toLowerCase() != 'procent' && goal.dataSeries?.unit.toLowerCase() != 'andel' &&
-        <RadioImage value={GraphType.Relative} src="/icons/chartChange.svg" name="graph" checked={current == GraphType.Relative} onChange={handleRadioChange} />
+        <RadioImage text='Procentuell förändring' value={GraphType.Relative} src="/icons/chartChange.svg" name="graph" checked={current == GraphType.Relative} onChange={handleRadioChange} />
       }
-      <RadioImage value={GraphType.Delta} src="/icons/delta.svg" name="graph" checked={current == GraphType.Delta} onChange={handleRadioChange} />
     </>
   );
 }

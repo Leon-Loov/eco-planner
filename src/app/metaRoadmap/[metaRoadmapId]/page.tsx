@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { metaRoadmapId: string
 
   return (
     <>
-      <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
+      <h1 className="display-flex align-items-center gap-25 flex-wrap-wrap">
         { // Only show the edit link if the user has edit access to the roadmap
           (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
           <Link href={`/metaRoadmap/${metaRoadmap.id}/editMetaRoadmap`}>
@@ -32,8 +32,8 @@ export default async function Page({ params }: { params: { metaRoadmapId: string
         }
         {`${metaRoadmap.name}`}
       </h1>
-      <span style={{ color: "gray" }}>Metadata för en färdplan</span>
-      <RoadmapTable title="Versioner av målbanan" user={session.user} metaRoadmap={metaRoadmap} />
+      <span>Metadata för en färdplan</span>
+      <RoadmapTable user={session.user} metaRoadmap={metaRoadmap} />
     </>
   )
 }

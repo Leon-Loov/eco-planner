@@ -5,7 +5,6 @@ import { getSessionData } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
 import Goals from "@/components/tables/goals";
-import Link from "next/link";
 import Image from "next/image";
 import Comments from "@/components/comments/comments";
 import { AccessLevel } from "@/types";
@@ -27,18 +26,58 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   }
 
   return <>
-    <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
-      { // Only show the edit link if the user has edit access to the roadmap
-        (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-        <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
-          <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
-        </Link>
-      }
-      {roadmap.metaRoadmap.name}
-    </h1>
-    <span style={{ color: "gray" }}>
-      Färdplan • <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>{`v.${roadmap.version}`}</a>
-    </span>
+    {/*
+    { // Only show the edit link if the user has edit access to the roadmap
+      (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+      <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
+        <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
+      </Link>
+    }
+    <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>Länk till metadata och fler versioner</a>
+    */}
+
+    <p>{roadmap.description}</p>
+
+    <section>
+      <section className="margin-y-100 padding-y-50" style={{ borderBottom: '2px solid var(--gray-90)' }}>
+        <label className="font-weight-bold margin-y-25 container-text">
+          Sök Målbana
+          <div className="margin-y-50 flex align-items-center gray-90 padding-50 smooth focusable">
+            <Image src='/icons/search.svg' alt="" width={24} height={24} />
+            <input type="search" className="padding-0 margin-x-50" />
+          </div>
+        </label>
+        <div className="flex gap-100 align-items-center justify-content-space-between">
+          <label className="margin-y-100 font-weight-bold">
+            Sortera på:
+            <select className="font-weight-bold margin-y-50 block">
+              <option>Namn (A-Ö)</option>
+              <option>Namn (Ö-A)</option>
+              <option>Antal åtgärder (stigande)</option>
+              <option>Antal åtgärder (fallande)</option>
+            </select>
+          </label>
+          <label className='flex align-items-center gap-50 padding-50 font-weight-bold button smooth transparent'>
+            <span style={{ lineHeight: '1' }}>Filtrera</span>
+            <div className='position-relative grid place-items-center'>
+              <input type="checkbox" className="position-absolute width-100 height-100 hidden" />
+              <Image src="/icons/filter.svg" alt="" width="24" height="24" />
+            </div>
+          </label>
+        </div>
+      </section>
+      <section id="roadmapFilters" className="margin-y-200 padding-100 gray-90 rounded">
+        <b>Enhet</b>
+        <label className="flex align-items-center gap-25 margin-y-50">
+          <input type="checkbox" />
+          Enhet 1
+        </label>
+        <label className="flex align-items-center gap-25 margin-y-50">
+          <input type="checkbox" />
+          Enhet 2
+        </label>
+      </section>
+    </section>
 
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Comments comments={roadmap.comments} objectId={roadmap.id} />

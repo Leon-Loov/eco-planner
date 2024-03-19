@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import ActionForm from "@/components/forms/actionForm/actionForm";
 import { notFound } from "next/navigation";
 import accessChecker from "@/lib/accessChecker";
-import { BackButton } from '@/components/buttons/redirectButtons';
 import getOneAction from "@/fetchers/getOneAction";
 import { AccessControlled, AccessLevel } from "@/types";
 
@@ -31,11 +30,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <div className='display-flex align-items-center gap-100 margin-y-100'>
-        <p><BackButton href="./" /></p>
-        <h1>Redigera åtgärden {`"${action.name}" under målbanan "${action.goal.name || action.goal.indicatorParameter || "ERROR"}"`}</h1>
+      <div className="container-text">
+        <h1>Redigera åtgärd: {`${action.name} under målbana: ${action.goal.name || action.goal.indicatorParameter || "ERROR"}`}</h1>
+        <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} currentAction={action} />
       </div>
-      <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} currentAction={action} />
     </>
   )
 }

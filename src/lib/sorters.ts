@@ -62,6 +62,28 @@ export function actionSorter(a: Action, b: Action) {
 }
 
 /**
+ * Sorts actions by start year, then by end year, then by name
+ */
+export function actionGraphSorter(a: { x: string, y: number[] }, b: { x: string, y: number[] }) {
+  // Strt year
+  if ((a.y[0] || 0) < (b.y[0] || 0)) {
+    return -1;
+  } else if ((a.y[0] || 0) > (b.y[0] || 0)) {
+    return 1;
+  } else {
+    // End year
+    if ((a.y[1] || 0) < (b.y[1] || 0)) {
+      return -1;
+    } else if ((a.y[1] || 0) > (b.y[1] || 0)) {
+      return 1;
+    } else {
+      // Name
+      return collator.compare(a.x, b.x);
+    }
+  }
+}
+
+/**
  * Sorts comments by time created, newest first.
  * Since unstable_cache returns stringified dates we need to convert them to Date objects first.
  */

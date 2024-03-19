@@ -45,7 +45,7 @@ export default function GoalTable({
   if (!goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
 
   return <>
-    <div className="overflow-x-scroll">
+    <div className="overflow-x-scroll smooth">
       <table id="goalTable" className={styles.table}>
         <thead>
           <tr>

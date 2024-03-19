@@ -176,7 +176,6 @@ export default function DataSeriesScaler({ dataSeriesId }: { dataSeriesId: strin
         <SecondPart />
         <label htmlFor="scaleFactor">Resulterande skalfaktor: </label>
         <output name="scaleFactor" id="scaleFactor">{value3 ?? "Värde saknas"}</output>
-        <br />
         <div className={`display-flex flex-direction-row align-items-center justify-content-space-between`}>
           <button disabled={!value3} type="button" onClick={doScaling}>Skala värdena</button>
           <button disabled={isLoading} type="button" onClick={closeModal}>Avbryt</button>

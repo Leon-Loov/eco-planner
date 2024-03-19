@@ -1,13 +1,13 @@
 "use client"
 
 import { DataSeries, Goal, Roadmap } from "@prisma/client"
-import { PrimaryLink } from "../generic/links/links"
 import { AccessLevel } from '@/types'
 import GoalTable from "./goalTables/goalTable"
 import TableSelector from './tableSelector/tableSelector'
 import LinkTree from './goalTables/linkTree'
 import { useEffect, useState } from "react"
-import { getStoredViewMode } from "./tableFunctions"
+import { getStoredViewMode } from "./functions/tableFunctions"
+import Link from "next/link"
 
 /** Enum for the different view modes for the goal table. */
 export enum ViewMode {
@@ -46,7 +46,7 @@ export default function Goals({
           <TableSelector id={roadmap.id} current={viewMode} setter={setViewMode} />
           { // Only show the button if the user has edit access to the roadmap
             (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-            <PrimaryLink href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</PrimaryLink>
+            <Link className="button round color-purewhite pureblack" style={{fontWeight: '500'}} href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</Link>
           }
         </nav>
       </label>

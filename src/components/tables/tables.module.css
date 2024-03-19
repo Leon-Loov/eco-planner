@@ -1,31 +1,43 @@
-.details[open]>ul {
+.details[open] > ul {
     border-left: 2px dashed lightgray;
 }
 
-.details[open]>summary {
+.details[open] > summary {
     font-weight: bold;
 }
 
-.details>summary {
+.details > summary {
     background-color: unset;
-    padding: .25em 3em .25em 0;
-    width: fit-content;
+    padding: .5rem 3rem .5rem 0;
+    width: 100%;
+    cursor: default;
 }
 
-.details>summary:hover {
+.details > summary:hover {
     font-weight: bold;
 }
 
-.details>summary:hover::marker {
+.details > summary:hover::marker {
     color: black;
 }
 
-.details>summary::marker {
+.details > summary::marker {
     color: gray;
 }
 
-.details[open]>summary::marker {
+.details[open] > summary::marker {
     color: black;
+}
+
+.list, .list li ul {
+    padding-inline-start: 40px;
+    margin-left: 5px;
+    list-style-type: none;
+}
+ 
+.list {
+    font-size: 1.25rem;
+    padding-inline-start: 0;
 }
 
 /* Links */
@@ -35,12 +47,8 @@
     color: black;
     text-decoration: none;
     width: fit-content;
-    padding-right: 3em;
-}
-
-ul>li:nth-child(1)>.link {
-    margin-top: 1em;
-}
+    padding-right: 3rem;
+} 
 
 .link:hover,
 .link.focus {
@@ -53,30 +61,21 @@ ul>li:nth-child(1)>.link {
     position: relative;
 }
 
-.radioImageWrapper>input[type="radio"] {
+.radioImageWrapper > input[type="radio"] {
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 2;
     margin: 0;
+    left: 0;
+    top: 0;
     opacity: 0;
     cursor: pointer;
 }
-
-.radioImageWrapper>input[type="radio"]:hover~.radioImage,
-.radioImageWrapper>input[type="radio"]:checked~.radioImage {
-    outline: 3px solid #0066b2;
+ 
+.radioImageWrapper:has(input[type="radio"]:checked) {
+    background-color: var(--gray-90);
 }
-
-.radioImage {
-    background-color: lightgray;
-    border-radius: 3px;
-    padding: .25em;
-    display: grid;
-    place-items: center;
-    position: relative;
-}
-
 
 /* Table styling*/
 
@@ -111,7 +110,8 @@ ul>li:nth-child(1)>.link {
 .table th {
     text-wrap: nowrap;
     position: sticky;
-    background-color: var(--gray-90);
+    background-color: var(--blue-20);
+    color: white;
     top: 0;
     z-index: 1;
 }
@@ -145,4 +145,42 @@ ul>li:nth-child(1)>.link {
     min-height: 300px;
     max-height: 500px;
     scrollbar-width: none;
+}
+
+/* New styles as of: 2024-02-20 */
+
+.roadmapLink {
+    border-radius: .5rem;
+    padding: .5rem;
+    display: block;
+    color: black;
+    text-decoration: none;
+    transition: background-color .1s ease;
+}
+
+.roadmapLink:hover {
+    background-color: var(--gray-90);
+}
+
+.roadmapLink > span {
+    display: block;
+}
+
+.linkTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.linkInfo {
+    text-transform: lowercase;
+}
+
+.actionLinkInfo {
+    margin: 0;
+    width: min(50ch, 100%);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    line-clamp: 1; 
+    -webkit-box-orient: vertical;
 }

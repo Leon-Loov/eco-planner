@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <h1 style={{ marginBottom: ".25em" }} className="display-flex align-items-center gap-25 flex-wrap-wrap">
+      <h1 className="display-flex align-items-center gap-25 flex-wrap-wrap">
         { // Only show the edit link if the user has edit access to the roadmap
           (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
           <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`}>
@@ -43,19 +43,17 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         }
         {action.name}
       </h1>
-      <span style={{ color: "gray" }}>Åtgärd</span>
+      <span>Åtgärd</span>
       {action.links.length > 0 &&
         <>
           <h2>Länkar</h2>
           {action.links.map((link) => (
             <Fragment key={link.id}>
               <a href={link.url}>{link.description || link.url}</a>
-              <br />
             </Fragment>
           ))}
         </>
       }
-      <br />
       <h2>Detaljer</h2>
       {action.description && <p>Beskrivning: {action.description}</p>}
       {(action.startYear || action.endYear) &&
@@ -76,10 +74,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       {action.relevantActors && <p>Relevanta aktörer: {action.relevantActors}</p>}
       {(action.isEfficiency || action.isSufficiency || action.isRenewables) &&
         <p>
-          Kategorier: <br />
+          Kategorier:
           <span className="margin-x-100">
-            {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables)) && <br />}
-            {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables) && <br />}
+            {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables))}
+            {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables)}
             {action.isRenewables && 'Renewables'}
           </span>
         </p>

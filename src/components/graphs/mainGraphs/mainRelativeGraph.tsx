@@ -1,6 +1,7 @@
 import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { dataSeriesDataFieldNames, DataSeriesDataFields } from "@/types";
 import { Goal, DataSeries } from "@prisma/client";
+import styles from '../graphs.module.css';
 
 export default function MainRelativeGraph({
   goal,
@@ -77,7 +78,7 @@ export default function MainRelativeGraph({
 
   return (
     <>
-      <div style={{ height: "500px", width: "100%", padding: '1rem', backgroundColor: 'white', borderRadius: '.5rem', border: '3px solid var(--gray-90)' }}>
+      <div className={styles.graphWrapper}>
         <WrappedChart
           options={chartOptions}
           series={chart}

@@ -77,21 +77,17 @@ export default function GoalForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="action-form">
+      <form onSubmit={handleSubmit}>
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
         <label htmlFor="goalName">Namn på målbanan: </label>
         <input type="text" name="goalName" id="goalName" defaultValue={currentGoal?.name ?? undefined} />
-        <br />
         <label htmlFor="description">Beskrivning av målbanan: </label>
         <input type="text" name="description" id="description" defaultValue={currentGoal?.description ?? undefined} />
-        <br />
         <label htmlFor="indicatorParameter">LEAP parameter: </label>
         <input type="text" list="LEAPOptions" name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined} />
-        <br />
         <label htmlFor="dataUnit">Enhet för dataserie: </label>
         <input type="text" name="dataUnit" required id="dataUnit" defaultValue={currentGoal?.dataSeries?.unit} />
-        <br />
         <details>
           <summary>
             Extra information om dataserie
@@ -111,10 +107,8 @@ export default function GoalForm({
           title="Använd numeriska värden separerade med semikolon eller tab. Decimaltal kan använda antingen punkt eller komma."
           defaultValue={dataSeriesString}
         />
-        <br />
         <LinkInput links={currentGoal?.links} />
-        <br />
-        <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} className="call-to-action-primary" />
+        <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} />
       </form>
 
       <datalist id="LEAPOptions">

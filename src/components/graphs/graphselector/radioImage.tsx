@@ -1,4 +1,4 @@
-import styles from '../../tables/tables.module.css' with { type: "css" };
+import styles from '../graphs.module.css' with { type: "css" };
 import Image from "next/image";
 
 export default function RadioImage({
@@ -6,24 +6,27 @@ export default function RadioImage({
   value,
   name, 
   checked,
+  text,
   onChange,
 }: {
   src: string,
   value: string,
   name: string,
   checked: boolean,
+  text: string,
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 
 
   return (
     <>
-      <div className={styles.radioImageWrapper}>
+      <label className={`button transparent font-weight-bold flex align-items-center gap-50 smooth ${styles.radioImageWrapper}`}>
+        {text}
         <input type='radio' name={name} value={value} checked={checked} onChange={onChange}/>
-        <div className={styles.radioImage}>
+        <div className='grid' >
           <Image src={src} alt={value} width={24} height={24} />
         </div>
-      </div>
+      </label>
     </>
   )
 }

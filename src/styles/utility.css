@@ -1,9 +1,29 @@
+/* Utility classes */
+
+.container {
+    display: block;
+    width: min(1250px, 100%);
+}
+
+.container-text {
+    display: block;
+    width: min(90ch, 100%);
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
 .display-flex, .flex {
     display: flex;
 }
 
 .display-grid, .grid {
     display: grid;
+}
+
+.display-block, .block {
+    display: block;
 }
 
 .flex-direction-row {
@@ -122,6 +142,14 @@
     gap: 5rem;
 }
 
+.margin-0 {
+    margin: 0;
+}
+ 
+.margin-auto {
+    margin: auto;
+}
+
 .margin-25 {
     margin: .25rem;
 }
@@ -218,6 +246,10 @@
     margin: 0 5rem;
 }
 
+.padding-0 {
+    padding: 0;
+}
+
 .padding-25 {
     padding: .25rem;
 }
@@ -312,4 +344,375 @@
 
 .padding-x-500 {
     padding: 0 5rem;
+}
+
+.smooth {
+    border-radius: .25rem;
+}
+
+.smooth-top {
+    border-radius: .25rem .25rem 0 0;
+}
+
+.smooth-right {
+    border-radius: 0 .25rem .25rem 0;
+}
+
+.smooth-bottom {
+    border-radius: 0 0 .25rem .25rem;
+}
+
+.smooth-left {
+    border-radius: .25rem 0 0 .25rem;
+}
+
+.rounded {
+    border-radius: .5rem;
+}
+
+.rounded-top {
+    border-radius: .5rem .5rem 0 0;
+}
+
+.rounded-right {
+    border-radius: 0 .5rem .5rem 0;
+}
+
+.rounded-bottom {
+    border-radius: 0 0 .5rem .5rem;
+}
+
+.rounded-left {
+    border-radius: .5rem 0 0 .5rem;
+}
+
+.round {
+    border-radius: 9999px;   
+}
+
+.round-top {
+    border-radius: 9999px 9999px 0 0;
+}
+
+.round-right {
+    border-radius: 0 9999px 9999px 0;
+}
+
+.round-bottom {
+    border-radius: 0 0 9999px 9999px;
+}
+
+.round-left {
+    border-radius: 9999px 0 0 9999px;
+}
+
+.circular {
+    border-radius: 100%;
+}
+
+.position-absolute {
+    position: absolute;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.position-fixed {
+    position: fixed;
+}
+
+.position-sticky {
+    position: sticky;
+}
+
+.font-weight-normal {
+    font-weight: normal;
+}
+
+.font-weight-bold {
+    font-weight: bold;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.height-100 {
+    height: 100%;
+}
+
+.focusable:focus-within {
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
+}
+
+.focusable input {
+    outline: none;
+    box-shadow: none;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+/* Forms */
+
+/* Text inputs (text, email, password, search, url) */
+
+input {
+    font-size: 1rem;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: inset 0 0 0 9999px #e0e6eb !important;
+}
+
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: inset 0 0 0 9999px white !important;
+}
+
+:where(
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="url"]
+) {
+    background-color: #e0e6eb;
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    border-radius: 3px;
+}
+
+:where(
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="search"]:focus,
+    input[type="url"]:focus 
+) {
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
+}
+
+/* If the element has a border, this should target the border instead of an outline (and only change color so that file selection keeps dashed line) */
+
+/* Number inputs (number, tel) */
+:where(
+    input[type="number"],
+    input[type="tel"] 
+) {
+    background-color: #e0e6eb;
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    border-radius: 3px;
+}
+
+:where(
+    input[type="number"]:focus,
+    input[type="tel"]:focus
+) {
+    outline: 2px solid ;
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
+}
+
+/* Button inputs (button, reset, submit, image) */
+:where(
+    input[type="button"],
+    input[type="reset"], 
+    input[type="submit"],
+    input[type="image"]
+) {
+    background-color: #e0e6eb;
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    border-radius: 3px;
+    transition: box-shadow .1s ease;
+}
+
+:where(
+    input[type="button"]:focus,
+    input[type="reset"]:focus, 
+    input[type="submit"]:focus,
+    input[type="image"]:focus
+) { 
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+}
+
+:where(
+    input[type="button"]:hover,
+    input[type="reset"]:hover, 
+    input[type="submit"]:hover,
+    input[type="image"]:hover 
+) {
+    box-shadow: inset 0 0 9999px rgba(0, 0, 0, .1);
+}
+
+/* Date inputs (datetimeLocal, date, month, week, time) */
+:where(
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"]
+ ) {
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    font-family: inherit;
+    border-radius: 3px;
+    border: 0;
+    background-color: #e0e6eb;
+}
+
+:where(
+    input[type="date"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="month"]:focus,
+    input[type="time"]:focus,
+    input[type="week"]:focus
+) {
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
+}
+
+/* File inputs (file) */
+
+:where(
+    input[type="file"]
+) {
+    display: block;
+    width: 100%;
+    padding: 1em;
+    border-radius: 3px;
+    border: 2px dashed #e0e6eb;
+    outline: none;
+}
+
+input[type="file"]::file-selector-button { /* TODO: :where() for pseudo elements not supported? */
+    background-color: #e0e6eb;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 3px;
+    margin: 0 .5rem;
+    cursor: pointer;
+}
+
+:where(
+    input[type="file"]:focus
+) {
+    border: 2px dashed var(--seagreen);
+}
+
+input[type="file"]:focus::file-selector-button { /* TODO: :where() for pseudo elements not supported? */
+    background-color: var(--seagreen);
+    color: white;
+}
+
+/* Selection inputs (checkbox, radio, range color) */
+
+:where(
+    input[type="radio"],
+    input[type="checkbox"] 
+) {
+    margin: 0;
+}
+    
+:where(
+    input[type="range"] 
+) {
+    display: block;
+    width: 100%;
+}
+
+:where(
+    input[type="color"] 
+) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: 100%;
+    border: 3px;
+    background-color: #e0e6eb;
+}
+
+input[type="color"]::-webkit-color-swatch { /* TODO: :where() for pseudo elements not supported? */
+    border-radius: 100%;
+    border: none;
+}
+
+input[type="color"]::-moz-color-swatch { /* TODO: :where() for pseudo elements not supported? */
+    border-radius: 100%;
+    border: none;
+}
+
+/* Hidden inputs (hidden) */
+
+/* Button */
+
+:where(
+    button
+) {
+    background-color: #e0e6eb;
+    border: 0;
+    border-radius: 3px;
+    padding-block: .5rem;
+    padding-inline: 1rem;
+    transition: box-shadow .1s ease;
+}
+
+:where(
+    button:hover
+) {
+    box-shadow: inset 0 0 999px rgba(0, 0, 0, .1);
+}
+
+:where(
+    button:not(:disabled):active
+) {
+    transform: scale(.95);
+}
+
+/* Select */
+:where(select) {
+    padding: .5rem 2rem .5rem .5rem;
+    border: none;
+    border-radius: 3px;
+
+    background: url('/icons/chevronDown.svg')
+                no-repeat
+                95% center          
+                #e0e6eb  
+    ;
+
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+
+}
+
+:where(select):focus {
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
 }
