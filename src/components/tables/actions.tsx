@@ -5,7 +5,7 @@ import styles from './tables.module.css' with { type: "css" };
 import { Action, Goal } from "@prisma/client"
 import { AccessLevel } from '@/types'
 import Link from 'next/link';
-import { RoadmapActionButton } from './tableActions/roadmapActions';
+import { TableMenu } from './tableActions/roadmapActions';
 
 interface ActionTableCommonProps {
   accessLevel?: AccessLevel,
@@ -45,7 +45,7 @@ export default function ActionTable({
   // If a goal is provided, extract the actions from it
   if (!actions) {
     actions = goal.actions.map((action) => {
-      let fakeGoal = { id: goal.id, roadmap: { id: goal.roadmapId } };
+      const fakeGoal = { id: goal.id, roadmap: { id: goal.roadmapId } };
       return { ...action, goal: fakeGoal };
     });
   }
@@ -78,10 +78,8 @@ export default function ActionTable({
           <span className={styles.linkTitle}>{action.name}</span>
           <p className={styles.actionLinkInfo}>{action.description}</p>
         </a>
-        <RoadmapActionButton
-          id={action.id}
-          tableName={action.name}
-          editHref={`/roadmap/${action.goal.roadmap.id}/goal/${action.goal.id}/action/${action.id}/editAction`}
+        <TableMenu
+          object={action}
         />
         {/*
           <span>{action.costEfficiency}</span>

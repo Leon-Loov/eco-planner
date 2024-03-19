@@ -1,7 +1,7 @@
 import { Data } from '@/lib/session';
 import styles from './tables.module.css' with { type: "css" };
 import { MetaRoadmap, Roadmap } from "@prisma/client";
-import { RoadmapActionButton } from './tableActions/roadmapActions';
+import { TableMenu } from './tableActions/roadmapActions';
 
 interface RoadmapTableCommonProps {
   user: Data['user'],
@@ -52,11 +52,8 @@ export default function RoadmapTable({
               <span className={styles.linkTitle}>{roadmap.metaRoadmap.name}</span>
               <span className={styles.linkInfo}>{roadmap.metaRoadmap.type} • {roadmap._count.goals} Målbanor</span>
             </a>
-            <RoadmapActionButton
-              addGoalHref={`/roadmap/${roadmap.id}/goal/createGoal`}
-              editHref={`/roadmap/${roadmap.id}/editRoadmap`}
-              id={roadmap.id}
-              tableName={roadmap.metaRoadmap.name}
+            <TableMenu
+              object={roadmap}
             />
             <span>v.{roadmap.version}</span> {/* TODO: Turn into link */}
           </div>
