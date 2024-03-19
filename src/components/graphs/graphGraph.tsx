@@ -1,8 +1,8 @@
 "use client"
 
-import MainDeltaGraph from "./mainDeltaGraph";
-import MainGraph from "./mainGraph";
-import MainRelativeGraph from "./mainRelativeGraph";
+import MainDeltaGraph from "./mainGraphs/mainDeltaGraph";
+import MainGraph from "./mainGraphs/mainGraph";
+import MainRelativeGraph from "./mainGraphs/mainRelativeGraph";
 import { DataSeries, Goal } from "@prisma/client";
 import GraphSelector from "./graphselector/graphSelector";
 import { useEffect, useState } from "react";

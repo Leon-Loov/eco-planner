@@ -1,7 +1,7 @@
 import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal } from "@prisma/client";
-import styles from './graphs.module.css'
+import styles from '../graphs.module.css'
 
 export default function MainGraph({
   goal,
