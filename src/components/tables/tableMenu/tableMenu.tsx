@@ -5,14 +5,17 @@ import styles from './tableMenu.module.css' with { type: "css" }
 import Link from "next/link";
 import { useRef } from "react";
 import { Action, DataSeries, Goal, MetaRoadmap } from "@prisma/client";
+import { AccessLevel } from "@/types";
 
 // TODO: This acts as a general purpose button for roadmaps, goals and actions. 
 // Update the name of the component to reflect this
 
 export function TableMenu(
   {
+    accessLevel,
     object,
   }: {
+    accessLevel?: AccessLevel,
     object: (
       // Action
       (Action & {
@@ -53,11 +56,16 @@ export function TableMenu(
   }) {
   const menu = useRef<HTMLDialogElement | null>(null);
 
+  // If user doesn't have edit access, don't show the menu
+  if (!(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin)) {
+    return null;
+  }
+
   let selfLink: string | undefined;
   let creationLink: string | undefined;
   let creationDescription: string | undefined;
   let editLink: string | undefined;
-  // TODO: Add function for deleting object
+  // TODO: Add function for deleting object, visible only to admins and authors
   // MetaRoadmaps
   if (object.roadmapVersions != undefined) {
     selfLink = `/metaRoadmap/${object.id}`;
