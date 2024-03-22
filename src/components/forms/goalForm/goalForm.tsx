@@ -80,15 +80,28 @@ export default function GoalForm({
       <form onSubmit={handleSubmit}>
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
-        <label htmlFor="goalName">Namn på målbanan: </label>
-        <input type="text" name="goalName" id="goalName" defaultValue={currentGoal?.name ?? undefined} />
-        <label htmlFor="description">Beskrivning av målbanan: </label>
-        <input type="text" name="description" id="description" defaultValue={currentGoal?.description ?? undefined} />
-        <label htmlFor="indicatorParameter">LEAP parameter: </label>
-        <input type="text" list="LEAPOptions" name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined} />
-        <label htmlFor="dataUnit">Enhet för dataserie: </label>
-        <input type="text" name="dataUnit" required id="dataUnit" defaultValue={currentGoal?.dataSeries?.unit} />
-        <details>
+
+        <label className="block margin-y-75">
+          Namn på målbanan:
+          <input className="margin-y-25" type="text" name="goalName" id="goalName" defaultValue={currentGoal?.name ?? undefined} />
+        </label>
+
+        <label className="block margin-y-75">
+          Beskrivning av målbanan: 
+          <input className="margin-y-25" type="text" name="description" id="description" defaultValue={currentGoal?.description ?? undefined} />
+        </label>
+
+        <label className="block margin-y-75">
+          LEAP parameter: 
+          <input className="margin-y-25" type="text" list="LEAPOptions" name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined} />
+        </label>
+
+        <label className="block margin-y-75">
+          Enhet för dataserie:
+          <input className="margin-y-25" type="text" name="dataUnit" required id="dataUnit" defaultValue={currentGoal?.dataSeries?.unit} />
+        </label>
+
+        <details className="margin-y-75">
           <summary>
             Extra information om dataserie
           </summary>
@@ -100,15 +113,20 @@ export default function GoalForm({
             Om värden saknas för ett år kan du lämna det tomt, exempelvis kan &quot;;1;;;;5&quot; användas för att ange värdena 1 och 5 för år 2021 och 2025.
           </p>
         </details>
-        <label htmlFor="dataSeries">Dataserie: </label>
-        {/* TODO: Make this allow .csv files and possibly excel files */}
-        <input type="text" name="dataSeries" required id="dataSeries"
-          pattern={dataSeriesPattern}
-          title="Använd numeriska värden separerade med semikolon eller tab. Decimaltal kan använda antingen punkt eller komma."
-          defaultValue={dataSeriesString}
-        />
+
+        <label className="block margin-y-75">
+          Dataserie:
+          {/* TODO: Make this allow .csv files and possibly excel files */}
+          <input type="text" name="dataSeries" required id="dataSeries"
+            pattern={dataSeriesPattern}
+            title="Använd numeriska värden separerade med semikolon eller tab. Decimaltal kan använda antingen punkt eller komma."
+            className="margin-y-25"
+            defaultValue={dataSeriesString}
+          />
+        </label>
+        
         <LinkInput links={currentGoal?.links} />
-        <input type="submit" value={currentGoal ? "Spara" : "Skapa målbana"} />
+        <input type="submit" className="margin-y-75" value={currentGoal ? "Spara" : "Skapa målbana"} />
       </form>
 
       <datalist id="LEAPOptions">
