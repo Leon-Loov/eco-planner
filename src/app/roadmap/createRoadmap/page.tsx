@@ -30,7 +30,7 @@ export default async function Page() {
 
   return (
     <>
-      <div className='container-text'>
+      <div className='container-text' style={{marginInline: 'auto'}}>
         <h1>Skapa en ny version av en färdplan</h1>
         <RoadmapForm
           user={session.user}
