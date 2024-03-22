@@ -394,11 +394,11 @@ export async function DELETE(request: NextRequest) {
   const response = new Response();
   const [session, roadmap] = await Promise.all([
     getSession(request, response),
-    request.json() as Promise<{ roadmapId: string }>
+    request.json() as Promise<{ id: string }>
   ]);
 
   // Validate request body
-  if (!roadmap.roadmapId) {
+  if (!roadmap.id) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -423,7 +423,7 @@ export async function DELETE(request: NextRequest) {
       }),
       prisma.roadmap.findUnique({
         where: {
-          id: roadmap.roadmapId,
+          id: roadmap.id,
           ...(session.user.isAdmin ? {} : {
             OR: [
               { authorId: session.user.id },
@@ -473,7 +473,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const deletedRoadmap = await prisma.roadmap.delete({
       where: {
-        id: roadmap.roadmapId
+        id: roadmap.id
       },
       select: {
         id: true,

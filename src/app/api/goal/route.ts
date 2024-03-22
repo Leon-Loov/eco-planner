@@ -356,11 +356,11 @@ export async function DELETE(request: NextRequest) {
   const response = new Response();
   const [session, goal] = await Promise.all([
     getSession(request, response),
-    request.json() as Promise<{ goalId: string }>
+    request.json() as Promise<{ id: string }>
   ]);
 
   // Validate request body
-  if (!goal.goalId) {
+  if (!goal.id) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -385,7 +385,7 @@ export async function DELETE(request: NextRequest) {
       }),
       prisma.goal.findUnique({
         where: {
-          id: goal.goalId,
+          id: goal.id,
           ...(session.user.isAdmin ? {} : {
             OR: [
               // Either the goal, roadmap or meta roadmap must be authored by the user unless they are an admin
@@ -437,7 +437,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const deletedGoal = await prisma.goal.delete({
       where: {
-        id: goal.goalId
+        id: goal.id
       },
       select: {
         id: true,
