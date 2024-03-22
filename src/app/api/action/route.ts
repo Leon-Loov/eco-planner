@@ -373,11 +373,11 @@ export async function DELETE(request: NextRequest) {
   const response = new Response();
   const [session, action] = await Promise.all([
     getSession(request, response),
-    request.json() as Promise<{ actionId: string }>
+    request.json() as Promise<{ id: string }>
   ]);
 
   // Validate request body
-  if (!action.actionId) {
+  if (!action.id) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -402,7 +402,7 @@ export async function DELETE(request: NextRequest) {
       }),
       prisma.action.findUnique({
         where: {
-          id: action.actionId,
+          id: action.id,
           // The user must be admin, or have authored the action or one of its parents
           ...(session.user.isAdmin ? {} : {
             OR: [
@@ -455,7 +455,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const deletedAction = await prisma.action.delete({
       where: {
-        id: action.actionId
+        id: action.id
       },
       select: {
         id: true,

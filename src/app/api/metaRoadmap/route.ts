@@ -417,11 +417,11 @@ export async function DELETE(request: NextRequest) {
   const response = new Response();
   const [session, metaRoadmap] = await Promise.all([
     getSession(request, response),
-    request.json() as Promise<{ metaRoadmapId: string }>
+    request.json() as Promise<{ id: string }>
   ]);
 
   // Validate request body
-  if (!metaRoadmap.metaRoadmapId) {
+  if (!metaRoadmap.id) {
     return createResponse(
       response,
       JSON.stringify({ message: 'Missing required input parameters' }),
@@ -446,7 +446,7 @@ export async function DELETE(request: NextRequest) {
       }),
       prisma.metaRoadmap.findUnique({
         where: {
-          id: metaRoadmap.metaRoadmapId,
+          id: metaRoadmap.id,
           // The user must be admin, or have authored the meta roadmap
           ...(session.user.isAdmin ? {} : { authorId: session.user.id })
         },
@@ -492,7 +492,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const deletedMetaRoadmap = await prisma.metaRoadmap.delete({
       where: {
-        id: metaRoadmap.metaRoadmapId
+        id: metaRoadmap.id
       },
       select: {
         id: true,
