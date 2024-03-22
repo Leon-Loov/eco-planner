@@ -18,10 +18,18 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
         </summary>
         <p>För att lägga till en användare/grupp, skriv in namnet och tryck på enter.</p>
         <p>För att ta bort en användare/grupp, checka ur rutan bredvid namnet.</p>
-        <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
-        <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
-        <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
-        <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
+        <div className="margin-y-75">
+          <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
+        </div>
+        <div className="margin-y-75">
+          <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
+        </div>
+        <div className="margin-y-75">
+          <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
+        </div>
+        <div className="margin-y-75">
+          <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
+        </div>
       </details>
     </>
   )

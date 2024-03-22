@@ -89,12 +89,14 @@ export default function MetaRoadmapForm({
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
 
-        <label htmlFor="metaRoadmapName">Namn för den nya färdplanen</label>
-        <input id="metaRoadmapName" name="metaRoadmapName" type="text" defaultValue={currentRoadmap?.name ?? undefined} required />
+        <label className="block margin-y-75">
+          Namn för den nya färdplanen
+          <input id="metaRoadmapName" name="metaRoadmapName" className="margin-y-25" type="text" defaultValue={currentRoadmap?.name ?? undefined} required />
+        </label>
 
         <label className="block margin-y-75">
           Beskrivning av färdplanen
-          <textarea className="block smooth" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} required></textarea>
+          <textarea className="block smooth margin-y-25" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} required></textarea>
         </label>
 
         <label className="block margin-y-75">
@@ -112,8 +114,10 @@ export default function MetaRoadmapForm({
           </select>
           </label>
 
-        <label htmlFor="actor">Aktör för färdplanen</label>
-        <input list="actors" id="actor" name="actor" type="text" defaultValue={currentRoadmap?.actor ?? undefined} />
+        <label>
+          Aktör för färdplanen
+          <input list="actors" id="actor" name="actor" type="text" defaultValue={currentRoadmap?.actor ?? undefined} />
+        </label>
 
         <div className="margin-y-300">
           <LinkInput />
@@ -126,8 +130,9 @@ export default function MetaRoadmapForm({
           </>
         }
 
-        <label htmlFor="parentRoadmap">Om denna färdplan har en annan färdplan den jobbar mot kan den väljas här</label>
-        <select name="parentRoadmap" id="parentRoadmap" defaultValue={currentRoadmap?.parentRoadmapId ?? ""}>
+        <label className="block margin-y-75">
+          Om denna färdplan har en annan färdplan den jobbar mot kan den väljas här
+          <select name="parentRoadmap" id="parentRoadmap" className="block margin-y-25" defaultValue={currentRoadmap?.parentRoadmapId ?? ""}>
           <option value="">Ingen förälder vald</option>
           {
             !parentRoadmapOptions && currentRoadmap && currentRoadmap.parentRoadmapId && (
@@ -142,6 +147,8 @@ export default function MetaRoadmapForm({
             })
           }
         </select>
+      </label>
+
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
         <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-y-100 seagreen color-purewhite" />
       </form>

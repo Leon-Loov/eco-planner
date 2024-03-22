@@ -716,3 +716,23 @@ input[type="color"]::-moz-color-swatch { /* TODO: :where() for pseudo elements n
     box-shadow: 0 0 .5rem -3px var(--seagreen);
     background-color: transparent;
 }
+
+/* Textarea */
+
+:where(
+    textarea
+) {
+    background-color: #e0e6eb;
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    border-radius: 3px;
+    resize: vertical;
+}
+
+:where(textarea:focus) {
+    outline: 2px solid var(--seagreen);
+    box-shadow: 0 0 .5rem -3px var(--seagreen);
+    background-color: transparent;
+}

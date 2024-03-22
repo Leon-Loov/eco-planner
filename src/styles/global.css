@@ -20,9 +20,7 @@ p {
   width: min(90ch, 100%);
 } 
 
-/* Grid layouts */
-
-.overflow-x-scroll { 
+.overflow-x-scroll { /* TODO: Remove class */
   overflow-x: scroll;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
