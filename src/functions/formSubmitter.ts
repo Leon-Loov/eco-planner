@@ -11,8 +11,8 @@ import { SetStateAction } from "react";
  */
 export default function formSubmitter(
   target: string,
-  body: string,
-  method: "POST" | "PUT",
+  body: string | null,
+  method: "POST" | "PUT" | "DELETE",
   loadingStateSetter?: (value: SetStateAction<boolean>) => void,
 ) {
   fetch(target, {
