@@ -13,7 +13,6 @@ import GraphGraph from "@/components/graphs/graphGraph";
 import getOneGoal from "@/fetchers/getOneGoal";
 import { Goal, DataSeries } from "@prisma/client";
 import Comments from "@/components/comments/comments";
-import { Fragment } from "react";
 import styles from './page.module.css'
 import getGoalByIndicator from "@/fetchers/getGoalByIndicator";
 import getRoadmapByVersion from "@/fetchers/getRoadmapByVersion";
@@ -49,7 +48,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   if (roadmap?.metaRoadmap.parentRoadmapId) {
     try {
       // Get the parent roadmap (if any)
-      let parentRoadmap = await getRoadmapByVersion(roadmap.metaRoadmap.parentRoadmapId,
+      const parentRoadmap = await getRoadmapByVersion(roadmap.metaRoadmap.parentRoadmapId,
         roadmap.targetVersion ||
         (await prisma.roadmap.aggregate({ where: { metaRoadmapId: roadmap.metaRoadmap.parentRoadmapId }, _max: { version: true } }))._max.version ||
         0);
@@ -95,11 +94,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             <h2>Alla värden i tabellerna använder följande skala: {`"${goal.dataSeries?.scale}"`}</h2>
           </>
         }
-        { // Only allow scaling the values if the user has edit access to the goal
-          (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
-          <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
-        }
-    */}
+      */}
 
       <section className="margin-y-100">
         <span style={{ color: 'gray' }}>Målbana</span>
@@ -107,11 +102,16 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <p style={{ width: 'min(120ch, 100%)' }}>{goal.description}</p>
       </section>
 
+      { // Only allow scaling the values if the user has edit access to the goal
+        (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
+        <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
+      }
+
       <section className={styles.graphLayout}>
-          <GraphGraph goal={goal} nationalGoal={parentGoal} />
-          <CombinedGraph roadmap={roadmap} goal={goal} />
+        <GraphGraph goal={goal} nationalGoal={parentGoal} />
+        <CombinedGraph roadmap={roadmap} goal={goal} />
       </section>
-      
+
       <section>
 
         <div className="flex align-items-center justify-content-space-between">
