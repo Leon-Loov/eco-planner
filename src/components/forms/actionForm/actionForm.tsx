@@ -51,30 +51,47 @@ export default function ActionForm({
       <form onSubmit={handleSubmit}>
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <button type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
-        <div>
-          <label htmlFor="actionName">Namn på åtgärden: </label>
-          <input type="text" name="actionName" required id="actionName" defaultValue={currentAction?.name} />
-        </div>
-        <div>
-          <label htmlFor="actionDescription">Beskrivning av åtgärden: </label>
-          <input type="text" name="actionDescription" id="actionDescription" defaultValue={currentAction?.description ?? undefined} />
-        </div>
-        <label htmlFor="costEfficiency">Kostnadseffektivitet: </label>
-        <input type="text" name="costEfficiency" id="costEfficiency" defaultValue={currentAction?.costEfficiency ?? undefined} />
-        <label htmlFor="expectedOutcome">Förväntat resultat: </label>
-        <input type="text" name="expectedOutcome" id="expectedOutcome" defaultValue={currentAction?.expectedOutcome ?? undefined} />
-        <div>
-          <label htmlFor="startYear">Planerat startår: </label>
-          <input type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} min={2000} />
-        </div>
-        <div>
-          <label htmlFor="endYear">Planerat slutår: </label>
-          <input type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} min={2000} />
-        </div>
-        <label htmlFor="projectManager">Projektansvarig: </label>
-        <input type="text" name="projectManager" id="projectManager" defaultValue={currentAction?.projectManager ?? undefined} />
-        <label htmlFor="relevantActors">Relevanta aktörer: </label>
-        <input type="text" name="relevantActors" id="relevantActors" defaultValue={currentAction?.relevantActors ?? undefined} />
+        
+        <label className="block margin-y-75">
+          Namn på åtgärden:
+          <input className="margin-y-25" type="text" name="actionName" required id="actionName" defaultValue={currentAction?.name} />
+        </label>
+
+        <label className="block margin-y-75">
+          Beskrivning av åtgärden: 
+          <input className="margin-y-25" type="text" name="actionDescription" id="actionDescription" defaultValue={currentAction?.description ?? undefined} />
+        </label>
+
+        <label className="block margin-y-75">
+          Kostnadseffektivitet: 
+          <input className="margin-y-25" type="text" name="costEfficiency" id="costEfficiency" defaultValue={currentAction?.costEfficiency ?? undefined} />
+        </label>
+
+        <label className="block margin-y-75">
+          Förväntat resultat: 
+          <input className="margin-y-25" type="text" name="expectedOutcome" id="expectedOutcome" defaultValue={currentAction?.expectedOutcome ?? undefined} />
+        </label>
+        
+        <label className="block margin-y-75">
+          Planerat startår: 
+          <input className="margin-y-25" type="number" name="startYear" id="startYear" defaultValue={currentAction?.startYear ?? undefined} min={2000} />
+        </label>
+
+        <label className="block margin-y-75">
+          Planerat slutår:
+          <input className="margin-y-25" type="number" name="endYear" id="endYear" defaultValue={currentAction?.endYear ?? undefined} min={2000} />
+        </label>
+
+        <label className="block margin-y-75">
+          Projektansvarig: 
+          <input className="margin-y-25" type="text" name="projectManager" id="projectManager" defaultValue={currentAction?.projectManager ?? undefined} />
+        </label>
+
+        <label className="block margin-y-75">
+          Relevanta aktörer: 
+          <input className="margin-y-25" type="text" name="relevantActors" id="relevantActors" defaultValue={currentAction?.relevantActors ?? undefined} />
+        </label>
+
         <p>Vilka kategorier faller åtgärden under?</p>
         <div className="display-flex gap-25 align-items-center">
           <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} />
@@ -88,10 +105,13 @@ export default function ActionForm({
           <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} />
           <label htmlFor="isRenewables">Renewables</label>
         </div>
+
         <div>
           <LinkInput links={currentAction?.links} />
         </div>
-        <input type="submit" value={currentAction ? "Spara" : "Skapa åtgärd"} />
+
+        <input type="submit" className="margin-y-75" value={currentAction ? "Spara" : "Skapa åtgärd"} />
+
       </form>
     </>
   )
