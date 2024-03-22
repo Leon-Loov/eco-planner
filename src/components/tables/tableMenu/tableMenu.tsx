@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useRef } from "react";
 import { Action, DataSeries, Goal, MetaRoadmap } from "@prisma/client";
 import { AccessLevel } from "@/types";
+import ConfirmDelete from "@/components/modals/confirmDelete";
+import { openModal } from "@/components/modals/modalFunctions";
 
 // TODO: This acts as a general purpose button for roadmaps, goals and actions. 
 // Update the name of the component to reflect this
@@ -50,11 +52,11 @@ export function TableMenu(
         metaRoadmap?: never,
         roadmap?: never,
         goal?: never,
-        name?: never,
       })
     )
   }) {
   const menu = useRef<HTMLDialogElement | null>(null);
+  const deletionRef = useRef<HTMLDialogElement | null>(null);
 
   // If user doesn't have edit access, don't show the menu
   if (!(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin)) {
@@ -65,13 +67,14 @@ export function TableMenu(
   let creationLink: string | undefined;
   let creationDescription: string | undefined;
   let editLink: string | undefined;
-  // TODO: Add function for deleting object, visible only to admins and authors
+  let deleteLink: string | undefined;
   // MetaRoadmaps
   if (object.roadmapVersions != undefined) {
     selfLink = `/metaRoadmap/${object.id}`;
     creationLink = `roadmap/createRoadmap?metaRoadmapId=${object.id}`;
     creationDescription = 'Ny färdplan';
     editLink = `/metaRoadmap/${object.id}/editMetaRoadmap`;
+    deleteLink = "/api/metaRoadmap"
   }
   // Roadmaps
   else if (object.metaRoadmap != undefined) {
@@ -79,6 +82,7 @@ export function TableMenu(
     creationLink = `/roadmap/${object.id}/goal/createGoal`;
     creationDescription = 'Ny målbana';
     editLink = `/roadmap/${object.id}/editRoadmap`;
+    deleteLink = "/api/roadmap"
   }
   // Goals
   else if (object.roadmap != undefined) {
@@ -86,11 +90,16 @@ export function TableMenu(
     creationLink = `/roadmap/${object.roadmap.id}/goal/${object.id}/action/createAction`;
     creationDescription = 'Ny åtgärd';
     editLink = `/roadmap/${object.roadmap.id}/goal/${object.id}/editGoal`;
+    deleteLink = "/api/goal"
+    if (!object.name) {
+      object.name = object.indicatorParameter;
+    }
   }
   // Actions
   else if (object.goal != undefined) {
     selfLink = `/roadmap/${object.goal.roadmap.id}/goal/${object.goal.id}/action/${object.id}`;
     editLink = `/roadmap/${object.goal.roadmap.id}/goal/${object.goal.id}/action/${object.id}/editAction`;
+    deleteLink = "/api/action"
   }
   // Catch all
   else {
@@ -141,12 +150,16 @@ export function TableMenu(
             <span>Redigera</span>
             <Image src='/icons/edit.svg' alt="" width={24} height={24} className={styles.actionImage} />
           </Link>
-          {/*
-            <Link href={editHref} className={styles.menuAction}>
-              <span>Radera färdplan</span>
-              <Image src='/icons/delete.svg' alt="" width={24} height={24} className={styles.actionImage} />
-            </Link> 
-          */}
+          { // Admins and authors can delete items
+            (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author) &&
+            <>
+              <button type="button" onClick={() => openModal(deletionRef)}>
+                <span>Radera färdplan</span>
+                <Image src='/icons/delete.svg' alt="" width={24} height={24} className={styles.actionImage} />
+              </button>
+              <ConfirmDelete modalRef={deletionRef} targetUrl={deleteLink} targetName={object.name || object.metaRoadmap?.name || "Namn sasknas"} targetId={object.id} />
+            </>
+          }
         </dialog>
       </div>
     </>
