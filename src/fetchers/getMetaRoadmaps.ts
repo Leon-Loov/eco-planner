@@ -1,3 +1,5 @@
+'use server';
+
 import { getSessionData } from "@/lib/session";
 import { metaRoadmapSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";

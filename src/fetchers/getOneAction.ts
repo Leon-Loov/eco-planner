@@ -1,3 +1,5 @@
+'use server';
+
 import { getSessionData } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { AccessControlled } from "@/types";

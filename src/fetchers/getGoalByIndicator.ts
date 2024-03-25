@@ -1,3 +1,5 @@
+'use server';
+
 import { getSessionData } from "@/lib/session"
 import { actionSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
