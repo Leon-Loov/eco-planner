@@ -8,13 +8,14 @@ import scbPopulationQuery from "@/lib/scbPopulationQuery";
 import scbAreaQuery from "@/lib/scbAreaQuery";
 import scaleDataSeries from "@/functions/scaleDataSeries";
 
+export enum ScaleBy {
+  Custom = "CUSTOM",
+  Inhabitants = "INHABITANTS",
+  Area = "AREA",
+}
+
 export default function DataSeriesScaler({ dataSeriesId }: { dataSeriesId: string }) {
-  enum ScaleBy {
-    Custom = "CUSTOM",
-    Inhabitants = "INHABITANTS",
-    Area = "AREA",
-  }
-  let modal = useRef<HTMLDialogElement | null>(null);
+  const modal = useRef<HTMLDialogElement | null>(null);
 
   const [scaleBy, setScaleBy] = useState<ScaleBy | "">("");
   const [value1, setValue1] = useState<number | undefined>(undefined);
@@ -75,6 +76,7 @@ export default function DataSeriesScaler({ dataSeriesId }: { dataSeriesId: strin
       case ScaleBy.Area:
         setIsLoading(true);
         value = parseFloat((await scbAreaQuery(areaCode))?.area ?? "0");
+        setIsLoading(false);
         return value;
         break;
       default:
@@ -152,10 +154,10 @@ export default function DataSeriesScaler({ dataSeriesId }: { dataSeriesId: strin
 
   return (
     <>
-      <button type="button" className="call-to-action-primary margin-y-200" style={{width: 'fit-content'}} onClick={openModal}>Skala alla värden i serien</button>
+      <button type="button" className="call-to-action-primary margin-y-200" style={{ width: 'fit-content' }} onClick={openModal}>Skala alla värden i serien</button>
       <dialog ref={modal} aria-modal>
         <div className={`display-flex flex-direction-row-reverse align-items-center justify-content-space-between`}>
-          <button disabled={isLoading} onClick={closeModal} autoFocus aria-label="Close" >
+          <button onClick={closeModal} autoFocus aria-label="Close" >
             <Image src='/icons/close.svg' alt="" width={18} height={18} />
           </button>
           <h2>Skala värden i serien</h2>
@@ -178,7 +180,7 @@ export default function DataSeriesScaler({ dataSeriesId }: { dataSeriesId: strin
         <output name="scaleFactor" id="scaleFactor">{value3 ?? "Värde saknas"}</output>
         <div className={`display-flex flex-direction-row align-items-center justify-content-space-between`}>
           <button disabled={!value3} type="button" onClick={doScaling}>Skala värdena</button>
-          <button disabled={isLoading} type="button" onClick={closeModal}>Avbryt</button>
+          <button type="button" onClick={closeModal}>Avbryt</button>
         </div>
       </dialog>
     </>

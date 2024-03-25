@@ -17,7 +17,8 @@ import styles from './page.module.css'
 import getGoalByIndicator from "@/fetchers/getGoalByIndicator";
 import getRoadmapByVersion from "@/fetchers/getRoadmapByVersion";
 import prisma from "@/prismaClient";
-import DataSeriesScaler from "@/components/DataSeriesScaler";
+import DataSeriesScaler from "@/components/modals/dataSeriesScaler";
+import CopyAndScale from "@/components/modals/copyAndScale";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -105,6 +106,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       { // Only allow scaling the values if the user has edit access to the goal
         (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
         <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
+      }
+
+      { // TODO: Maybe show button even if no data series is attached?
+        goal.dataSeries?.id &&
+        <CopyAndScale goal={goal} user={session.user} />
       }
 
       <section className={styles.graphLayout}>
