@@ -6,6 +6,9 @@ import { closeModal, openModal } from "./modalFunctions";
 import { useEffect, useRef, useState } from "react";
 import getRoadmaps from "@/fetchers/getRoadmaps";
 import { Data } from "@/lib/session";
+import RepeatableScaling from "../repeatableScaling";
+import { GoalInput, dataSeriesDataFieldNames } from "@/types";
+import formSubmitter from "@/functions/formSubmitter";
 
 export default function CopyAndScale({
   goal,
@@ -15,7 +18,7 @@ export default function CopyAndScale({
   user: Data["user"],
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [roadmapOptions, setRoadmapOptions] = useState<{ id: string, name: string, version: number }[]>([]);
+  const [roadmapOptions, setRoadmapOptions] = useState<{ id: string, name: string, version: number, actor: string | null }[]>([]);
 
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
@@ -32,12 +35,64 @@ export default function CopyAndScale({
         return false;
       });
     }).then(roadmaps => {
-      setRoadmapOptions(roadmaps.map(roadmap => ({ id: roadmap.id, name: roadmap.metaRoadmap.name, version: roadmap.version })));
+      setRoadmapOptions(roadmaps.map(roadmap => ({ id: roadmap.id, name: roadmap.metaRoadmap.name, version: roadmap.version, actor: roadmap.metaRoadmap.actor })));
     }).catch(error => {
       console.error("Error getting roadmaps", error);
-      setRoadmapOptions([{ id: "error", name: "Error getting roadmaps", version: 0 }]);
+      setRoadmapOptions([{ id: "error", name: "Error getting roadmaps", version: 0, actor: null }]);
     });
   }, [user]);
+
+  function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setIsLoading(true);
+
+    const form = event.target.elements;
+
+    // Id of the roadmap to copy the goal to
+    const copyToId = (form.namedItem("copyTo") as HTMLSelectElement).value;
+
+    // Get the scaling factor
+    const scalars = form.namedItem("scaleFactor");
+    let scaleFactor: number = 1;
+    if (scalars instanceof HTMLInputElement && scalars.value) {
+      scaleFactor = parseFloat((scalars as HTMLInputElement).value);
+    } else if (scalars instanceof NodeList && scalars.length > 0) {
+      for (const i of scalars) {
+        if (i instanceof HTMLInputElement && i.value) {
+          scaleFactor *= parseFloat(i.value);
+        }
+      }
+    }
+
+    // Get the data series from current goal
+    const dataSeries: string[] = [];
+    for (const i of dataSeriesDataFieldNames) {
+      const value = goal.dataSeries?.[i];
+      if (value == undefined) {
+        dataSeries.push("");
+      } else {
+        dataSeries.push((value * scaleFactor).toString());
+      }
+    }
+
+    const formData: GoalInput & { roadmapId: string } = {
+      name: goal.name,
+      description: goal.description,
+      indicatorParameter: goal.indicatorParameter,
+      dataUnit: goal.dataSeries?.unit || "missing",
+      dataScale: goal.dataSeries?.scale || undefined,
+      dataSeries: dataSeries,
+      roadmapId: copyToId,
+    };
+
+    const formJSON = JSON.stringify(formData);
+
+    formSubmitter('/api/goal', formJSON, 'POST', setIsLoading);
+  }
+
+  // Might use for keys for repeatableScaling
+  // const uuid = crypto?.randomUUID() || Math.random().toString();
 
   return (
     <>
@@ -50,13 +105,22 @@ export default function CopyAndScale({
           <h2>Kopiera och skala</h2>
         </div>
         <p>Kopiera och skala målbanan {goal.name}</p>
-        <label htmlFor="copyTo">Under vilken färdplan vill du skapa en kopia av målbanan?</label>
-        <select name="copyTo" id="copyTo">
-          <option value="">Välj färdplan</option>
-          {roadmapOptions.map(roadmap => (
-            <option key={roadmap.id} value={roadmap.id}>{`${roadmap.name} ${roadmap.version ? `(version ${roadmap.version.toString()})` : null}`}</option>
-          ))}
-        </select>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="copyTo">Under vilken färdplan vill du skapa en kopia av målbanan?</label>
+          <select required name="copyTo" id="copyTo">
+            <option value="">Välj färdplan</option>
+            {roadmapOptions.map(roadmap => (
+              <option key={roadmap.id} value={roadmap.id}>{`${roadmap.name} ${roadmap.version ? `(version ${roadmap.version.toString()})` : null}`}</option>
+            ))}
+          </select>
+          <br />
+          {/* This should be rendered with an array.map and keys, with an option to add and remove entries */}
+          <RepeatableScaling>
+            {/* Here should be a button to remove the current instance of RepeatableScaling */}
+          </RepeatableScaling>
+          <br />
+          <input type="submit" value="Skapa skalad kopia" />
+        </form>
       </dialog>
     </>
   )
