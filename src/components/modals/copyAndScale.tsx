@@ -55,14 +55,45 @@ export default function CopyAndScale({
 
     // Get the scaling factor
     const scalars = form.namedItem("scaleFactor");
+    const weights = form.namedItem("weight");
+    let totalWeight: number = 0;
     let scaleFactor: number = 1;
     if (scalars instanceof HTMLInputElement && scalars.value) {
-      scaleFactor = parseFloat((scalars as HTMLInputElement).value);
-    } else if (scalars instanceof NodeList && scalars.length > 0) {
-      for (const i of scalars) {
-        if (i instanceof HTMLInputElement && i.value) {
-          scaleFactor *= parseFloat(i.value);
+      const tempScale = parseFloat(scalars.value);
+      // If the value is a number, use it as the scale factor
+      if (tempScale != null && !isNaN(tempScale)) {
+        scaleFactor = tempScale;
+      };
+    }
+    // If the input is a NodeList, loop through it and calculate the weighted average of the scale factors
+    // TODO: Consider adding a toggle between weighted average, product, and weighted geometric mean
+    else if (scalars instanceof NodeList && scalars.length > 0) {
+      scaleFactor = 0;
+      for (let i = 0; i < scalars.length; i++) {
+        let scalar: number | null = null;
+        let weight: number | null = null;
+        // Try parsing values from the input fields
+        if (scalars instanceof NodeList && scalars[i] instanceof HTMLInputElement) {
+          scalar = parseFloat((scalars[i] as HTMLInputElement).value);
         }
+        if (weights instanceof NodeList && weights[i] instanceof HTMLInputElement) {
+          weight = parseFloat((weights[i] as HTMLInputElement).value);
+        }
+        // If scalar is a number, multiply total scale factor with it
+        // If weight is not a number, default to 1 (but allow 0 to be used as a weight)
+        if (scalar != null && !isNaN(scalar)) {
+          if (weight != null && !isNaN(weight)) {
+            totalWeight += weight;
+            scaleFactor += scalar * weight;
+          } else {
+            totalWeight += 1;
+            scaleFactor += scalar * 1;
+          }
+        }
+      }
+      // If the total weight is not 0, divide the scale factor by it to get the weighted average
+      if (totalWeight > 0) {
+        scaleFactor /= totalWeight;
       }
     }
 

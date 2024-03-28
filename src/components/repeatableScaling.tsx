@@ -176,6 +176,9 @@ export default function RepeatableScaling({
       <label htmlFor="result">Skalfaktor för den här beräkningen: </label>
       <output name="result" id="result">{result ?? "Värde saknas"}</output>
       <input type="hidden" name="scaleFactor" value={result?.toString() ?? "1"} />
+      <br />
+      <label htmlFor="weight">Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna): </label>
+      <input type="number" step={"any"} id="weight" name="weight" />
 
       {children &&
         <>
