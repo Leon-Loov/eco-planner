@@ -19,10 +19,11 @@ export default function CopyAndScale({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [roadmapOptions, setRoadmapOptions] = useState<{ id: string, name: string, version: number, actor: string | null }[]>([]);
+  const [scalingComponents, setScalingComponents] = useState<string[]>([crypto?.randomUUID() || Math.random().toString()]);
 
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
-  // Get list of roadmaps user can add a copy of the goal to on mount
+  // Get list of roadmaps user can add a copy of the goal to
   useEffect(() => {
     getRoadmaps().then(roadmaps => {
       // Select only roadmaps user ha edit access to
@@ -114,10 +115,15 @@ export default function CopyAndScale({
             ))}
           </select>
           <br />
-          {/* This should be rendered with an array.map and keys, with an option to add and remove entries */}
-          <RepeatableScaling>
-            {/* Here should be a button to remove the current instance of RepeatableScaling */}
-          </RepeatableScaling>
+          {scalingComponents.map((id) => {
+            return (
+              <RepeatableScaling key={id}>
+                <button type="button" onClick={() => setScalingComponents(scalingComponents.filter((i) => i !== id))}>Ta bort</button>
+              </RepeatableScaling>
+            )
+          })}
+          <br />
+          <button type="button" onClick={() => setScalingComponents([...scalingComponents, (crypto?.randomUUID() || Math.random().toString())])}>Lägg till skalning</button>
           <br />
           <input type="submit" value="Skapa skalad kopia" />
         </form>
