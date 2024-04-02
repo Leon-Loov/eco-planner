@@ -311,6 +311,10 @@
     background-color: var(--white-90);
 }
 
+.red {
+    background-color: red;
+} 
+
 .purewhite {
     background-color: white;
 }

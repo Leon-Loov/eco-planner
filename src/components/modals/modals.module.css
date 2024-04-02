@@ -1,0 +1,7 @@
+.modal {
+    padding: 1rem;
+    border-radius: .25rem;
+    border: 0;
+    width: min(45ch, 100%);
+    box-shadow: 0 0 .5rem -.25rem rgb(0,0,0);
+}
