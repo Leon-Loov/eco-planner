@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return (
     <>
-      <div className="container-text">
+      <div className="container-text" style={{marginInline: 'auto'}}>
         <h1>Skapa ny målbana</h1>
         <GoalForm roadmapId={params.roadmapId} />
       </div>

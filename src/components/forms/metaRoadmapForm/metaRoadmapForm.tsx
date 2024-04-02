@@ -114,9 +114,9 @@ export default function MetaRoadmapForm({
           </select>
           </label>
 
-        <label>
+        <label className="block margin-y-75">
           Aktör för färdplanen
-          <input list="actors" id="actor" name="actor" type="text" defaultValue={currentRoadmap?.actor ?? undefined} />
+          <input className="margin-y-25" list="actors" id="actor" name="actor" type="text" defaultValue={currentRoadmap?.actor ?? undefined} />
         </label>
 
         <div className="margin-y-300">

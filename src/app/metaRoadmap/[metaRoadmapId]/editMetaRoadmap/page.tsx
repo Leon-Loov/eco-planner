@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { metaRoadmapId: string
 
   return (
     <>
-      <div className='container-text'>
+      <div className='container-text' style={{marginInline: 'auto'}}>
         <h1>Redigera metadatan för färdplan: {`${currentRoadmap.name}`}</h1>
         <MetaRoadmapForm
           user={session.user}

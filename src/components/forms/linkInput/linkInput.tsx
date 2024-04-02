@@ -22,32 +22,39 @@ export default function LinkInput({ links }: { links?: { url: string, descriptio
           <input type="button" value="Ta bort ↑" onClick={() => setLinkList(linkList.filter((_, i) => i !== index))} />
         </Fragment>
       ))}
+
       {/* A text field whose contents get appended to linkList upon pressing enter */}
-      <label className="block" htmlFor="newLink">Ny länk: </label>
-      <input type="url" name="linkUrl" id="newLink" onKeyDown={(event) => {
-        if (event.key === 'Enter') {
-          let url = event.currentTarget.value;
-          // #newDescription os the input field for the description of the link
-          let description = (event.currentTarget.parentNode?.querySelector('#newDescription') as HTMLInputElement)?.value ?? '';
-          // Add the new link to the list of links
-          setLinkList([...linkList, { url, description }])
-          // Clear the text fields
-          event.currentTarget.value = '';
-          (event.currentTarget.parentNode?.querySelector('#newDescription') as HTMLInputElement).value = '';
-        }
-      }} />
-      <label className="block" htmlFor="newDescription">Beskrivning: </label>
-      <input type="text" name="linkDescription" id="newDescription" onKeyDown={(event) => {
-        if (event.key === 'Enter') {
-          let url = (event.currentTarget.parentNode?.querySelector('#newLink') as HTMLInputElement)?.value ?? '';
-          let description = event.currentTarget.value;
-          // Add the new link to the list of links
-          setLinkList([...linkList, { url, description }])
-          // Clear the text fields
-          event.currentTarget.value = '';
-          (event.currentTarget.parentNode?.querySelector('#newLink') as HTMLInputElement).value = '';
-        }
-      }} />
+      <label className="block margin-y-75">
+        Ny länk: 
+        <input className="margin-y-25" type="url" name="linkUrl" id="newLink" onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            let url = event.currentTarget.value;
+            // #newDescription os the input field for the description of the link
+            let description = (event.currentTarget.parentNode?.querySelector('#newDescription') as HTMLInputElement)?.value ?? '';
+            // Add the new link to the list of links
+            setLinkList([...linkList, { url, description }])
+            // Clear the text fields
+            event.currentTarget.value = '';
+            (event.currentTarget.parentNode?.querySelector('#newDescription') as HTMLInputElement).value = '';
+          }
+        }} />
+      </label>
+
+      <label className="block margin-y-75">
+        Beskrivning: 
+        <input className="margin-y-25" type="text" name="linkDescription" id="newDescription" onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            let url = (event.currentTarget.parentNode?.querySelector('#newLink') as HTMLInputElement)?.value ?? '';
+            let description = event.currentTarget.value;
+            // Add the new link to the list of links
+            setLinkList([...linkList, { url, description }])
+            // Clear the text fields
+            event.currentTarget.value = '';
+            (event.currentTarget.parentNode?.querySelector('#newLink') as HTMLInputElement).value = '';
+          }
+        }} />
+      </label>
+
     </fieldset>
   )
 }

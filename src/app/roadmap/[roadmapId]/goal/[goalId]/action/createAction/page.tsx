@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <div className="container-text">
+      <div className="container-text" style={{marginInline: 'auto'}}>
         <h1>Skapa ny åtgärd under målbana: {`${goal?.name || goal.indicatorParameter}`}</h1>
         <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} />
       </div>

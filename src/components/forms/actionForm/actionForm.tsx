@@ -93,24 +93,24 @@ export default function ActionForm({
         </label>
 
         <p>Vilka kategorier faller åtgärden under?</p>
-        <div className="display-flex gap-25 align-items-center">
+        <div className="display-flex gap-25 align-items-center margin-y-50">
           <input type="checkbox" name="isSufficiency" id="isSufficiency" defaultChecked={currentAction?.isSufficiency} />
           <label htmlFor="isSufficiency">Sufficiency</label>
         </div>
-        <div className="display-flex gap-25 align-items-center">
+        <div className="display-flex gap-25 align-items-center margin-y-50">
           <input type="checkbox" name="isEfficiency" id="isEfficiency" defaultChecked={currentAction?.isEfficiency} />
           <label htmlFor="isEfficiency">Efficiency</label>
         </div>
-        <div className="display-flex gap-25 align-items-center">
+        <div className="display-flex gap-25 align-items-center margin-y-50">
           <input type="checkbox" name="isRenewables" id="isRenewables" defaultChecked={currentAction?.isRenewables} />
           <label htmlFor="isRenewables">Renewables</label>
         </div>
 
-        <div>
+        <div className="margin-y-300">
           <LinkInput links={currentAction?.links} />
         </div>
 
-        <input type="submit" className="margin-y-75" value={currentAction ? "Spara" : "Skapa åtgärd"} />
+        <input type="submit" className="margin-y-75 seagreen color-purewhite" value={currentAction ? "Spara" : "Skapa åtgärd"} />
 
       </form>
     </>

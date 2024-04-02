@@ -729,6 +729,9 @@ input[type="color"]::-moz-color-swatch { /* TODO: :where() for pseudo elements n
     border: none;
     border-radius: 3px;
     resize: vertical;
+    min-height: 150px;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 :where(textarea:focus) {

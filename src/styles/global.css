@@ -58,3 +58,13 @@ section:has(input[type="checkbox"]:checked) + #roadmapFilters {
 ) {
     transform: scale(.95);
 }
+
+fieldset {
+  border-radius: 3px;
+  border: 2px solid var(--gray-90);
+}
+
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+}

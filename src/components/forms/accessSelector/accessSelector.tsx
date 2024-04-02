@@ -138,8 +138,10 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
         </Fragment>
       ))}
       {/* A text field whose contents get appended to editUsers upon pressing enter */}
-      <label className="block" htmlFor="newEditUser">Ny användare: </label>
-      <input type="text" name="editUsers" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
+      <label className="block margin-y-75">
+        Ny användare: 
+        <input className="margin-y-25" type="text" name="editUsers" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
+      </label>
     </fieldset>
   )
 }
@@ -168,8 +170,10 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
         </Fragment>
       ))}
       {/* A text field whose contents get appended to viewUsers upon pressing enter */}
-      <label className="block" htmlFor="newViewUser">Ny användare: </label>
-      <input type="text" name="viewUsers" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
+      <label className="block margin-y-75">
+        Ny användare: 
+        <input className="margin-y-25" type="text" name="viewUsers" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
+      </label>
     </fieldset>
   )
 }
@@ -183,7 +187,7 @@ function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
       <legend>Grupper med redigeringsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'editGroup' + group}>
-          <label className="display-flex align-items-center gap-100" htmlFor={'editGroup' + group}>
+          <label className="display-flex align-items-center gap-50 margin-y-50">
             <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
             {group}
           </label>
@@ -201,7 +205,7 @@ function ViewGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
       <legend>Grupper med läsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
-          <label className="display-flex align-items-center gap-100" htmlFor={'viewGroup' + group}>
+          <label className="display-flex align-items-center gap-50 margin-y-50">
             <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
             {group}
           </label>

@@ -126,7 +126,7 @@ export default function GoalForm({
         </label>
         
         <LinkInput links={currentGoal?.links} />
-        <input type="submit" className="margin-y-75" value={currentGoal ? "Spara" : "Skapa målbana"} />
+        <input type="submit" className="margin-y-75 seagreen color-purewhite" value={currentGoal ? "Spara" : "Skapa målbana"} />
       </form>
 
       <datalist id="LEAPOptions">

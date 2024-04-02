@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
   return (
     <>
-      <div className='container-text'>
+      <div className='container-text' style={{marginInline: 'auto'}}>
         <h1>Redigera färdplan</h1>
         <p>Menade de att redigera den gemensamma metadatan för alla versioner av den här färdplanen? I så fall kan du <Link href={`/metaRoadmap/${roadmap.metaRoadmapId}/editMetaRoadmap`}>gå hit</Link> för att redigera metadatan.</p>
         <RoadmapForm
