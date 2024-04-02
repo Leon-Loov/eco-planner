@@ -26,15 +26,6 @@ export default async function Page({ params }: { params: { roadmapId: string } }
   }
 
   return <>
-    {/*
-    { // Only show the edit link if the user has edit access to the roadmap
-      (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-      <Link href={`/roadmap/${roadmap.id}/editRoadmap`}>
-        <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${roadmap.metaRoadmap.name}`} />
-      </Link>
-    }
-    <a href={`/metaRoadmap/${roadmap.metaRoadmapId}`}>Länk till metadata och fler versioner</a>
-    */}
 
     <p>{roadmap.description}</p>
 
