@@ -86,49 +86,31 @@ export default function MetaRoadmapForm({
 
   const [transformIndex, setTransformIndex] = useState(1)
 
-  function doStuff() {
+  function doStuff(reverse: boolean = false) {
     const aaaaa = document?.getElementById('form-sections')
-    let bbbbb = Array.from(aaaaa?.children || [])
+    const bbbbb = Array.from(aaaaa?.children || [])
 
-    if (transformIndex + 1 > bbbbb.length) {
+    if ((transformIndex + 1 > bbbbb.length && !reverse) || (transformIndex - 1 <= 0 && reverse)) {
       return
     }
 
     bbbbb.forEach(element => {
       const transformData = (element as HTMLElement).dataset.transform
       if (transformData) {
-        let test = parseInt(transformData);
-        (element as HTMLElement).dataset.transform = (test - 100).toString();
-        let datasetTransform = (element as HTMLElement).dataset.transform;
-        (element as HTMLElement).style.transform = `translate(${datasetTransform}%, 0)`
+        const test = parseInt(transformData);
 
+        if (reverse) {
+          (element as HTMLElement).dataset.transform = (test + 100).toString();
+        } else {
+          (element as HTMLElement).dataset.transform = (test - 100).toString();
+        }
+
+        const datasetTransform = (element as HTMLElement).dataset.transform;
+        (element as HTMLElement).style.transform = `translate(${datasetTransform}%, 0)`
       }
     })
 
-    setTransformIndex(transformIndex + 1)
-
-  }
-
-  function doStuffBackwards() {
-    const aaaaa = document?.getElementById('form-sections')
-    let bbbbb = Array.from(aaaaa?.children || [])
-    
-    if (transformIndex - 1 <= 0) {
-      return
-    }
-
-    bbbbb.forEach(element => {
-      const transformData = (element as HTMLElement).dataset.transform
-      if (transformData) {
-        let test = parseInt(transformData);
-        (element as HTMLElement).dataset.transform = (test + 100).toString();
-        let datasetTransform = (element as HTMLElement).dataset.transform;
-        (element as HTMLElement).style.transform = `translate(${datasetTransform}%, 0)`
-
-      }
-    })
-
-    setTransformIndex(transformIndex - 1)
+    setTransformIndex(transformIndex + (reverse ? -1 : 1))
 
   }
 
@@ -188,26 +170,26 @@ export default function MetaRoadmapForm({
             <label className="block margin-y-75">
               Om denna färdplan har en annan färdplan den jobbar mot kan den väljas här
               <select name="parentRoadmap" id="parentRoadmap" className="block margin-y-25" defaultValue={currentRoadmap?.parentRoadmapId ?? ""}>
-              <option value="">Ingen förälder vald</option>
-              {
-                !parentRoadmapOptions && currentRoadmap && currentRoadmap.parentRoadmapId && (
-                  <option value={currentRoadmap.parentRoadmapId} disabled>{currentRoadmap.parentRoadmapId}</option>
-                )
-              }
-              {
-                parentRoadmapOptions && parentRoadmapOptions.map((roadmap) => {
-                  return (
-                    <option key={roadmap.id} value={roadmap.id}>{roadmap.name}</option>
+                <option value="">Ingen förälder vald</option>
+                {
+                  !parentRoadmapOptions && currentRoadmap && currentRoadmap.parentRoadmapId && (
+                    <option value={currentRoadmap.parentRoadmapId} disabled>{currentRoadmap.parentRoadmapId}</option>
                   )
-                })
-              }
+                }
+                {
+                  parentRoadmapOptions && parentRoadmapOptions.map((roadmap) => {
+                    return (
+                      <option key={roadmap.id} value={roadmap.id}>{roadmap.name}</option>
+                    )
+                  })
+                }
               </select>
             </label>
           </section>
         </div>
 
-        <button type="button" onClick={doStuffBackwards}>←</button>
-        <button type="button" onClick={doStuff}>→</button>
+        <button type="button" onClick={() => doStuff(true)}>←</button>
+        <button type="button" onClick={() => doStuff()}>→</button>
 
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
         <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-y-100 seagreen color-purewhite" />
