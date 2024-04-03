@@ -10,6 +10,12 @@ import RepeatableScaling from "../repeatableScaling";
 import { GoalInput, dataSeriesDataFieldNames } from "@/types";
 import formSubmitter from "@/functions/formSubmitter";
 
+enum ScaleMethod {
+  Algebraic = "ALGEBRAIC",
+  Geometric = "GEOMETRIC",
+  Multiplicative = "MULTIPLICATIVE",
+}
+
 export default function CopyAndScale({
   goal,
   user,
@@ -20,6 +26,7 @@ export default function CopyAndScale({
   const [isLoading, setIsLoading] = useState(false);
   const [roadmapOptions, setRoadmapOptions] = useState<{ id: string, name: string, version: number, actor: string | null }[]>([]);
   const [scalingComponents, setScalingComponents] = useState<string[]>([crypto?.randomUUID() || Math.random().toString()]);
+  const [scalingMethod, setScalingMethod] = useState<ScaleMethod>(ScaleMethod.Geometric);
 
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
@@ -43,57 +50,120 @@ export default function CopyAndScale({
     });
   }, [user]);
 
-  function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  function formSubmission(form: FormData) {
     setIsLoading(true);
 
-    const form = event.target.elements;
+    // If any of the inputs are files, throw. This will only happen if the user has tampered with the form, so no need to give a nice error message
 
     // Id of the roadmap to copy the goal to
-    const copyToId = (form.namedItem("copyTo") as HTMLSelectElement).value;
+    const copyToId = form.get("copyTo");
+    if (copyToId instanceof File) {
+      setIsLoading(false);
+      throw new Error("Why is this a file?");
+    }
 
     // Get the scaling factor
-    const scalars = form.namedItem("scaleFactor");
-    const weights = form.namedItem("weight");
-    let totalWeight: number = 0;
+    const scalars = form.getAll("scaleFactor");
+    const weights = form.getAll("weight");
     let scaleFactor: number = 1;
-    if (scalars instanceof HTMLInputElement && scalars.value) {
-      const tempScale = parseFloat(scalars.value);
+    let totalWeight: number;
+    // If the input is a single value, use it as the scale factor
+    if (scalars.length == 1) {
+      if (scalars[0] instanceof File) {
+        setIsLoading(false);
+        throw new Error("Why is this a file?");
+      }
+      const tempScale = parseFloat(scalars[0].replace(",", "."));
       // If the value is a number, use it as the scale factor
-      if (tempScale != null && !isNaN(tempScale)) {
+      if (!isNaN(tempScale)) {
         scaleFactor = tempScale;
       };
     }
-    // If the input is a NodeList, loop through it and calculate the weighted average of the scale factors
-    // TODO: Consider adding a toggle between weighted average, product, and weighted geometric mean
-    else if (scalars instanceof NodeList && scalars.length > 0) {
-      scaleFactor = 0;
-      for (let i = 0; i < scalars.length; i++) {
-        let scalar: number | null = null;
-        let weight: number | null = null;
-        // Try parsing values from the input fields
-        if (scalars instanceof NodeList && scalars[i] instanceof HTMLInputElement) {
-          scalar = parseFloat((scalars[i] as HTMLInputElement).value);
-        }
-        if (weights instanceof NodeList && weights[i] instanceof HTMLInputElement) {
-          weight = parseFloat((weights[i] as HTMLInputElement).value);
-        }
-        // If scalar is a number, multiply total scale factor with it
-        // If weight is not a number, default to 1 (but allow 0 to be used as a weight)
-        if (scalar != null && !isNaN(scalar)) {
-          if (weight != null && !isNaN(weight)) {
-            totalWeight += weight;
-            scaleFactor += scalar * weight;
-          } else {
-            totalWeight += 1;
-            scaleFactor += scalar * 1;
+    // If there are multiple inputs, loop through them and calculate the weighted average of the scale factors
+    // TODO: Add a toggle between weighted mean, product, and weighted geometric mean
+    else if (scalars.length > 1) {
+      switch (scalingMethod) {
+        case ScaleMethod.Algebraic:
+          totalWeight = 0;
+          scaleFactor = 0;
+          for (let i = 0; i < scalars.length; i++) {
+            if (scalars[i] instanceof File || weights[i] instanceof File) {
+              setIsLoading(false);
+              throw new Error("Why is this a file?");
+            }
+
+            const scalar: number = parseFloat((scalars[i] as string).replace(",", "."));
+            const weight: number = parseFloat((weights[i] as string ?? "1").replace(",", "."));
+
+            // If scalar is a number, multiply total scale factor with it
+            // If weight is not a number, default to 1 (but allow 0 to be used as a weight)
+            if (!isNaN(scalar)) {
+              if (!isNaN(weight)) {
+                totalWeight += weight;
+                scaleFactor += scalar * weight;
+              } else {
+                totalWeight += 1;
+                scaleFactor += scalar * 1;
+              }
+            }
           }
-        }
+          // If the total weight is not 0, divide the scale factor by it to get the weighted average
+          if (totalWeight != 0) {
+            scaleFactor /= totalWeight;
+          }
+          break;
+        case ScaleMethod.Multiplicative:
+          scaleFactor = 1;
+          for (let i = 0; i < scalars.length; i++) {
+            if (scalars[i] instanceof File) {
+              setIsLoading(false);
+              throw new Error("Why is this a file?");
+            }
+
+            const scalar: number = parseFloat((scalars[i] as string).replace(",", "."));
+
+            // If scalar is a number, multiply total scale factor with it
+            if (!isNaN(scalar)) {
+              scaleFactor *= scalar;
+            }
+          }
+          break;
+        // Default to geometric scaling
+        case ScaleMethod.Geometric:
+        default:
+          totalWeight = 0;
+          scaleFactor = 1; // This initial value won't affect the result since it's the identity element for multiplication and it has no weight
+
+          for (let i = 0; i < scalars.length; i++) {
+            if (scalars[i] instanceof File || weights[i] instanceof File) {
+              setIsLoading(false);
+              throw new Error("Why is this a file?");
+            }
+
+            const scalar: number = parseFloat((scalars[i] as string).replace(",", "."));
+            const weight: number = parseFloat((weights[i] as string ?? "1").replace(",", "."));
+
+            // If scalar is a number, multiply total scale factor with it
+            // If weight is not a number, default to 1 (but allow 0 to be used as a weight)
+            if (!isNaN(scalar)) {
+              if (!isNaN(weight)) {
+                totalWeight += weight;
+                scaleFactor *= Math.pow(scalar, weight);
+              } else {
+                totalWeight += 1;
+                scaleFactor *= Math.pow(scalar, 1);
+              }
+            }
+          }
+          // Take the totalWeight-th root of the scale factor to get the weighted geometric mean
+          scaleFactor = Math.pow(scaleFactor, 1 / totalWeight);
+          break;
       }
-      // If the total weight is not 0, divide the scale factor by it to get the weighted average
-      if (totalWeight > 0) {
-        scaleFactor /= totalWeight;
+      // If the resultant scale factor is NaN, don't proceed
+      if (isNaN(scaleFactor)) {
+        setIsLoading(false);
+        alert("Felaktig inmatning. Skalningsfaktorn kunde inte beräknas. Ofta beror detta på ett ickenumeriskt värde i ett inmatningsfält eller att produkten av alla skalningsfaktorer är negativ.");
+        return;
       }
     }
 
@@ -115,16 +185,13 @@ export default function CopyAndScale({
       dataUnit: goal.dataSeries?.unit || "missing",
       dataScale: goal.dataSeries?.scale || undefined,
       dataSeries: dataSeries,
-      roadmapId: copyToId,
+      roadmapId: copyToId ?? "",
     };
 
     const formJSON = JSON.stringify(formData);
 
     formSubmitter('/api/goal', formJSON, 'POST', setIsLoading);
   }
-
-  // Might use for keys for repeatableScaling
-  // const uuid = crypto?.randomUUID() || Math.random().toString();
 
   return (
     <>
@@ -137,7 +204,7 @@ export default function CopyAndScale({
           <h2>Kopiera och skala</h2>
         </div>
         <p>Kopiera och skala målbanan {goal.name}</p>
-        <form onSubmit={handleSubmit}>
+        <form action={formSubmission}>
           <label htmlFor="copyTo">Under vilken färdplan vill du skapa en kopia av målbanan?</label>
           <select required name="copyTo" id="copyTo">
             <option value="">Välj färdplan</option>

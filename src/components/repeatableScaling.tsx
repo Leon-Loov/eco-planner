@@ -36,12 +36,14 @@ export default function RepeatableScaling({
   defaultArea1,
   defaultArea2,
   defaultSpecificValue,
+  useWeight = true,
 }: {
   children?: React.ReactNode
   defaultScaleBy?: ScaleBy,
   defaultArea1?: string,
   defaultArea2?: string,
   defaultSpecificValue?: number,
+  useWeight?: boolean
 }) {
   const [scaleBy, setScaleBy] = useState<ScaleBy | "">(defaultScaleBy ?? "");
   const [numericInput, setNumericInput] = useState<number | null>(null);
@@ -175,10 +177,15 @@ export default function RepeatableScaling({
       <br />
       <label htmlFor="result">Skalfaktor för den här beräkningen: </label>
       <output name="result" id="result">{result ?? "Värde saknas"}</output>
-      <input type="hidden" name="scaleFactor" value={result?.toString() ?? "1"} />
-      <br />
-      <label htmlFor="weight">Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna): </label>
-      <input type="number" step={"any"} id="weight" name="weight" />
+      <input type="hidden" name="scaleFactor" value={(!isNaN(result || 1) && result?.toString()) ? result.toString() : "1"} />
+      {// Only show weight input if useWeight is true
+        useWeight &&
+        <>
+          <br />
+          <label htmlFor="weight">Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna): </label>
+          <input type="number" step={"any"} id="weight" name="weight" defaultValue={1} />
+        </>
+      }
 
       {children &&
         <>
