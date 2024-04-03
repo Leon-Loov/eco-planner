@@ -109,6 +109,29 @@ export default function MetaRoadmapForm({
 
   }
 
+  function doStuffBackwards() {
+    const aaaaa = document?.getElementById('form-sections')
+    let bbbbb = Array.from(aaaaa?.children || [])
+    
+    if (transformIndex - 1 <= 0) {
+      return
+    }
+
+    bbbbb.forEach(element => {
+      const transformData = (element as HTMLElement).dataset.transform
+      if (transformData) {
+        let test = parseInt(transformData);
+        (element as HTMLElement).dataset.transform = (test + 100).toString();
+        let datasetTransform = (element as HTMLElement).dataset.transform;
+        (element as HTMLElement).style.transform = `translate(${datasetTransform}%, 0)`
+
+      }
+    })
+
+    setTransformIndex(transformIndex - 1)
+
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit} >
@@ -183,6 +206,7 @@ export default function MetaRoadmapForm({
           </section>
         </div>
 
+        <button type="button" onClick={doStuffBackwards}>←</button>
         <button type="button" onClick={doStuff}>→</button>
 
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
