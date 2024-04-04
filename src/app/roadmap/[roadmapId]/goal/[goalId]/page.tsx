@@ -97,21 +97,33 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         }
       */}
 
-      <section className="margin-y-100">
-        <span style={{ color: 'gray' }}>Målbana</span>
-        <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
-        <p style={{ width: 'min(120ch, 100%)' }}>{goal.description}</p>
+      <section className="display-flex justify-content-space-between flex-wrap-wrap margin-y-100">
+        <section>
+          <span style={{ color: 'gray' }}>Målbana</span>
+          <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
+          <p>{goal.description}</p>
+        </section>
+        <aside>
+          { // Only show the edit link if the user has edit access to the roadmap
+            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`} className="display-flex align-items-center gap-50" >
+              Redigera Målbana
+              <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
+            </Link>
+          } <br/>
+          { // TODO: Maybe show button even if no data series is attached?
+            goal.dataSeries?.id &&
+            <CopyAndScale goal={goal} user={session.user} />
+          }
+        </aside>
       </section>
 
-      { // Only allow scaling the values if the user has edit access to the goal
+        
+        
+      { /* Only allow scaling the values if the user has edit access to the goal
         (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
         <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
-      }
-
-      { // TODO: Maybe show button even if no data series is attached?
-        goal.dataSeries?.id &&
-        <CopyAndScale goal={goal} user={session.user} />
-      }
+      */ }
 
       <section className={styles.graphLayout}>
         <GraphGraph goal={goal} nationalGoal={parentGoal} />
