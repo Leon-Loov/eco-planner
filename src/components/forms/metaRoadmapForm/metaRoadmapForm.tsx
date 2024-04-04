@@ -122,6 +122,7 @@ export default function MetaRoadmapForm({
 
         <div id="form-sections" className={styles.formSlider}>
           <section className="width-100" data-transform="0">
+            <h2>Beskriv din färdplan</h2>
             <label className="block margin-y-75">
               Namn för den nya färdplanen
               <input id="metaRoadmapName" name="metaRoadmapName" className="margin-y-25" type="text" defaultValue={currentRoadmap?.name ?? undefined} required />
@@ -134,6 +135,7 @@ export default function MetaRoadmapForm({
           </section>
 
           <section className="width-100" data-transform="0">
+            <h2>Vem ansvarar för den här färdplanen?</h2>
             <label className="block margin-y-75">
               Typ av färdplan
               <select className="block margin-y-25" name="type" id="type" defaultValue={currentRoadmap?.type ?? ""} required>
@@ -155,18 +157,21 @@ export default function MetaRoadmapForm({
             </label>
           </section>
 
-          <section className="margin-y-300 width-100" data-transform="0">
+          <section className="width-100" data-transform="0">
+            <h2>Är fädplanen beroende av några externa resurser?</h2>
             <LinkInput />
           </section>
 
           { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user is the author of the roadmap
             (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
             <section data-transform="0">
+              <h2>Vem ska ha tillgång till din färdplan?</h2>
               <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
             </section>
           }
 
           <section className="width-100" data-transform="0">
+            <h2>Jobbar denna färdplan mot en annan färdplan?</h2>
             <label className="block margin-y-75">
               Om denna färdplan har en annan färdplan den jobbar mot kan den väljas här
               <select name="parentRoadmap" id="parentRoadmap" className="block margin-y-25" defaultValue={currentRoadmap?.parentRoadmapId ?? ""}>
@@ -188,11 +193,13 @@ export default function MetaRoadmapForm({
           </section>
         </div>
 
-        <button type="button" onClick={() => doStuff(true)}>←</button>
-        <button type="button" onClick={() => doStuff()}>→</button>
-
+        <div className="padding-x-100">
+          <button type="button" onClick={() => doStuff(true)}>←</button>
+          <button type="button" onClick={() => doStuff()}>→</button>
+        </div>
+        
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
-        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-y-100 seagreen color-purewhite" />
+        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-100 seagreen color-purewhite" />
       </form>
 
       <datalist id="actors">
