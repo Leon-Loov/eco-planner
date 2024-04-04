@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <aside>
           { // Only show the edit link if the user has edit access to the roadmap
             (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`} className="display-flex align-items-center gap-50" >
+            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`} className="display-flex align-items-center gap-50 justify-content-flex-end color-pureblack" style={{textDecoration: 'none', fontWeight: '500'}} >
               Redigera Målbana
               <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
             </Link>

@@ -196,24 +196,30 @@ export default function CopyAndScale({
 
   return (
     <>
-      <button type="button" className="call-to-action-primary margin-y-200" style={{ width: 'fit-content' }} onClick={() => openModal(modalRef)}>Kopiera målbanan till en annan färdplan och skala den</button>
-      <dialog ref={modalRef} aria-modal>
+      <button type="button" className="transparent flex gap-50 padding-0" style={{fontSize: '1rem', fontWeight: '500'}} onClick={() => openModal(modalRef)}>
+        Kopiera och skala målbana
+        <Image src='/icons/copy.svg' alt="" width={24} height={24} />
+      </button>
+      <dialog ref={modalRef} aria-modal style={{border: '0', borderRadius: '.25rem', boxShadow: '0 0 .5rem -.25rem rgba(0,0,0,.25'}}>
         <div className={`display-flex flex-direction-row-reverse align-items-center justify-content-space-between`}>
-          <button disabled={isLoading} onClick={() => closeModal(modalRef)} autoFocus aria-label="Close" >
+          <button className="grid round padding-50 transparent" disabled={isLoading} onClick={() => closeModal(modalRef)} autoFocus aria-label="Close" >
             <Image src='/icons/close.svg' alt="" width={18} height={18} />
           </button>
-          <h2>Kopiera och skala</h2>
+          <h2 className="margin-0">Kopiera och skala</h2>
         </div>
         <p>Kopiera och skala målbanan {goal.name}</p>
+
         <form action={formSubmission}>
-          <label htmlFor="copyTo">Under vilken färdplan vill du skapa en kopia av målbanan?</label>
-          <select required name="copyTo" id="copyTo">
-            <option value="">Välj färdplan</option>
-            {roadmapOptions.map(roadmap => (
-              <option key={roadmap.id} value={roadmap.id}>{`${roadmap.name} ${roadmap.version ? `(version ${roadmap.version.toString()})` : null}`}</option>
-            ))}
-          </select>
-          <br />
+          <label className="margin-y-75">
+            Under vilken färdplan vill du skapa en kopia av målbanan?
+            <select className="block margin-y-25" required name="copyTo" id="copyTo">
+              <option value="">Välj färdplan</option>
+              {roadmapOptions.map(roadmap => (
+                <option key={roadmap.id} value={roadmap.id}>{`${roadmap.name} ${roadmap.version ? `(version ${roadmap.version.toString()})` : null}`}</option>
+              ))}
+            </select>
+          </label>
+
           {scalingComponents.map((id) => {
             return (
               <RepeatableScaling key={id} useWeight={scalingMethod != ScaleMethod.Multiplicative}> {/* Multiplicative scaling doesn't use weights */}
@@ -221,25 +227,24 @@ export default function CopyAndScale({
               </RepeatableScaling>
             )
           })}
-          <br />
-          <fieldset>
+
+          <fieldset className="margin-y-100">
             <legend>Välj skalningsmetod</legend>
-            <label>
+            <label className="flex gap-25 align-items-center margin-y-50">
               <input type="radio" name="scalingMethod" value={ScaleMethod.Geometric} checked={scalingMethod === ScaleMethod.Geometric} onChange={() => setScalingMethod(ScaleMethod.Geometric)} />
               Geometriskt genomsnitt
             </label>
-            <label>
+            <label className="flex gap-25 align-items-center margin-y-50">
               <input type="radio" name="scalingMethod" value={ScaleMethod.Algebraic} checked={scalingMethod === ScaleMethod.Algebraic} onChange={() => setScalingMethod(ScaleMethod.Algebraic)} />
               Algebraiskt genomsnitt
             </label>
-            <label>
+            <label className="flex gap-25 align-items-center margin-y-50">
               <input type="radio" name="scalingMethod" value={ScaleMethod.Multiplicative} checked={scalingMethod === ScaleMethod.Multiplicative} onChange={() => setScalingMethod(ScaleMethod.Multiplicative)} />
               Multiplikativ skalning
             </label>
           </fieldset>
-          <br />
-          <button type="button" onClick={() => setScalingComponents([...scalingComponents, (crypto?.randomUUID() || Math.random().toString())])}>Lägg till skalning</button>
-          <br />
+
+          <button type="button" className="margin-y-100" onClick={() => setScalingComponents([...scalingComponents, (crypto?.randomUUID() || Math.random().toString())])}>Lägg till skalning</button>
           <input type="submit" value="Skapa skalad kopia" />
         </form>
       </dialog>

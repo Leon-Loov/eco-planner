@@ -164,35 +164,40 @@ export default function RepeatableScaling({
   }
 
   return (
-    <div style={{ border: "1px solid black" }}>
-      <label htmlFor="scaleBy">Vad vill du skala utifrån?</label>
-      <select required name="scaleBy" id="scaleBy" defaultValue={defaultScaleBy} onChange={(e) => setScaleBy(e.target.value as ScaleBy)}>
-        <option value="">Inget alternativ valt</option>
-        <option value={ScaleBy.Custom}>Specifikt värde</option>
-        <option value={ScaleBy.Inhabitants}>Relativt antal invånare</option>
-        <option value={ScaleBy.Area}>Relativ yta</option>
-      </select>
-      <br />
+    <>
+      <label className="block margin-y-75">
+        Vad vill du skala utifrån?
+        <select className="block margin-y-25" required name="scaleBy" id="scaleBy" defaultValue={defaultScaleBy} onChange={(e) => setScaleBy(e.target.value as ScaleBy)}>
+          <option value="">Inget alternativ valt</option>
+          <option value={ScaleBy.Custom}>Specifikt värde</option>
+          <option value={ScaleBy.Inhabitants}>Relativt antal invånare</option>
+          <option value={ScaleBy.Area}>Relativ yta</option>
+        </select>
+      </label>
+
       {ScalarInputs()}
-      <br />
-      <label htmlFor="result">Skalfaktor för den här beräkningen: </label>
-      <output name="result" id="result">{result ?? "Värde saknas"}</output>
-      <input type="hidden" name="scaleFactor" value={(!isNaN(result || 1) && result?.toString()) ? result.toString() : "1"} />
+
+      <label className="block margin-y-75">
+        Skalfaktor för den här beräkningen:
+        <output name="result" id="result">{result ?? " Värde saknas"}</output>
+      </label>
+      <input className="margin-y-25" type="hidden" name="scaleFactor" value={(!isNaN(result || 1) && result?.toString()) ? result.toString() : "1"} />
+
       {// Only show weight input if useWeight is true
         useWeight &&
         <>
-          <br />
-          <label htmlFor="weight">Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna): </label>
-          <input type="number" step={"any"} min={0} id="weight" name="weight" defaultValue={1} />
+          <label className="block margin-y-75">
+            Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna)
+            <input className="margin-y-25" type="number" step={"any"} min={0} id="weight" name="weight" defaultValue={1} />
+          </label>
         </>
       }
 
       {children &&
         <>
-          <br />
           {children}
         </>
       }
-    </div>
+    </>
   )
 }
