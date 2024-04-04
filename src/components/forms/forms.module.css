@@ -25,3 +25,7 @@
     background-color: var(--seagreen);
     transition: transform .2s ease;
 }
+
+.submitButton:disabled {
+    background-color: var(--gray-70);
+}

@@ -91,6 +91,7 @@ export default function MetaRoadmapForm({
     const currentIndicator = document?.getElementById('current-indicator')
     const indicatorsParent = document?.getElementById('indicators')
     const indicators = Array.from(indicatorsParent?.children || [])
+    const submitButton = document?.getElementById('submit-button')
 
     const currentTransformIndex = transformIndex + (options?.reverse ? -1 : 1)
 
@@ -125,6 +126,15 @@ export default function MetaRoadmapForm({
 
     if (currentIndicator) {
       currentIndicator.style.transform = `translate(${(250 * currentTransformIndex) + 50}%, 0)`
+    }
+
+    // Enable submitbutton if on final step
+    if(submitButton) {
+      if (currentTransformIndex == sections.length - 1) {
+        submitButton.removeAttribute('disabled')
+      } else {
+        submitButton.setAttribute('disabled', 'true')
+      }
     }
 
     setTransformIndex(currentTransformIndex)
@@ -212,7 +222,7 @@ export default function MetaRoadmapForm({
 
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
         <div className="padding-x-100">
-          <button type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="seagreen color-purewhite width-100">
+          <button type="submit" id="submit-button" value={currentRoadmap ? "Spara" : "Skapa färdplan"} disabled className={`${styles.submitButton} seagreen color-purewhite width-100`}>
             {currentRoadmap ? "Spara" : "Skapa färdplan"}
           </button>
         </div>
