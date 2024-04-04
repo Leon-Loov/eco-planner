@@ -89,6 +89,8 @@ export default function MetaRoadmapForm({
     const sectionsParent = document?.getElementById('form-sections')
     const sections = Array.from(sectionsParent?.children || [])
     const currentIndicator = document?.getElementById('current-indicator')
+    const indicatorsParent = document?.getElementById('indicators')
+    const indicators = Array.from(indicatorsParent?.children || [])
 
     const currentTransformIndex = transformIndex + (options?.reverse ? -1 : 1)
 
@@ -111,6 +113,15 @@ export default function MetaRoadmapForm({
         (element as HTMLElement).style.transform = `translate(${datasetTransform}%, 0)`
       }
     })
+
+    // Turn indicators green if they are complete
+    for (let i = 0; i < indicators.length; i++) {
+      if (i < currentTransformIndex) {
+        (indicators[i] as HTMLElement).style.backgroundColor = 'seagreen'
+      } else {
+        (indicators[i] as HTMLElement).style.backgroundColor = 'var(--gray-90)'
+      }
+    }
 
     if (currentIndicator) {
       currentIndicator.style.transform = `translate(${(250 * currentTransformIndex) + 50}%, 0)`
@@ -200,15 +211,15 @@ export default function MetaRoadmapForm({
         </div>
 
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
-        <div className="padding-x-100 display-flex justify-content-flex-end">
-          <button type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="seagreen color-purewhite">
+        <div className="padding-x-100">
+          <button type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="seagreen color-purewhite width-100">
             {currentRoadmap ? "Spara" : "Skapa färdplan"}
           </button>
         </div>
       </form>
 
       <div className="margin-y-100" style={{ marginInline: 'auto', width: 'fit-content' }}>
-        <div className="display-flex justify-content-center gap-75 margin-y-50">
+        <div id="indicators" className="display-flex justify-content-center gap-75 margin-y-50">
           <div className={styles.indicator}></div>
           <div className={styles.indicator}></div>
           <div className={styles.indicator}></div>
