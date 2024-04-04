@@ -62,6 +62,7 @@ export default function MetaRoadmapForm({
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [transformIndex, setTransformIndex] = useState(0)
 
   const timestamp = Date.now()
 
@@ -84,14 +85,14 @@ export default function MetaRoadmapForm({
     }
   }
 
-  const [transformIndex, setTransformIndex] = useState(1)
-
-  function iterateSections(reverse: boolean = false) {
+  function iterateSections(options?: { reverse?: boolean }) {
     const sectionsParent = document?.getElementById('form-sections')
     const sections = Array.from(sectionsParent?.children || [])
     const currentIndicator = document?.getElementById('current-indicator')
 
-    if ((transformIndex + 1 > sections.length && !reverse) || (transformIndex - 1 <= 0 && reverse)) {
+    const currentTransformIndex = transformIndex + (options?.reverse ? -1 : 1)
+
+    if ((currentTransformIndex >= sections.length && !options?.reverse) || (currentTransformIndex < 0 && options?.reverse)) {
       return
     }
 
@@ -100,7 +101,7 @@ export default function MetaRoadmapForm({
       if (transformData) {
         const test = parseInt(transformData);
 
-        if (reverse) {
+        if (options?.reverse) {
           (element as HTMLElement).dataset.transform = (test + 100).toString();
         } else {
           (element as HTMLElement).dataset.transform = (test - 100).toString();
@@ -112,10 +113,10 @@ export default function MetaRoadmapForm({
     })
 
     if (currentIndicator) {
-      currentIndicator.style.transform = `translate(${(250 * transformIndex) + 50}%, 0)`
+      currentIndicator.style.transform = `translate(${(250 * currentTransformIndex) + 50}%, 0)`
     }
 
-    setTransformIndex(transformIndex + (reverse ? -1 : 1))
+    setTransformIndex(currentTransformIndex)
 
   }
 
@@ -206,7 +207,7 @@ export default function MetaRoadmapForm({
         </div>
       </form>
 
-      <div className="margin-y-100" style={{marginInline: 'auto', width: 'fit-content'}}>
+      <div className="margin-y-100" style={{ marginInline: 'auto', width: 'fit-content' }}>
         <div className="display-flex justify-content-center gap-75 margin-y-50">
           <div className={styles.indicator}></div>
           <div className={styles.indicator}></div>
@@ -218,7 +219,7 @@ export default function MetaRoadmapForm({
       </div>
 
       <div className="padding-x-100 display-flex justify-content-center gap-100">
-        <button type="button" onClick={() => iterateSections(true)}>Tillbaka</button>
+        <button type="button" onClick={() => iterateSections({ reverse: true })}>Tillbaka</button>
         <button type="button" onClick={() => iterateSections()}>Nästa</button>
       </div>
 
