@@ -89,6 +89,7 @@ export default function MetaRoadmapForm({
   function iterateSections(reverse: boolean = false) {
     const sectionsParent = document?.getElementById('form-sections')
     const sections = Array.from(sectionsParent?.children || [])
+    const currentIndicator = document?.getElementById('current-indicator')
 
     if ((transformIndex + 1 > sections.length && !reverse) || (transformIndex - 1 <= 0 && reverse)) {
       return
@@ -109,6 +110,10 @@ export default function MetaRoadmapForm({
         (element as HTMLElement).style.transform = `translate(${datasetTransform}%, 0)`
       }
     })
+
+    if (currentIndicator) {
+      currentIndicator.style.transform = `translate(${(250 * transformIndex) + 50}%, 0)`
+    }
 
     setTransformIndex(transformIndex + (reverse ? -1 : 1))
 
@@ -202,14 +207,14 @@ export default function MetaRoadmapForm({
       </form>
 
       <div className="margin-y-100" style={{marginInline: 'auto', width: 'fit-content'}}>
-        <div className="display-flex justify-content-center gap-50 margin-y-50">
+        <div className="display-flex justify-content-center gap-75 margin-y-50">
           <div className={styles.indicator}></div>
           <div className={styles.indicator}></div>
           <div className={styles.indicator}></div>
           <div className={styles.indicator}></div>
           <div className={styles.indicator}></div>
         </div>
-        <div className={styles.currentIndicator}></div>
+        <div className={styles.currentIndicator} id="current-indicator"></div>
       </div>
 
       <div className="padding-x-100 display-flex justify-content-center gap-100">
