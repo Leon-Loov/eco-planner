@@ -183,7 +183,7 @@ export default function RepeatableScaling({
         <>
           <br />
           <label htmlFor="weight">Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna): </label>
-          <input type="number" step={"any"} id="weight" name="weight" defaultValue={1} />
+          <input type="number" step={"any"} min={0} id="weight" name="weight" defaultValue={1} />
         </>
       }
 

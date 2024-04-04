@@ -156,11 +156,12 @@ export default function CopyAndScale({
             }
           }
           // Take the totalWeight-th root of the scale factor to get the weighted geometric mean
-          scaleFactor = Math.pow(scaleFactor, 1 / totalWeight);
+          // Will return NaN if the scale factor is negative before taking the root
+          scaleFactor = Math.pow(scaleFactor, (1 / totalWeight));
           break;
       }
-      // If the resultant scale factor is NaN, don't proceed
-      if (isNaN(scaleFactor)) {
+      // Don't proceed if the resultant scale factor is NaN, infinite, or non-numeric for some reason
+      if (!Number.isFinite(scaleFactor)) {
         setIsLoading(false);
         alert("Felaktig inmatning. Skalningsfaktorn kunde inte beräknas. Ofta beror detta på ett ickenumeriskt värde i ett inmatningsfält eller att produkten av alla skalningsfaktorer är negativ.");
         return;
@@ -215,11 +216,27 @@ export default function CopyAndScale({
           <br />
           {scalingComponents.map((id) => {
             return (
-              <RepeatableScaling key={id}>
+              <RepeatableScaling key={id} useWeight={scalingMethod != ScaleMethod.Multiplicative}> {/* Multiplicative scaling doesn't use weights */}
                 <button type="button" onClick={() => setScalingComponents(scalingComponents.filter((i) => i !== id))}>Ta bort</button>
               </RepeatableScaling>
             )
           })}
+          <br />
+          <fieldset>
+            <legend>Välj skalningsmetod</legend>
+            <label>
+              <input type="radio" name="scalingMethod" value={ScaleMethod.Geometric} checked={scalingMethod === ScaleMethod.Geometric} onChange={() => setScalingMethod(ScaleMethod.Geometric)} />
+              Geometriskt genomsnitt
+            </label>
+            <label>
+              <input type="radio" name="scalingMethod" value={ScaleMethod.Algebraic} checked={scalingMethod === ScaleMethod.Algebraic} onChange={() => setScalingMethod(ScaleMethod.Algebraic)} />
+              Algebraiskt genomsnitt
+            </label>
+            <label>
+              <input type="radio" name="scalingMethod" value={ScaleMethod.Multiplicative} checked={scalingMethod === ScaleMethod.Multiplicative} onChange={() => setScalingMethod(ScaleMethod.Multiplicative)} />
+              Multiplikativ skalning
+            </label>
+          </fieldset>
           <br />
           <button type="button" onClick={() => setScalingComponents([...scalingComponents, (crypto?.randomUUID() || Math.random().toString())])}>Lägg till skalning</button>
           <br />
