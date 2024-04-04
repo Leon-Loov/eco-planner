@@ -86,15 +86,15 @@ export default function MetaRoadmapForm({
 
   const [transformIndex, setTransformIndex] = useState(1)
 
-  function doStuff(reverse: boolean = false) {
-    const aaaaa = document?.getElementById('form-sections')
-    const bbbbb = Array.from(aaaaa?.children || [])
+  function iterateSections(reverse: boolean = false) {
+    const sectionsParent = document?.getElementById('form-sections')
+    const sections = Array.from(sectionsParent?.children || [])
 
-    if ((transformIndex + 1 > bbbbb.length && !reverse) || (transformIndex - 1 <= 0 && reverse)) {
+    if ((transformIndex + 1 > sections.length && !reverse) || (transformIndex - 1 <= 0 && reverse)) {
       return
     }
 
-    bbbbb.forEach(element => {
+    sections.forEach(element => {
       const transformData = (element as HTMLElement).dataset.transform
       if (transformData) {
         const test = parseInt(transformData);
@@ -158,7 +158,7 @@ export default function MetaRoadmapForm({
           </section>
 
           <section className="width-100" data-transform="0">
-            <h2>Är fädplanen beroende av några externa resurser?</h2>
+            <h2>Är färdplanen beroende av några externa resurser?</h2>
             <LinkInput />
           </section>
 
@@ -193,14 +193,29 @@ export default function MetaRoadmapForm({
           </section>
         </div>
 
-        <div className="padding-x-100">
-          <button type="button" onClick={() => doStuff(true)}>←</button>
-          <button type="button" onClick={() => doStuff()}>→</button>
-        </div>
-        
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
-        <input type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="margin-100 seagreen color-purewhite" />
+        <div className="padding-x-100 display-flex justify-content-flex-end">
+          <button type="submit" value={currentRoadmap ? "Spara" : "Skapa färdplan"} className="seagreen color-purewhite">
+            {currentRoadmap ? "Spara" : "Skapa färdplan"}
+          </button>
+        </div>
       </form>
+
+      <div className="margin-y-100" style={{marginInline: 'auto', width: 'fit-content'}}>
+        <div className="display-flex justify-content-center gap-50 margin-y-50">
+          <div className={styles.indicator}></div>
+          <div className={styles.indicator}></div>
+          <div className={styles.indicator}></div>
+          <div className={styles.indicator}></div>
+          <div className={styles.indicator}></div>
+        </div>
+        <div className={styles.currentIndicator}></div>
+      </div>
+
+      <div className="padding-x-100 display-flex justify-content-center gap-100">
+        <button type="button" onClick={() => iterateSections(true)}>Tillbaka</button>
+        <button type="button" onClick={() => iterateSections()}>Nästa</button>
+      </div>
 
       <datalist id="actors">
         {
