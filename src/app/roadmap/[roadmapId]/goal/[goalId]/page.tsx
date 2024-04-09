@@ -138,6 +138,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         </div>
         <ActionGraph actions={goal.actions} />
 
+        {/*
         <section>
           <section className="margin-y-100 padding-y-50" style={{ borderBottom: '2px solid var(--gray-90)' }}>
             <label className="font-weight-bold margin-y-25 container-text">
@@ -176,7 +177,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             </label>
           </section>
         </section>
-
+        */}
+        
+        <div style={{borderBottom: '2px solid var(--gray-90)', margin: '1rem 0'}}></div>
+        
         <Actions goal={goal} accessLevel={accessLevel} />
       </section>
       <Comments comments={goal.comments} objectId={goal.id} />
