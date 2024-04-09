@@ -72,7 +72,6 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     </section>
     */}
 
-    {/*
     <h2>Featured</h2>
     <div 
       className="flex gap-100 margin-y-100 padding-y-50" 
@@ -81,11 +80,17 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         overflowX: 'auto',
       }}
     >
-      <div style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}></div>
-      <div style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}></div>
-      <div style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}></div>
+
+      {roadmap.goals.map((goal, key) => 
+        goal.isFeatured ?  
+          <div key={key} style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}>
+            {goal.isFeatured}
+          </div>
+        : null 
+      )}
+      
     </div>
-     */}
+     
 
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Comments comments={roadmap.comments} objectId={roadmap.id} />

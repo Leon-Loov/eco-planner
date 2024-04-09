@@ -41,7 +41,7 @@ export default function GoalForm({
       goalId: currentGoal?.id || null,
       links,
       timestamp,
-      // TODO: Add isFeatured to the form and here
+      isFeatured: (form.namedItem('isFeatured') as HTMLInputElement)?.checked,
     } as GoalInput)
 
     formSubmitter('/api/goal', formJSON, currentGoal ? 'PUT' : 'POST');
@@ -127,6 +127,12 @@ export default function GoalForm({
         </label>
 
         <LinkInput links={currentGoal?.links} />
+
+        <label className="flex align-items-center gap-50 margin-y-100">
+          <input type="checkbox" name="isFeatured" id="isFeatured" defaultChecked={currentGoal?.isFeatured} /> {/* TODO: Make toggle */}
+          Featured? 
+        </label>
+
         <input type="submit" className="margin-y-75 seagreen color-purewhite" value={currentGoal ? "Spara" : "Skapa målbana"} />
       </form>
 
