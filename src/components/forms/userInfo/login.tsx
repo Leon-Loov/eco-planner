@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+import styles from '../forms.module.css'
 
 function handleSubmit(event: any) {
   event.preventDefault()
@@ -29,6 +31,9 @@ function handleSubmit(event: any) {
 }
 
 export default function Login() {
+
+  const [showPassword, setShowPassword] = useState(false)
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -46,7 +51,10 @@ export default function Login() {
           Lösenord
           <div className="margin-y-50 padding-50 flex align-items-center gray-90 smooth focusable">
             <Image src="/icons/password.svg" alt="" width={24} height={24} />
-            <input className="padding-0 margin-x-50"  type="password" placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
+            <input className="padding-0 margin-x-50 transparent" type={showPassword ? 'text' : 'password'} placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
+            <button type="button" className={`${styles.showPasswordButton} grid padding-0 transparent`} onClick={() => setShowPassword(prevState => !prevState)}>
+              <Image src={showPassword ? '/icons/eyeDisabled.svg' : '/icons/eye.svg'}  alt="" width={24} height={24} />
+            </button>
           </div>
         </label>
 
