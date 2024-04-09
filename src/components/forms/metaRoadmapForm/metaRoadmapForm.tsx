@@ -150,7 +150,10 @@ export default function MetaRoadmapForm({
 
         <div id="form-sections" className={styles.formSlider}>
           <section className="width-100" data-transform="0">
-            <h2>Beskriv din färdplan</h2>
+            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
+              <h2 style={{marginBottom:'0'}}>Beskriv din färdplan</h2>
+              <p style={{marginTop: '.25rem'}}>Ge din färdplan ett namn och en beskrivning.</p>
+            </div>
             <label className="block margin-y-75">
               Namn för den nya färdplanen
               <input id="metaRoadmapName" name="metaRoadmapName" className="margin-y-25" type="text" defaultValue={currentRoadmap?.name ?? undefined} required />
@@ -163,7 +166,10 @@ export default function MetaRoadmapForm({
           </section>
 
           <section className="width-100" data-transform="0">
-            <h2>Vem ansvarar för den här färdplanen?</h2>
+            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
+              <h2 style={{marginBottom:'0'}}>Vem ansvarar för den här färdplanen?</h2>
+              <p style={{marginTop: '.25rem'}}>Beskriv vem som ansvarar för färdplanen genom att välja en typ och en aktör. </p>
+            </div>
             <label className="block margin-y-75">
               Typ av färdplan
               <select className="block margin-y-25" name="type" id="type" defaultValue={currentRoadmap?.type ?? ""} required>
@@ -186,22 +192,38 @@ export default function MetaRoadmapForm({
           </section>
 
           <section className="width-100" data-transform="0">
-            <h2>Är färdplanen beroende av några externa resurser?</h2>
+            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
+              <h2 style={{marginBottom:'0'}}>Är färdplanen beroende av några externa resurser?</h2>
+              <p style={{marginTop: '.25rem'}}>
+                Om färdplanen är associerad med några utomstående resurser såsom externa textdokument eller 
+                hemsidor är det möjligt länka till dessa här.
+              </p>
+            </div>
             <LinkInput />
           </section>
 
           { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user is the author of the roadmap
             (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
             <section data-transform="0">
-              <h2>Vem ska ha tillgång till din färdplan?</h2>
+              <div style={{textAlign: 'center', marginBottom: '3rem'}}>
+                <h2 style={{marginBottom:'0'}}>Vem ska ha tillgång till din färdplan?</h2>
+                <p style={{marginTop: '.25rem'}}>
+                  Fyll i vilka grupper eller personer som ska kunna se eller redigera denna färdplan.
+                </p>
+              </div>
               <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
             </section>
           }
 
           <section className="width-100" data-transform="0">
-            <h2>Jobbar denna färdplan mot en annan färdplan?</h2>
+            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
+              <h2 style={{marginBottom:'0'}}>Jobbar denna färdplan mot en annan färdplan?</h2>
+              <p style={{marginTop: '.25rem'}}>
+                Fyll om denna färdplan jobbar mot en annan färdplan.
+              </p>
+            </div>
             <label className="block margin-y-75">
-              Om denna färdplan har en annan färdplan den jobbar mot kan den väljas här
+              Förälder
               <select name="parentRoadmap" id="parentRoadmap" className="block margin-y-25" defaultValue={currentRoadmap?.parentRoadmapId ?? ""}>
                 <option value="">Ingen förälder vald</option>
                 {
