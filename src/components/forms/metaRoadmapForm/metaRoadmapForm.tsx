@@ -9,6 +9,7 @@ import AccessSelector, { getAccessData } from "@/components/forms/accessSelector
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
 import formSubmitter from "@/functions/formSubmitter";
 import styles from '../forms.module.css'
+import Image from "next/image";
 
 export default function MetaRoadmapForm({
   user,
@@ -220,29 +221,39 @@ export default function MetaRoadmapForm({
           </section>
         </div>
 
-        {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
-        <div className="padding-x-100">
-          <button type="submit" id="submit-button" value={currentRoadmap ? "Spara" : "Skapa färdplan"} disabled className={`${styles.submitButton} seagreen color-purewhite width-100`}>
-            {currentRoadmap ? "Spara" : "Skapa färdplan"}
+        <div className="margin-y-100 padding-x-100 display-flex align-items-flex-start justify-content-space-between gap-100">
+          
+          <button type="button" className="flex align-items-center transparent round gap-25" style={{fontSize: '1rem'}} onClick={() => iterateSections({ reverse: true })}>
+            <Image src="/icons/arrowLeft.svg" alt="" width={24} height={24} />
+            Tillbaka 
           </button>
+
+          <div className="margin-y-50" style={{ marginInline: 'auto', width: 'fit-content' }}>
+            <div id="indicators" className="display-flex justify-content-center gap-75 margin-y-50">
+              <div className={styles.indicator}></div>
+              <div className={styles.indicator}></div>
+              <div className={styles.indicator}></div>
+              <div className={styles.indicator}></div>
+              <div className={styles.indicator}></div>
+            </div>
+            <div className={styles.currentIndicator} id="current-indicator"></div>
+          </div>
+
+          <button type="button" className="flex align-items-center transparent round gap-25" style={{fontSize: '1rem'}} onClick={() => iterateSections()}>
+            Nästa
+            <Image src="/icons/arrowRight.svg" alt="" width={24} height={24} />
+          </button>
+
         </div>
+
+        {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
+
+        <button type="submit" id="submit-button" value={currentRoadmap ? "Spara" : "Skapa färdplan"} disabled 
+                className={`${styles.submitButton} seagreen color-purewhite round block`} style={{marginInline: 'auto', width: 'min(25ch, 100%)', fontSize: '1rem'}}>
+          {currentRoadmap ? "Spara" : "Skapa färdplan"}
+        </button>
+
       </form>
-
-      <div className="margin-y-100" style={{ marginInline: 'auto', width: 'fit-content' }}>
-        <div id="indicators" className="display-flex justify-content-center gap-75 margin-y-50">
-          <div className={styles.indicator}></div>
-          <div className={styles.indicator}></div>
-          <div className={styles.indicator}></div>
-          <div className={styles.indicator}></div>
-          <div className={styles.indicator}></div>
-        </div>
-        <div className={styles.currentIndicator} id="current-indicator"></div>
-      </div>
-
-      <div className="padding-x-100 display-flex justify-content-center gap-100">
-        <button type="button" onClick={() => iterateSections({ reverse: true })}>Tillbaka</button>
-        <button type="button" onClick={() => iterateSections()}>Nästa</button>
-      </div>
 
       <datalist id="actors">
         {
