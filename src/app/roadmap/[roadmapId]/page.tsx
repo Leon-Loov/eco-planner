@@ -29,6 +29,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
     <p>{roadmap.description}</p>
 
+    {/* Sorting stuff
     <section>
       <section className="margin-y-100 padding-y-50" style={{ borderBottom: '2px solid var(--gray-90)' }}>
         <label className="font-weight-bold margin-y-25 container-text">
@@ -69,6 +70,22 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         </label>
       </section>
     </section>
+    */}
+
+    {/*
+    <h2>Featured</h2>
+    <div 
+      className="flex gap-100 margin-y-100 padding-y-50" 
+      style={{ 
+        borderBottom: '2px solid var(--gray-90)',
+        overflowX: 'auto',
+      }}
+    >
+      <div style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}></div>
+      <div style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}></div>
+      <div style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}></div>
+    </div>
+     */}
 
     <Goals title="Målbanor" roadmap={roadmap} accessLevel={accessLevel} />
     <Comments comments={roadmap.comments} objectId={roadmap.id} />
