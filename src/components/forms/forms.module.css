@@ -29,3 +29,9 @@
 .submitButton:disabled {
     background-color: var(--gray-70);
 }
+
+/* Login/Signup forms */
+
+.showPasswordButton:hover {
+    box-shadow: initial;
+}
