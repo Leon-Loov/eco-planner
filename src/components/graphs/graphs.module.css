@@ -30,7 +30,7 @@
 }
 
 .graphWrapperThumbnail {
-    width: 400px;
+    width: 600px;
     height: 300px;
     border-radius: .5rem;
     border: 2px solid var(--gray-90);
