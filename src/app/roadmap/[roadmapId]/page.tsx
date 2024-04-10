@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     */}
 
     <div 
-      className="flex gap-100 margin-y-100 padding-y-100" 
+      className="flex gap-100 margin-y-100 padding-y-100 align-items-flex-end" 
       style={{ 
         borderBottom: '2px solid var(--gray-90)',
         overflowX: 'auto',
