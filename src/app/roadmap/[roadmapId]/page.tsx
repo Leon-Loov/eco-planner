@@ -8,6 +8,7 @@ import Goals from "@/components/tables/goals";
 import Image from "next/image";
 import Comments from "@/components/comments/comments";
 import { AccessLevel } from "@/types";
+import ThumbnailGraph from "@/components/graphs/mainGraphs/thumbnailGraph";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
@@ -74,7 +75,7 @@ export default async function Page({ params }: { params: { roadmapId: string } }
 
     <h2>Featured</h2>
     <div 
-      className="flex gap-100 margin-y-100 padding-y-50" 
+      className="flex gap-100 margin-y-100 padding-y-100" 
       style={{ 
         borderBottom: '2px solid var(--gray-90)',
         overflowX: 'auto',
@@ -82,10 +83,10 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     >
 
       {roadmap.goals.map((goal, key) => 
-        goal.isFeatured ?  
-          <div key={key} style={{minWidth: '500px', height: '200px', backgroundColor: 'red',borderRadius: '3px'}}>
-            {goal.isFeatured}
-          </div>
+        goal.isFeatured ?
+          <a href={`/roadmap/${roadmap.id}/goal/${goal.id}`}  key={key}>
+            <ThumbnailGraph goal={goal}/>
+          </a>
         : null 
       )}
       

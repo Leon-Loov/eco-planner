@@ -136,8 +136,9 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           <h2>Åtgärder</h2>
           <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/action/createAction`} className="button color-purewhite pureblack round font-weight-bold">Skapa ny åtgärd</Link>
         </div>
-        <ActionGraph actions={goal.actions} />
-
+        <div className="margin-y-100">
+          <ActionGraph actions={goal.actions} />
+        </div>
         {/*
         <section>
           <section className="margin-y-100 padding-y-50" style={{ borderBottom: '2px solid var(--gray-90)' }}>
@@ -178,9 +179,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           </section>
         </section>
         */}
-        
-        <div style={{borderBottom: '2px solid var(--gray-90)', margin: '1rem 0'}}></div>
-        
+                
         <Actions goal={goal} accessLevel={accessLevel} />
       </section>
       <Comments comments={goal.comments} objectId={goal.id} />
