@@ -73,7 +73,6 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     </section>
     */}
 
-    <h2>Featured</h2>
     <div 
       className="flex gap-100 margin-y-100 padding-y-100" 
       style={{ 
@@ -81,12 +80,14 @@ export default async function Page({ params }: { params: { roadmapId: string } }
         overflowX: 'auto',
       }}
     >
-
       {roadmap.goals.map((goal, key) => 
         goal.isFeatured ?
-          <a href={`/roadmap/${roadmap.id}/goal/${goal.id}`}  key={key}>
-            <ThumbnailGraph goal={goal}/>
-          </a>
+          <div key={key}>
+            <h3 style={{textAlign: 'center'}}>{goal.name}</h3>
+            <a href={`/roadmap/${roadmap.id}/goal/${goal.id}`}>
+              <ThumbnailGraph goal={goal}/>
+            </a>
+          </div>
         : null 
       )}
       
