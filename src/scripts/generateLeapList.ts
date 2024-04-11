@@ -8,7 +8,7 @@ import { RoadmapType } from '@prisma/client';
  */
 async function generateLeapList() {
   // Get the indicator parameters
-  let rawData = await prisma.roadmap.findMany({
+  const rawData = await prisma.roadmap.findMany({
     where: {
       metaRoadmap: { type: RoadmapType.NATIONAL },
       viewGroups: { some: { name: 'public' } },
@@ -29,8 +29,8 @@ async function generateLeapList() {
 
   // Flatten the data
   let leapList = [];
-  for (let roadmap of rawData) {
-    for (let goal of roadmap.goals) {
+  for (const roadmap of rawData) {
+    for (const goal of roadmap.goals) {
       leapList.push(goal.indicatorParameter);
     }
   }

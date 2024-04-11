@@ -2,7 +2,7 @@ import { GoalInput } from "@/types"
 import dataSeriesDataFieldNames from "@/lib/dataSeriesDataFieldNames.json" with { type: "json" }
 
 export default function parseCsv(csv: ArrayBuffer): string[][] {
-  // Windows-1252 (sometimes called ANSI) is the default encoding for CSV files exported from Excel. Is a superset of ISO-8859-1 (Latin-1).
+  // Windows-1252 (sometimes called ANSI) is the default encoding for CSV files exported from Excel. It's a superset of ISO-8859-1 (Latin-1).
   const decoder = new TextDecoder('windows-1252')
   const decodedCsv = decoder.decode(csv)
   const rows = decodedCsv.split('\n')
@@ -28,16 +28,16 @@ export function csvToGoalList(csv: string[][]) {
     "dataUnit": "Units",
     "dataScale": "Scale",
   }
-  let numericHeaders = []
-  for (let year of dataSeriesDataFieldNames) {
+  const numericHeaders = []
+  for (const year of dataSeriesDataFieldNames) {
     numericHeaders.push(year.replace("val", ""))
   }
 
-  let headerIndex: { [key: string]: number } = {}
-  let output: GoalInput[] = [];
+  const headerIndex: { [key: string]: number } = {}
+  const output: GoalInput[] = [];
 
   // Check that all headers are present and get their indices
-  for (let i of Object.keys(nonNumericHeaders)) {
+  for (const i of Object.keys(nonNumericHeaders)) {
     if (!headers.includes(nonNumericHeaders[i as keyof typeof nonNumericHeaders])) {
       throw new Error(`Missing header "${nonNumericHeaders[i as keyof typeof nonNumericHeaders]}"`)
     } else {
@@ -45,7 +45,7 @@ export function csvToGoalList(csv: string[][]) {
     }
   }
 
-  for (let i of numericHeaders) {
+  for (const i of numericHeaders) {
     if (!headers.includes(i)) {
       throw new Error(`Missing header "${i}"`)
     } else {
@@ -60,8 +60,8 @@ export function csvToGoalList(csv: string[][]) {
       continue
     }
 
-    let dataSeries: string[] = []
-    for (let j of numericHeaders) {
+    const dataSeries: string[] = []
+    for (const j of numericHeaders) {
       dataSeries.push(csv[i][headerIndex[j]]?.replaceAll(",", "."))
     }
 
