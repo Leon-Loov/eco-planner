@@ -24,13 +24,15 @@ export default function GraphSelector({
     }
   };
 
+  const percentAndFraction = ['procent', 'percent', '%', 'andel', 'fraction'];
+
   // Set the selectedOption as the context value
   return (
     <>
       <RadioImage text='Målbana' value={GraphType.Main} src="/icons/line.svg" name="graph" checked={current == GraphType.Main} onChange={handleRadioChange} />
       <RadioImage text='Årlig förändring' value={GraphType.Delta} src="/icons/calendarStats.svg" name="graph" checked={current == GraphType.Delta} onChange={handleRadioChange} />
       { // Don't allow relative graph if the main graph is already percent or fraction
-        goal.dataSeries?.unit.toLowerCase() != 'procent' && goal.dataSeries?.unit.toLowerCase() != 'andel' &&
+        !percentAndFraction.includes(goal.dataSeries?.unit?.toLowerCase() ?? "") &&
         <RadioImage text='Procentuell förändring' value={GraphType.Relative} src="/icons/chartChange.svg" name="graph" checked={current == GraphType.Relative} onChange={handleRadioChange} />
       }
     </>
