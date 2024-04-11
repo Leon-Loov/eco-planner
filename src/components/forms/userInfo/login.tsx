@@ -14,14 +14,20 @@ function handleSubmit(event: any) {
     password: form.password.value,
   })
 
-  // Try to login, redirect to the home page if successful.
+  // Try to login, redirect away if successful.
   fetch('/api/login', {
     method: 'POST',
     body: formJSON,
     headers: { 'Content-Type': 'application/json' },
   }).then((res) => {
     if (res.ok) {
-      window.location.href = '/'
+      // Redirect to the page the user came from, or to the home page.
+      const from = new URLSearchParams(window.location.search).get('from')
+      if (from) {
+        window.location.href = from
+      } else {
+        window.location.href = '/'
+      }
     } else {
       alert('Login failed.')
     }
@@ -43,7 +49,7 @@ export default function Login() {
           Användarnamn
           <div className="margin-y-50 padding-50 flex align-items-center gray-90 smooth focusable">
             <Image src="/icons/user.svg" alt="" width={24} height={24} />
-            <input className="padding-0 margin-x-50"  type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
+            <input className="padding-0 margin-x-50" type="text" placeholder="användarnamn" name="username" required id="username" autoComplete="username" />
           </div>
         </label>
 
@@ -53,13 +59,13 @@ export default function Login() {
             <Image src="/icons/password.svg" alt="" width={24} height={24} />
             <input className="padding-0 margin-x-50 transparent" type={showPassword ? 'text' : 'password'} placeholder="lösenord" name="password" required id="password" autoComplete="current-password" />
             <button type="button" className={`${styles.showPasswordButton} grid padding-0 transparent`} onClick={() => setShowPassword(prevState => !prevState)}>
-              <Image src={showPassword ? '/icons/eyeDisabled.svg' : '/icons/eye.svg'}  alt="" width={24} height={24} />
+              <Image src={showPassword ? '/icons/eyeDisabled.svg' : '/icons/eye.svg'} alt="" width={24} height={24} />
             </button>
           </div>
         </label>
 
         <button role="submit" className="block margin-y-50 font-weight-bold seagreen color-purewhite">Logga In</button>
-        <p className="padding-y-50" style={{borderTop: '1px solid var(--gray-90)'}}>
+        <p className="padding-y-50" style={{ borderTop: '1px solid var(--gray-90)' }}>
           <small>Har du inget konto? <Link href='/signup'>Skapa konto</Link></small>
         </p>
       </form>
