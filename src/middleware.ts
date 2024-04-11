@@ -19,16 +19,18 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (
-    req.nextUrl.pathname.endsWith('/createRoadmap') ||
-    req.nextUrl.pathname.endsWith('/createRoadmap/') ||
-    req.nextUrl.pathname.endsWith('/createGoal') ||
-    req.nextUrl.pathname.endsWith('/createGoal/') ||
-    req.nextUrl.pathname.endsWith('/createAction') ||
-    req.nextUrl.pathname.endsWith('/createAction/')
-  ) {
+  /**
+   * Mathces the creation and editing pages for MetaRoadmaps, Roadmaps, Goals, and Actions, with or without trailing slashes.
+   * For example, "/createMetaRoadmap" or "/editAction/"
+   */
+  const createOrEditRegEx = /\/(create|edit)(MetaRoadmap|Roadmap|Goal|Action)\/?$/
+  // Redirect away from creation and editing pages if not logged in
+  if (req.nextUrl.pathname.match(createOrEditRegEx)) {
     if (!session.user?.isLoggedIn) {
-      return NextResponse.redirect(new URL('/login', req.url))
+      const loginUrl = new URL('/login', req.url)
+      // Save the current page as the "from" query parameter so we can redirect back after logging in
+      loginUrl.searchParams.set('from', req.nextUrl.pathname)
+      return NextResponse.redirect(loginUrl)
     }
   }
 
