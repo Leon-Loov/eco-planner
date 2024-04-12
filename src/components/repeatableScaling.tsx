@@ -178,12 +178,12 @@ export default function RepeatableScaling({
       {ScalarInputs()}
 
       <label className="block margin-y-75">
-        Skalfaktor för den här beräkningen:
-        <output name="result" id="result">{result ?? " Värde saknas"}</output>
+        {"Skalfaktor för den här beräkningen: "}
+        <output name="result" id="result">{Number.isFinite(result ?? NaN) ? result : "Värde saknas"}</output>
       </label>
-      
+
       {/* Hidden input, used because outputs are not submitted with formData */}
-      <input className="margin-y-25" type="hidden" name="scaleFactor" value={(!isNaN(result || 1) && result?.toString()) ? result.toString() : "1"} />
+      <input className="margin-y-25" type="hidden" name="scaleFactor" value={(Number.isFinite(result ?? 1) && result?.toString()) ? result.toString() : "1"} />
 
       {// Only show weight input if useWeight is true
         useWeight &&
