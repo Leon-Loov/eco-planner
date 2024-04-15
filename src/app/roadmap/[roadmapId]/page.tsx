@@ -74,10 +74,10 @@ export default async function Page({ params }: { params: { roadmapId: string } }
     */}
 
     <div 
-      className="flex gap-100 margin-y-100 padding-y-100 align-items-flex-end" 
+      className="grid gap-100 margin-y-100 padding-y-100 align-items-flex-end" 
       style={{ 
         borderBottom: '2px solid var(--gray-90)',
-        overflowX: 'auto',
+        gridTemplateColumns: 'repeat(auto-fit, 300px)'
       }}
     >
       {roadmap.goals.map((goal, key) => 
