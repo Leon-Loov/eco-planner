@@ -15,6 +15,9 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+COPY /prisma/schema.prisma ./prisma/
+
+RUN yarn prisma generate
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -26,8 +29,6 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN yarn prisma generate
 
 RUN yarn build
 
@@ -58,7 +59,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 8081
+# EXPOSE 8081
 
 ENV PORT 8081
 

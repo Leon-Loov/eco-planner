@@ -4,7 +4,8 @@
     "prebuild": "node --loader ts-node/esm ./src/scripts/generateLeapList.ts && node --loader ts-node/esm ./src/scripts/getDataSeriesValueFieldNames.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "docker compose -f compose.test.yaml up -d"
   },
   "dependencies": {
     "@prisma/client": "^5.3.1",

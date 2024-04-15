@@ -1,0 +1,11 @@
+name: eco-planner
+
+services:
+  test:
+    image: ecoplanner:test
+    build: .
+    pull_policy: build
+    # No exposed ports since tests will run in the container
+    env_file:
+      - docker/.env
+    command: sh -c 'HOSTNAME="0.0.0.0" node server.js' # Add test commands
