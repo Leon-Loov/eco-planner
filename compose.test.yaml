@@ -5,7 +5,19 @@ services:
     image: ecoplanner:test
     build: .
     pull_policy: build
-    # No exposed ports since tests will run in the container
+    networks:
+      - testDatabase
     env_file:
-      - docker/.env
-    command: sh -c 'HOSTNAME="0.0.0.0" node server.js' # Add test commands
+      - docker/.env.test
+    command: sh -c 'sleep 15; HOSTNAME="0.0.0.0" node server.js' # Add test commands
+
+  testdb:
+    build:
+      context: .
+      dockerfile: docker/testdb.Dockerfile
+    networks:
+      - testDatabase
+
+networks:
+  testDatabase:
+    internal: true
