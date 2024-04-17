@@ -44,6 +44,7 @@ export default function FormWrapper({
 
   const [transformIndex, setTransformIndex] = useState(0)
   const sections = React.Children.toArray(children)
+  const formSlide = Array.prototype.slice.call(document.getElementsByClassName('fieldsetWrapper'))
 
   function iterateSections(options?: { reverse?: boolean }) {
 
@@ -54,26 +55,14 @@ export default function FormWrapper({
         return
       }
 
-      // TODO: Make this work :)
-      sections.forEach(element => {
-        if (React.isValidElement(element)) {
-
-            // Define styles object based on the color prop
-            const styles = {
-              backgroundColor: 'red',
-              padding: '10px',
-              borderRadius: '5px',
-              color: 'white',
-            };
-
-            // Modify the style prop of the element directly
-            element.props.style = styles;
-
+      // TODO: Fix bug where first button press does not apply, then applies double on next press
+      formSlide.forEach(element => {
+        if (element) {      
             if (options?.reverse) {
-              console.log(element.props.style)
+              element.style.transform = `translateX(-${(currentTransformIndex) * 100}%)`
             } else {
-              console.log(element.props.style)
-            }            
+              element.style.transform = `translateX(-${(currentTransformIndex) * 100}%)`
+            }
           }
         }
       )}      
@@ -89,7 +78,7 @@ export default function FormWrapper({
     <>
       <div className={styles.formSlider}>
         {React.Children.map(children, (child, index) => (
-          <div className={`${styles.formSlide}`} key={index}>
+          <div className={`${styles.formSlide} fieldsetWrapper`} key={index}>
             {child}
           </div>
         ))}
