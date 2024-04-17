@@ -14,12 +14,38 @@ export default function FormWrapper({
   const [transformIndex, setTransformIndex] = useState(0)
   const sections = React.Children.toArray(children)
 
-  function iterateSections(options?: { reverse?: boolean }) {
-
+  function iterateIndicators(currentTransformIndex: number) {
     const currentIndicator = document?.getElementById('current-indicator')
     const indicatorsParent = document?.getElementById('indicators')
     const indicators = Array.from(indicatorsParent?.children || [])
+
+    // Turn indicators green if they are complete
+    for (let i = 0; i < indicators.length; i++) {
+      if (i < currentTransformIndex) {
+        (indicators[i] as HTMLElement).style.backgroundColor = 'seagreen'
+      } else {
+        (indicators[i] as HTMLElement).style.backgroundColor = 'var(--gray-90)'
+      }
+    }
+
+    if (currentIndicator) {
+      currentIndicator.style.transform = `translate(${(250 * currentTransformIndex) + 50}%, 0)`
+    }
+  }
+
+  function enableSubmitButton(currentTransformIndex: number) {
     const submitButton = document?.getElementById('submit-button')
+    // Enable submitbutton if on final step
+    if (submitButton) {
+      if (currentTransformIndex == sections.length - 1) {
+        submitButton.removeAttribute('disabled')
+      } else {
+        submitButton.setAttribute('disabled', 'true')
+      }
+    }
+  }
+
+  function iterateSections(options?: { reverse?: boolean }) {
 
     const currentTransformIndex = transformIndex + (options?.reverse ? -1 : 1)
 
@@ -29,6 +55,7 @@ export default function FormWrapper({
       }
 
       // TODO: Make this work :)
+      {/* 
       sections.forEach(element => {
         if (React.isValidElement(element)) {
 
@@ -50,30 +77,11 @@ export default function FormWrapper({
           
         }
       })
+      */}
     }
 
-    // Turn indicators green if they are complete
-    for (let i = 0; i < indicators.length; i++) {
-      if (i < currentTransformIndex) {
-        (indicators[i] as HTMLElement).style.backgroundColor = 'seagreen'
-      } else {
-        (indicators[i] as HTMLElement).style.backgroundColor = 'var(--gray-90)'
-      }
-    }
-
-    if (currentIndicator) {
-      currentIndicator.style.transform = `translate(${(250 * currentTransformIndex) + 50}%, 0)`
-    }
-
-    // Enable submitbutton if on final step
-    if (submitButton) {
-      if (currentTransformIndex == sections.length - 1) {
-        submitButton.removeAttribute('disabled')
-      } else {
-        submitButton.setAttribute('disabled', 'true')
-      }
-    }
-
+    iterateIndicators(currentTransformIndex)
+    enableSubmitButton(currentTransformIndex)
     setTransformIndex(currentTransformIndex)
 
   }
