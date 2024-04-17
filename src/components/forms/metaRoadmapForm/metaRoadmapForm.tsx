@@ -10,6 +10,7 @@ import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
 import formSubmitter from "@/functions/formSubmitter";
 import styles from '../forms.module.css'
 import Image from "next/image";
+import FormWrapper from "../formWrapper";
 
 export default function MetaRoadmapForm({
   user,
@@ -63,8 +64,7 @@ export default function MetaRoadmapForm({
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [transformIndex, setTransformIndex] = useState(0)
-
+  
   const timestamp = Date.now()
 
   const customRoadmapTypes = {
@@ -86,61 +86,6 @@ export default function MetaRoadmapForm({
     }
   }
 
-  function iterateSections(options?: { reverse?: boolean }) {
-    const sectionsParent = document?.getElementById('form-sections')
-    const sections = Array.from(sectionsParent?.children || [])
-    const currentIndicator = document?.getElementById('current-indicator')
-    const indicatorsParent = document?.getElementById('indicators')
-    const indicators = Array.from(indicatorsParent?.children || [])
-    const submitButton = document?.getElementById('submit-button')
-
-    const currentTransformIndex = transformIndex + (options?.reverse ? -1 : 1)
-
-    if ((currentTransformIndex >= sections.length && !options?.reverse) || (currentTransformIndex < 0 && options?.reverse)) {
-      return
-    }
-
-    sections.forEach(element => {
-      const transformData = (element as HTMLElement).dataset.transform
-      if (transformData) {
-        const test = parseInt(transformData);
-
-        if (options?.reverse) {
-          (element as HTMLElement).dataset.transform = (test + 100).toString();
-        } else {
-          (element as HTMLElement).dataset.transform = (test - 100).toString();
-        }
-
-        const datasetTransform = (element as HTMLElement).dataset.transform;
-        (element as HTMLElement).style.transform = `translate(${datasetTransform}%, 0)`
-      }
-    })
-
-    // Turn indicators green if they are complete
-    for (let i = 0; i < indicators.length; i++) {
-      if (i < currentTransformIndex) {
-        (indicators[i] as HTMLElement).style.backgroundColor = 'seagreen'
-      } else {
-        (indicators[i] as HTMLElement).style.backgroundColor = 'var(--gray-90)'
-      }
-    }
-
-    if (currentIndicator) {
-      currentIndicator.style.transform = `translate(${(250 * currentTransformIndex) + 50}%, 0)`
-    }
-
-    // Enable submitbutton if on final step
-    if(submitButton) {
-      if (currentTransformIndex == sections.length - 1) {
-        submitButton.removeAttribute('disabled')
-      } else {
-        submitButton.setAttribute('disabled', 'true')
-      }
-    }
-
-    setTransformIndex(currentTransformIndex)
-
-  }
 
   return (
     <>
@@ -148,11 +93,11 @@ export default function MetaRoadmapForm({
         {/* This hidden submit button prevents submitting by pressing enter, this avoids accidental submission when adding new entries in AccessSelector (for example, when pressing enter to add someone to the list of editors) */}
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
 
-        <div id="form-sections" className={styles.formSlider}>
+        <FormWrapper>
           <section className="width-100" data-transform="0">
-            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
-              <h2 style={{marginBottom:'0'}}>Beskriv din färdplan</h2>
-              <p style={{marginTop: '.25rem'}}>Ge din färdplan ett namn och en beskrivning.</p>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <h2 style={{ marginBottom: '0' }}>Beskriv din färdplan</h2>
+              <p style={{ marginTop: '.25rem' }}>Ge din färdplan ett namn och en beskrivning.</p>
             </div>
             <label className="block margin-y-75">
               Namn för den nya färdplanen
@@ -166,9 +111,9 @@ export default function MetaRoadmapForm({
           </section>
 
           <section className="width-100" data-transform="0">
-            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
-              <h2 style={{marginBottom:'0'}}>Vem ansvarar för den här färdplanen?</h2>
-              <p style={{marginTop: '.25rem'}}>Beskriv vem som ansvarar för färdplanen genom att välja en typ och en aktör. </p>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <h2 style={{ marginBottom: '0' }}>Vem ansvarar för den här färdplanen?</h2>
+              <p style={{ marginTop: '.25rem' }}>Beskriv vem som ansvarar för färdplanen genom att välja en typ och en aktör. </p>
             </div>
             <label className="block margin-y-75">
               Typ av färdplan
@@ -192,33 +137,33 @@ export default function MetaRoadmapForm({
           </section>
 
           <section className="width-100" data-transform="0">
-            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
-              <h2 style={{marginBottom:'0'}}>Är färdplanen beroende av några externa resurser?</h2>
-              <p style={{marginTop: '.25rem'}}>
-                Om färdplanen är associerad med några utomstående resurser såsom externa textdokument eller 
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <h2 style={{ marginBottom: '0' }}>Är färdplanen beroende av några externa resurser?</h2>
+              <p style={{ marginTop: '.25rem' }}>
+                Om färdplanen är associerad med några utomstående resurser såsom externa textdokument eller
                 hemsidor är det möjligt länka till dessa här.
               </p>
             </div>
             <LinkInput />
           </section>
 
-          { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user is the author of the roadmap
+          { /* Only show the access selector if a new roadmap is being created, the user is an admin, or the user is the author of the roadmap
             (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
             <section data-transform="0">
-              <div style={{textAlign: 'center', marginBottom: '3rem'}}>
-                <h2 style={{marginBottom:'0'}}>Vem ska ha tillgång till din färdplan?</h2>
-                <p style={{marginTop: '.25rem'}}>
+              <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <h2 style={{ marginBottom: '0' }}>Vem ska ha tillgång till din färdplan?</h2>
+                <p style={{ marginTop: '.25rem' }}>
                   Fyll i vilka grupper eller personer som ska kunna se eller redigera denna färdplan.
                 </p>
               </div>
               <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
             </section>
-          }
+          */ }
 
           <section className="width-100" data-transform="0">
-            <div style={{textAlign: 'center', marginBottom: '3rem'}}>
-              <h2 style={{marginBottom:'0'}}>Jobbar denna färdplan mot en annan färdplan?</h2>
-              <p style={{marginTop: '.25rem'}}>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <h2 style={{ marginBottom: '0' }}>Jobbar denna färdplan mot en annan färdplan?</h2>
+              <p style={{ marginTop: '.25rem' }}>
                 Fyll om denna färdplan jobbar mot en annan färdplan.
               </p>
             </div>
@@ -241,40 +186,15 @@ export default function MetaRoadmapForm({
               </select>
             </label>
           </section>
-        </div>
+        </FormWrapper>
 
-        <div className="margin-y-100 padding-x-100 display-flex align-items-flex-start justify-content-space-between gap-100">
-          
-          <button type="button" className="flex align-items-center transparent round gap-25" style={{fontSize: '1rem'}} onClick={() => iterateSections({ reverse: true })}>
-            <Image src="/icons/arrowLeft.svg" alt="" width={24} height={24} />
-            Tillbaka 
-          </button>
-
-          <div className="margin-y-50" style={{ marginInline: 'auto', width: 'fit-content' }}>
-            <div id="indicators" className="display-flex justify-content-center gap-75 margin-y-50">
-              <div className={styles.indicator}></div>
-              <div className={styles.indicator}></div>
-              <div className={styles.indicator}></div>
-              <div className={styles.indicator}></div>
-              <div className={styles.indicator}></div>
-            </div>
-            <div className={styles.currentIndicator} id="current-indicator"></div>
-          </div>
-
-          <button type="button" className="flex align-items-center transparent round gap-25" style={{fontSize: '1rem'}} onClick={() => iterateSections()}>
-            Nästa
-            <Image src="/icons/arrowRight.svg" alt="" width={24} height={24} />
-          </button>
-
-        </div>
 
         {/* Add copy of RoadmapForm? Only if we decide to include it immediately rather than redirecting to it */}
 
-        <button type="submit" id="submit-button" value={currentRoadmap ? "Spara" : "Skapa färdplan"} disabled 
-                className={`${styles.submitButton} seagreen color-purewhite round block`} style={{marginInline: 'auto', width: 'min(25ch, 100%)', fontSize: '1rem'}}>
+        <button type="submit" id="submit-button" value={currentRoadmap ? "Spara" : "Skapa färdplan"} disabled
+          className={`${styles.submitButton} seagreen color-purewhite round block`} style={{ marginInline: 'auto', width: 'min(25ch, 100%)', fontSize: '1rem' }}>
           {currentRoadmap ? "Spara" : "Skapa färdplan"}
         </button>
-
       </form>
 
       <datalist id="actors">

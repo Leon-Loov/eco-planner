@@ -11,26 +11,20 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
 
   return (
     <>
-      <details className={styles.permissionDetails} open>
-        <summary className={styles.permissionSummary}>
-          <span>Redigera behörigheter</span>
-          <Image src="/icons/plus.svg" alt="expand" width={24} height={24}></Image>
-        </summary>
-        <p>För att lägga till en användare/grupp, skriv in namnet och tryck på enter.</p>
-        <p>För att ta bort en användare/grupp, checka ur rutan bredvid namnet.</p>
-        <div className="margin-y-75">
-          <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
-        </div>
-        <div className="margin-y-75">
-          <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
-        </div>
-        <div className="margin-y-75">
-          <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
-        </div>
-        <div className="margin-y-75">
-          <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
-        </div>
-      </details>
+      <p>För att lägga till en användare/grupp, skriv in namnet och tryck på enter.</p>
+      <p>För att ta bort en användare/grupp, checka ur rutan bredvid namnet.</p>
+      <div className="margin-y-75">
+        <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
+      </div>
+      <div className="margin-y-75">
+        <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
+      </div>
+      <div className="margin-y-75">
+        <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
+      </div>
+      <div className="margin-y-75">
+        <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
+      </div>
     </>
   )
 }
