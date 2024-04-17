@@ -3,7 +3,7 @@
     overflow: hidden;
 }
 
-.formSlider > section {
+.formSlider > .formSlide {
     min-width: 100%;
     transition: transform .2s ease;
     padding: 0 1rem;

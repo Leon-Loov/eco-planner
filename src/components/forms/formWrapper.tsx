@@ -11,9 +11,6 @@ export default function FormWrapper({
   children: React.ReactNode,
 }) {
 
-  const [transformIndex, setTransformIndex] = useState(0)
-  const sections = React.Children.toArray(children)
-
   function iterateIndicators(currentTransformIndex: number) {
     const currentIndicator = document?.getElementById('current-indicator')
     const indicatorsParent = document?.getElementById('indicators')
@@ -35,7 +32,7 @@ export default function FormWrapper({
 
   function enableSubmitButton(currentTransformIndex: number) {
     const submitButton = document?.getElementById('submit-button')
-    // Enable submitbutton if on final step
+
     if (submitButton) {
       if (currentTransformIndex == sections.length - 1) {
         submitButton.removeAttribute('disabled')
@@ -44,6 +41,9 @@ export default function FormWrapper({
       }
     }
   }
+
+  const [transformIndex, setTransformIndex] = useState(0)
+  const sections = React.Children.toArray(children)
 
   function iterateSections(options?: { reverse?: boolean }) {
 
@@ -55,30 +55,29 @@ export default function FormWrapper({
       }
 
       // TODO: Make this work :)
-      {/* 
       sections.forEach(element => {
         if (React.isValidElement(element)) {
 
-          const transformData = element.props['data-transform']
+            // Define styles object based on the color prop
+            const styles = {
+              backgroundColor: 'red',
+              padding: '10px',
+              borderRadius: '5px',
+              color: 'white',
+            };
 
-          if (transformData) {
-            const test = parseInt(transformData);
-            
+            // Modify the style prop of the element directly
+            element.props.style = styles;
+
             if (options?.reverse) {
-              element.props['data-transform'] = (test + 100).toString();
+              console.log(element.props.style)
             } else {
-              element.props['data-transform'] = (test + 100).toString();
-            }
-            
-            const datasetTransform = element.props['data-transform'];
-            element.props.style.transform = `translate(${datasetTransform}%, 0)`
-            
+              console.log(element.props.style)
+            }            
           }
-          
         }
-      })
-      */}
-    }
+      )}      
+    
 
     iterateIndicators(currentTransformIndex)
     enableSubmitButton(currentTransformIndex)
@@ -89,7 +88,11 @@ export default function FormWrapper({
   return (
     <>
       <div className={styles.formSlider}>
-        {children}
+        {React.Children.map(children, (child, index) => (
+          <div className={`${styles.formSlide}`} key={index}>
+            {child}
+          </div>
+        ))}
       </div>
 
       <div className="margin-y-100 padding-x-100 display-flex align-items-flex-start justify-content-space-between gap-100">
