@@ -84,13 +84,13 @@ export default function FormWrapper({
         ))}
       </div>
 
-      <div className="margin-y-100 padding-x-100 display-flex align-items-flex-start justify-content-space-between gap-100">
-        <button type="button" className="flex align-items-center transparent round gap-25" style={{ fontSize: '1rem' }} onClick={() => iterateSections({ reverse: true })}>
+      <div className={`margin-y-100 padding-x-100 gap-50 grid ${styles.indicatorLayout}`}>
+        <button type="button" className={`flex align-items-center transparent round gap-25 ${styles.indicatorButton}`} onClick={() => iterateSections({ reverse: true })}>
           <Image src="/icons/arrowLeft.svg" alt="" width={24} height={24} />
           Tillbaka
         </button>
 
-        <div className="margin-y-50" style={{ marginInline: 'auto', width: 'fit-content' }}>
+        <div className={`margin-y-50 ${styles.indicatorWrapper}`} style={{ marginInline: 'auto', width: 'fit-content' }}>
           <div id="indicators" className="display-flex justify-content-center gap-75 margin-y-50">
             {sections.map((section, index) => (
               <div className={styles.indicator} key={index}></div>
@@ -99,7 +99,7 @@ export default function FormWrapper({
           <div className={styles.currentIndicator} id="current-indicator"></div>
         </div>
 
-        <button type="button" className="flex align-items-center transparent round gap-25" style={{ fontSize: '1rem' }} onClick={() => iterateSections()}>
+        <button type="button" className={`flex align-items-center transparent round gap-25 ${styles.indicatorButton}`} style={{ marginLeft: 'auto' }} onClick={() => iterateSections()}>
           Nästa
           <Image src="/icons/arrowRight.svg" alt="" width={24} height={24} />
         </button>
