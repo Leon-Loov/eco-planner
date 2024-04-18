@@ -22,7 +22,6 @@
     height: fit-content;
     @media(max-width: 615px) {
         margin-bottom: 2rem;
-        margin-inline: auto;
     }
 }
 
@@ -52,6 +51,7 @@
     @media(max-width: 615px) {
         grid-template-columns: auto auto;
         grid-template-rows: auto auto;
+        justify-content: center;
     }
 }
 

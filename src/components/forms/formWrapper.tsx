@@ -90,7 +90,7 @@ export default function FormWrapper({
           Tillbaka
         </button>
 
-        <div className={`margin-y-50 ${styles.indicatorWrapper}`} style={{ marginInline: 'auto', width: 'fit-content' }}>
+        <div className={`margin-y-50 ${styles.indicatorWrapper}`}>
           <div id="indicators" className="display-flex justify-content-center gap-75 margin-y-50">
             {sections.map((section, index) => (
               <div className={styles.indicator} key={index}></div>
