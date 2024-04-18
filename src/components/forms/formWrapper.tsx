@@ -44,18 +44,18 @@ export default function FormWrapper({
 
   const [transformIndex, setTransformIndex] = useState(0)
   const sections = React.Children.toArray(children)
-  const formSlide = Array.prototype.slice.call(document.getElementsByClassName('fieldsetWrapper'))
 
   function iterateSections(options?: { reverse?: boolean }) {
+    const formSlide = Array.prototype.slice.call(document?.getElementsByClassName('fieldsetWrapper'))
 
     const currentTransformIndex = transformIndex + (options?.reverse ? -1 : 1)
 
     if (sections) {
+      console.log(currentTransformIndex, sections.length, options?.reverse)
       if ((currentTransformIndex >= sections.length && !options?.reverse) || (currentTransformIndex < 0 && options?.reverse)) {
         return
       }
 
-      // TODO: Fix bug where first button press does not apply, then applies double on next press
       formSlide.forEach(element => {
         if (element) {      
             if (options?.reverse) {
