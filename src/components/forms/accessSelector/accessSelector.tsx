@@ -13,16 +13,10 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
     <>
       <p>För att lägga till en användare/grupp, skriv in namnet och tryck på enter.</p>
       <div className="margin-y-75">
-        <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} />
+        <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
       </div>
       <div className="margin-y-75">
-        <EditGroups groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
-      </div>
-      <div className="margin-y-75">
-        <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} />
-      </div>
-      <div className="margin-y-75">
-        <ViewGroups groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
+        <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
       </div>
     </>
   )
@@ -106,10 +100,12 @@ function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>, selectedOpt
   }
 }
 
-function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
+function EditUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
   // The users that have editing access to the item
   const [editUsers, setEditUsers] = useState<string[]>(existingUsers ?? []);
-
+  // The 'Public' group should never have editing access to an item
+  let groups = groupOptions.filter((group) => group !== 'Public')
+  
   return (
     <fieldset>
       <legend>Användare med redigeringsbehörighet</legend>
@@ -135,13 +131,24 @@ function EditUsers({ existingUsers }: { existingUsers?: string[] }) {
         Ny användare: 
         <input className="margin-y-25" type="text" name="editUsers" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
       </label>
+
+        {groups.map((group) => (
+          <Fragment key={'viewGroup' + group}>
+            <label className="display-flex align-items-center gap-50 margin-y-50">
+              <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
+              {group}
+            </label>
+          </Fragment>
+        ))}
+
     </fieldset>
   )
 }
 
-function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
+function ViewUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
   // The users that have viewing access to the item
   const [viewUsers, setViewUsers] = useState<string[]>(existingUsers ?? []);
+  let groups = groupOptions
 
   return (
     <fieldset>
@@ -167,35 +174,6 @@ function ViewUsers({ existingUsers }: { existingUsers?: string[] }) {
         Ny användare: 
         <input className="margin-y-25" type="text" name="viewUsers" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
       </label>
-    </fieldset>
-  )
-}
-
-function EditGroups({ groupOptions, existingGroups }: { groupOptions: string[], existingGroups?: string[] }) {
-  // The 'Public' group should never have editing access to an item
-  let groups = groupOptions.filter((group) => group !== 'Public')
-
-  return (
-    <fieldset>
-      <legend>Grupper med redigeringsbehörighet</legend>
-      {groups.map((group) => (
-        <Fragment key={'editGroup' + group}>
-          <label className="display-flex align-items-center gap-50 margin-y-50">
-            <input type="checkbox" name="editGroups" id={'editGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
-            {group}
-          </label>
-        </Fragment>
-      ))}
-    </fieldset>
-  );
-}
-
-function ViewGroups({ groupOptions, existingGroups }: { groupOptions: string[], existingGroups?: string[] }) {
-  let groups = groupOptions
-
-  return (
-    <fieldset>
-      <legend>Grupper med läsbehörighet</legend>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
           <label className="display-flex align-items-center gap-50 margin-y-50">
@@ -205,5 +183,5 @@ function ViewGroups({ groupOptions, existingGroups }: { groupOptions: string[], 
         </Fragment>
       ))}
     </fieldset>
-  );
-}
+  )
+} 

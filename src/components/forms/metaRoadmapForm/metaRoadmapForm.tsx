@@ -150,15 +150,15 @@ export default function MetaRoadmapForm({
           {(!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
             <fieldset data-transform="0">
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <h2 style={{ marginBottom: '0' }}>Vem ska ha tillgång till din färdplan?</h2>
+                <h2 style={{ marginBottom: '0' }}>Vem ska kunna se denna färdplan?</h2>
                 <p style={{ marginTop: '.25rem' }}>
-                  Fyll i vilka grupper eller personer som ska kunna se eller redigera denna färdplan.
+                  Fyll i vilka grupper eller personer som ska kunna se denna färdplan.
                 </p>
               </div>
               <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
             </fieldset>
           }     
-
+          
           <fieldset className="width-100" data-transform="0">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Jobbar denna färdplan mot en annan färdplan?</h2>
