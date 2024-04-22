@@ -16,7 +16,7 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
         <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
       </div>
       <div className="margin-y-75">
-        <ViewUsers existingUsers={currentAccess?.viewers.map((viewer) => { return viewer.username })} groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
+        <ViewUsers groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
       </div>
     </>
   )
@@ -100,7 +100,7 @@ function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>, selectedOpt
   }
 }
 
-function EditUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
+export function EditUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
   // The users that have editing access to the item
   const [editUsers, setEditUsers] = useState<string[]>(existingUsers ?? []);
   // The 'Public' group should never have editing access to an item
@@ -145,7 +145,7 @@ function EditUsers({ existingUsers, groupOptions, existingGroups }: { existingUs
   )
 }
 
-function ViewUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
+export function ViewUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
   // The users that have viewing access to the item
   const [viewUsers, setViewUsers] = useState<string[]>(existingUsers ?? []);
   let groups = groupOptions

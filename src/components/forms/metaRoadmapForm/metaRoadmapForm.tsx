@@ -5,11 +5,10 @@ import { Data } from "@/lib/session";
 import { AccessControlled, MetaRoadmapInput } from "@/types";
 import { MetaRoadmap, RoadmapType } from "@prisma/client";
 import { useEffect, useState } from "react";
-import AccessSelector, { getAccessData } from "@/components/forms/accessSelector/accessSelector";
+import { EditUsers, ViewUsers, getAccessData } from "@/components/forms/accessSelector/accessSelector";
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
 import formSubmitter from "@/functions/formSubmitter";
 import styles from '../forms.module.css'
-import Image from "next/image";
 import FormWrapper from "../formWrapper";
 
 export default function MetaRoadmapForm({
@@ -155,10 +154,23 @@ export default function MetaRoadmapForm({
                   Fyll i vilka grupper eller personer som ska kunna se denna färdplan.
                 </p>
               </div>
-              <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
+              <ViewUsers groupOptions={userGroups} /> {/*TODO: other params? */}
             </fieldset>
           }     
-          
+
+                    
+          {(!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
+            <fieldset data-transform="0">
+              <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <h2 style={{ marginBottom: '0' }}>Vem ska kunna se redigera färdplan?</h2>
+                <p style={{ marginTop: '.25rem' }}>
+                  Fyll i vilka grupper eller personer som ska kunna redigera denna färdplan.
+                </p>
+              </div>
+              <EditUsers groupOptions={userGroups} /> {/*TODO: other params? */}
+            </fieldset>
+          }     
+
           <fieldset className="width-100" data-transform="0">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Jobbar denna färdplan mot en annan färdplan?</h2>
