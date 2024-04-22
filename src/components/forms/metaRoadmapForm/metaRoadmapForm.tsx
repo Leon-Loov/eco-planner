@@ -94,7 +94,7 @@ export default function MetaRoadmapForm({
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
 
         <FormWrapper>
-          <section className="width-100" data-transform="0">
+          <fieldset className="width-100" data-transform="0">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Beskriv din färdplan</h2>
               <p style={{ marginTop: '.25rem' }}>Ge din färdplan ett namn och en beskrivning.</p>
@@ -108,9 +108,9 @@ export default function MetaRoadmapForm({
               Beskrivning av färdplanen
               <textarea className="block smooth margin-y-25" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} required></textarea>
             </label>
-          </section>
+          </fieldset>
 
-          <section className="width-100" data-transform="0">
+          <fieldset className="width-100" data-transform="0">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Vem ansvarar för den här färdplanen?</h2>
               <p style={{ marginTop: '.25rem' }}>Beskriv vem som ansvarar för färdplanen genom att välja en typ och en aktör. </p>
@@ -134,9 +134,9 @@ export default function MetaRoadmapForm({
               Aktör för färdplanen
               <input className="margin-y-25" list="actors" id="actor" name="actor" type="text" defaultValue={currentRoadmap?.actor ?? undefined} />
             </label>
-          </section>
+          </fieldset>
 
-          <section className="width-100" data-transform="0">
+          <fieldset className="width-100" data-transform="0">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Är färdplanen beroende av några externa resurser?</h2>
               <p style={{ marginTop: '.25rem' }}>
@@ -145,11 +145,11 @@ export default function MetaRoadmapForm({
               </p>
             </div>
             <LinkInput />
-          </section>
+          </fieldset>
 
           { /* Only show the access selector if a new roadmap is being created, the user is an admin, or the user is the author of the roadmap
             (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
-            <section data-transform="0">
+            <fieldset data-transform="0">
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h2 style={{ marginBottom: '0' }}>Vem ska ha tillgång till din färdplan?</h2>
                 <p style={{ marginTop: '.25rem' }}>
@@ -157,10 +157,10 @@ export default function MetaRoadmapForm({
                 </p>
               </div>
               <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
-            </section>
+            </fieldset>
           */ }
 
-          <section className="width-100" data-transform="0">
+          <fieldset className="width-100" data-transform="0">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Jobbar denna färdplan mot en annan färdplan?</h2>
               <p style={{ marginTop: '.25rem' }}>
@@ -185,7 +185,7 @@ export default function MetaRoadmapForm({
                 }
               </select>
             </label>
-          </section>
+          </fieldset>
         </FormWrapper>
 
 
