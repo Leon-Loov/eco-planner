@@ -147,8 +147,7 @@ export default function MetaRoadmapForm({
             <LinkInput />
           </fieldset>
 
-          { /* Only show the access selector if a new roadmap is being created, the user is an admin, or the user is the author of the roadmap
-            (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
+          {(!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
             <fieldset data-transform="0">
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h2 style={{ marginBottom: '0' }}>Vem ska ha tillgång till din färdplan?</h2>
@@ -158,7 +157,7 @@ export default function MetaRoadmapForm({
               </div>
               <AccessSelector groupOptions={userGroups} currentAccess={currentAccess} />
             </fieldset>
-          */ }
+          }     
 
           <fieldset className="width-100" data-transform="0">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
