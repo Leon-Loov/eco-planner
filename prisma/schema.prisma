@@ -126,6 +126,9 @@ model Goal {
   // Will be something similar to "Key\Energiomvandlingsanläggningar\Insatta bränslen för elproduktion\Naturgas", as defined by LEAP
   indicatorParameter String  @map("indicator_parameter") @db.Text
 
+  // The graphs of featured Goals' DataSeries will be shown as thumbnails on the roadmap page
+  isFeatured Boolean @default(false) @map("is_featured")
+
   // A series of datapoints for the goal
   dataSeries DataSeries? @relation("data_series")
   // Links related to this goal

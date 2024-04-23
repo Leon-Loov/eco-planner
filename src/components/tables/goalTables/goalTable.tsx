@@ -34,7 +34,7 @@ export default function GoalTable({
   if ((!goals && !roadmap) || (goals && roadmap)) throw new Error('GoalTable: Either `goals` XOR `roadmap` must be provided');
 
   if (!goals) {
-    goals = roadmap.goals.map(goal => {
+    goals = roadmap?.goals.map(goal => {
       return {
         ...goal,
         roadmap: (({ goals, ...data }) => data)(roadmap),
@@ -42,7 +42,7 @@ export default function GoalTable({
     })
   }
 
-  if (!goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
+  if (!goals?.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
 
   return <>
     <div className="overflow-x-scroll smooth">

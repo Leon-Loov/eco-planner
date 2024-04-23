@@ -44,14 +44,14 @@ export default function ActionTable({
 
   // If a goal is provided, extract the actions from it
   if (!actions) {
-    actions = goal.actions.map((action) => {
+    actions = goal?.actions.map((action) => {
       const fakeGoal = { id: goal.id, roadmap: { id: goal.roadmapId } };
       return { ...action, goal: fakeGoal };
     });
   }
 
   // If no actions are found, return a message
-  if (!actions.length) return (
+  if (!actions?.length) return (
     <>
       <p>Målbanan har inga åtgärder.
         { // Only show the button if the user has edit access to the goal and a goal is provided

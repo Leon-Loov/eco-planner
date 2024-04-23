@@ -129,6 +129,7 @@ export async function POST(request: NextRequest) {
       data: {
         name: goal.name,
         description: goal.description,
+        isFeatured: goal.isFeatured,
         indicatorParameter: goal.indicatorParameter,
         author: {
           connect: { id: session.user.id },
@@ -305,6 +306,7 @@ export async function PUT(request: NextRequest) {
       data: {
         name: goal.name,
         description: goal.description,
+        isFeatured: goal.isFeatured,
         indicatorParameter: goal.indicatorParameter,
         dataSeries: {
           upsert: {

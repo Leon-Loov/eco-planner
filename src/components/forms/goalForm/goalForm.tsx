@@ -1,7 +1,7 @@
 'use client'
 
 import parameterOptions from "@/lib/LEAPList.json" with { type: "json" }
-import { dataSeriesDataFieldNames } from "@/types"
+import { GoalInput, dataSeriesDataFieldNames } from "@/types"
 import { DataSeries, Goal } from "@prisma/client"
 import LinkInput, { getLinks } from "@/components/forms/linkInput/linkInput"
 import formSubmitter from "@/functions/formSubmitter"
@@ -41,7 +41,8 @@ export default function GoalForm({
       goalId: currentGoal?.id || null,
       links,
       timestamp,
-    })
+      isFeatured: (form.namedItem('isFeatured') as HTMLInputElement)?.checked,
+    } as GoalInput)
 
     formSubmitter('/api/goal', formJSON, currentGoal ? 'PUT' : 'POST');
   }
@@ -87,12 +88,12 @@ export default function GoalForm({
         </label>
 
         <label className="block margin-y-75">
-          Beskrivning av målbanan: 
+          Beskrivning av målbanan:
           <input className="margin-y-25" type="text" name="description" id="description" defaultValue={currentGoal?.description ?? undefined} />
         </label>
 
         <label className="block margin-y-75">
-          LEAP parameter: 
+          LEAP parameter:
           <input className="margin-y-25" type="text" list="LEAPOptions" name="indicatorParameter" required id="indicatorParameter" defaultValue={currentGoal?.indicatorParameter || undefined} />
         </label>
 
@@ -124,8 +125,14 @@ export default function GoalForm({
             defaultValue={dataSeriesString}
           />
         </label>
-        
+
         <LinkInput links={currentGoal?.links} />
+
+        <label className="flex align-items-center gap-50 margin-y-100">
+          <input type="checkbox" name="isFeatured" id="isFeatured" defaultChecked={currentGoal?.isFeatured} /> {/* TODO: Make toggle */}
+          Featured? 
+        </label>
+
         <input type="submit" className="margin-y-75 seagreen color-purewhite" value={currentGoal ? "Spara" : "Skapa målbana"} />
       </form>
 
