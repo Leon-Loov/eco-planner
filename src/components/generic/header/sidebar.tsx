@@ -4,6 +4,7 @@ import { getSessionData } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import Image from 'next/image'
+import Notifications from '../notifications/notification'
 
 export default async function Sidebar() {
   const { user } = await getSessionData(cookies())
@@ -25,10 +26,13 @@ export default async function Sidebar() {
             }
             { // Link to user if logged in
               user?.isLoggedIn &&
-              <Link href={`/user/${user.username}`} className={styles.link}>
-                <Image src='/icons/user.svg' alt='' width={24} height={24} />
-                Mitt Konto
-              </Link>
+              <div>
+                <Link href={`/user/${user.username}`} className={styles.link}>
+                  <Image src='/icons/user.svg' alt='' width={24} height={24} />
+                  Mitt Konto
+                </Link>
+               {/* <Notifications /> */}
+              </div>
             }
           </div>
           <div className='flex-grow-100'>
