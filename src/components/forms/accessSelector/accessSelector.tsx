@@ -1,7 +1,7 @@
 'use client'
 
 import { AccessControlled } from "@/types";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import Image from "next/image";
 import styles from './accessSelector.module.css' with { type: "css" };
 
@@ -89,14 +89,19 @@ export function getAccessData(editUsers: RadioNodeList | Element | null, viewUse
  */
 function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>, selectedOptions: string[], selectedSetter: React.Dispatch<React.SetStateAction<string[]>>, allOptions?: string[]) {
   if (event.key === 'Enter' && event.currentTarget.value !== '') {
-    // Add the new user to the list of selected users
-    selectedSetter([...selectedOptions, event.currentTarget.value]);
-    if (allOptions) {
-      // Add the new user to the list of options
-      allOptions.push(event.currentTarget.value);
-    }
+    addUser(event.currentTarget.value, selectedOptions, selectedSetter, allOptions)
     // Clear the text field
     event.currentTarget.value = '';
+  }
+}
+
+function addUser(name: string | undefined, selectedOptions: string[], selectedSetter: React.Dispatch<React.SetStateAction<string[]>>, allOptions?: string[]) {
+  if(!name) return;
+  // Add the new user to the list of selected users
+  selectedSetter([...selectedOptions, name]);
+  if (allOptions) {
+    // Add the new user to the list of options
+    allOptions.push(name);
   }
 }
 
@@ -106,9 +111,32 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
   // The 'Public' group should never have editing access to an item
   let groups = groupOptions.filter((group) => group !== 'Public')
   
+  let editorRef = useRef<HTMLInputElement | null>(null)
+
   return (
     <fieldset>
       <legend>Användare med redigeringsbehörighet</legend>
+
+      {groups.map((group) => (
+        <Fragment key={'viewGroup' + group}>
+          <label className="display-flex align-items-center gap-50 margin-y-50">
+            <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
+            {group}
+          </label>
+        </Fragment>
+      ))}
+
+      {/* A text field whose contents get appended to editUsers upon pressing enter */}
+      <div className="flex align-items-flex-end margin-y-75 gap-100 flex-wrap-wrap">
+        <label className="block flex-grow-100">
+          Ny användare: 
+          <input style={{marginTop: '.25rem'}} type="text" name="editUsers" ref={editorRef} id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
+        </label>
+
+        <button style={{fontSize: '1rem'}} onClick={() => {addUser(editorRef.current?.value, editUsers, setEditUsers); if(editorRef.current) editorRef.current.value = ''}}>Lägg till användare</button>
+      </div>
+
+
       {editUsers.map((user, index) => (
         <Fragment key={'editUser' + index}>
           <label className="display-flex gap-100 align-items-center">
@@ -126,20 +154,6 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
           </label>
         </Fragment>
       ))}
-      {/* A text field whose contents get appended to editUsers upon pressing enter */}
-      <label className="block margin-y-75">
-        Ny användare: 
-        <input className="margin-y-25" type="text" name="editUsers" id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
-      </label>
-
-        {groups.map((group) => (
-          <Fragment key={'viewGroup' + group}>
-            <label className="display-flex align-items-center gap-50 margin-y-50">
-              <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
-              {group}
-            </label>
-          </Fragment>
-        ))}
 
     </fieldset>
   )
