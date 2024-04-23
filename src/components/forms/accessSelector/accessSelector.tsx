@@ -114,9 +114,9 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
   let editorRef = useRef<HTMLInputElement | null>(null)
 
   return (
-    <fieldset>
-      <legend>Användare med redigeringsbehörighet</legend>
+    <>
 
+      <p><strong>Grupper med redigeringsbehörighet</strong></p>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
           <label className="display-flex align-items-center gap-50 margin-y-50">
@@ -127,7 +127,9 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
       ))}
 
       {/* A text field whose contents get appended to editUsers upon pressing enter */}
-      <div className="flex align-items-flex-end margin-y-75 gap-100 flex-wrap-wrap">
+      
+      <p><strong>Användare med redigeringsbehörighet</strong></p>
+      <div className="flex align-items-flex-end margin-y-100 gap-100 flex-wrap-wrap">
         <label className="block flex-grow-100">
           Ny användare: 
           <input style={{marginTop: '.25rem'}} type="text" name="editUsers" ref={editorRef} id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
@@ -155,7 +157,7 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
         </Fragment>
       ))}
 
-    </fieldset>
+    </>
   )
 }
 
@@ -164,9 +166,33 @@ export function ViewUsers({ existingUsers, groupOptions, existingGroups }: { exi
   const [viewUsers, setViewUsers] = useState<string[]>(existingUsers ?? []);
   let groups = groupOptions
 
+  let viewRef = useRef<HTMLInputElement | null>(null)
+
   return (
-    <fieldset>
-      <legend>Användare med läsbehörighet</legend>
+    <>
+
+      <p><strong>Grupper med läsbehörighet</strong></p>
+      {groups.map((group) => (
+        <Fragment key={'viewGroup' + group}>
+          <label className="display-flex align-items-center gap-50 margin-y-50">
+            <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
+            {group}
+          </label>
+        </Fragment>
+      ))}
+
+      {/* A text field whose contents get appended to viewUsers upon pressing enter */}
+      <p><strong>Användare med läsbehörighet</strong></p>
+      <div className="flex align-items-flex-end margin-y-100 gap-100 flex-wrap-wrap">
+        <label className="block flex-grow-100">
+          Ny användare: 
+          <input style={{marginTop: '.25rem'}} type="text" name="viewUsers" id="newViewUser" ref={viewRef} onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
+        </label>  
+        
+        <button style={{fontSize: '1rem'}} onClick={() => {addUser(viewRef.current?.value, viewUsers, setViewUsers); if(viewRef.current) viewRef.current.value = ''}}>Lägg till användare</button>
+      </div>
+
+      
       {viewUsers.map((user, index) => (
         <Fragment key={'viewUser' + index}>
           <label className="display-flex gap-100 align-items-center">
@@ -183,19 +209,7 @@ export function ViewUsers({ existingUsers, groupOptions, existingGroups }: { exi
           </label>
         </Fragment>
       ))}
-      {/* A text field whose contents get appended to viewUsers upon pressing enter */}
-      <label className="block margin-y-75">
-        Ny användare: 
-        <input className="margin-y-25" type="text" name="viewUsers" id="newViewUser" onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
-      </label>
-      {groups.map((group) => (
-        <Fragment key={'viewGroup' + group}>
-          <label className="display-flex align-items-center gap-50 margin-y-50">
-            <input type="checkbox" name="viewGroups" id={'viewGroup' + group} value={group} defaultChecked={existingGroups?.includes(group)} />
-            {group}
-          </label>
-        </Fragment>
-      ))}
-    </fieldset>
+
+    </>
   )
 } 
