@@ -6,7 +6,10 @@ services:
     build: .
     pull_policy: build
     networks:
+      - default
       - testDatabase
+    ports:
+      - 127.0.0.1:8082:8081
     env_file:
       - docker/.env.test
     command: sh -c 'sleep 15; HOSTNAME="0.0.0.0" node server.js' # Add test commands
@@ -15,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: docker/testdb.Dockerfile
+    ports:
+      - 127.0.0.1:3366:3306
     networks:
       - testDatabase
 
