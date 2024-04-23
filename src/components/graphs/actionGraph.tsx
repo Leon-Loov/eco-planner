@@ -53,7 +53,6 @@ export default function ActionGraph({
         horizontal: true,
         barHeight: "24px",
         borderRadius: 3,
-
       },
     },
     grid: {

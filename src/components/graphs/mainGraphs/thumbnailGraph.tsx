@@ -3,12 +3,10 @@ import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal } from "@prisma/client";
 import styles from '../graphs.module.css'
 
-export default function MainGraph({
+export default function ThumbnailGraph({
   goal,
-  nationalGoal,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
-  nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
 }) {
   if (!goal.dataSeries) {
     return null
@@ -32,28 +30,18 @@ export default function MainGraph({
     })
   }
 
-  if (nationalGoal?.dataSeries) {
-    let nationalSeries = []
-    for (let i of dataSeriesDataFieldNames) {
-      if (nationalGoal.dataSeries[i as keyof DataSeriesDataFields]) {
-        nationalSeries.push({
-          x: new Date(i.replace('val', '')).getTime(),
-          y: nationalGoal.dataSeries[i as keyof DataSeriesDataFields]
-        })
-      }
-    }
-    mainChart.push({
-      name: 'Nationell motsvarighet',
-      data: nationalSeries,
-      type: 'line',
-    })
-  }
-
   let mainChartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: 'line',
-      animations: { enabled: false, dynamicAnimation: { enabled: false } }
+      animations: { enabled: false, dynamicAnimation: { enabled: false } },
+      zoom: {
+        enabled: false,
+      },
+      toolbar: {
+        show: false,
+      },
     },
+    tooltip : {  enabled : false },
     stroke: { curve: 'straight' },
     xaxis: {
       type: 'datetime',
@@ -69,22 +57,11 @@ export default function MainGraph({
         labels: { formatter: floatSmoother },
       }
     ],
-    tooltip: {
-      x: { format: 'yyyy' },
-    },
-  }
-
-  if (mainChart.length > 1) {
-    (mainChartOptions.yaxis as ApexYAxis[]).push({
-      title: { text: "Nationell målbana" },
-      labels: { formatter: floatSmoother },
-      opposite: true,
-    })
   }
 
   return (
     <>
-      <div className={styles.graphWrapper}>
+      <div className={styles.graphWrapperThumbnail}>
         <WrappedChart
           options={mainChartOptions}
           series={mainChart}

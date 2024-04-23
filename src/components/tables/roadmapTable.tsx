@@ -32,7 +32,11 @@ export default function RoadmapTable({
   let creationLink = '/metaRoadmap/createMetaRoadmap';
 
   if (!roadmaps) {
+    // Between Typescript version 5.3.3 and 5.4.4 there was a change where the type of `metaRoadmap` stopped being inferred as `NonNullable<typeof metaRoadmap>`.
+    // We can claim that `metaRoadmap` is `NonNullable<typeof metaRoadmap>` since the program will throw if both `roadmaps` and `metaRoadmap` are undefined.
+    metaRoadmap = metaRoadmap as NonNullable<typeof metaRoadmap>;
     roadmaps = metaRoadmap.roadmapVersions.map((version) => {
+      metaRoadmap = metaRoadmap as NonNullable<typeof metaRoadmap>;
       return {
         id: version.id,
         version: version.version,

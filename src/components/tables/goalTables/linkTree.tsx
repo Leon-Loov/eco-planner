@@ -38,7 +38,7 @@ export default function LinkTree({
   if ((!goals && !roadmap) || (goals && roadmap)) throw new Error('LinkTree: Either `goals` XOR `roadmap` must be provided');
 
   if (!goals) {
-    goals = roadmap.goals.map(goal => {
+    goals = roadmap?.goals.map(goal => {
       return {
         ...goal,
         roadmap: (({ goals, ...data }) => data)(roadmap),
@@ -46,7 +46,7 @@ export default function LinkTree({
     })
   }
 
-  if (!goals.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
+  if (!goals?.length) return (<p>Du har inte tillgång till några målbanor i denna färdplan, eller så är färdplanen tom.</p>);
 
   const openCategories = getSessionStorage(roadmap?.id || "") || [];
 
@@ -98,7 +98,7 @@ export default function LinkTree({
     );
   };
 
-  let data = goalsToTree(goals);
+  const data = goalsToTree(goals);
 
   return (
     <>

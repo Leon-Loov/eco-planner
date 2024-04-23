@@ -18,7 +18,10 @@ export default async function Page() {
   return (
     <>
       <div className='container-text' style={{marginInline: 'auto'}}>
-        <h1 style={{textAlign: 'center'}}>Skapa en ny färdplan</h1>
+        <div className='margin-y-300' style={{fontSize: 'larger', width: 'min(45ch, 100%)', marginInline: 'auto'}}>
+          <h1 style={{textAlign: 'center'}}>Skapa en ny färdplan</h1>
+          <div style={{width: 'min(15ch, 100%)', height: '2px', backgroundColor: 'var(--gray-90)', marginInline: 'auto'}}></div>
+        </div>
         <MetaRoadmapForm
           user={session.user}
           userGroups={session.user?.userGroups}
