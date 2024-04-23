@@ -162,7 +162,7 @@ export default function MetaRoadmapForm({
           {(!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
             <fieldset data-transform="0">
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <h2 style={{ marginBottom: '0' }}>Vem ska kunna se redigera färdplan?</h2>
+                <h2 style={{ marginBottom: '0' }}>Vem ska kunna redigera färdplanen?</h2>
                 <p style={{ marginTop: '.25rem' }}>
                   Fyll i vilka grupper eller personer som ska kunna redigera denna färdplan.
                 </p>

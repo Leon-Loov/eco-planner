@@ -1,34 +1,3 @@
-.permissionSummary {
-    cursor: pointer;
-    border-bottom: 3px solid var(--gray);
-    padding: .5rem;
-    border-radius: 3px;
-    font-weight: bold;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    transition: border-color .2s;
-}
-
-.permissionSummary::marker {
-    color: transparent;
-    font-size: 0;
-}
-
-.permissionDetails img {
-    transition: transform .2s;
-    transform: rotate(0deg);
-}
-
-.permissionDetails[open] img {
-    transform: rotate(45deg);
-}
-
-.permissionDetails[open] > .permissionSummary {
-    border-color: black;
-}
-
 .removeUserButton {
     border: none; 
     border-radius: 3px;
@@ -40,5 +9,20 @@
 }
 
 .removeUserButton:hover {
-    background-color: var(--gray-90);
+    box-shadow: none
+}
+
+.user {
+    padding-inline: 0;
+    padding-block: .25rem;
+    background-color: transparent;
+    border-bottom: 2px solid var(--gray-90);
+    transition: border-bottom .2s ease;
+    border-radius: 0;
+}
+
+.user:focus {
+    border-bottom: 2px solid black;
+    outline: 0;
+    box-shadow: none;
 }
