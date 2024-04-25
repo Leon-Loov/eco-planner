@@ -31,7 +31,7 @@ export default async function Sidebar() {
                   <Image src='/icons/user.svg' alt='' width={24} height={24} />
                   Mitt Konto
                 </Link>
-               {/* <Notifications /> */}
+               {/*<Notifications amount={} /> */}
               </div>
             }
           </div>

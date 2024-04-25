@@ -2,7 +2,7 @@ import styles from './notification.module.css'
 import Link from "next/link"
 import Image from "next/image"
 
-export default function Notifications() {
+export default function Notifications({ amount }: { amount: number }) {
   return (
     <Link href="/" className={`flex align-items-center ${styles.link}`}>
       <div style={{position: 'relative', display: 'grid'}}>
@@ -28,7 +28,7 @@ export default function Notifications() {
               backgroundColor: 'red', 
               borderRadius: '9999px', 
             }}>
-            9
+            {amount <= 99 ? amount : '+99' }
           </div>
         </div>
       </div>
