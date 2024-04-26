@@ -2,13 +2,13 @@ import { PxWebApiV2TableArray } from "@/lib/scb/PxWebApiV2Types";
 
 /**
  * Returns a list of tables from SCB's API. Returns null on error.
- * @param tags 
+ * @param searchQuery String to search for. Unclear which fields the query is matched against. The search seems to use OR logic, so searching for 'population income' will return tables matching either 'population', 'income', or both. Default is undefined, which will return all tables.
  * @param language Two-letter language code. Default is 'sv'. Currently (2024-04-26) the API will respond with 'en' regardless of the language parameter, but according to the documentation it should work in the future.
  * @param pageSize Initial page size. If the number of tables is larger than this, the function will call itself with the correct page size.
  */
-export async function getTables(tags?: string, language: string = 'sv', pageSize: number = 9999) {
+export async function getTables(searchQuery?: string, language: string = 'sv', pageSize: number = 9999) {
   const url = new URL(`https://api.scb.se/ov0104/v2beta/api/v2/tables`);
-  if (tags) url.searchParams.append('query', tags);
+  if (searchQuery) url.searchParams.append('query', searchQuery);
   if (language) url.searchParams.append('language', language);
   if (pageSize) url.searchParams.append('pageSize', pageSize.toString());
 
@@ -20,12 +20,12 @@ export async function getTables(tags?: string, language: string = 'sv', pageSize
       data = await response.json();
       // If we didn't get all tables, try again with the correct page size
       if (data?.page?.totalElements > data?.page?.pageSize) {
-        return await getTables(tags, language, data.page.totalElements);
+        return await getTables(searchQuery, language, data.page.totalElements);
       }
     } else if (response.status == 429) {
       // Wait 10 seconds and try again
       await new Promise(resolve => setTimeout(resolve, 10000));
-      return await getTables(tags, language, pageSize);
+      return await getTables(searchQuery, language, pageSize);
     } else {
       return null;
     }
