@@ -55,7 +55,7 @@ export type PxWebApiV2ContentsVariable = PxWebApiV2VariableBase & {
   ];
 };
 
-export type PxWebApiV2RegularVariable = {
+export type PxWebApiV2RegularVariable = PxWebApiV2VariableBase & {
   type: "RegularVariable";
   elimination?: boolean;
   eliminationValueCode?: string;
@@ -77,7 +77,7 @@ export type PxWebApiV2RegularVariable = {
   ];
 };
 
-export type PxWebApiV2GeographicalVariable = {
+export type PxWebApiV2GeographicalVariable = PxWebApiV2VariableBase & {
   type: "GeographicalVariable";
   elimination?: boolean;
   eliminationValueCode?: string;
