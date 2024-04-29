@@ -24,20 +24,3 @@ export async function getTableDetails(tableId: string, language: string = 'sv') 
 
   return data;
 }
-
-export function extractVariableOptions(tableData: PxWebApiV2TableDetails) {
-  const result: { times: { code: string, label: string }[], [variableName: string]: { code: string, label: string }[] } = { times: [] };
-
-  const timeVariable = tableData.variables.find(variable => variable.type === "TimeVariable") as PxWebApiV2TimeVariable;
-  if (!timeVariable) {
-    throw new Error("No time variable found in table data");
-  }
-
-  result["times"] = timeVariable.values;
-
-  tableData.variables.filter(variable => variable.type != "TimeVariable").forEach(variable => {
-    result[variable.label] = variable.values;
-  });
-
-  return result;
-}
