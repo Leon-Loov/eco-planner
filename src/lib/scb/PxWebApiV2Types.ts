@@ -24,8 +24,9 @@ export type PxWebApiV2VariableBase = {
 export type PxWebApiV2TimeVariable = PxWebApiV2VariableBase & {
   type: "TimeVariable";
   timeUnit?: "Annual" | "HalfYear" | "Quarterly" | "Monthly" | "Weekly" | "Other";
-  firstPeriod?: string;
-  lastPeriod?: string;
+  // If this project goes on for ~100 years this template literal type will need to be updated (IDE will complain about explicit values over 2199)
+  firstPeriod?: `${'17' | '18' |'19' | '20' | '21'}${'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'}${'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'}${'' | `M${'01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12'}` | `K${'1' | '2' | '3' | '4'}`}`;
+  lastPeriod?: `${'17' | '18' |'19' | '20' | '21'}${'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'}${'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'}${'' | `M${'01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12'}` | `K${'1' | '2' | '3' | '4'}`}`;
   values: [
     {
       code: string;
