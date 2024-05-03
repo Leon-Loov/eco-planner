@@ -9,7 +9,7 @@ import { PxWebApiV2TableArray } from "@/lib/scb/PxWebApiV2Types";
 export async function getTables(searchQuery?: string, language: string = 'sv', pageSize: number = 9999) {
   const url = new URL(`https://api.scb.se/ov0104/v2beta/api/v2/tables`);
   if (searchQuery) url.searchParams.append('query', searchQuery);
-  if (language) url.searchParams.append('language', language);
+  if (language) url.searchParams.append('lang', language);
   if (pageSize) url.searchParams.append('pageSize', pageSize.toString());
 
   let data: PxWebApiV2TableArray;

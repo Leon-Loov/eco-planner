@@ -1,8 +1,8 @@
-import { PxWebApiV2TableDetails, PxWebApiV2TimeVariable } from "@/lib/scb/PxWebApiV2Types";
+import { PxWebApiV2TableDetails } from "./PxWebApiV2Types";
 
 export async function getTableDetails(tableId: string, language: string = 'sv') {
   const url = new URL(`https://api.scb.se/ov0104/v2beta/api/v2/tables/${tableId}/metadata`);
-  url.searchParams.append('language', language);
+  url.searchParams.append('lang', language);
 
   let data: PxWebApiV2TableDetails;
 
@@ -24,3 +24,5 @@ export async function getTableDetails(tableId: string, language: string = 'sv') 
 
   return data;
 }
+
+getTableDetails("TAB5974").then(data => console.log(data));
