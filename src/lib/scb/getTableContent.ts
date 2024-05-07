@@ -1,14 +1,18 @@
 export async function getTableContent(tableId: string, language: string = 'sv', selection: Object[]) {
   const url = new URL(`https://api.scb.se/ov0104/v2beta/api/v2/tables/${tableId}/data`);
   url.searchParams.append('lang', language);
-  // url.searchParams.append('outputFormat', 'json');
+  url.searchParams.append('outputformat', 'json');
 
-  const body = JSON.stringify(selection);
+  const body = JSON.stringify({ selection: selection, });
 
   let data: any;
 
   try {
-    const response = await fetch(url, { method: 'POST', body: body });
+    const response = await fetch(url, {
+      method: 'POST',
+      body: body,
+      headers: { 'Content-Type': 'application/json' }
+    });
     if (response.ok) {
       data = await response.json();
     } else if (response.status == 429) {
@@ -29,5 +33,6 @@ export async function getTableContent(tableId: string, language: string = 'sv', 
 
 getTableContent("TAB5974", "sv", [
   { variableCode: "ContentsCode", valueCodes: ["000005NO"] },
-  { variableCode: "Tid", valueCodes: ["2024"] }
-]).then(data => console.log(data));
+  { variableCode: "Tid", valueCodes: ["FROM(2100)"] },
+  { variableCode: "Kon", valueCodes: ["1", "2"] },
+]).then(data => console.log(data.data));
