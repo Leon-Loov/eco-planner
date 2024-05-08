@@ -1,3 +1,5 @@
+import filterTableContentKeys from "./filterTableContentKeys.ts";
+
 export async function getTableContent(tableId: string, language: string = 'sv', selection: Object[]) {
   const url = new URL(`https://api.scb.se/ov0104/v2beta/api/v2/tables/${tableId}/data`);
   url.searchParams.append('lang', language);
@@ -16,7 +18,7 @@ export async function getTableContent(tableId: string, language: string = 'sv', 
     if (response.ok) {
       data = await response.json();
     } else if (response.status == 429) {
-      // Wait 10 seconds and try again
+      // If hit with "429: Too many requests", wait 10 seconds and try again
       await new Promise(resolve => setTimeout(resolve, 10000));
       return await getTableContent(tableId, language, selection);
     } else {
@@ -31,8 +33,8 @@ export async function getTableContent(tableId: string, language: string = 'sv', 
   return data;
 }
 
-getTableContent("TAB5974", "sv", [
-  { variableCode: "ContentsCode", valueCodes: ["000005NO"] },
-  { variableCode: "Tid", valueCodes: ["FROM(2100)"] },
-  { variableCode: "Kon", valueCodes: ["1", "2"] },
-]).then(data => console.log(data.data));
+getTableContent("TAB1267", "sv", [
+  { variableCode: "ContentsCode", valueCodes: ["BE0101A9"] },
+  { variableCode: "Tid", valueCodes: ["FROM(2020)"] },
+  { variableCode: "Kon", valueCodes: ["1"] },
+]).then(data => filterTableContentKeys(data)).then(data => console.log(data?.data));

@@ -2,13 +2,18 @@ import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal } from "@prisma/client";
 import styles from '../graphs.module.css'
+import { getTableContent } from "@/lib/scb/getTableContent";
+import filterTableContentKeys from "@/lib/scb/filterTableContentKeys";
+import { PxWebApiV2TableContent } from "@/lib/scb/PxWebApiV2Types";
 
 export default function MainGraph({
   goal,
   nationalGoal,
+  historicalData,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
   nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
+  historicalData?: PxWebApiV2TableContent['data']
 }) {
   if (!goal.dataSeries) {
     return null
@@ -32,19 +37,34 @@ export default function MainGraph({
     })
   }
 
-  if (nationalGoal?.dataSeries) {
-    let nationalSeries = []
-    for (let i of dataSeriesDataFieldNames) {
-      if (nationalGoal.dataSeries[i as keyof DataSeriesDataFields]) {
-        nationalSeries.push({
-          x: new Date(i.replace('val', '')).getTime(),
-          y: nationalGoal.dataSeries[i as keyof DataSeriesDataFields]
-        })
-      }
+  // if (nationalGoal?.dataSeries) {
+  //   let nationalSeries = []
+  //   for (let i of dataSeriesDataFieldNames) {
+  //     if (nationalGoal.dataSeries[i as keyof DataSeriesDataFields]) {
+  //       nationalSeries.push({
+  //         x: new Date(i.replace('val', '')).getTime(),
+  //         y: nationalGoal.dataSeries[i as keyof DataSeriesDataFields]
+  //       })
+  //     }
+  //   }
+  //   mainChart.push({
+  //     name: 'Nationell motsvarighet',
+  //     data: nationalSeries,
+  //     type: 'line',
+  //   })
+  // }
+
+  if (historicalData) {
+    const historicalSeries = []
+    for (const i of historicalData) {
+      historicalSeries.push({
+        x: new Date(i.key[0]).getTime(),
+        y: parseFloat(i.values[0])
+      })
     }
     mainChart.push({
-      name: 'Nationell motsvarighet',
-      data: nationalSeries,
+      name: 'Historik',
+      data: historicalSeries,
       type: 'line',
     })
   }

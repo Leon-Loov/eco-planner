@@ -102,6 +102,25 @@ export type PxWebApiV2GeographicalVariable = PxWebApiV2VariableBase & {
   ];
 };
 
+export type PxWebApiV2TableContent = {
+  columns: {
+    code: string;
+    text: string;
+    type: "c" | "t" | "d";
+  }[];
+  comments: any[];
+  data: {
+    key: string[];
+    values: string[];
+  }[];
+  metadata: {
+    infofile: string;
+    updated: string; // ISO 8601 date string
+    label: string;
+    source: string;
+  }[];
+};
+
 export type PxWebApiV2TableDetails = {
   language: string; // Language code (ISO 639)
   id: string;
