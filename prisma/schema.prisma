@@ -135,7 +135,7 @@ model Goal {
   // Table ID in the external dataset
   externalTableId  String? @map("external_id")
   // JSON string containing the selection for the external dataset. Is sent in the body of the request to the external API
-  externalSeletion String? @map("external_selection")
+  externalSelection String? @map("external_selection")
 
   // A series of datapoints for the goal
   dataSeries DataSeries? @relation("data_series")
