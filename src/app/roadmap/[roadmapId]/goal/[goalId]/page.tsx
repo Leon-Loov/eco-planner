@@ -17,10 +17,10 @@ import styles from './page.module.css'
 import getGoalByIndicator from "@/fetchers/getGoalByIndicator";
 import getRoadmapByVersion from "@/fetchers/getRoadmapByVersion";
 import prisma from "@/prismaClient";
-import DataSeriesScaler from "@/components/modals/dataSeriesScaler";
 import CopyAndScale from "@/components/modals/copyAndScale";
 import { getTableContent } from "@/lib/pxWeb/getTableContent";
 import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
+import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -46,11 +46,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     return notFound();
   }
 
-  const data = await getTableContent("TAB1267", "sv", [
-    { variableCode: "ContentsCode", valueCodes: ["BE0101A9"] },
-    { variableCode: "Tid", valueCodes: ["FROM(2020)"] },
-    // { variableCode: "Kon", valueCodes: ["1"] },
-  ]).then(data => filterTableContentKeys(data));
+  let externalData: PxWebApiV2TableContent | null = null;
+  if (goal.externalDataset && goal.externalTableId && goal.externalSelection) {
+    externalData = await getTableContent(goal.externalTableId, JSON.parse(goal.externalSelection), goal.externalDataset).then(data => filterTableContentKeys(data));
+  }
 
   // Fetch parent goal
   let parentGoal: Goal & { dataSeries: DataSeries | null } | null = null;
@@ -134,7 +133,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       */ }
 
       <section className={styles.graphLayout}>
-        <GraphGraph goal={goal} nationalGoal={parentGoal} historicalData={data?.data} />
+        <GraphGraph goal={goal} nationalGoal={parentGoal} historicalData={externalData} />
         <CombinedGraph roadmap={roadmap} goal={goal} />
       </section>
 

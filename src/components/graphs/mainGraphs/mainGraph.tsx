@@ -2,9 +2,8 @@ import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal } from "@prisma/client";
 import styles from '../graphs.module.css'
-import { getTableContent } from "@/lib/pxWeb/getTableContent";
-import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
 import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
+import { parsePeriod } from "@/lib/pxWeb/utility";
 
 export default function MainGraph({
   goal,
@@ -13,63 +12,13 @@ export default function MainGraph({
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
   nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
-  historicalData?: PxWebApiV2TableContent['data']
+  historicalData?: PxWebApiV2TableContent | null,
 }) {
   if (!goal.dataSeries) {
     return null
   }
 
-  let mainChart: ApexAxisChartSeries = [];
-  if (goal.dataSeries) {
-    let mainSeries = []
-    for (let i of dataSeriesDataFieldNames) {
-      if (goal.dataSeries[i as keyof DataSeriesDataFields]) {
-        mainSeries.push({
-          x: new Date(i.replace('val', '')).getTime(),
-          y: goal.dataSeries[i as keyof DataSeriesDataFields]
-        })
-      }
-    }
-    mainChart.push({
-      name: (goal.name || goal.indicatorParameter).split('\\').slice(-1)[0],
-      data: mainSeries,
-      type: 'line',
-    })
-  }
-
-  // if (nationalGoal?.dataSeries) {
-  //   let nationalSeries = []
-  //   for (let i of dataSeriesDataFieldNames) {
-  //     if (nationalGoal.dataSeries[i as keyof DataSeriesDataFields]) {
-  //       nationalSeries.push({
-  //         x: new Date(i.replace('val', '')).getTime(),
-  //         y: nationalGoal.dataSeries[i as keyof DataSeriesDataFields]
-  //       })
-  //     }
-  //   }
-  //   mainChart.push({
-  //     name: 'Nationell motsvarighet',
-  //     data: nationalSeries,
-  //     type: 'line',
-  //   })
-  // }
-
-  if (historicalData) {
-    const historicalSeries = []
-    for (const i of historicalData) {
-      historicalSeries.push({
-        x: new Date(i.key[0]).getTime(),
-        y: parseFloat(i.values[0])
-      })
-    }
-    mainChart.push({
-      name: 'Historik',
-      data: historicalSeries,
-      type: 'line',
-    })
-  }
-
-  let mainChartOptions: ApexCharts.ApexOptions = {
+  const mainChartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: 'line',
       animations: { enabled: false, dynamicAnimation: { enabled: false } }
@@ -90,16 +39,69 @@ export default function MainGraph({
       }
     ],
     tooltip: {
-      x: { format: 'yyyy' },
+      x: { format: 'yyyy-MM-dd' },
+      shared: true,
     },
   }
 
-  if (mainChart.length > 1) {
+  const mainChart: ApexAxisChartSeries = [];
+  if (goal.dataSeries) {
+    const mainSeries = []
+    for (const i of dataSeriesDataFieldNames) {
+      if (goal.dataSeries[i as keyof DataSeriesDataFields]) {
+        mainSeries.push({
+          x: new Date(i.replace('val', '')).getTime(),
+          y: goal.dataSeries[i as keyof DataSeriesDataFields]
+        })
+      }
+    }
+    mainChart.push({
+      name: (goal.name || goal.indicatorParameter).split('\\').slice(-1)[0],
+      data: mainSeries,
+      type: 'line',
+    })
+  }
+
+  if (nationalGoal?.dataSeries) {
+    const nationalSeries = []
+    for (const i of dataSeriesDataFieldNames) {
+      if (nationalGoal.dataSeries[i as keyof DataSeriesDataFields]) {
+        nationalSeries.push({
+          x: new Date(i.replace('val', '')).getTime(),
+          y: nationalGoal.dataSeries[i as keyof DataSeriesDataFields]
+        })
+      }
+    }
+    mainChart.push({
+      name: 'Nationell motsvarighet',
+      data: nationalSeries,
+      type: 'line',
+    });
     (mainChartOptions.yaxis as ApexYAxis[]).push({
       title: { text: "Nationell målbana" },
       labels: { formatter: floatSmoother },
       opposite: true,
-    })
+    });
+  }
+
+  if (historicalData) {
+    const historicalSeries = []
+    for (const i of historicalData.data) {
+      historicalSeries.push({
+        x: parsePeriod(i.key[0]).getTime(),
+        y: parseFloat(i.values[0])
+      })
+    }
+    mainChart.push({
+      name: `${historicalData.metadata[0]?.label}`,
+      data: historicalSeries,
+      type: 'line',
+    });
+    (mainChartOptions.yaxis as ApexYAxis[]).push({
+      title: { text: "Historik" },
+      labels: { formatter: floatSmoother },
+      opposite: true,
+    });
   }
 
   return (

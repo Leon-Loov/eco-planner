@@ -22,7 +22,7 @@ export default function GraphGraph({
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
   nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
-  historicalData?: PxWebApiV2TableContent['data']
+  historicalData?: PxWebApiV2TableContent | null,
 }) {
   const [graphType, setGraphType] = useState<GraphType | "">("");
 

@@ -1,9 +1,11 @@
+import { PxWebApiV2TableContent } from "./pxWebApiV2Types";
+
 /**
  * Try to "flatten" the responseJson by filtering out all keys that have the same value for all entries.
  * If the `data` array has only 1 entry, the function will return null since it is not possible to filter out any keys.
  * If any entry in the `data` array doesn't have exactly one value and one key the function will return null.
  */
-export default function filterTableContentKeys(responseJson: { data: { key: string[], values: string[] }[] }) {
+export default function filterTableContentKeys(responseJson: PxWebApiV2TableContent) {
   // Early return if any data entry does not have exactly one value
   for (const { key, values } of responseJson.data) {
     if (values.length != 1) {
