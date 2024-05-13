@@ -1,4 +1,4 @@
-import filterTableContentKeys from "./filterTableContentKeys.ts";
+import { PxWebApiV2TableContent } from "./pxWebApiV2Types.ts";
 import { externalDatasetBaseUrls } from "./utility.ts";
 
 export async function getTableContent(tableId: string, selection: Object[], externalDataset: string, language: string = 'sv',) {
@@ -10,7 +10,7 @@ export async function getTableContent(tableId: string, selection: Object[], exte
 
   const body = JSON.stringify({ selection: selection, });
 
-  let data: any;
+  let data: PxWebApiV2TableContent | null = null;
 
   try {
     const response = await fetch(url, {
@@ -36,8 +36,9 @@ export async function getTableContent(tableId: string, selection: Object[], exte
   return data;
 }
 
-// getTableContent("TAB1267", [
-//   { variableCode: "ContentsCode", valueCodes: ["BE0101A9"] },
-//   { variableCode: "Tid", valueCodes: ["FROM(2020)"] },
-//   { variableCode: "Kon", valueCodes: ["1"] },
-// ], "SCB", "sv").then(data => filterTableContentKeys(data)).then(data => console.log(data?.data));
+// getTableContent("TAB2946", [
+//   { variableCode: "Region", valueCodes: ["00"] },
+//   { variableCode: "ArealTyp", valueCodes: ["01"] },
+//   { variableCode: "ContentsCode", valueCodes: ["000001O3"] },
+//   { variableCode: "Tid", valueCodes: ["BOTTOM(1)"] }
+// ], "SCB", "sv").then(data => console.log(data?.data));
