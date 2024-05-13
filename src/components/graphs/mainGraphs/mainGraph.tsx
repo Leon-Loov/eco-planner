@@ -2,9 +2,9 @@ import WrappedChart, { floatSmoother } from "@/lib/chartWrapper";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { DataSeries, Goal } from "@prisma/client";
 import styles from '../graphs.module.css'
-import { getTableContent } from "@/lib/scb/getTableContent";
-import filterTableContentKeys from "@/lib/scb/filterTableContentKeys";
-import { PxWebApiV2TableContent } from "@/lib/scb/PxWebApiV2Types";
+import { getTableContent } from "@/lib/pxWeb/getTableContent";
+import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
+import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
 
 export default function MainGraph({
   goal,

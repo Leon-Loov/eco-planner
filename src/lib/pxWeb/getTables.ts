@@ -1,4 +1,4 @@
-import { PxWebApiV2TableArray } from "@/lib/scb/PxWebApiV2Types";
+import { PxWebApiV2TableArray } from "@/lib/pxWeb/pxWebApiV2Types";
 
 /**
  * Returns a list of tables from SCB's API. Returns null on error.

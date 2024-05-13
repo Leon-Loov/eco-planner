@@ -7,7 +7,7 @@ import { DataSeries, Goal } from "@prisma/client";
 import GraphSelector from "./graphselector/graphSelector";
 import { useEffect, useState } from "react";
 import { getStoredGraphType } from "./functions/graphFunctions";
-import { PxWebApiV2TableContent } from "@/lib/scb/PxWebApiV2Types";
+import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
 
 export enum GraphType {
   Main = "MAIN",

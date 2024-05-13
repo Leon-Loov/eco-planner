@@ -19,8 +19,8 @@ import getRoadmapByVersion from "@/fetchers/getRoadmapByVersion";
 import prisma from "@/prismaClient";
 import DataSeriesScaler from "@/components/modals/dataSeriesScaler";
 import CopyAndScale from "@/components/modals/copyAndScale";
-import { getTableContent } from "@/lib/scb/getTableContent";
-import filterTableContentKeys from "@/lib/scb/filterTableContentKeys";
+import { getTableContent } from "@/lib/pxWeb/getTableContent";
+import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
