@@ -21,6 +21,7 @@ import CopyAndScale from "@/components/modals/copyAndScale";
 import { getTableContent } from "@/lib/pxWeb/getTableContent";
 import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
 import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
+import QueryBuilder from "@/components/forms/pxWeb/queryBuilder";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -121,6 +122,10 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           { // TODO: Maybe show button even if no data series is attached?
             goal.dataSeries?.id &&
             <CopyAndScale goal={goal} user={session.user} />
+          }
+          {
+            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+            <QueryBuilder goal={goal} user={session.user} />
           }
         </aside>
       </section>
