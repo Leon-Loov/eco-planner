@@ -1,7 +1,9 @@
 import { PxWebApiV2TableDetails } from "./pxWebApiV2Types";
+import { externalDatasetBaseUrls } from "./utility";
 
-export async function getTableDetails(tableId: string, language: string = 'sv') {
-  const url = new URL(`https://api.scb.se/ov0104/v2beta/api/v2/tables/${tableId}/metadata`);
+export async function getTableDetails(tableId: string, externalDataset: string, language: string = 'sv') {
+  const baseUrl = externalDatasetBaseUrls[externalDataset as keyof typeof externalDatasetBaseUrls] ?? externalDatasetBaseUrls.SCB;
+  const url = new URL(`${baseUrl}/tables/${tableId}/metadata`);
   url.searchParams.append('lang', language);
 
   let data: PxWebApiV2TableDetails;
@@ -13,7 +15,7 @@ export async function getTableDetails(tableId: string, language: string = 'sv') 
     } else if (response.status == 429) {
       // Wait 10 seconds and try again
       await new Promise(resolve => setTimeout(resolve, 10000));
-      return await getTableDetails(tableId, language);
+      return await getTableDetails(tableId, externalDataset, language);
     } else {
       return null;
     }
@@ -25,4 +27,4 @@ export async function getTableDetails(tableId: string, language: string = 'sv') 
   return data;
 }
 
-getTableDetails("TAB5974").then(data => console.log(data));
+// getTableDetails("TAB5974", "SCB").then(data => console.log(data));
