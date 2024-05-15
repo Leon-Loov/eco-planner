@@ -5,7 +5,10 @@ import { PxWebApiV2TableContent } from "./pxWebApiV2Types";
  * If the `data` array has only 1 entry, the function will return null since it is not possible to filter out any keys.
  * If any entry in the `data` array doesn't have exactly one value and one key the function will return null.
  */
-export default function filterTableContentKeys(responseJson: PxWebApiV2TableContent) {
+export default function filterTableContentKeys(responseJson: PxWebApiV2TableContent | null) {
+  if (!responseJson) {
+    return null;
+  }
   // Early return if any data entry does not have exactly one value
   for (const { key, values } of responseJson.data) {
     if (values.length != 1) {
