@@ -23,6 +23,7 @@ export type PxWebApiV2VariableBase = {
 
 export type PxWebApiV2TimeVariable = PxWebApiV2VariableBase & {
   type: "TimeVariable";
+  elimination: undefined;
   timeUnit?: "Annual" | "HalfYear" | "Quarterly" | "Monthly" | "Weekly" | "Other";
   /** Possible format examples: 2024 | 2024K2 | 2024M5 | 2025W18 (And possibly another for HalfYear?) */
   firstPeriod?: string;
@@ -40,6 +41,7 @@ export type PxWebApiV2TimeVariable = PxWebApiV2VariableBase & {
 
 export type PxWebApiV2ContentsVariable = PxWebApiV2VariableBase & {
   type: "ContentsVariable";
+  elimination: undefined;
   values: [
     {
       code: string;
