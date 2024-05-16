@@ -1,3 +1,6 @@
+// Use server in order to circumvent CORS issues
+'use server';
+
 import { PxWebApiV2TableContent } from "./pxWebApiV2Types.ts";
 import { externalDatasetBaseUrls } from "./utility.ts";
 
