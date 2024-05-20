@@ -11,6 +11,7 @@ import { getTables } from "@/lib/pxWeb/getTables";
 import { getTableDetails } from "@/lib/pxWeb/getTableDetails";
 import { getTableContent } from "@/lib/pxWeb/getTableContent";
 import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
+import formSubmitter from "@/functions/formSubmitter";
 
 export default function QueryBuilder({
   goal,
@@ -19,32 +20,6 @@ export default function QueryBuilder({
   goal: Goal,
   user: Data["user"],
 }) {
-  // Requres a goal as input
-
-  // Should do a POST request to api/goal where it updates:
-  // `externalDataset`
-  // `externalTableId`
-  // `externalSelection`
-
-  // First user selects a data source from `externalDatasetBaseUrls` in lib/pxWeb/utility.ts
-
-  // Then user gets to write a search query passed into `getTables`, resulting in a list of tables added to a dropdown where they can select one
-
-  // A query is made to `getTableDetails` to get the table's metadata
-
-  // For each variable in the table, a dropdown is added to the form where the user can select a value
-  // Variables with `elimination: true` are optional, others are required
-  // If any variable only has one value, it should probably be pre-selected? 
-
-  // The TimeVariable is used to select the first period, and thus results in something like
-  // { variableCode: "Tid", valueCodes: ["FROM(SelectedValue)"] }
-  // While other variables will be something like
-  // { variableCode: "Name", valueCodes: ["SelectedValue"] }
-
-  // Whenever a field is changed(?), try getting table content with the current selection and filter it through `filterTableContentKeys`
-  // If a valid result is found, show it like "Does this look correct?" => Small table with metadata[0].label and some values from the data array
-  // If invalid result, ask user to change selection, and block submission until a valid result is found
-
   const [isLoading, setIsLoading] = useState(false);
   const [dataSource, setDataSource] = useState<string>("" as keyof typeof externalDatasetBaseUrls);
   const [tables, setTables] = useState<{ id: string, label: string }[] | null>(null);
@@ -79,6 +54,28 @@ export default function QueryBuilder({
     });
 
     return queryObject;
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    // Return if insufficient selection has been made
+    if (!tables || !tableDetails) return;
+    // Return if properly formatted response was not found
+    if (!tableContent) return;
+    if (!(event.target instanceof HTMLFormElement)) return;
+
+    if (!(event.target.checkValidity())) return;
+    const formData = new FormData(event.target);
+    const query = buildQuery(formData);
+
+    // Update the goal with the new data
+    formSubmitter("/api/goal", JSON.stringify({
+      goalId: goal.id,
+      externalDataset: dataSource,
+      externalTableId: formData.get("externalTableId") as string,
+      externalSelection: query,
+      timestamp: Date.now(),
+    }), "PUT", setIsLoading);
   }
 
   function tryGetResult() {
@@ -116,7 +113,7 @@ export default function QueryBuilder({
     if (!externalDatasetBaseUrls[dataSource as keyof typeof externalDatasetBaseUrls]) return;
     if (!tableId) return;
 
-    getTableDetails(tableId, dataSource).then(result => { setTableDetails(result); console.log(result) });
+    getTableDetails(tableId, dataSource).then(result => setTableDetails(result));
   }
 
   return (
@@ -134,7 +131,7 @@ export default function QueryBuilder({
         </div>
         <p>Lägg till en historisk dataserie till {goal.name ?? goal.indicatorParameter}</p>
 
-        <form ref={formRef} onChange={tryGetResult}>
+        <form ref={formRef} onChange={tryGetResult} onSubmit={handleSubmit}>
           {/* Hidden disabled submit button to prevent accidental submisson */}
           <button type="submit" style={{ display: 'none' }} disabled></button>
 
@@ -149,6 +146,7 @@ export default function QueryBuilder({
           </label>
 
           {/* Make this look better? Maybe a div or something */}
+          {/* TODO: Check that this works well with dynamic keyboards (smartphone/tablet) */}
           <div className="flex gap-25">
             <label className="margin-y-75">
               Sök efter tabell
@@ -195,13 +193,15 @@ export default function QueryBuilder({
             </div>
           )}
 
-          {tableContent && (
+          {tableContent ? (
             <div>
               <p>Ser detta rimligt ut? (visar max 5 värden)</p>
               <table>
                 <thead>
-                  <th scope="col">Period</th>
-                  <th scope="col">Värde</th>
+                  <tr>
+                    <th scope="col">Period</th>
+                    <th scope="col">Värde</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {tableContent.data.map((row, index) => (
@@ -213,6 +213,10 @@ export default function QueryBuilder({
                   ))}
                 </tbody>
               </table>
+            </div>
+          ) : (
+            <div>
+              <p>Inget läsbart resultat hittades. Vänligen uppdatera dina val.</p>
             </div>
           )}
 
