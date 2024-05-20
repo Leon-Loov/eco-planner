@@ -34,7 +34,7 @@ export default function filterTableContentKeys(responseJson: PxWebApiV2TableCont
     return alternatives;
   }, [] as string[][]);
 
-  const identicalValues = valueAlternatives.map((alternatives, index) => alternatives.length == 1 ? alternatives[index] : null);
+  const identicalValues = valueAlternatives.map((alternatives, index) => alternatives.length == 1 ? alternatives[0] : null);
 
   // Filter out all keys that have the same value for all entries
   responseJson.data.forEach((obj, index) => {
