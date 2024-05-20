@@ -131,11 +131,11 @@ model Goal {
 
   // Connections to external datasets
   // Name of the external dataset (should match one of the available datasets defined in an enum)
-  externalDataset  String? @map("external_dataset")
+  externalDataset   String? @map("external_dataset")
   // Table ID in the external dataset
-  externalTableId  String? @map("external_id")
+  externalTableId   String? @map("external_id")
   // JSON string containing the selection for the external dataset. Is sent in the body of the request to the external API
-  externalSelection String? @map("external_selection")
+  externalSelection String? @map("external_selection") @db.Text
 
   // A series of datapoints for the goal
   dataSeries DataSeries? @relation("data_series")
