@@ -51,7 +51,7 @@ export type PxWebApiV2ContentsVariable = PxWebApiV2VariableBase & {
       adjustment?: "None" | "SesOnly" | "WorkOnly" | "WorkAndSes";
       measuringType?: "Stock" | "Flow" | "Average" | "Other";
       referencePeriod?: string;
-      preferedNumberOfDecimals: number;
+      preferedNumberOfDecimals?: number;
       priceType?: "Undefined" | "Current" | "Fixed";
       notes?: PxWebApiV2Note[];
       links?: PxWebApiV2Link[];
