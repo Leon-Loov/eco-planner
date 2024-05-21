@@ -8,6 +8,7 @@ import LinkTree from './goalTables/linkTree'
 import { useEffect, useState } from "react"
 import { getStoredViewMode } from "./functions/tableFunctions"
 import Link from "next/link"
+import { allowStorage, clearStorage, storageConsent } from "@/functions/localStorage"
 
 /** Enum for the different view modes for the goal table. */
 export enum ViewMode {
@@ -33,6 +34,11 @@ export default function Goals({
   accessLevel?: AccessLevel
 }) {
   const [viewMode, setViewMode] = useState<ViewMode | "">("")
+  const [storageAllowed, setStorageAllowed] = useState(false)
+
+  useEffect(() => {
+    setStorageAllowed(storageConsent())
+  }, [])
 
   useEffect(() => {
     setViewMode(getStoredViewMode(roadmap.id))
@@ -46,9 +52,21 @@ export default function Goals({
           <TableSelector id={roadmap.id} current={viewMode} setter={setViewMode} />
           { // Only show the button if the user has edit access to the roadmap
             (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-            <Link className="button round color-purewhite pureblack" style={{fontWeight: '500'}} href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</Link>
+            <Link className="button round color-purewhite pureblack" style={{ fontWeight: '500' }} href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</Link>
           }
         </nav>
+      </label>
+      <label >
+        <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
+          if (e.target.checked) {
+            setStorageAllowed(true);
+            allowStorage();
+          } else {
+            setStorageAllowed(false);
+            clearStorage();
+          }
+        }} />
+        Spara framtida vyändringar mellan sessioner och sidnavigeringar
       </label>
       {viewMode == ViewMode.Table && (
         <GoalTable roadmap={roadmap} />
