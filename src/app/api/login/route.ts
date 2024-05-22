@@ -1,19 +1,17 @@
 import { NextRequest } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import prisma from "@/prismaClient";
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const response = new Response();
-  const session = await getSession(request, response);
+  const session = await getSession(cookies());
 
-  let { username, password }: { username: string, password: string } = await request.json();
+  const { username, password }: { username: string, password: string } = await request.json();
 
   // Validate request body
   if (!username || !password) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Username and password are required' }),
+    return Response.json({ message: 'Username and password are required' },
       { status: 400 }
     );
   }
@@ -40,9 +38,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (e) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'User not found' }),
+    return Response.json({ message: 'User not found' },
       { status: 400 }
     );
   }
@@ -51,9 +47,7 @@ export async function POST(request: NextRequest) {
   const passwordMatches = await bcrypt.compare(password, user.password);
 
   if (!passwordMatches) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Incorrect password' }),
+    return Response.json({ message: 'Incorrect password' },
       { status: 400 }
     );
   }
@@ -69,9 +63,7 @@ export async function POST(request: NextRequest) {
 
   await session.save();
 
-  return createResponse(
-    response,
-    JSON.stringify({ message: 'Login successful' }),
+  return Response.json({ message: 'Login successful' },
     { status: 200 }
   );
 }

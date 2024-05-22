@@ -1,20 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import { allowedDomains } from "@/lib/allowedDomains";
 import prisma from "@/prismaClient"
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const response = new Response();
-  const session = await getSession(request, response);
+  const session = await getSession(cookies());
 
   let { username, email, password }: { username: string; email: string; password: string; } = await request.json();
 
   // Validate request body
   if (!username || !email || !password) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Username, email, and password are required' }),
+    return Response.json({ message: 'Username, email, and password are required' },
       { status: 400 }
     );
   }
@@ -29,9 +27,7 @@ export async function POST(request: NextRequest) {
   });
 
   if (usernameExists) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Username "' + username + '" is already taken' }),
+    return Response.json({ message: 'Username "' + username + '" is already taken' },
       { status: 400 }
     );
   }
@@ -43,9 +39,7 @@ export async function POST(request: NextRequest) {
   });
 
   if (emailExists) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Email "' + email + '" is already in use' }),
+    return Response.json({ message: 'Email "' + email + '" is already in use' },
       { status: 400 }
     );
   }
@@ -53,9 +47,7 @@ export async function POST(request: NextRequest) {
   // Check if email belongs to an allowed domain
   // TODO: Add actual email validation by sending a verification email
   if (!allowedDomains.includes(email.split('@')[1])) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Email domain "' + email.split('@')[1] + '" is not allowed' }),
+    return Response.json({ message: 'Email domain "' + email.split('@')[1] + '" is not allowed' },
       { status: 400 }
     );
   }
@@ -85,9 +77,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (e) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Error creating user' }),
+    return Response.json({ message: 'Error creating user' },
       { status: 500 }
     );
   }
@@ -128,9 +118,7 @@ export async function POST(request: NextRequest) {
 
   await session.save();
 
-  return createResponse(
-    response,
-    JSON.stringify({ message: 'User created' }),
+  return Response.json({ message: 'User created' },
     { status: 200 }
   )
 }

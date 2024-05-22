@@ -1,5 +1,5 @@
-import { getIronSession, createResponse, unsealData } from "iron-session";
-import { RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
+import { IronSession, getIronSession } from "iron-session";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 // The information we store in our cookie
 export interface Data {
@@ -13,7 +13,7 @@ export interface Data {
 }
 
 // Config stuff for Iron-Session
-const options = {
+export const options = {
   password: process.env.IRON_SESSION_PASSWORD!,
   cookieName: "eco_planner",
   cookieOptions: {
@@ -25,18 +25,13 @@ const options = {
 /**
  * Accepts cookies as input and if our cookie is included the contents of it is returned.
  */
-export async function getSessionData(cookies: Pick<RequestCookies, 'get'>) {
-  const seal = cookies.get(options.cookieName)?.value
-  if (!seal) return {}
-  return unsealData<Data>(seal, options)
+export async function getSessionData(cookies: ReadonlyRequestCookies) {
+  return getIronSession<Data>(cookies, options);
 }
 
 /**
  * Gets our cookie data from an incoming request
  */
-export function getSession(req: Request, res: Response) {
-  const session = getIronSession<Data>(req, res, options);
-  return session;
+export async function getSession(cookies: ReadonlyRequestCookies): Promise<IronSession<Data>> {
+  return getIronSession<Data>(cookies, options);
 };
-
-export { createResponse };
