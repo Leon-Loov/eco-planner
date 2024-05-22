@@ -30,6 +30,9 @@ p {
   display: none;
 }
 
+dialog {
+  width: min(70ch, 90%);
+}
 
 /* Temporary while rewriting */
 

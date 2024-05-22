@@ -164,8 +164,13 @@ export async function PUT(request: NextRequest) {
     request.json() as Promise<GoalInput & { goalId: string, timestamp?: number }>,
   ]);
 
+  // Convert externalSelection to string so it can be stored in the database
+  if (goal.externalSelection && typeof goal.externalSelection == "object") {
+    goal.externalSelection = JSON.stringify(goal.externalSelection);
+  }
+
   // Validate request body
-  if (!goal.indicatorParameter || !goal.dataUnit || !goal.dataSeries || !goal.goalId) {
+  if (goal.indicatorParameter === null || goal.dataUnit === null || goal.dataSeries === null || !goal.goalId) {
     return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
@@ -254,14 +259,16 @@ export async function PUT(request: NextRequest) {
   }
 
   // Prepare for creating data series
-  const dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
-  // If the data series is invalid, return an error
-  if (dataValues === null) {
-    return Response.json({
-      message: 'Invalid data series'
-    },
-      { status: 400 }
-    );
+  let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null | undefined = undefined;
+  // Don't try to update if the received data series is undefined (but complain about null)
+  if (!goal.dataSeries === undefined) {
+    dataValues = dataSeriesPrep(goal, session.user!.id);
+    // If the data series is invalid, return an error
+    if (dataValues === null) {
+      return Response.json({ message: 'Invalid data series' },
+        { status: 400 }
+      );
+    }
   }
 
   // Edit goal
@@ -273,12 +280,18 @@ export async function PUT(request: NextRequest) {
         description: goal.description,
         isFeatured: goal.isFeatured,
         indicatorParameter: goal.indicatorParameter,
-        dataSeries: {
-          upsert: {
-            create: dataValues,
-            update: dataValues,
+        externalDataset: goal.externalDataset,
+        externalTableId: goal.externalTableId,
+        externalSelection: goal.externalSelection,
+        // Only update the data series if it is not undefined (undefined means no change)
+        ...(dataValues ? {
+          dataSeries: {
+            upsert: {
+              create: dataValues,
+              update: dataValues,
+            }
           }
-        },
+        } : {}),
         links: {
           set: [],
           create: goal.links?.map(link => {
