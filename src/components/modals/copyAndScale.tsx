@@ -223,7 +223,7 @@ export default function CopyAndScale({
         Kopiera och skala målbana
         <Image src='/icons/copy.svg' alt="" width={24} height={24} />
       </button>
-      <dialog ref={modalRef} aria-modal style={{ border: '0', borderRadius: '.25rem', boxShadow: '0 0 .5rem -.25rem rgba(0,0,0,.25' }}>
+      <dialog ref={modalRef} aria-modal style={{ border: '0', borderRadius: '.5rem', boxShadow: '0 0 .5rem -.25rem rgba(0,0,0,.25'}}>
         <div className={`display-flex flex-direction-row-reverse align-items-center justify-content-space-between`}>
           <button className="grid round padding-50 transparent" disabled={isLoading} onClick={() => closeModal(modalRef)} autoFocus aria-label="Close" >
             <Image src='/icons/close.svg' alt="" width={18} height={18} />
@@ -233,9 +233,9 @@ export default function CopyAndScale({
 
         <form action={formSubmission} name="copyAndScale" onChange={recalculateScalingResult}>
 
-          <label className="block margin-y-75">
+          <label className="block margin-y-100">
             I vilken färdplan vill du placera den skalade målbanan?
-            <select className="block margin-y-25" required name="copyTo" id="copyTo">
+            <select className="block margin-y-25 width-100" required name="copyTo" id="copyTo">
               <option value="">Välj färdplan</option>
               {roadmapOptions.map(roadmap => (
                 <option key={roadmap.id} value={roadmap.id}>{`${roadmap.name} ${roadmap.version ? `(version ${roadmap.version.toString()})` : null}`}</option>
@@ -247,32 +247,53 @@ export default function CopyAndScale({
             {scalingComponents.map((id) => {
               return (
                 <RepeatableScaling key={id} useWeight={scalingMethod != ScaleMethod.Multiplicative}> {/* Multiplicative scaling doesn't use weights */}
-                  <button type="button" onClick={() => setScalingComponents(scalingComponents.filter((i) => i !== id))}>Ta bort</button>
-                </RepeatableScaling>
+                  <button type="button" 
+                  style={{
+                    position: 'absolute', 
+                    top: '0', 
+                    right: '0', 
+                    transform: 'translate(50%, calc(-20px - 50%))',
+                    backgroundColor: 'white',
+                    padding: '.25rem',
+                    borderRadius: '100%',
+                    display: 'grid',
+                    cursor: 'pointer'
+                  }} onClick={() => setScalingComponents(scalingComponents.filter((i) => i !== id))}>
+                    <Image src='/icons/circleMinus.svg' alt="Ta bort skalning" width={24} height={24} />
+                  </button>
+                </RepeatableScaling> 
               )
             })}
           </div>
           <button type="button" className="margin-y-100" onClick={() => setScalingComponents([...scalingComponents, (crypto?.randomUUID() || Math.random().toString())])}>Lägg till skalning</button>
 
-          <fieldset className="margin-y-100">
-            <legend>Välj skalningsmetod</legend>
-            <label className="flex gap-25 align-items-center margin-y-50">
-              <input type="radio" name="scalingMethod" value={ScaleMethod.Geometric} checked={scalingMethod === ScaleMethod.Geometric} onChange={() => setScalingMethod(ScaleMethod.Geometric)} />
-              Geometriskt genomsnitt
-            </label>
-            <label className="flex gap-25 align-items-center margin-y-50">
-              <input type="radio" name="scalingMethod" value={ScaleMethod.Algebraic} checked={scalingMethod === ScaleMethod.Algebraic} onChange={() => setScalingMethod(ScaleMethod.Algebraic)} />
-              Algebraiskt genomsnitt
-            </label>
-            <label className="flex gap-25 align-items-center margin-y-50">
-              <input type="radio" name="scalingMethod" value={ScaleMethod.Multiplicative} checked={scalingMethod === ScaleMethod.Multiplicative} onChange={() => setScalingMethod(ScaleMethod.Multiplicative)} />
-              Multiplikativ skalning
-            </label>
-          </fieldset>
+          <details className="padding-y-25 margin-y-75" style={{borderBottom: '1px solid var(--gray-90)'}}>
+            <summary>Avancerat</summary>
+            <fieldset className="margin-y-100">
+              <legend>Välj skalningsmetod</legend>
+              <label className="flex gap-25 align-items-center margin-y-50">
+                <input type="radio" name="scalingMethod" value={ScaleMethod.Geometric} checked={scalingMethod === ScaleMethod.Geometric} onChange={() => setScalingMethod(ScaleMethod.Geometric)} />
+                Geometriskt genomsnitt
+              </label>
+              <label className="flex gap-25 align-items-center margin-y-50">
+                <input type="radio" name="scalingMethod" value={ScaleMethod.Algebraic} checked={scalingMethod === ScaleMethod.Algebraic} onChange={() => setScalingMethod(ScaleMethod.Algebraic)} />
+                Algebraiskt genomsnitt
+              </label>
+              <label className="flex gap-25 align-items-center margin-y-50">
+                <input type="radio" name="scalingMethod" value={ScaleMethod.Multiplicative} checked={scalingMethod === ScaleMethod.Multiplicative} onChange={() => setScalingMethod(ScaleMethod.Multiplicative)} />
+                Multiplikativ skalning
+              </label>
+            </fieldset>
+          </details>
 
-          <output className="margin-y-100">Resulterande skalfaktor: {scalingResult}</output>
+          <label style={{marginInline: 'auto'}}>
+            <strong className="block bold" style={{textAlign: 'center'}}>Resulterande skalfaktor</strong> 
+            <output className="margin-y-100 block" style={{textAlign: 'center'}}>{scalingResult}</output>
+          </label>
 
-          <input type="submit" value="Skapa skalad kopia" />
+          <button className="block seagreen color-purewhite smooth width-100" style={{marginInline: 'auto', fontWeight: '500'}}>
+            Skapa skalad kopia
+          </button>
         </form>
       </dialog>
     </>

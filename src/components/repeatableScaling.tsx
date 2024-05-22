@@ -197,7 +197,7 @@ export default function RepeatableScaling({
 
   return (
     <>
-      <fieldset className="padding-50 smooth" style={{border: '1px solid var(--gray-90)'}}>
+      <fieldset className="padding-50 smooth" style={{border: '1px solid var(--gray-90)', position: 'relative'}}>
         <legend className="flex gap-50 align-items-center padding-x-50">
           Skala utifrån:
           <select className="block margin-y-25" required name="scaleBy" id="scaleBy" defaultValue={defaultScaleBy} onChange={(e) => setScaleBy(e.target.value as ScaleBy)}>
