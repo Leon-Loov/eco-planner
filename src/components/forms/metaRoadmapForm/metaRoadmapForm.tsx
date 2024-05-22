@@ -1,7 +1,7 @@
 'use client'
 
 import countiesAndMunicipalities from "@/lib/countiesAndMunicipalities.json" with { type: "json" }
-import { Data } from "@/lib/session";
+import { LoginData } from "@/lib/session";
 import { AccessControlled, MetaRoadmapInput } from "@/types";
 import { MetaRoadmap, RoadmapType } from "@prisma/client";
 import { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ export default function MetaRoadmapForm({
   parentRoadmapOptions,
   currentRoadmap,
 }: {
-  user: Data['user'],
+  user: LoginData['user'],
   userGroups: string[],
   parentRoadmapOptions?: MetaRoadmap[],
   currentRoadmap?: MetaRoadmap & AccessControlled,

@@ -1,4 +1,4 @@
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import GoalForm from "@/components/forms/goalForm/goalForm";
 import accessChecker from "@/lib/accessChecker";
@@ -9,7 +9,7 @@ import { AccessControlled, AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, currentGoal] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneGoal(params.goalId),
   ]);
 

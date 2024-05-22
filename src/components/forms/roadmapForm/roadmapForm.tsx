@@ -4,7 +4,7 @@ import AccessSelector, { getAccessData } from "@/components/forms/accessSelector
 import getOneRoadmap from "@/fetchers/getOneRoadmap"
 import formSubmitter from "@/functions/formSubmitter"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
-import { Data } from "@/lib/session"
+import { LoginData } from "@/lib/session"
 import { AccessControlled, GoalInput, RoadmapInput } from "@/types"
 import { Goal, MetaRoadmap, Roadmap } from "@prisma/client"
 import Link from "next/link"
@@ -17,7 +17,7 @@ export default function RoadmapForm({
   metaRoadmapAlternatives,
   currentRoadmap,
 }: {
-  user: Data['user'],
+  user: LoginData['user'],
   userGroups: string[],
   metaRoadmapAlternatives?: (MetaRoadmap & {
     roadmapVersions: { id: string, version: number }[],

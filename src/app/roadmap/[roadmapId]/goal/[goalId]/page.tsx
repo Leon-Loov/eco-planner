@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { cookies } from "next/headers";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
 import { AccessControlled, AccessLevel } from "@/types";
 import CombinedGraph from "@/components/graphs/combinedGraph";
@@ -25,7 +25,7 @@ import QueryBuilder from "@/components/forms/pxWeb/queryBuilder";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneRoadmap(params.roadmapId),
     getOneGoal(params.goalId)
   ]);

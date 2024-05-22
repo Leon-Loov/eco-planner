@@ -5,7 +5,7 @@ import Image from "next/image";
 import { closeModal, openModal } from "./modalFunctions";
 import { useEffect, useRef, useState } from "react";
 import getRoadmaps from "@/fetchers/getRoadmaps";
-import { Data } from "@/lib/session";
+import { LoginData } from "@/lib/session";
 import RepeatableScaling from "../repeatableScaling";
 import { GoalInput, dataSeriesDataFieldNames } from "@/types";
 import formSubmitter from "@/functions/formSubmitter";
@@ -124,7 +124,7 @@ export default function CopyAndScale({
   user,
 }: {
   goal: Goal & { dataSeries: DataSeries | null },
-  user: Data["user"],
+  user: LoginData["user"],
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [roadmapOptions, setRoadmapOptions] = useState<{ id: string, name: string, version: number, actor: string | null }[]>([]);

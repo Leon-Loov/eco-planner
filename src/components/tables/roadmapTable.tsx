@@ -1,4 +1,4 @@
-import { Data } from '@/lib/session';
+import { LoginData } from '@/lib/session';
 import styles from './tables.module.css' with { type: "css" };
 import { MetaRoadmap } from "@prisma/client";
 import { TableMenu } from './tableMenu/tableMenu';
@@ -6,7 +6,7 @@ import { AccessControlled, AccessLevel } from '@/types';
 import accessChecker from '@/lib/accessChecker';
 
 interface RoadmapTableCommonProps {
-  user: Data['user'],
+  user: LoginData['user'],
 }
 
 interface RoadmapTableWithMetaRoadmap extends RoadmapTableCommonProps {

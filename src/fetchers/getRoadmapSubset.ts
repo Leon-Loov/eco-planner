@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { roadmapSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
 import { MetaRoadmap, Roadmap } from "@prisma/client";
@@ -15,7 +15,7 @@ import { cookies } from "next/headers";
  * @returns Array of roadmaps
  */
 export default async function getRoadmapSubset(actor?: string) {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedRoadmapSubset(session.user?.id ?? '', actor);
 }
 
@@ -27,7 +27,7 @@ export default async function getRoadmapSubset(actor?: string) {
  */
 const getCachedRoadmapSubset = unstable_cache(
   async (userId: any, actor?: string) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let roadmaps: (
       Roadmap & {
