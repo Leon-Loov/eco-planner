@@ -228,13 +228,13 @@ export default function CopyAndScale({
           <button className="grid round padding-50 transparent" disabled={isLoading} onClick={() => closeModal(modalRef)} autoFocus aria-label="Close" >
             <Image src='/icons/close.svg' alt="" width={18} height={18} />
           </button>
-          <h2 className="margin-0">Kopiera och skala</h2>
+          <h2 className="margin-0">Kopiera och skala målbanan {goal.name}</h2>
         </div>
-        <p>Kopiera och skala målbanan {goal.name}</p>
 
         <form action={formSubmission} name="copyAndScale" onChange={recalculateScalingResult}>
-          <label className="margin-y-75">
-            Under vilken färdplan vill du skapa en kopia av målbanan?
+
+          <label className="block margin-y-75">
+            I vilken färdplan vill du placera den skalade målbana?
             <select className="block margin-y-25" required name="copyTo" id="copyTo">
               <option value="">Välj färdplan</option>
               {roadmapOptions.map(roadmap => (

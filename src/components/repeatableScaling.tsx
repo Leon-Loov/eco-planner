@@ -165,41 +165,43 @@ export default function RepeatableScaling({
 
   return (
     <>
-      <label className="block margin-y-75">
-        Vad vill du skala utifrån?
-        <select className="block margin-y-25" required name="scaleBy" id="scaleBy" defaultValue={defaultScaleBy} onChange={(e) => setScaleBy(e.target.value as ScaleBy)}>
-          <option value="">Inget alternativ valt</option>
-          <option value={ScaleBy.Custom}>Specifikt värde</option>
-          <option value={ScaleBy.Inhabitants}>Relativt antal invånare</option>
-          <option value={ScaleBy.Area}>Relativ yta</option>
-        </select>
-      </label>
+      <fieldset className="padding-50 smooth" style={{border: '1px solid var(--gray-90)'}}>
+        <legend className="flex gap-50 align-items-center padding-x-50">
+          Skala utifrån:
+          <select className="block margin-y-25" required name="scaleBy" id="scaleBy" defaultValue={defaultScaleBy} onChange={(e) => setScaleBy(e.target.value as ScaleBy)}>
+            <option value="">Inget alternativ valt</option>
+            <option value={ScaleBy.Custom}>Specifikt värde</option>
+            <option value={ScaleBy.Inhabitants}>Relativt antal invånare</option>
+            <option value={ScaleBy.Area}>Relativ yta</option>
+          </select>
+        </legend>
 
-      {ScalarInputs()}
+        {ScalarInputs()}
 
-      <label className="block margin-y-75">
-        {"Skalfaktor för den här beräkningen: "}
-        <output name="result" id="result">{Number.isFinite(result ?? NaN) ? result : "Värde saknas"}</output>
-      </label>
+        <label className="block margin-y-75">
+          {"Skalfaktor för den här beräkningen: "}
+          <output name="result" id="result">{Number.isFinite(result ?? NaN) ? result : "Värde saknas"}</output>
+        </label>
 
-      {/* Hidden input, used because outputs are not submitted with formData */}
-      <input className="margin-y-25" type="hidden" name="scaleFactor" value={(Number.isFinite(result ?? 1) && result?.toString()) ? result.toString() : "1"} />
+        {/* Hidden input, used because outputs are not submitted with formData */}
+        <input className="margin-y-25" type="hidden" name="scaleFactor" value={(Number.isFinite(result ?? 1) && result?.toString()) ? result.toString() : "1"} />
 
-      {// Only show weight input if useWeight is true
-        useWeight &&
-        <>
-          <label className="block margin-y-75">
-            Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna)
-            <input className="margin-y-25" type="number" step={"any"} min={0} id="weight" name="weight" defaultValue={1} />
-          </label>
-        </>
-      }
+        {// Only show weight input if useWeight is true
+          useWeight &&
+          <>
+            <label className="block margin-y-75">
+              Vikt för denna faktor (används för att skapa ett viktat genomsnitt mellan faktorerna)
+              <input className="margin-y-25" type="number" step={"any"} min={0} id="weight" name="weight" defaultValue={1} />
+            </label>
+          </>
+        }
 
-      {children &&
-        <>
-          {children}
-        </>
-      }
+        {children &&
+          <>
+            {children}
+          </>
+        }
+      </fieldset>
     </>
   )
 }
