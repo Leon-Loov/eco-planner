@@ -101,61 +101,93 @@ export default function RepeatableScaling({
       case ScaleBy.Inhabitants:
         return (
           <div key={ScaleBy.Inhabitants}>
-            <label htmlFor="parentArea">Ursprungligt område, vanligtvis det större</label>
-            <select required name="parentArea" id="parentArea" defaultValue={defaultArea1} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue1(result)) }}>
-              <option value="">Välj område</option>
-              {
-                Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
-                  <option key={code} value={code}>{name}</option>
-                ))
-              }
-            </select>
-            <br />
-            <label htmlFor="parentAreaPopulation">Antal invånare: </label>
-            <output name="parentAreaPopulation" id="parentAreaPopulation">{value1 ?? "Värde saknas"}</output>
-            <br />
-            <label htmlFor="childArea">Nytt område, vanligtvis det mindre</label>
-            <select required name="childArea" id="childArea" defaultValue={defaultArea2 ?? ""} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue2(result)) }}>
-              <option value="">Välj område</option>
-              {
-                Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
-                  <option key={code} value={code}>{name}</option>
-                ))
-              }
-            </select>
-            <br />
-            <label htmlFor="childAreaPopulation">Antal invånare: </label>
-            <output name="childAreaPopulation" id="childAreaPopulation">{value2 ?? "Värde saknas"}</output>
+            <section className="margin-y-50">
+              <label className="flex align-items-center justify-content-space-between">
+                Ursprungligt område:
+                <select required name="parentArea" id="parentArea" defaultValue={defaultArea1} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue1(result)) }}>
+                  <option value="">Välj område</option>
+                  {
+                    Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
+                      <option key={code} value={code}>{name}</option>
+                    ))
+                  }
+                </select>
+              </label>
+
+              <label>
+                <small className="flex gap-25">
+                  Antal invånare:
+                  <output name="parentAreaPopulation" id="parentAreaPopulation">{value1 ?? "Värde saknas"}</output>
+                </small>
+              </label>
+            </section>
+
+            <section className="margin-y-50">
+              <label className="flex align-items-center justify-content-space-between">
+                Nytt område: 
+                <select required name="childArea" id="childArea" defaultValue={defaultArea2 ?? ""} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue2(result)) }}>
+                  <option value="">Välj område</option>
+                  {
+                    Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
+                      <option key={code} value={code}>{name}</option>
+                    ))
+                  }
+                </select>
+              </label>
+
+              <label>
+                <small className="flex gap-25">
+                  Antal invånare:
+                  <output name="childAreaPopulation" id="childAreaPopulation">{value2 ?? "Värde saknas"}</output>
+                </small>
+              </label>
+            </section>
           </div>
         );
       case ScaleBy.Area:
         return (
           <div key={ScaleBy.Area}>
-            <label htmlFor="parentArea">Ursprungligt område, vanligtvis det större</label>
-            <select required name="parentArea" id="parentArea" defaultValue={defaultArea1 ?? ""} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue1(result)) }}>
-              <option value="">Välj område</option>
-              {
-                Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
-                  <option key={code} value={code}>{name}</option>
-                ))
-              }
-            </select>
-            <br />
-            <label htmlFor="parentAreaArea">Ytarea: </label>
-            <output name="parentAreaArea" id="parentAreaArea">{value1 ? `${value1} kvadratkilometer` : "Värde saknas"}</output>
-            <br />
-            <label htmlFor="childArea">Nytt område, vanligtvis det mindre</label>
-            <select required name="childArea" id="childArea" defaultValue={defaultArea2 ?? ""} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue2(result)) }}>
-              <option value="">Välj område</option>
-              {
-                Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
-                  <option key={code} value={code}>{name}</option>
-                ))
-              }
-            </select>
-            <br />
-            <label htmlFor="childAreaArea">Ytarea: </label>
-            <output name="childAreaArea" id="childAreaArea">{value2 ? `${value2} kvadratkilometer` : "Värde saknas"}</output>
+            <section className="margin-y-50">
+              <label className="flex align-items-center justify-content-space-between">
+                Ursprungligt område:
+                <select required name="parentArea" id="parentArea" defaultValue={defaultArea1 ?? ""} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue1(result)) }}>
+                  <option value="">Välj område</option>
+                  {
+                    Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
+                      <option key={code} value={code}>{name}</option>
+                    ))
+                  }
+                </select>
+              </label>
+
+              <label>
+                <small className="flex gap-25">
+                  Ytarea:
+                  <output name="parentAreaArea" id="parentAreaArea">{value1 ? `${value1} kvadratkilometer` : "Värde saknas"}</output>
+                </small>
+              </label>
+            </section>
+            
+            <section className="margin-y-50">
+              <label className="flex align-items-center justify-content-space-between">
+                Nytt område:
+                <select required name="childArea" id="childArea" defaultValue={defaultArea2 ?? ""} onChange={(e) => { getValue(e, scaleBy).then((result) => setValue2(result)) }}>
+                  <option value="">Välj område</option>
+                  {
+                    Object.entries(areaCodes).sort(areaSorter).map(([name, code]) => (
+                      <option key={code} value={code}>{name}</option>
+                    ))
+                  }
+                </select>
+              </label>
+
+              <label>
+                <small className="flex gap-25">
+                  Ytarea:
+                  <output name="childAreaArea" id="childAreaArea">{value2 ? `${value2} kvadratkilometer` : "Värde saknas"}</output>
+                </small>
+              </label>
+            </section>
           </div>
         );
       default:
@@ -179,7 +211,7 @@ export default function RepeatableScaling({
         {ScalarInputs()}
 
         <label className="block margin-y-75">
-          {"Skalfaktor för den här beräkningen: "}
+          {"Skalfaktor för den här beräkningen: "} <br />
           <output name="result" id="result">{Number.isFinite(result ?? NaN) ? result : "Värde saknas"}</output>
         </label>
 

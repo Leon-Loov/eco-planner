@@ -234,7 +234,7 @@ export default function CopyAndScale({
         <form action={formSubmission} name="copyAndScale" onChange={recalculateScalingResult}>
 
           <label className="block margin-y-75">
-            I vilken färdplan vill du placera den skalade målbana?
+            I vilken färdplan vill du placera den skalade målbanan?
             <select className="block margin-y-25" required name="copyTo" id="copyTo">
               <option value="">Välj färdplan</option>
               {roadmapOptions.map(roadmap => (
