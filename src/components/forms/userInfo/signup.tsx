@@ -5,14 +5,15 @@ import Image from "next/image";
 import { useState } from "react";
 import styles from '../forms.module.css'
 
-function handleSubmit(event: any) {
+function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   event.preventDefault()
 
   const form = event.target
   const formJSON = JSON.stringify({
     username: form.username.value,
-    email: form.email.value,
-    password: form.password.value,
+    email: form.email?.value,
+    password: form.password?.value,
+    remember: (form.remember as HTMLInputElement | null)?.checked
   })
 
   // Try to signup, redirect to the home page if successful.
@@ -61,12 +62,18 @@ export default function Signup() {
             <Image src="/icons/password.svg" alt="" width={24} height={24} />
             <input className="padding-0 margin-x-50 transparent" type={showPassword ? 'text' : 'password'} placeholder="password" name="password" required id="password" autoComplete="new-password" />
             <button type="button" className={`${styles.showPasswordButton} grid padding-0 transparent`} onClick={() => setShowPassword(prevState => !prevState)}>
-              <Image src={showPassword ? '/icons/eyeDisabled.svg' : '/icons/eye.svg'}  alt="" width={24} height={24} />
+              <Image src={showPassword ? '/icons/eyeDisabled.svg' : '/icons/eye.svg'} alt="" width={24} height={24} />
             </button>
           </div>
         </label>
+
+        <label>
+          <input type="checkbox" name="remember" id="remember" />
+          {" Kom ihåg inloggning"}
+        </label>
+
         <button className="block margin-y-100 font-weight-bold seagreen color-purewhite" type="submit"> Skapa Konto </button>
-        <p className="padding-y-50" style={{borderTop: '1px solid var(--gray-90)'}}>
+        <p className="padding-y-50" style={{ borderTop: '1px solid var(--gray-90)' }}>
           <small>Har du redan ett konto? <Link href='/login'>Logga in</Link></small>
         </p>
       </form>

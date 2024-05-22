@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useState } from "react";
 import styles from '../forms.module.css'
 
-function handleSubmit(event: any) {
+function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   event.preventDefault()
 
   const form = event.target
   const formJSON = JSON.stringify({
-    username: form.username.value,
-    password: form.password.value,
+    username: form.username?.value,
+    password: form.password?.value,
+    remember: (form.remember as HTMLInputElement | null)?.checked,
   })
 
   // Try to login, redirect away if successful.
@@ -62,6 +63,11 @@ export default function Login() {
               <Image src={showPassword ? '/icons/eyeDisabled.svg' : '/icons/eye.svg'} alt="" width={24} height={24} />
             </button>
           </div>
+        </label>
+
+        <label>
+          <input type="checkbox" name="remember" id="remember" />
+          {" Kom ihåg inloggning"}
         </label>
 
         <button role="submit" className="block margin-y-50 font-weight-bold seagreen color-purewhite">Logga In</button>
