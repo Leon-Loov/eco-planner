@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     ...options,
     cookieOptions: {
       ...options.cookieOptions,
-      maxAge: 14 * 24 * 60 * 60, // 14 days in seconds
+      maxAge: 365 * 24 * 60 * 60, // Standard year in seconds
     }
   } : options);
 
