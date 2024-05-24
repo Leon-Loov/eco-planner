@@ -219,7 +219,7 @@ export default function CopyAndScale({
 
   return (
     <>
-      <button type="button" className="transparent flex gap-50 padding-0" style={{ fontSize: '1rem', fontWeight: '500' }} onClick={() => openModal(modalRef)}>
+      <button type="button" className="seagreen color-purewhite round flex gap-50" style={{ fontSize: '1rem', fontWeight: '500' }} onClick={() => openModal(modalRef)}>
         Kopiera och skala målbana
         <Image src='/icons/copy.svg' alt="" width={24} height={24} />
       </button>

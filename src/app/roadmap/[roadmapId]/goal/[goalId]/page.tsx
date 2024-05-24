@@ -105,32 +105,27 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         }
       */}
 
-      <section className="display-flex justify-content-space-between flex-wrap-wrap margin-y-100">
-        <section>
-          <span style={{ color: 'gray' }}>Målbana</span>
+      <section className="margin-y-100" style={{width: 'min(90ch, 100%)'}}>
+        <span style={{ color: 'gray' }}>Målbana</span>
+        <div className="flex flex-wrap-wrap align-items-center justify-content-space-between gap-100">
           <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
-          <p>{goal.description}</p>
-        </section>
-        <aside>
-          { // Only show the edit link if the user has edit access to the roadmap
-            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`} className="display-flex align-items-center gap-50 justify-content-flex-end color-pureblack" style={{ textDecoration: 'none', fontWeight: '500' }} >
-              Redigera Målbana
-              <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
-            </Link>
-          } <br />
           { // TODO: Maybe show button even if no data series is attached?
             goal.dataSeries?.id &&
             <CopyAndScale goal={goal} user={session.user} />
           }
-          {
-            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+        </div>
+        { // Only show the edit link if the user has edit access to the roadmap
+          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+          <div className="flex flex-wrap-wrap align-items-center gap-100 margin-y-100">
+            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`} className="display-flex align-items-center gap-50 color-pureblack" style={{ textDecoration: 'none', fontWeight: '500' }} >
+              Redigera Målbana
+              <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
+            </Link>
             <QueryBuilder goal={goal} user={session.user} />
-          }
-        </aside>
+          </div>
+        }
+        <p>{goal.description}</p>
       </section>
-
-
 
       { /* Only allow scaling the values if the user has edit access to the goal
         (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
