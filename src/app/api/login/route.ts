@@ -1,13 +1,20 @@
 import { NextRequest } from "next/server";
-import { getSession } from "@/lib/session"
+import { getSession, options } from "@/lib/session"
 import prisma from "@/prismaClient";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const session = await getSession(cookies());
+  const { username, password, remember }: { username: string, password: string, remember?: boolean } = await request.json();
 
-  const { username, password }: { username: string, password: string } = await request.json();
+  // Create session, set maxAge if user toggled remember me
+  const session = await getSession(cookies(), remember ? {
+    ...options,
+    cookieOptions: {
+      ...options.cookieOptions,
+      maxAge: 14 * 24 * 60 * 60, // 14 days in seconds
+    }
+  } : options);
 
   // Validate request body
   if (!username || !password) {
@@ -62,6 +69,18 @@ export async function POST(request: NextRequest) {
   };
 
   await session.save();
+
+  // if (remember) {
+  //   console.log(typeof session.updateConfig);
+  //   session.updateConfig({
+  //     ...options,
+  //     cookieOptions: {
+  //       ...options.cookieOptions,
+  //       maxAge: 14 * 24 * 60 * 60, // 14 days in seconds
+  //     }
+  //   });
+  //   session.save();
+  // }
 
   return Response.json({ message: 'Login successful' },
     { status: 200 }

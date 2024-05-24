@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/session"
+import { getSession, options } from "@/lib/session"
 import { allowedDomains } from "@/lib/allowedDomains";
 import prisma from "@/prismaClient"
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const session = await getSession(cookies());
+  const { username, email, password, remember }: { username: string; email: string; password: string; remember?: string; } = await request.json();
 
-  let { username, email, password }: { username: string; email: string; password: string; } = await request.json();
+  // Create session, set maxAge if user toggled remember me
+  const session = await getSession(cookies(), remember ? {
+    ...options,
+    cookieOptions: {
+      ...options.cookieOptions,
+      maxAge: 14 * 24 * 60 * 60, // 14 days in seconds
+    }
+  } : options);
 
   // Validate request body
   if (!username || !email || !password) {
@@ -16,7 +23,7 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
-  email = email.toLowerCase();
+  const lowercaseEmail = email.toLowerCase();
 
   // Check if email or username already exists; this is implicitly done by Prisma when creating a new user,
   // but we want to return a more specific error message
@@ -34,20 +41,20 @@ export async function POST(request: NextRequest) {
 
   const emailExists = await prisma.user.findUnique({
     where: {
-      email: email,
+      email: lowercaseEmail,
     }
   });
 
   if (emailExists) {
-    return Response.json({ message: 'Email "' + email + '" is already in use' },
+    return Response.json({ message: 'Email "' + lowercaseEmail + '" is already in use' },
       { status: 400 }
     );
   }
 
   // Check if email belongs to an allowed domain
   // TODO: Add actual email validation by sending a verification email
-  if (!allowedDomains.includes(email.split('@')[1])) {
-    return Response.json({ message: 'Email domain "' + email.split('@')[1] + '" is not allowed' },
+  if (!allowedDomains.includes(lowercaseEmail.split('@')[1])) {
+    return Response.json({ message: 'Email domain "' + lowercaseEmail.split('@')[1] + '" is not allowed' },
       { status: 400 }
     );
   }
@@ -61,15 +68,15 @@ export async function POST(request: NextRequest) {
     await prisma.user.create({
       data: {
         username: username,
-        email: email,
+        email: lowercaseEmail,
         password: hashedPassword,
         userGroups: {
           connectOrCreate: {
             where: {
-              name: email.split('@')[1],
+              name: lowercaseEmail.split('@')[1],
             },
             create: {
-              name: email.split('@')[1],
+              name: lowercaseEmail.split('@')[1],
             },
           },
         },
