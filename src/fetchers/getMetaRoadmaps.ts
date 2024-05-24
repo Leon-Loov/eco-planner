@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { metaRoadmapSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
 import { Prisma } from "@prisma/client";
@@ -14,7 +14,7 @@ import { cookies } from "next/headers";
  * @returns Array of meta roadmaps
  */
 export default async function getMetaRoadmaps() {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedMetaRoadmaps(session.user?.id ?? '');
 }
 
@@ -25,7 +25,7 @@ export default async function getMetaRoadmaps() {
  */
 const getCachedMetaRoadmaps = unstable_cache(
   async (userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let metaRoadmaps: Prisma.MetaRoadmapGetPayload<{
       include: {

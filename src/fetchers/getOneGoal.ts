@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import { actionSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
 import { AccessControlled } from "@/types";
@@ -16,7 +16,7 @@ import { cookies } from "next/headers";
  * @returns Goal object with actions
  */
 export default async function getOneGoal(id: string) {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedGoal(id, session.user?.id ?? '')
 }
 
@@ -28,7 +28,7 @@ export default async function getOneGoal(id: string) {
  */
 const getCachedGoal = unstable_cache(
   async (id, userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let goal: Goal & {
       _count: { actions: number }

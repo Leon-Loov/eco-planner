@@ -1,4 +1,4 @@
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import GoalForm from "@/components/forms/goalForm/goalForm";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
@@ -9,7 +9,7 @@ import { AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneRoadmap(params.roadmapId),
   ]);
 

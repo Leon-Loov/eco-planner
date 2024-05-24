@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { AccessControlled, AccessLevel, ClientError, GoalInput } from "@/types";
 import { Prisma } from "@prisma/client";
@@ -7,39 +7,33 @@ import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
 import dataSeriesPrep from "./dataSeriesPrep";
 import pruneOrphans from "@/functions/pruneOrphans";
+import { cookies } from "next/headers";
 
 /**
  * Handles POST requests to the goal API
  */
 export async function POST(request: NextRequest) {
-  const response = new Response();
   const [session, goal] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<GoalInput & { roadmapId: string }>,
   ]);
 
   // Validate request body
   if (!goal.indicatorParameter || !goal.dataUnit || !goal.dataSeries) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   if (!goal.roadmapId) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing parent. Please report this problem unless you are sending custom requests.' }),
+    return Response.json({ message: 'Missing parent. Please report this problem unless you are sending custom requests.' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -87,24 +81,18 @@ export async function POST(request: NextRequest) {
     if (e instanceof Error) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
-        await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        session.destroy();
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.IllegalParent }),
+      return Response.json({ message: ClientError.IllegalParent },
         { status: 403 }
       );
     } else {
       // If non-error is thrown, log it and return a generic error message
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -114,11 +102,9 @@ export async function POST(request: NextRequest) {
   const dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null = dataSeriesPrep(goal, session.user!.id);
   // If the data series is invalid, return an error
   if (dataValues === null) {
-    return createResponse(
-      response,
-      JSON.stringify({
-        message: 'Invalid data series'
-      }),
+    return Response.json({
+      message: 'Invalid data series'
+    },
       { status: 400 }
     );
   }
@@ -153,23 +139,17 @@ export async function POST(request: NextRequest) {
     // Invalidate old cache
     revalidateTag('goal');
     // Return the new goal's ID if successful
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Goal created", id: newGoal.id }),
+    return Response.json({ message: "Goal created", id: newGoal.id },
       { status: 201, headers: { 'Location': `/roadmap/${goal.roadmapId}/goal/${newGoal.id}` } }
     );
   } catch (e: any) {
     console.log(e);
     if (e?.code == 'P2025') {
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to connect records. Given roadmap might not exist' }),
+      return Response.json({ message: 'Failed to connect records. Given roadmap might not exist' },
         { status: 400 }
       );
     }
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }
@@ -179,9 +159,8 @@ export async function POST(request: NextRequest) {
  * Handles PUT requests to the goal API
  */
 export async function PUT(request: NextRequest) {
-  const response = new Response();
   const [session, goal] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<GoalInput & { goalId: string, timestamp?: number }>,
   ]);
 
@@ -192,18 +171,14 @@ export async function PUT(request: NextRequest) {
 
   // Validate request body
   if (goal.indicatorParameter === null || goal.dataUnit === null || goal.dataSeries === null || !goal.goalId) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -262,30 +237,22 @@ export async function PUT(request: NextRequest) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
         await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
       if (e.message == ClientError.StaleData) {
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.StaleData }),
+        return Response.json({ message: ClientError.StaleData },
           { status: 409 }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.AccessDenied }),
+      return Response.json({ message: ClientError.AccessDenied },
         { status: 403 }
       );
     } else {
       // If non-error is thrown, log it and return a generic error message
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -293,16 +260,12 @@ export async function PUT(request: NextRequest) {
 
   // Prepare for creating data series
   let dataValues: Prisma.DataSeriesCreateWithoutGoalInput | null | undefined = undefined;
-  // Don't try to update if the data series is currently undefined (but complain about null)
+  // Don't try to update if the received data series is undefined (but complain about null)
   if (!goal.dataSeries === undefined) {
     dataValues = dataSeriesPrep(goal, session.user!.id);
     // If the data series is invalid, return an error
     if (dataValues === null) {
-      return createResponse(
-        response,
-        JSON.stringify({
-          message: 'Invalid data series'
-        }),
+      return Response.json({ message: 'Invalid data series' },
         { status: 400 }
       );
     }
@@ -351,16 +314,12 @@ export async function PUT(request: NextRequest) {
     // Invalidate old cache
     revalidateTag('goal');
     // Return the edited goal's ID if successful
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Goal updated", id: editedGoal.id }),
+    return Response.json({ message: "Goal updated", id: editedGoal.id },
       { status: 200, headers: { 'Location': `/roadmap/${editedGoal.roadmap.id}/goal/${editedGoal.id}` } }
     );
   } catch (e: any) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }
@@ -370,26 +329,21 @@ export async function PUT(request: NextRequest) {
  * Handles DELETE requests to the goal API
  */
 export async function DELETE(request: NextRequest) {
-  const response = new Response();
   const [session, goal] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<{ id: string }>
   ]);
 
   // Validate request body
   if (!goal.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -429,22 +383,16 @@ export async function DELETE(request: NextRequest) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
         await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.AccessDenied }),
+      return Response.json({ message: ClientError.AccessDenied },
         { status: 403 }
       );
     } else {
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -469,17 +417,13 @@ export async function DELETE(request: NextRequest) {
     await pruneOrphans();
     // Invalidate old cache
     revalidateTag('goal');
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Goal deleted', id: deletedGoal.id }),
+    return Response.json({ message: 'Goal deleted', id: deletedGoal.id },
       // Redirect to the parent roadmap
       { status: 200, headers: { 'Location': `/roadmap/${deletedGoal.roadmap.id}` } }
     );
   } catch (e) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }

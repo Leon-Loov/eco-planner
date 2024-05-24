@@ -1,6 +1,6 @@
 'use server';
 
-import { Data, getSessionData } from "@/lib/session";
+import { LoginData, getSession } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { DataSeriesDataFields, dataSeriesDataFieldNames } from "@/types";
 import { revalidateTag } from "next/cache";
@@ -14,7 +14,7 @@ export default async function scaleDataSeries(
   dataSeriesId: string,
   scaleFactor: number,
 ): Promise<string> {
-  const session = await getSessionData(cookies())
+  const session = await getSession(cookies())
   if (!session.user) return "Not logged in";
 
   // Create an object with the yearly dataSeries fields as keys, and each value is an object with a multiply key and the scaleFactor as the value

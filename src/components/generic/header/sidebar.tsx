@@ -1,13 +1,13 @@
 import styles from './header.module.css' with { type: "css" }
 import LogoutButton from '@/components/buttons/logoutButton'
-import { getSessionData } from '@/lib/session'
+import { getSession } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import Image from 'next/image'
 import Notifications from '../notifications/notification'
 
 export default async function Sidebar() {
-  const { user } = await getSessionData(cookies())
+  const { user } = await getSession(cookies())
   return <>
     <aside className={styles.container}>
       <div className={styles.menuToggleContainer}>

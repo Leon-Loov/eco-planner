@@ -1,6 +1,6 @@
 import getOneMetaRoadmap from "@/fetchers/getOneMetaRoadmap";
 import accessChecker from "@/lib/accessChecker";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { AccessLevel } from "@/types";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import RoadmapTable from "@/components/tables/roadmapTable";
 
 export default async function Page({ params }: { params: { metaRoadmapId: string } }) {
   const [session, metaRoadmap] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneMetaRoadmap(params.metaRoadmapId),
   ]);
 

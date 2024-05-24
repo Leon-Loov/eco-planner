@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { AccessControlled } from "@/types";
 import { Action, Link, Note, Comment } from "@prisma/client";
@@ -15,7 +15,7 @@ import { cookies } from "next/headers";
  * @returns Action object
  */
 export default async function getOneAction(id: string) {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedAction(id, session.user?.id ?? '')
 }
 
@@ -27,7 +27,7 @@ export default async function getOneAction(id: string) {
  */
 const getCachedAction = unstable_cache(
   async (id, userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let action: Action & {
       notes: Note[],

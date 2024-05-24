@@ -1,24 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession, options } from "@/lib/session"
 import { allowedDomains } from "@/lib/allowedDomains";
 import prisma from "@/prismaClient"
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const response = new Response();
-  const session = await getSession(request, response);
+  const { username, email, password, remember }: { username: string; email: string; password: string; remember?: string; } = await request.json();
 
-  let { username, email, password }: { username: string; email: string; password: string; } = await request.json();
+  // Create session, set maxAge if user toggled remember me
+  const session = await getSession(cookies(), remember ? {
+    ...options,
+    cookieOptions: {
+      ...options.cookieOptions,
+      maxAge: 14 * 24 * 60 * 60, // 14 days in seconds
+    }
+  } : options);
 
   // Validate request body
   if (!username || !email || !password) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Username, email, and password are required' }),
+    return Response.json({ message: 'Username, email, and password are required' },
       { status: 400 }
     );
   }
-  email = email.toLowerCase();
+  const lowercaseEmail = email.toLowerCase();
 
   // Check if email or username already exists; this is implicitly done by Prisma when creating a new user,
   // but we want to return a more specific error message
@@ -29,33 +34,27 @@ export async function POST(request: NextRequest) {
   });
 
   if (usernameExists) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Username "' + username + '" is already taken' }),
+    return Response.json({ message: 'Username "' + username + '" is already taken' },
       { status: 400 }
     );
   }
 
   const emailExists = await prisma.user.findUnique({
     where: {
-      email: email,
+      email: lowercaseEmail,
     }
   });
 
   if (emailExists) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Email "' + email + '" is already in use' }),
+    return Response.json({ message: 'Email "' + lowercaseEmail + '" is already in use' },
       { status: 400 }
     );
   }
 
   // Check if email belongs to an allowed domain
   // TODO: Add actual email validation by sending a verification email
-  if (!allowedDomains.includes(email.split('@')[1])) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Email domain "' + email.split('@')[1] + '" is not allowed' }),
+  if (!allowedDomains.includes(lowercaseEmail.split('@')[1])) {
+    return Response.json({ message: 'Email domain "' + lowercaseEmail.split('@')[1] + '" is not allowed' },
       { status: 400 }
     );
   }
@@ -69,15 +68,15 @@ export async function POST(request: NextRequest) {
     await prisma.user.create({
       data: {
         username: username,
-        email: email,
+        email: lowercaseEmail,
         password: hashedPassword,
         userGroups: {
           connectOrCreate: {
             where: {
-              name: email.split('@')[1],
+              name: lowercaseEmail.split('@')[1],
             },
             create: {
-              name: email.split('@')[1],
+              name: lowercaseEmail.split('@')[1],
             },
           },
         },
@@ -85,9 +84,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (e) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Error creating user' }),
+    return Response.json({ message: 'Error creating user' },
       { status: 500 }
     );
   }
@@ -128,9 +125,7 @@ export async function POST(request: NextRequest) {
 
   await session.save();
 
-  return createResponse(
-    response,
-    JSON.stringify({ message: 'User created' }),
+  return Response.json({ message: 'User created' },
     { status: 200 }
   )
 }

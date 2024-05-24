@@ -1,4 +1,4 @@
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import ActionForm from "@/components/forms/actionForm/actionForm";
 import { notFound } from "next/navigation";
@@ -8,7 +8,7 @@ import { AccessControlled, AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string, actionId: string } }) {
   const [session, action] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneAction(params.actionId)
   ]);
 

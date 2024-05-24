@@ -1,5 +1,5 @@
 import getRoadmaps from "@/fetchers/getRoadmaps";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import RoadmapTable from "@/components/tables/roadmapTable";
 import AttributedImage from "@/components/generic/images/attributedImage";
@@ -10,7 +10,7 @@ import styles from "./page.module.css" with { type: "css" };
 
 export default async function Page() {
   const [session, metaRoadmaps] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getMetaRoadmaps()
   ]);
 

@@ -1,16 +1,14 @@
 import { NextRequest } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession } from "@/lib/session"
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const response = new Response();
-  const session = await getSession(request, response);
+  const session = await getSession(cookies());
 
   // Remove session to log out
   session.destroy();
 
-  return createResponse(
-    response,
-    JSON.stringify({ message: 'Logged out' }),
+  return Response.json({ message: 'Logged out' },
     { status: 200 }
   );
 }

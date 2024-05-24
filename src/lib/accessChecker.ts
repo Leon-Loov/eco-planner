@@ -1,5 +1,5 @@
 import { AccessControlled, AccessLevel } from "@/types";
-import { Data } from "./session";
+import { LoginData } from "./session";
 
 /**
  * Checks if the user has access to an item and returns their access level. An empty string means no access.
@@ -7,7 +7,7 @@ import { Data } from "./session";
  * @param user The user object from the session
  * @returns A string representing the user's access level to the item; "", "VIEW", "EDIT", or "ADMIN", based on the `AccessLevel` enum
  */
-export default function accessChecker(item: AccessControlled | null | undefined, user: Data["user"]): AccessLevel {
+export default function accessChecker(item: AccessControlled | null | undefined, user: LoginData["user"]): AccessLevel {
   // If the item is null or undefined, return no access
   if (!item) return AccessLevel.None;
 

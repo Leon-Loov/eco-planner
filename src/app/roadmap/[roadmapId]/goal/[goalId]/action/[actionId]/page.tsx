@@ -1,5 +1,5 @@
 import getOneAction from "@/fetchers/getOneAction";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,7 +11,7 @@ import Comments from "@/components/comments/comments";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string, actionId: string } }) {
   const [session, action] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneAction(params.actionId)
   ]);
 

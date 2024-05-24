@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import { goalSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
 import { Comment, DataSeries, Goal, MetaRoadmap, Roadmap } from "@prisma/client";
@@ -16,7 +16,7 @@ import { cookies } from "next/headers";
  * @returns Roadmap object with goals
  */
 export default async function getRoadmapByVersion(metaId: string, version: number) {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedRoadmap(metaId, version, session.user?.id ?? '')
 }
 
@@ -29,7 +29,7 @@ export default async function getRoadmapByVersion(metaId: string, version: numbe
  */
 const getCachedRoadmap = unstable_cache(
   async (metaId, version, userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let roadmap: Roadmap & {
       metaRoadmap: MetaRoadmap,

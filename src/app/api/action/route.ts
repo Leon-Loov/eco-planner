@@ -1,44 +1,38 @@
 import { NextRequest } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { AccessControlled, AccessLevel, ClientError, ActionInput } from "@/types";
 import accessChecker from "@/lib/accessChecker";
 import { revalidateTag } from "next/cache";
 import pruneOrphans from "@/functions/pruneOrphans";
+import { cookies } from "next/headers";
 
 /**
  * Handles POST requests to the action API
  */
 export async function POST(request: NextRequest) {
-  const response = new Response();
   const [session, action] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<ActionInput>,
   ]);
 
   // Validate request body
   if (!action.name) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   // TODO: Make sure user has access to the parent goal (declared in goal's parent roadmap)
   if (!action.goalId) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing parent. Please report this problem unless you are sending custom requests.' }),
+    return Response.json({ message: 'Missing parent. Please report this problem unless you are sending custom requests.' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -90,24 +84,18 @@ export async function POST(request: NextRequest) {
     if (e instanceof Error) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
-        await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        session.destroy();
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.IllegalParent }),
+      return Response.json({ message: ClientError.IllegalParent },
         { status: 403 }
       );
     } else {
       // If non-error is thrown, log it and return a generic error message
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -163,23 +151,17 @@ export async function POST(request: NextRequest) {
     // Invalidate old cache
     revalidateTag('action');
     // Return the new action's ID if successful
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Action created', id: newAction.id }),
+    return Response.json({ message: 'Action created', id: newAction.id },
       { status: 201, headers: { 'Location': `/roadmap/${newAction.goal.roadmap.id}/goal/${newAction.goal.id}/action/${newAction.id}` } }
     );
   } catch (error: any) {
     console.log(error);
     if (error?.code == 'P2025') {
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to connect records. Given goal might not exist' }),
+      return Response.json({ message: 'Failed to connect records. Given goal might not exist' },
         { status: 400 }
       );
     }
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }
@@ -189,33 +171,26 @@ export async function POST(request: NextRequest) {
  * Handles PUT requests to the action API
  */
 export async function PUT(request: NextRequest) {
-  const response = new Response();
   const [session, action] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<ActionInput & { actionId: string, timestamp?: number }>
   ]);
 
   // Validate request body
   if (!action.actionId || !action.name) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
   if (!action.timestamp) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Potentially stale data. Please refresh and try again.' }),
+    return Response.json({ message: 'Potentially stale data. Please refresh and try again.' },
       { status: 409 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -276,29 +251,21 @@ export async function PUT(request: NextRequest) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
         await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
       if (e.message == ClientError.StaleData) {
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.StaleData }),
+        return Response.json({ message: ClientError.StaleData },
           { status: 409 }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.AccessDenied }),
+      return Response.json({ message: ClientError.AccessDenied },
         { status: 403 }
       );
     } else {
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -351,16 +318,12 @@ export async function PUT(request: NextRequest) {
     // Invalidate old cache
     revalidateTag('action');
     // Return the new action's ID if successful
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Action updated', id: updatedAction.id }),
+    return Response.json({ message: 'Action updated', id: updatedAction.id },
       { status: 200, headers: { 'Location': `/roadmap/${updatedAction.goal.roadmap.id}/goal/${updatedAction.goal.id}/action/${updatedAction.id}` } }
     );
   } catch (error: any) {
     console.log(error);
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }
@@ -370,26 +333,21 @@ export async function PUT(request: NextRequest) {
  * Handles DELETE requests to the action API
  */
 export async function DELETE(request: NextRequest) {
-  const response = new Response();
   const [session, action] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<{ id: string }>
   ]);
 
   // Validate request body
   if (!action.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -430,22 +388,16 @@ export async function DELETE(request: NextRequest) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
         await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.AccessDenied }),
+      return Response.json({ message: ClientError.AccessDenied },
         { status: 403 }
       );
     } else {
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -475,17 +427,13 @@ export async function DELETE(request: NextRequest) {
     await pruneOrphans();
     // Invalidate old cache
     revalidateTag('action');
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Action deleted', id: deletedAction.id }),
+    return Response.json({ message: 'Action deleted', id: deletedAction.id },
       // Redirect to the parent goal
       { status: 200, headers: { 'Location': `/roadmap/${deletedAction.goal.roadmap.id}/goal/${deletedAction.goal.id}` } }
     );
   } catch (e) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }

@@ -1,7 +1,7 @@
 'use client';
 
 import { closeModal, openModal } from "@/components/modals/modalFunctions";
-import { Data } from "@/lib/session";
+import { LoginData } from "@/lib/session";
 import { Goal } from "@prisma/client";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -18,7 +18,7 @@ export default function QueryBuilder({
   user
 }: {
   goal: Goal,
-  user: Data["user"],
+  user: LoginData["user"],
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [dataSource, setDataSource] = useState<string>("" as keyof typeof externalDatasetBaseUrls);

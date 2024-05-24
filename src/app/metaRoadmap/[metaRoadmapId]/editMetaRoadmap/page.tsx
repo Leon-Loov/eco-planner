@@ -1,4 +1,4 @@
-import { getSessionData } from '@/lib/session';
+import { getSession } from '@/lib/session';
 import MetaRoadmapForm from '@/components/forms/metaRoadmapForm/metaRoadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -9,7 +9,7 @@ import { AccessLevel } from '@/types';
 
 export default async function Page({ params }: { params: { metaRoadmapId: string } }) {
   const [session, currentRoadmap, parentRoadmapOptions] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneMetaRoadmap(params.metaRoadmapId),
     getMetaRoadmaps(),
   ]);

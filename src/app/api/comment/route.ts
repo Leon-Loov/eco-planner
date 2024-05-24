@@ -1,44 +1,37 @@
 import findTypeFromId from "@/functions/findTypeFromId";
 import { getSession } from "@/lib/session";
 import prisma from "@/prismaClient";
-import { createResponse } from "iron-session";
 import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const response = new Response();
-  const session = await getSession(request, response);
+  const session = await getSession(cookies());
 
   // Validate session
   if (!session.user?.isLoggedIn) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthenticated, only registered users can comment' }),
+    return Response.json({ message: 'Unauthenticated, only registered users can comment' },
       { status: 401 }
     );
   }
 
-  let comment: { commentText: string, objectId: string } = await request.json();
-  let objectType = await findTypeFromId(comment.objectId).catch((err) => { return "" });
+  const comment: { commentText: string, objectId: string } = await request.json();
+  const objectType = await findTypeFromId(comment.objectId).catch((err) => { return "" });
 
   if (comment.commentText == "") {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Comment text cannot be empty' }),
+    return Response.json({ message: 'Comment text cannot be empty' },
       { status: 400 }
     );
   }
   if (objectType == "") {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Invalid object id' }),
+    return Response.json({ message: 'Invalid object id' },
       { status: 400 }
     );
   }
 
   // Create comment
   try {
-    let newComment = await prisma.comment.create({
+    const newComment = await prisma.comment.create({
       data: {
         commentText: comment.commentText,
         authorId: session.user.id,
@@ -48,23 +41,17 @@ export async function POST(request: NextRequest) {
       }
     });
     revalidateTag(objectType)
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Comment created', id: newComment.id }),
+    return Response.json({ message: 'Comment created', id: newComment.id },
       { status: 200 }
     );
   } catch (err) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Error creating comment' }),
+    return Response.json({ message: 'Error creating comment' },
       { status: 500 }
     );
   }
 
   // If we get here, something went wrong
-  return createResponse(
-    response,
-    JSON.stringify({ message: 'Internal server error' }),
+  return Response.json({ message: 'Internal server error' },
     { status: 500 }
   )
 }

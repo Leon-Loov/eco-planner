@@ -1,4 +1,4 @@
-import { getSessionData } from '@/lib/session';
+import { getSession } from '@/lib/session';
 import RoadmapForm from '@/components/forms/roadmapForm/roadmapForm';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -6,7 +6,7 @@ import getMetaRoadmaps from '@/fetchers/getMetaRoadmaps';
 
 export default async function Page() {
   let [session, metaRoadmapAlternatives] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getMetaRoadmaps(),
   ]);
 
