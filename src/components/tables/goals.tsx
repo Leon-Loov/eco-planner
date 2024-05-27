@@ -11,6 +11,7 @@ import Link from "next/link"
 import Image from "next/image"
 import styles from './tables.module.css'
 import { allowStorage, clearStorage, storageConsent } from "@/functions/localStorage"
+import GraphCookie from "../cookies/graphCookie"
 
 /** Enum for the different view modes for the goal table. */
 export enum ViewMode {
@@ -36,11 +37,6 @@ export default function Goals({
   accessLevel?: AccessLevel
 }) {
   const [viewMode, setViewMode] = useState<ViewMode | "">("")
-  const [storageAllowed, setStorageAllowed] = useState(false)
-
-  useEffect(() => {
-    setStorageAllowed(storageConsent())
-  }, [])
 
   useEffect(() => {
     setViewMode(getStoredViewMode(roadmap.id))
@@ -64,18 +60,7 @@ export default function Goals({
       </label>
 
       <div className={styles.settingsContainer}>
-        <label className="flex align-items-center gap-50">
-          <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
-            if (e.target.checked) {
-              setStorageAllowed(true);
-              allowStorage();
-            } else {
-              setStorageAllowed(false);
-              clearStorage();
-            }
-          }} />
-          Spara framtida vyändringar mellan sessioner och sidnavigeringar
-        </label>
+        <GraphCookie />
       </div>
 
       {viewMode == ViewMode.Table && (

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { getStoredGraphType } from "./functions/graphFunctions";
 import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
 import { allowStorage, clearStorage, storageConsent } from "@/functions/localStorage";
+import GraphCookie from "../cookies/graphCookie";
 
 export enum GraphType {
   Main = "MAIN",
@@ -25,12 +26,9 @@ export default function GraphGraph({
   nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
   historicalData?: PxWebApiV2TableContent | null,
 }) {
+  
   const [graphType, setGraphType] = useState<GraphType | "">("");
-  const [storageAllowed, setStorageAllowed] = useState(false)
 
-  useEffect(() => {
-    setStorageAllowed(storageConsent())
-  }, [])
   useEffect(() => {
     setGraphType(getStoredGraphType(goal.id));
   }, [goal.id]);
@@ -39,18 +37,7 @@ export default function GraphGraph({
     switch (graphType) {
       case GraphType.Main:
         return <div>
-          <label>
-            <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
-              if (e.target.checked) {
-                setStorageAllowed(true);
-                allowStorage();
-              } else {
-                setStorageAllowed(false);
-                clearStorage();
-              }
-            }} />
-            Spara framtida vyändringar mellan sessioner och sidnavigeringar
-          </label>
+          <GraphCookie />
           <nav className="display-flex align-items-center gap-25 margin-y-100">
             <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
           </nav>
@@ -58,18 +45,7 @@ export default function GraphGraph({
         </div>;
       case GraphType.Relative:
         return <div>
-          <label >
-            <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
-              if (e.target.checked) {
-                setStorageAllowed(true);
-                allowStorage();
-              } else {
-                setStorageAllowed(false);
-                clearStorage();
-              }
-            }} />
-            Spara framtida vyändringar mellan sessioner och sidnavigeringar
-          </label>
+          <GraphCookie />
           <nav className="display-flex align-items-center gap-25 margin-y-100">
             <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
           </nav>
@@ -77,18 +53,7 @@ export default function GraphGraph({
         </div>;
       case GraphType.Delta:
         return <div>
-          <label >
-            <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
-              if (e.target.checked) {
-                setStorageAllowed(true);
-                allowStorage();
-              } else {
-                setStorageAllowed(false);
-                clearStorage();
-              }
-            }} />
-            Spara framtida vyändringar mellan sessioner och sidnavigeringar
-          </label>
+          <GraphCookie />
           <nav className="display-flex align-items-center gap-25 margin-y-100">
             <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
           </nav>
