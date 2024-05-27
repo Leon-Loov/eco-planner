@@ -8,7 +8,6 @@ import GraphSelector from "./graphselector/graphSelector";
 import { useEffect, useState } from "react";
 import { getStoredGraphType } from "./functions/graphFunctions";
 import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
-import { allowStorage, clearStorage, storageConsent } from "@/functions/localStorage";
 import GraphCookie from "../cookies/graphCookie";
 
 export enum GraphType {
@@ -26,7 +25,7 @@ export default function GraphGraph({
   nationalGoal: Goal & { dataSeries: DataSeries | null } | null,
   historicalData?: PxWebApiV2TableContent | null,
 }) {
-  
+
   const [graphType, setGraphType] = useState<GraphType | "">("");
 
   useEffect(() => {
@@ -37,7 +36,6 @@ export default function GraphGraph({
     switch (graphType) {
       case GraphType.Main:
         return <div>
-          <GraphCookie />
           <nav className="display-flex align-items-center gap-25 margin-y-100">
             <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
           </nav>
@@ -45,7 +43,6 @@ export default function GraphGraph({
         </div>;
       case GraphType.Relative:
         return <div>
-          <GraphCookie />
           <nav className="display-flex align-items-center gap-25 margin-y-100">
             <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
           </nav>
@@ -53,7 +50,6 @@ export default function GraphGraph({
         </div>;
       case GraphType.Delta:
         return <div>
-          <GraphCookie />
           <nav className="display-flex align-items-center gap-25 margin-y-100">
             <GraphSelector goal={goal} current={graphType} setter={setGraphType} />
           </nav>

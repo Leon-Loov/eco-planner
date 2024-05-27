@@ -22,6 +22,7 @@ import { getTableContent } from "@/lib/pxWeb/getTableContent";
 import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
 import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
 import QueryBuilder from "@/components/forms/pxWeb/queryBuilder";
+import GraphCookie from "@/components/cookies/graphCookie";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
@@ -132,6 +133,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
       */ }
 
+      <GraphCookie />
       <section className={styles.graphLayout}>
         <GraphGraph goal={goal} nationalGoal={parentGoal} historicalData={externalData} />
         <CombinedGraph roadmap={roadmap} goal={goal} />

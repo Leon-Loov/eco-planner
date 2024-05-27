@@ -7,24 +7,24 @@ import { GraphType } from "../graphs/graphGraph";
 
 export default function GraphCookie() {
 
-    const [storageAllowed, setStorageAllowed] = useState(false)
-  
-    useEffect(() => {
-      setStorageAllowed(storageConsent())
-    }, [])
-    
-    return (
-        <label>
-            <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
-            if (e.target.checked) {
-                setStorageAllowed(true);
-                allowStorage();
-            } else {
-                setStorageAllowed(false);
-                clearStorage();
-            }
-            }} />
-            Spara framtida vyändringar mellan sessioner och sidnavigeringar
-        </label>
-    )
+  const [storageAllowed, setStorageAllowed] = useState(false)
+
+  useEffect(() => {
+    setStorageAllowed(storageConsent())
+  }, [])
+
+  return (
+    <label className="flex gap-25 align-items-center">
+      <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
+        if (e.target.checked) {
+          setStorageAllowed(true);
+          allowStorage();
+        } else {
+          setStorageAllowed(false);
+          clearStorage();
+        }
+      }} />
+      Spara framtida vyändringar mellan sessioner och sidnavigeringar
+    </label>
+  )
 }

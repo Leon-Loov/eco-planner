@@ -10,7 +10,6 @@ import { getStoredViewMode } from "./functions/tableFunctions"
 import Link from "next/link"
 import Image from "next/image"
 import styles from './tables.module.css'
-import { allowStorage, clearStorage, storageConsent } from "@/functions/localStorage"
 import GraphCookie from "../cookies/graphCookie"
 
 /** Enum for the different view modes for the goal table. */
