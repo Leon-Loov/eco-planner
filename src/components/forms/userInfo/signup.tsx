@@ -67,9 +67,9 @@ export default function Signup() {
           </div>
         </label>
 
-        <label>
+        <label className="flex align-items-center gap-50">
           <input type="checkbox" name="remember" id="remember" />
-          {" Kom ihåg inloggning"}
+          Kom ihåg inlogg
         </label>
 
         <button className="block margin-y-100 font-weight-bold seagreen color-purewhite" type="submit"> Skapa Konto </button>

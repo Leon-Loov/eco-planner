@@ -39,7 +39,7 @@ export default function GraphGraph({
     switch (graphType) {
       case GraphType.Main:
         return <div>
-          <label >
+          <label>
             <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
               if (e.target.checked) {
                 setStorageAllowed(true);

@@ -8,6 +8,8 @@ import LinkTree from './goalTables/linkTree'
 import { useEffect, useState } from "react"
 import { getStoredViewMode } from "./functions/tableFunctions"
 import Link from "next/link"
+import Image from "next/image"
+import styles from './tables.module.css'
 import { allowStorage, clearStorage, storageConsent } from "@/functions/localStorage"
 
 /** Enum for the different view modes for the goal table. */
@@ -46,7 +48,7 @@ export default function Goals({
 
   return (
     <>
-      <label htmlFor="goalTable" className="display-flex justify-content-space-between align-items-center flex-wrap-wrap">
+      <label htmlFor="goalTable" className={`display-flex justify-content-space-between align-items-center flex-wrap-wrap ${styles.tableNav}`}>
         <h2>{title}</h2>
         <nav className='display-flex align-items-center gap-100'>
           <TableSelector id={roadmap.id} current={viewMode} setter={setViewMode} />
@@ -54,20 +56,28 @@ export default function Goals({
             (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
             <Link className="button round color-purewhite pureblack" style={{ fontWeight: '500' }} href={`/roadmap/${roadmap.id}/goal/createGoal`}>Skapa ny målbana</Link>
           }
+          <div className={styles.settings}>
+            <input type="checkbox" />
+            <Image src="/icons/settings.svg" alt="Inställningar" width="24" height="24" />
+          </div>
         </nav>
       </label>
-      <label >
-        <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
-          if (e.target.checked) {
-            setStorageAllowed(true);
-            allowStorage();
-          } else {
-            setStorageAllowed(false);
-            clearStorage();
-          }
-        }} />
-        Spara framtida vyändringar mellan sessioner och sidnavigeringar
-      </label>
+
+      <div className={styles.settingsContainer}>
+        <label className="flex align-items-center gap-50">
+          <input type="checkbox" id="allowStorage" checked={storageAllowed} onChange={e => {
+            if (e.target.checked) {
+              setStorageAllowed(true);
+              allowStorage();
+            } else {
+              setStorageAllowed(false);
+              clearStorage();
+            }
+          }} />
+          Spara framtida vyändringar mellan sessioner och sidnavigeringar
+        </label>
+      </div>
+
       {viewMode == ViewMode.Table && (
         <GoalTable roadmap={roadmap} />
       )}

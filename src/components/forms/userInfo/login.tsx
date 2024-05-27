@@ -65,12 +65,12 @@ export default function Login() {
           </div>
         </label>
 
-        <label>
+        <label className="flex align-items-center gap-50">
           <input type="checkbox" name="remember" id="remember" />
-          {" Kom ihåg inloggning"}
+          Kom ihåg inlogg
         </label>
 
-        <button role="submit" className="block margin-y-50 font-weight-bold seagreen color-purewhite">Logga In</button>
+        <button role="submit" className="block margin-y-100 font-weight-bold seagreen color-purewhite">Logga In</button>
         <p className="padding-y-50" style={{ borderTop: '1px solid var(--gray-90)' }}>
           <small>Har du inget konto? <Link href='/signup'>Skapa konto</Link></small>
         </p>
