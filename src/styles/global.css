@@ -31,7 +31,7 @@ p {
 }
 
 dialog {
-  max-width: 70ch;
+  max-width: min(70ch, 100%);
 }
 
 /* Temporary while rewriting */

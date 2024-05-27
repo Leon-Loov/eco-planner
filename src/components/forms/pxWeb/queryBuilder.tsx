@@ -5,6 +5,7 @@ import { LoginData } from "@/lib/session";
 import { Goal } from "@prisma/client";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import styles from './queryBuilder.module.css'
 import { PxWebApiV2TableArray, PxWebApiV2TableContent, PxWebApiV2TableDetails } from "@/lib/pxWeb/pxWebApiV2Types";
 import { externalDatasetBaseUrls } from "@/lib/pxWeb/utility";
 import { getTables } from "@/lib/pxWeb/getTables";
@@ -122,7 +123,7 @@ export default function QueryBuilder({
         Lägg till historisk data
         <Image src='/icons/chartAdd.svg' alt="" width={24} height={24} />
       </button>
-      <dialog ref={modalRef} aria-modal style={{ border: '0', borderRadius: '.25rem', boxShadow: '0 0 .5rem -.25rem rgba(0,0,0,.25' }}>
+      <dialog className={styles.dialog} ref={modalRef} aria-modal style={{ border: '0', borderRadius: '.25rem', boxShadow: '0 0 .5rem -.25rem rgba(0,0,0,.25' }}>
         <div className={`display-flex flex-direction-row-reverse align-items-center justify-content-space-between`}>
           <button className="grid round padding-50 transparent" disabled={isLoading} onClick={() => closeModal(modalRef)} autoFocus aria-label="Close" >
             <Image src='/icons/close.svg' alt="" width={18} height={18} />
@@ -145,16 +146,14 @@ export default function QueryBuilder({
             </select>
           </label>
 
-          {/* Make this look better? Maybe a div or something */}
           {/* TODO: Check that this works well with dynamic keyboards (smartphone/tablet) */}
-          <div className="flex gap-25">
-            <label className="margin-y-75">
-              Sök efter tabell
-              <input type="search" className="block margin-y-25" id="tableSearch" onKeyDown={searchOnEnter} />
+          <div className="flex gap-25 align-items-flex-end margin-y-75">
+            <label className="flex-grow-100">
+              <span className="block margin-y-25">Sök efter tabell</span>
+              <input type="search" className="block" id="tableSearch" onKeyDown={searchOnEnter} />
             </label>
-            <button type="button" onClick={searchWithButton}>Sök</button>
+            <button type="button" onClick={searchWithButton} style={{fontSize: '1rem'}}>Sök</button>
           </div>
-          <br />
 
           {tables && (
             <label className="margin-y-75">
@@ -171,7 +170,7 @@ export default function QueryBuilder({
           {tableDetails && (
             <div>
               {tableDetails.variables.map(variable => (
-                <label key={variable.id} className="margin-y-75">
+                <label key={variable.id} className="block margin-y-75">
                   {/* Use CSS to set proper capitalisation of labels; something like `label::first-letter { text-transform: capitalize; }` */}
                   {variable.type == "TimeVariable" ? "Startperiod" : variable.label} {!variable.elimination && <span style={{ color: "red" }}>*</span>}
                   <select className={`block margin-y-25 ${variable.type}`}
@@ -220,7 +219,7 @@ export default function QueryBuilder({
             </div>
           )}
 
-          <button type="submit">Submit</button>
+          <button type="submit" className="seagreen color-purewhite">Lägg till datakälla</button>
         </form>
       </dialog>
     </>
