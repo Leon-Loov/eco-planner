@@ -13,6 +13,7 @@ import { getTableDetails } from "@/lib/pxWeb/getTableDetails";
 import { getTableContent } from "@/lib/pxWeb/getTableContent";
 import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
 import formSubmitter from "@/functions/formSubmitter";
+import FormWrapper from "../formWrapper";
 
 export default function QueryBuilder({
   goal,
@@ -136,63 +137,67 @@ export default function QueryBuilder({
           {/* Hidden disabled submit button to prevent accidental submisson */}
           <button type="submit" style={{ display: 'none' }} disabled></button>
 
-          <label className="margin-y-75">
-            Datakälla
-            <select className="block margin-y-25" required name="externalDataset" id="externalDataset" onChange={e => setDataSource(e.target.value)}>
-              <option value="">Välj en källa</option>
-              {Object.keys(externalDatasetBaseUrls).map((name) => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </select>
-          </label>
-
-          {/* TODO: Check that this works well with dynamic keyboards (smartphone/tablet) */}
-          <div className="flex gap-25 align-items-flex-end margin-y-75">
-            <label className="flex-grow-100">
-              <span className="block margin-y-25">Sök efter tabell</span>
-              <input type="search" className="block" onKeyDown={searchOnEnter} />
-            </label>
-            <button type="button" onClick={searchWithButton} style={{fontSize: '1rem'}}>Sök</button>
-          </div>
-
-          <div style={{height: '300px', overflowY: 'scroll', paddingRight: '.5rem'}}>
-            {tables && tables.map(({ id, label }) => (
-              <label key={id} className={`${styles.tableSelect} block padding-y-25`}>
-                {label}
-                <input type="radio" value={id} name="table" onChange={e => handleSelect(e.target.value)} />
+          <FormWrapper>
+            <fieldset>
+              <label className="margin-y-75">
+                Datakälla
+                <select className="block margin-y-25" required name="externalDataset" id="externalDataset" onChange={e => setDataSource(e.target.value)}>
+                  <option value="">Välj en källa</option>
+                  {Object.keys(externalDatasetBaseUrls).map((name) => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
               </label>
-            ))}
-          </div>
 
-          <fieldset className="margin-y-100" style={{border: '1px solid var(--gray-90)', borderRadius: '3px', padding: '.5rem'}}>
-            <legend className="padding-x-50">
-              <strong>Välj värden för tabell</strong>
-            </legend>
-            {tableDetails && (
-              <>
-                {tableDetails.variables.map(variable => (
-                  <label key={variable.id} className="block margin-y-75">
-                    {/* Use CSS to set proper capitalisation of labels; something like `label::first-letter { text-transform: capitalize; }` */}
-                    {variable.type == "TimeVariable" ? "Startperiod" : variable.label} {!variable.elimination && <span style={{ color: "red" }}>*</span>}
-                    <select className={`block margin-y-25 ${variable.type}`}
-                      required={!variable.elimination}
-                      name={variable.id}
-                      id={variable.id}
-                      // If only one value is available, pre-select it
-                      defaultValue={variable.values.length == 1 ? variable.values[0].code : undefined}>
-                      { // If only one value is available, don't show a placeholder option
-                        variable.values.length != 1 &&
-                        <option value="">Välj ett värde</option>
-                      }
-                      {variable.values.map(value => (
-                        <option key={value.code} value={value.code} lang={tableDetails.language}>{value.label}</option>
-                      ))}
-                    </select>
+              {/* TODO: Check that this works well with dynamic keyboards (smartphone/tablet) */}
+              <div className="flex gap-25 align-items-flex-end margin-y-75">
+                <label className="flex-grow-100">
+                  <span className="block margin-y-25">Sök efter tabell</span>
+                  <input type="search" className="block" onKeyDown={searchOnEnter} />
+                </label>
+                <button type="button" onClick={searchWithButton} style={{fontSize: '1rem'}}>Sök</button>
+              </div>
+
+              <div style={{height: '300px', overflowY: 'scroll', paddingRight: '.5rem'}}>
+                {tables && tables.map(({ id, label }) => (
+                  <label key={id} className={`${styles.tableSelect} block padding-y-25`}>
+                    {label}
+                    <input type="radio" value={id} name="table" onChange={e => handleSelect(e.target.value)} />
                   </label>
                 ))}
-              </>
-            )}
-          </fieldset>
+              </div>
+            </fieldset>
+
+            <fieldset className="margin-y-100" style={{border: '1px solid var(--gray-90)', borderRadius: '3px', padding: '.5rem'}}>
+              <legend className="padding-x-50">
+                <strong>Välj värden för tabell</strong>
+              </legend>
+              {tableDetails && (
+                <>
+                  {tableDetails.variables.map(variable => (
+                    <label key={variable.id} className="block margin-y-75">
+                      {/* Use CSS to set proper capitalisation of labels; something like `label::first-letter { text-transform: capitalize; }` */}
+                      {variable.type == "TimeVariable" ? "Startperiod" : variable.label} {!variable.elimination && <span style={{ color: "red" }}>*</span>}
+                      <select className={`block margin-y-25 ${variable.type}`}
+                        required={!variable.elimination}
+                        name={variable.id}
+                        id={variable.id}
+                        // If only one value is available, pre-select it
+                        defaultValue={variable.values.length == 1 ? variable.values[0].code : undefined}>
+                        { // If only one value is available, don't show a placeholder option
+                          variable.values.length != 1 &&
+                          <option value="">Välj ett värde</option>
+                        }
+                        {variable.values.map(value => (
+                          <option key={value.code} value={value.code} lang={tableDetails.language}>{value.label}</option>
+                        ))}
+                      </select>
+                    </label>
+                  ))}
+                </>
+              )}
+            </fieldset>
+          </FormWrapper>
 
           {tableContent ? (
             <div>
