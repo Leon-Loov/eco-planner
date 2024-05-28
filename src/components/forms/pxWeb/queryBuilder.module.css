@@ -29,3 +29,32 @@
     height: 100%;
     opacity: 0;
 }
+
+/* Temp */
+
+.temporary {
+    max-height: 300px;
+    overflow-y: scroll;
+    padding-right: .25rem;
+}
+
+/* width */
+.temporary::-webkit-scrollbar {
+    width: .5rem;
+}
+  
+/* Track */
+.temporary::-webkit-scrollbar-track {
+    border-radius: 9999px;
+}
+   
+/* Handle */
+.temporary::-webkit-scrollbar-thumb {
+    background: var(--gray-90); 
+    border-radius: 9999px;
+}
+  
+/* Handle on hover */
+.temporary::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-70); 
+}

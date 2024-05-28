@@ -160,13 +160,15 @@ export default function QueryBuilder({
                     <button type="button" onClick={searchWithButton} style={{fontSize: '1rem'}}>Sök</button>
                   </div>
 
-                  <div style={{height: '300px', overflowY: 'scroll', paddingRight: '.5rem'}}>
-                    {tables && tables.map(({ id, label }) => (
-                      <label key={id} className={`${styles.tableSelect} block padding-y-25`}>
-                        {label}
-                        <input type="radio" value={id} name="table" onChange={e => handleSelect(e.target.value)} />
-                      </label>
-                    ))}
+                  <div style={{padding: '.25rem', border: '1px solid var(--gray-90)', borderRadius: '.25rem'}}>
+                    <div className={styles.temporary}>
+                      {tables && tables.map(({ id, label }) => (
+                        <label key={id} className={`${styles.tableSelect} block padding-y-25`}>
+                          {label}
+                          <input type="radio" value={id} name="externalTableId" onChange={e => handleSelect(e.target.value)} />
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </>
               : null }
