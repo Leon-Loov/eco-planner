@@ -120,7 +120,7 @@ export default function QueryBuilder({
 
   return (
     <>
-      <button type="button" className="transparent flex gap-50 padding-50" style={{ fontSize: '1rem', fontWeight: '500' }} onClick={() => openModal(modalRef)}>
+      <button type="button" className="transparent flex gap-50 padding-50" style={{ fontSize: '1rem', fontWeight: '500', lineHeight: '1.5' }} onClick={() => openModal(modalRef)}>
         Lägg till historisk data
         <Image src='/icons/chartAdd.svg' alt="" width={24} height={24} />
       </button>

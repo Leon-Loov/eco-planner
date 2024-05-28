@@ -32,18 +32,24 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     return notFound();
   }
 
-  return (
+  return ( // TODO: Make sure optional stuff from form renders conditionally
     <>
-      <h1 className="display-flex align-items-center gap-25 flex-wrap-wrap">
-        { // Only show the edit link if the user has edit access to the roadmap
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-          <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`}>
-            <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${action.name}`} />
-          </Link>
-        }
-        {action.name}
-      </h1>
-      <span>Åtgärd</span>
+      <section className="margin-y-100">
+        <span style={{ color: 'gray' }}>Åtgärd</span>
+        <h1 style={{margin: '0'}}>{action.name}</h1>
+        <p style={{fontSize: '1.25rem', margin: '0'}}>{action.startYear} - {action.endYear}</p>
+        {(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) ?
+          <div className="margin-y-100">
+            <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`} className="flex align-items-center gap-50 padding-50 smooth button transparent" style={{width: 'fit-content', fontWeight: '500'}}>
+              Redigera åtgärd
+              <Image src="/icons/edit.svg" width={24} height={24} alt={`Redigera åtgärd: ${action.name}`} />
+            </Link>
+          </div>
+        : null}
+      </section>
+
+      <p>{action.description}</p>
+
       {action.links.length > 0 &&
         <>
           <h2>Länkar</h2>
@@ -54,18 +60,8 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           ))}
         </>
       }
-      <h2>Detaljer</h2>
-      {action.description && <p>Beskrivning: {action.description}</p>}
-      {(action.startYear || action.endYear) &&
-        <>
-          <p>
-            {"Aktiv period: "}
-            {action.startYear && action.startYear}
-            {action.startYear && action.endYear && ' - '}
-            {action.endYear && action.endYear}
-          </p>
-        </>
-      }
+
+      
       {action.costEfficiency && <p>Kostnadseffektivitet: {action.costEfficiency}</p>}
       {action.expectedOutcome && <p>Förväntad effekt: {action.expectedOutcome}</p>}
       {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel == AccessLevel.Admin)) &&
