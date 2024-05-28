@@ -150,51 +150,49 @@ export default function QueryBuilder({
           <div className="flex gap-25 align-items-flex-end margin-y-75">
             <label className="flex-grow-100">
               <span className="block margin-y-25">Sök efter tabell</span>
-              <input type="search" className="block" id="tableSearch" onKeyDown={searchOnEnter} />
+              <input type="search" className="block" onKeyDown={searchOnEnter} />
             </label>
             <button type="button" onClick={searchWithButton} style={{fontSize: '1rem'}}>Sök</button>
           </div>
 
-            <fieldset style={{border: '1px solid var(--gray-90)', borderRadius: '3px', padding: '.5rem'}}>
-              <legend className="padding-x-50">
-                {tables && (
-                  <label className="margin-y-75 flex align-items-center gap-50">
-                    Tabell
-                    <select style={{width: '50ch'}} required name="externalTableId" id="externalTableId" onChange={e => handleSelect(e.target.value)}>
-                      <option value="">Välj en tabell</option>
-                      {tables.map(({ id, label }) => (
-                        <option key={id} value={id}>{label}</option>
+          <div style={{height: '300px', overflowY: 'scroll', paddingRight: '.5rem'}}>
+            {tables && tables.map(({ id, label }) => (
+              <label key={id} className={`${styles.tableSelect} block padding-y-25`}>
+                {label}
+                <input type="radio" value={id} name="table" onChange={e => handleSelect(e.target.value)} />
+              </label>
+            ))}
+          </div>
+
+          <fieldset className="margin-y-100" style={{border: '1px solid var(--gray-90)', borderRadius: '3px', padding: '.5rem'}}>
+            <legend className="padding-x-50">
+              <strong>Välj värden för tabell</strong>
+            </legend>
+            {tableDetails && (
+              <>
+                {tableDetails.variables.map(variable => (
+                  <label key={variable.id} className="block margin-y-75">
+                    {/* Use CSS to set proper capitalisation of labels; something like `label::first-letter { text-transform: capitalize; }` */}
+                    {variable.type == "TimeVariable" ? "Startperiod" : variable.label} {!variable.elimination && <span style={{ color: "red" }}>*</span>}
+                    <select className={`block margin-y-25 ${variable.type}`}
+                      required={!variable.elimination}
+                      name={variable.id}
+                      id={variable.id}
+                      // If only one value is available, pre-select it
+                      defaultValue={variable.values.length == 1 ? variable.values[0].code : undefined}>
+                      { // If only one value is available, don't show a placeholder option
+                        variable.values.length != 1 &&
+                        <option value="">Välj ett värde</option>
+                      }
+                      {variable.values.map(value => (
+                        <option key={value.code} value={value.code} lang={tableDetails.language}>{value.label}</option>
                       ))}
                     </select>
                   </label>
-                )}
-              </legend>
-              {tableDetails && (
-                <>
-                  {tableDetails.variables.map(variable => (
-                    <label key={variable.id} className="block margin-y-75">
-                      {/* Use CSS to set proper capitalisation of labels; something like `label::first-letter { text-transform: capitalize; }` */}
-                      {variable.type == "TimeVariable" ? "Startperiod" : variable.label} {!variable.elimination && <span style={{ color: "red" }}>*</span>}
-                      <select className={`block margin-y-25 ${variable.type}`}
-                        required={!variable.elimination}
-                        name={variable.id}
-                        id={variable.id}
-                        // If only one value is available, pre-select it
-                        defaultValue={variable.values.length == 1 ? variable.values[0].code : undefined}>
-                        { // If only one value is available, don't show a placeholder option
-                          variable.values.length != 1 &&
-                          <option value="">Välj ett värde</option>
-                        }
-                        {variable.values.map(value => (
-                          <option key={value.code} value={value.code} lang={tableDetails.language}>{value.label}</option>
-                        ))}
-                      </select>
-                    </label>
-                  ))}
-                </>
-              )}
-            </fieldset>
-          
+                ))}
+              </>
+            )}
+          </fieldset>
 
           {tableContent ? (
             <div>
