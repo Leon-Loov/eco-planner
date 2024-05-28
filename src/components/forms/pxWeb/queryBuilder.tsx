@@ -150,22 +150,26 @@ export default function QueryBuilder({
               </label>
 
               {/* TODO: Check that this works well with dynamic keyboards (smartphone/tablet) */}
-              <div className="flex gap-25 align-items-flex-end margin-y-75">
-                <label className="flex-grow-100">
-                  <span className="block margin-y-25">Sök efter tabell</span>
-                  <input type="search" className="block" onKeyDown={searchOnEnter} />
-                </label>
-                <button type="button" onClick={searchWithButton} style={{fontSize: '1rem'}}>Sök</button>
-              </div>
+              {dataSource ?
+                <>
+                  <div className="flex gap-25 align-items-flex-end margin-y-75">
+                    <label className="flex-grow-100">
+                      <span className="block margin-y-25">Sök efter tabell</span>
+                      <input type="search" className="block" onKeyDown={searchOnEnter} />
+                    </label>
+                    <button type="button" onClick={searchWithButton} style={{fontSize: '1rem'}}>Sök</button>
+                  </div>
 
-              <div style={{height: '300px', overflowY: 'scroll', paddingRight: '.5rem'}}>
-                {tables && tables.map(({ id, label }) => (
-                  <label key={id} className={`${styles.tableSelect} block padding-y-25`}>
-                    {label}
-                    <input type="radio" value={id} name="table" onChange={e => handleSelect(e.target.value)} />
-                  </label>
-                ))}
-              </div>
+                  <div style={{height: '300px', overflowY: 'scroll', paddingRight: '.5rem'}}>
+                    {tables && tables.map(({ id, label }) => (
+                      <label key={id} className={`${styles.tableSelect} block padding-y-25`}>
+                        {label}
+                        <input type="radio" value={id} name="table" onChange={e => handleSelect(e.target.value)} />
+                      </label>
+                    ))}
+                  </div>
+                </>
+              : null }
             </fieldset>
 
             <fieldset className="margin-y-100" style={{border: '1px solid var(--gray-90)', borderRadius: '3px', padding: '.5rem'}}>
