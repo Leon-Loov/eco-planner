@@ -110,10 +110,9 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         <span style={{ color: 'gray' }}>Målbana</span>
         <div className="flex flex-wrap-wrap align-items-center justify-content-space-between gap-100">
           <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
-          { // TODO: Maybe show button even if no data series is attached?
-            goal.dataSeries?.id &&
+          { (goal.dataSeries?.id && session.user) ?
             <CopyAndScale goal={goal} user={session.user} />
-          }
+          : null }
         </div>
         { // Only show the edit link if the user has edit access to the roadmap
           (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
