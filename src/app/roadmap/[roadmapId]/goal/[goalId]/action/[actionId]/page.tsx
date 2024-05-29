@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return ( // TODO: Make sure optional stuff from form renders conditionally
     <>
-      <section className="margin-y-100">
+      <section className="margin-y-100" style={{width: 'min(90ch, 100%)'}}>
         <span style={{ color: 'gray' }}>Åtgärd</span>
         <h1 style={{margin: '0'}}>{action.name}</h1>
         <p style={{fontSize: '1.25rem', margin: '0'}}>{action.startYear} - {action.endYear}</p>
@@ -48,9 +48,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         : null}
       </section>
 
-      <p>{action.description}</p>
+      {action.description ? 
+        <p>{action.description}</p>
+      : null}
 
-      {action.links.length > 0 &&
+      {action.links.length > 0 ?
         <>
           <h2>Länkar</h2>
           {action.links.map((link) => (
@@ -59,25 +61,36 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             </Fragment>
           ))}
         </>
-      }
+      : null }
 
+      <h2>Förväntad effekt</h2>    
+      {action.expectedOutcome ? 
+        <p>{action.expectedOutcome}</p>
+      : null}
+
+      <h2>Kostnadseffektivitet</h2>
+      {action.costEfficiency ? 
+        <p>{action.costEfficiency}</p>
+      : null}
+
+      <h2>Projektledare</h2>
+      {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel == AccessLevel.Admin)) ?
+        <p>{action.projectManager}</p>
+      : null}
+
+      <h2>Relevanta Aktörer</h2>
+      {action.relevantActors ? 
+      <p>{action.relevantActors}</p>
+      : null}
       
-      {action.costEfficiency && <p>Kostnadseffektivitet: {action.costEfficiency}</p>}
-      {action.expectedOutcome && <p>Förväntad effekt: {action.expectedOutcome}</p>}
-      {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel == AccessLevel.Admin)) &&
-        <p>Projektledare: {action.projectManager}</p>
-      }
-      {action.relevantActors && <p>Relevanta aktörer: {action.relevantActors}</p>}
-      {(action.isEfficiency || action.isSufficiency || action.isRenewables) &&
+      <h2>Kategorier</h2>
+      {(action.isEfficiency || action.isSufficiency || action.isRenewables) ?
         <p>
-          Kategorier:
-          <span className="margin-x-100">
-            {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables))}
-            {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables)}
-            {action.isRenewables && 'Renewables'}
-          </span>
+          {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables))}
+          {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables)}
+          {action.isRenewables && 'Renewables'}
         </p>
-      }
+      : null }
       <Comments comments={action.comments} objectId={action.id} />
     </>
   )
