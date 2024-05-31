@@ -31,7 +31,7 @@ export default async function Sidebar() {
                   <Image src='/icons/user.svg' alt='' width={24} height={24} />
                   Mitt Konto
                 </Link>
-               {/*<Notifications amount={} /> */}
+                {/*<Notifications amount={} /> */}
               </div>
             }
           </div>
@@ -42,7 +42,7 @@ export default async function Sidebar() {
             </Link>
             <Link href="/info" className={styles.link}>
               <Image src='/icons/info.svg' alt='' width={24} height={24} />
-              Information
+              Om verktyget
             </Link>
           </div>
           <div>
