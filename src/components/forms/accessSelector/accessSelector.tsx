@@ -6,9 +6,6 @@ import Image from "next/image";
 import styles from './accessSelector.module.css' with { type: "css" };
 
 export default function AccessSelector({ groupOptions, currentAccess }: { groupOptions: string[], currentAccess?: AccessControlled | undefined }) {
-  // In case the groupOptions prop includes 'Public', remove it; it should never have editing access to an item
-  groupOptions = groupOptions.filter((group) => group !== 'Public')
-
   return (
     <>
       <p>För att lägga till en användare/grupp, skriv in namnet och tryck på enter.</p>
@@ -16,8 +13,12 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
         <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
       </div>
       <div className="margin-y-75">
-        <ViewUsers groupOptions={[...groupOptions, 'Public']} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
+        <ViewUsers groupOptions={groupOptions} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
       </div>
+      <label className="display-flex align-items-center gap-50 margin-y-50">
+        <input type="checkbox" name="isPublic" id="isPublic" defaultChecked={currentAccess?.isPublic} />
+        Ska alla användare kunna se detta inlägg?
+      </label>
     </>
   )
 }
@@ -27,13 +28,13 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
  * @param formElements The form elements to convert to JSON.
  */
 export function getAccessData(editUsers: RadioNodeList | Element | null, viewUsers: RadioNodeList | Element | null, editGroups: RadioNodeList | Element | null, viewGroups: RadioNodeList | Element | null) {
-  let editUsersValue: string[] = [];
-  let viewUsersValue: string[] = [];
-  let editGroupsValue: string[] = [];
-  let viewGroupsValue: string[] = [];
+  const editUsersValue: string[] = [];
+  const viewUsersValue: string[] = [];
+  const editGroupsValue: string[] = [];
+  const viewGroupsValue: string[] = [];
 
   if (editUsers instanceof RadioNodeList) {
-    for (let i of editUsers) {
+    for (const i of editUsers) {
       if (i instanceof HTMLInputElement && i.value) {
         editUsersValue.push(i.value);
       }
@@ -43,7 +44,7 @@ export function getAccessData(editUsers: RadioNodeList | Element | null, viewUse
   }
 
   if (viewUsers instanceof RadioNodeList) {
-    for (let i of viewUsers) {
+    for (const i of viewUsers) {
       if (i instanceof HTMLInputElement && i.value) {
         viewUsersValue.push(i.value);
       }
@@ -53,7 +54,7 @@ export function getAccessData(editUsers: RadioNodeList | Element | null, viewUse
   }
 
   if (editGroups instanceof RadioNodeList) {
-    for (let i of editGroups) {
+    for (const i of editGroups) {
       if (i instanceof HTMLInputElement && i.checked) {
         editGroupsValue.push(i.value);
       }
@@ -63,7 +64,7 @@ export function getAccessData(editUsers: RadioNodeList | Element | null, viewUse
   }
 
   if (viewGroups instanceof RadioNodeList) {
-    for (let i of viewGroups) {
+    for (const i of viewGroups) {
       if (i instanceof HTMLInputElement && i.checked) {
         viewGroupsValue.push(i.value);
       }
@@ -96,7 +97,7 @@ function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>, selectedOpt
 }
 
 function addUser(name: string | undefined, selectedOptions: string[], selectedSetter: React.Dispatch<React.SetStateAction<string[]>>, allOptions?: string[]) {
-  if(!name) return;
+  if (!name) return;
   // Add the new user to the list of selected users
   selectedSetter([...selectedOptions, name]);
   if (allOptions) {
@@ -108,14 +109,16 @@ function addUser(name: string | undefined, selectedOptions: string[], selectedSe
 export function EditUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
   // The users that have editing access to the item
   const [editUsers, setEditUsers] = useState<string[]>(existingUsers ?? []);
-  // The 'Public' group should never have editing access to an item
-  let groups = groupOptions.filter((group) => group !== 'Public')
-  
-  let editorRef = useRef<HTMLInputElement | null>(null)
+
+  // Add existing groups with access to the list of options, in case they are not already there
+  let groups = [...groupOptions, ...existingGroups ?? []]
+  // Remove duplicates
+  groups = groups.filter((group, index) => groups.indexOf(group) === index)
+
+  const editorRef = useRef<HTMLInputElement | null>(null)
 
   return (
     <>
-
       <p><strong>Grupper med redigeringsbehörighet</strong></p>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
@@ -127,18 +130,18 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
       ))}
 
       {/* A text field whose contents get appended to editUsers upon pressing enter */}
-      
-      <p style={{marginTop: '3rem'}}><strong>Användare med redigeringsbehörighet</strong></p>
+
+      <p style={{ marginTop: '3rem' }}><strong>Användare med redigeringsbehörighet</strong></p>
       <div className="flex align-items-flex-end margin-y-100 gap-100 flex-wrap-wrap">
         <label className="block flex-grow-100">
-          Ny användare: 
-          <input style={{marginTop: '.25rem'}} type="text" name="editUsers" ref={editorRef} id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
+          Ny användare:
+          <input style={{ marginTop: '.25rem' }} type="text" name="editUsers" ref={editorRef} id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
         </label>
 
-        <button style={{fontSize: '1rem'}} onClick={() => {addUser(editorRef.current?.value, editUsers, setEditUsers); if(editorRef.current) editorRef.current.value = ''}}>Lägg till användare</button>
+        <button style={{ fontSize: '1rem' }} onClick={() => { addUser(editorRef.current?.value, editUsers, setEditUsers); if (editorRef.current) editorRef.current.value = '' }}>Lägg till användare</button>
       </div>
 
-      <section style={{maxHeight: '300px', overflowY: 'scroll', scrollbarWidth: 'thin'}}>
+      <section style={{ maxHeight: '300px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
         {editUsers.map((user, index) => (
           <Fragment key={'editUser' + index}>
             <label className="display-flex gap-100 align-items-center">
@@ -165,12 +168,16 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
 export function ViewUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
   // The users that have viewing access to the item
   const [viewUsers, setViewUsers] = useState<string[]>(existingUsers ?? []);
-  let groups = [...groupOptions, 'Public']
 
-  let viewRef = useRef<HTMLInputElement | null>(null)
+  // Add existing groups with access to the list of options, in case they are not already there
+  let groups = [...groupOptions, ...existingGroups ?? []]
+  // Remove duplicates
+  groups = groups.filter((group, index) => groups.indexOf(group) === index)
+
+  const viewRef = useRef<HTMLInputElement | null>(null)
 
   return (
-    <div style={{marginBottom: '3rem'}} >
+    <div style={{ marginBottom: '3rem' }} >
 
       <p><strong>Grupper med läsbehörighet</strong></p>
       {groups.map((group) => (
@@ -183,17 +190,17 @@ export function ViewUsers({ existingUsers, groupOptions, existingGroups }: { exi
       ))}
 
       {/* A text field whose contents get appended to viewUsers upon pressing enter */}
-      <p style={{marginTop: '3rem'}}><strong>Användare med läsbehörighet</strong></p>
+      <p style={{ marginTop: '3rem' }}><strong>Användare med läsbehörighet</strong></p>
       <div className="flex align-items-flex-end gap-100 flex-wrap-wrap margin-y-100">
         <label className="block flex-grow-100">
-          Ny användare: 
-          <input style={{marginTop: '.25rem'}} type="text" name="viewUsers" id="newViewUser" ref={viewRef} onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
-        </label>  
-        
-        <button style={{fontSize: '1rem'}} onClick={() => {addUser(viewRef.current?.value, viewUsers, setViewUsers); if(viewRef.current) viewRef.current.value = ''}}>Lägg till användare</button>
+          Ny användare:
+          <input style={{ marginTop: '.25rem' }} type="text" name="viewUsers" id="newViewUser" ref={viewRef} onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
+        </label>
+
+        <button style={{ fontSize: '1rem' }} onClick={() => { addUser(viewRef.current?.value, viewUsers, setViewUsers); if (viewRef.current) viewRef.current.value = '' }}>Lägg till användare</button>
       </div>
 
-      <section style={{maxHeight: '300px', overflowY: 'scroll', scrollbarWidth: 'thin'}}>
+      <section style={{ maxHeight: '300px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
         {viewUsers.map((user, index) => (
           <Fragment key={'viewUser' + index}>
             <label className="display-flex gap-100 align-items-center">

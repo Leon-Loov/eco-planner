@@ -54,6 +54,7 @@ export async function POST(request: NextRequest) {
               viewers: { select: { id: true, username: true } },
               editGroups: { include: { users: { select: { id: true, username: true } } } },
               viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              isPublic: true,
             }
           }
         }
@@ -75,6 +76,7 @@ export async function POST(request: NextRequest) {
       viewers: goal.roadmap.viewers,
       editGroups: goal.roadmap.editGroups,
       viewGroups: goal.roadmap.viewGroups,
+      isPublic: goal.roadmap.isPublic,
     }
     const accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
@@ -214,6 +216,7 @@ export async function PUT(request: NextRequest) {
                   viewers: { select: { id: true, username: true } },
                   editGroups: { include: { users: { select: { id: true, username: true } } } },
                   viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                  isPublic: true,
                 }
               }
             }
@@ -236,6 +239,7 @@ export async function PUT(request: NextRequest) {
       viewers: currentAction.goal.roadmap.viewers,
       editGroups: currentAction.goal.roadmap.editGroups,
       viewGroups: currentAction.goal.roadmap.viewGroups,
+      isPublic: currentAction.goal.roadmap.isPublic,
     }
     const accessLevel = accessChecker(accessFields, session.user)
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {

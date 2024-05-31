@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
       viewers: metaRoadmap.viewers,
       editGroups: metaRoadmap.editGroups,
       viewGroups: metaRoadmap.viewGroups,
+      isPublic: metaRoadmap.isPublic,
     }
     const accessLevel = accessChecker(accessFields, session.user);
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
@@ -157,6 +158,7 @@ export async function POST(request: NextRequest) {
         viewers: { connect: viewers },
         editGroups: { connect: editGroups },
         viewGroups: { connect: viewGroups },
+        isPublic: roadmap.isPublic,
         metaRoadmap: { connect: { id: roadmap.metaRoadmapId } },
         goals: {
           create: roadmapGoalCreator(roadmap, session.user.id),
@@ -231,6 +233,7 @@ export async function PUT(request: NextRequest) {
           viewers: { select: { id: true, username: true } },
           editGroups: { include: { users: { select: { id: true, username: true } } } },
           viewGroups: { include: { users: { select: { id: true, username: true } } } },
+          isPublic: true,
         }
       })
     ]);
@@ -308,6 +311,7 @@ export async function PUT(request: NextRequest) {
         viewers: { set: viewers },
         editGroups: { set: editGroups },
         viewGroups: { set: viewGroups },
+        isPublic: roadmap.isPublic,
         goals: {
           create: roadmapGoalCreator(roadmap, session.user!.id),
         }

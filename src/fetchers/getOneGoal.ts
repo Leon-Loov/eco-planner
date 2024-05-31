@@ -72,6 +72,7 @@ const getCachedGoal = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
                 viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                isPublic: true,
               },
             },
             links: true,
@@ -107,7 +108,7 @@ const getCachedGoal = unstable_cache(
                 { viewers: { some: { id: userId } } },
                 { editGroups: { some: { users: { some: { id: userId } } } } },
                 { viewGroups: { some: { users: { some: { id: userId } } } } },
-                { viewGroups: { some: { name: 'Public' } } }
+                { isPublic: true }
               ]
             }
           },
@@ -141,6 +142,7 @@ const getCachedGoal = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
                 viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                isPublic: true,
               },
             },
             links: true,
@@ -163,7 +165,7 @@ const getCachedGoal = unstable_cache(
       goal = await prisma.goal.findUnique({
         where: {
           id,
-          roadmap: { viewGroups: { some: { name: 'Public' } } }
+          roadmap: { isPublic: true }
         },
         include: {
           _count: { select: { actions: true } },
@@ -195,6 +197,7 @@ const getCachedGoal = unstable_cache(
               viewers: { select: { id: true, username: true } },
               editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
               viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+              isPublic: true,
             },
           },
           links: true,

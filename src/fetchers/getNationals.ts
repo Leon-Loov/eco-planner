@@ -82,7 +82,7 @@ const getCachedRoadmaps = unstable_cache(
               { viewers: { some: { id: session.user.id } } },
               { editGroups: { some: { users: { some: { id: session.user.id } } } } },
               { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-              { viewGroups: { some: { name: 'Public' } } }
+              { isPublic: true }
             ]
           },
           include: {
@@ -114,7 +114,7 @@ const getCachedRoadmaps = unstable_cache(
       roadmaps = await prisma.roadmap.findMany({
         where: {
           metaRoadmap: { type: RoadmapType.NATIONAL },
-          viewGroups: { some: { name: 'Public' } }
+          isPublic: true
         },
         include: {
           metaRoadmap: true,

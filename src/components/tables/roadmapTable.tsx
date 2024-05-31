@@ -48,6 +48,7 @@ export default function RoadmapTable({
         viewers: version.viewers,
         editGroups: version.editGroups,
         viewGroups: version.viewGroups,
+        isPublic: version.isPublic,
       }
     })
     // Set the creation link to create a new roadmap version for the specified meta roadmap instead

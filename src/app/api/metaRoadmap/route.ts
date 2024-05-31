@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
         viewers: targetRoadmap.viewers,
         editGroups: targetRoadmap.editGroups,
         viewGroups: targetRoadmap.viewGroups,
+        isPublic: targetRoadmap.isPublic,
       }
       const accessLevel = accessChecker(accessFields, session.user)
       // For now, being able to view a meta roadmap is enough to create a new one working towards it.
@@ -155,6 +156,7 @@ export async function POST(request: NextRequest) {
         viewers: { connect: viewers },
         editGroups: { connect: editGroups },
         viewGroups: { connect: viewGroups },
+        isPublic: metaRoadmap.isPublic,
       },
       select: { id: true }
     });
@@ -348,6 +350,7 @@ export async function PUT(request: NextRequest) {
         viewers: { set: viewers },
         editGroups: { set: editGroups },
         viewGroups: { set: viewGroups },
+        isPublic: metaRoadmap.isPublic,
       },
       select: { id: true }
     });

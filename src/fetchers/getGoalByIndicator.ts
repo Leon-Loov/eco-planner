@@ -81,6 +81,7 @@ const getCachedGoal = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
                 viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                isPublic: true,
               },
             },
             links: true,
@@ -118,7 +119,7 @@ const getCachedGoal = unstable_cache(
                 { viewers: { some: { id: userId } } },
                 { editGroups: { some: { users: { some: { id: userId } } } } },
                 { viewGroups: { some: { users: { some: { id: userId } } } } },
-                { viewGroups: { some: { name: 'Public' } } }
+                { isPublic: true }
               ]
             }
           },
@@ -147,6 +148,7 @@ const getCachedGoal = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
                 viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                isPublic: true,
               },
             },
             links: true,
@@ -177,7 +179,7 @@ const getCachedGoal = unstable_cache(
           ...(unit ? { dataSeries: { unit: unit } } : {}),
           roadmap: {
             id: roadmapId,
-            viewGroups: { some: { name: 'Public' } }
+            isPublic: true,
           }
         },
         include: {
@@ -205,6 +207,7 @@ const getCachedGoal = unstable_cache(
               viewers: { select: { id: true, username: true } },
               editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
               viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+              isPublic: true,
             },
           },
           links: true,

@@ -119,7 +119,7 @@ const getCachedRoadmapSubset = unstable_cache(
       roadmaps = await prisma.roadmap.findMany({
         where: {
           metaRoadmap: { actor: actor ?? undefined },
-          viewGroups: { some: { name: 'Public' } }
+          isPublic: true,
         },
         include: {
           _count: {

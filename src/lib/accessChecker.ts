@@ -13,7 +13,7 @@ export default function accessChecker(item: AccessControlled | null | undefined,
 
   // User is not signed in
   if (!user) {
-    if (item.viewGroups?.map(group => group.name).includes("Public")) return AccessLevel.View;
+    if (item.isPublic) return AccessLevel.View;
     return AccessLevel.None;
   }
 
@@ -29,9 +29,9 @@ export default function accessChecker(item: AccessControlled | null | undefined,
   if (item.editGroups?.map(group => group.name).some(name => user.userGroups?.includes(name))) return AccessLevel.Edit;
 
   // User is viewer
+  if (item.isPublic) return AccessLevel.View;
   if (item.viewers?.map(viewer => viewer.id).includes(user.id)) return AccessLevel.View;
   if (item.viewGroups?.map(group => group.name).some(name => user.userGroups?.includes(name))) return AccessLevel.View;
-  if (item.viewGroups?.map(group => group.name).includes("Public")) return AccessLevel.View;
 
   // User does not have access
   return AccessLevel.None;

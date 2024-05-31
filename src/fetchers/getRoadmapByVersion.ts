@@ -95,7 +95,7 @@ const getCachedRoadmap = unstable_cache(
               { viewers: { some: { id: session.user.id } } },
               { editGroups: { some: { users: { some: { id: session.user.id } } } } },
               { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-              { viewGroups: { some: { name: 'Public' } } }
+              { isPublic: true }
             ]
           },
           include: {
@@ -130,7 +130,7 @@ const getCachedRoadmap = unstable_cache(
       roadmap = await prisma.roadmap.findUnique({
         where: {
           meta_version: { metaRoadmapId: metaId, version },
-          viewGroups: { some: { name: 'Public' } },
+          isPublic: true,
         },
         include: {
           metaRoadmap: true,

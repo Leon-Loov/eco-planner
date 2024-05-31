@@ -59,6 +59,7 @@ const getCachedAction = unstable_cache(
                     viewers: { select: { id: true, username: true } },
                     editGroups: { include: { users: { select: { id: true, username: true } } } },
                     viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                    isPublic: true,
                   }
                 }
               }
@@ -89,7 +90,7 @@ const getCachedAction = unstable_cache(
                   { viewers: { some: { id: userId } } },
                   { editGroups: { some: { users: { some: { id: userId } } } } },
                   { viewGroups: { some: { users: { some: { id: userId } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
+                  { isPublic: true }
                 ]
               }
             }
@@ -115,6 +116,7 @@ const getCachedAction = unstable_cache(
                     viewers: { select: { id: true, username: true } },
                     editGroups: { include: { users: { select: { id: true, username: true } } } },
                     viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                    isPublic: true,
                   }
                 }
               }
@@ -136,7 +138,7 @@ const getCachedAction = unstable_cache(
       action = await prisma.action.findUnique({
         where: {
           id,
-          goal: { roadmap: { viewGroups: { some: { name: 'Public' } } } }
+          goal: { roadmap: { isPublic: true } }
         },
         include: {
           notes: true,
@@ -159,6 +161,7 @@ const getCachedAction = unstable_cache(
                   viewers: { select: { id: true, username: true } },
                   editGroups: { include: { users: { select: { id: true, username: true } } } },
                   viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                  isPublic: true,
                 }
               }
             }

@@ -51,6 +51,7 @@ export default function MetaRoadmapForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      isPublic: (form.namedItem("isPublic") as HTMLInputElement)?.checked || false,
       links,
       parentRoadmapId: (form.namedItem("parentRoadmap") as HTMLSelectElement)?.value || undefined,
       id: currentRoadmap?.id || undefined,
@@ -63,7 +64,7 @@ export default function MetaRoadmapForm({
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  
+
   const timestamp = Date.now()
 
   const customRoadmapTypes = {
@@ -82,6 +83,7 @@ export default function MetaRoadmapForm({
       viewers: currentRoadmap.viewers,
       editGroups: currentRoadmap.editGroups,
       viewGroups: currentRoadmap.viewGroups,
+      isPublic: currentRoadmap.isPublic,
     }
   }
 
@@ -156,9 +158,9 @@ export default function MetaRoadmapForm({
               </div>
               <ViewUsers groupOptions={userGroups} /> {/*TODO: other params? */}
             </fieldset>
-          }     
+          }
 
-                    
+
           {(!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
             <fieldset className="width-100">
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -169,7 +171,7 @@ export default function MetaRoadmapForm({
               </div>
               <EditUsers groupOptions={userGroups} /> {/*TODO: other params? */}
             </fieldset>
-          }     
+          }
 
           <fieldset className="width-100">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>

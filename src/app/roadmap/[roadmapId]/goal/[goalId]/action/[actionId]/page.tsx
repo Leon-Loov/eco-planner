@@ -23,6 +23,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       viewers: action.goal.roadmap.viewers,
       editGroups: action.goal.roadmap.editGroups,
       viewGroups: action.goal.roadmap.viewGroups,
+      isPublic: action.goal.roadmap.isPublic
     }
     accessLevel = accessChecker(actionAccessData, session.user);
   }
@@ -34,23 +35,23 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return ( // TODO: Make sure optional stuff from form renders conditionally
     <>
-      <section className="margin-y-100" style={{width: 'min(90ch, 100%)'}}>
+      <section className="margin-y-100" style={{ width: 'min(90ch, 100%)' }}>
         <span style={{ color: 'gray' }}>Åtgärd</span>
-        <h1 style={{margin: '0'}}>{action.name}</h1>
-        <p style={{fontSize: '1.25rem', margin: '0'}}>{action.startYear} - {action.endYear}</p>
+        <h1 style={{ margin: '0' }}>{action.name}</h1>
+        <p style={{ fontSize: '1.25rem', margin: '0' }}>{action.startYear} - {action.endYear}</p>
         {(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) ?
           <div className="margin-y-100">
-            <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`} className="flex align-items-center gap-50 padding-50 smooth button transparent" style={{width: 'fit-content', fontWeight: '500'}}>
+            <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`} className="flex align-items-center gap-50 padding-50 smooth button transparent" style={{ width: 'fit-content', fontWeight: '500' }}>
               Redigera åtgärd
               <Image src="/icons/edit.svg" width={24} height={24} alt={`Redigera åtgärd: ${action.name}`} />
             </Link>
           </div>
-        : null}
+          : null}
       </section>
 
-      {action.description ? 
+      {action.description ?
         <p>{action.description}</p>
-      : null}
+        : null}
 
       {action.links.length > 0 ?
         <>
@@ -61,28 +62,28 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             </Fragment>
           ))}
         </>
-      : null }
+        : null}
 
-      <h2>Förväntad effekt</h2>    
-      {action.expectedOutcome ? 
+      <h2>Förväntad effekt</h2>
+      {action.expectedOutcome ?
         <p>{action.expectedOutcome}</p>
-      : null}
+        : null}
 
       <h2>Kostnadseffektivitet</h2>
-      {action.costEfficiency ? 
+      {action.costEfficiency ?
         <p>{action.costEfficiency}</p>
-      : null}
+        : null}
 
       <h2>Projektledare</h2>
       {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel == AccessLevel.Admin)) ?
         <p>{action.projectManager}</p>
-      : null}
+        : null}
 
       <h2>Relevanta Aktörer</h2>
-      {action.relevantActors ? 
-      <p>{action.relevantActors}</p>
-      : null}
-      
+      {action.relevantActors ?
+        <p>{action.relevantActors}</p>
+        : null}
+
       <h2>Kategorier</h2>
       {(action.isEfficiency || action.isSufficiency || action.isRenewables) ?
         <p>
@@ -90,7 +91,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables)}
           {action.isRenewables && 'Renewables'}
         </p>
-      : null }
+        : null}
       <Comments comments={action.comments} objectId={action.id} />
     </>
   )

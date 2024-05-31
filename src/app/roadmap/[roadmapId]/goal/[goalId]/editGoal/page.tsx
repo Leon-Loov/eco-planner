@@ -21,6 +21,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       viewers: currentGoal.roadmap.viewers,
       editGroups: currentGoal.roadmap.editGroups,
       viewGroups: currentGoal.roadmap.viewGroups,
+      isPublic: currentGoal.roadmap.isPublic
     }
   }
   // User must be signed in and have edit access to the goal, and the goal must exist

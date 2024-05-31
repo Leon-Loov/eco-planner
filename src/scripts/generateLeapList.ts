@@ -11,7 +11,7 @@ async function generateLeapList() {
   const rawData = await prisma.roadmap.findMany({
     where: {
       metaRoadmap: { type: RoadmapType.NATIONAL },
-      viewGroups: { some: { name: 'public' } },
+      isPublic: true,
     },
     select: {
       goals: {

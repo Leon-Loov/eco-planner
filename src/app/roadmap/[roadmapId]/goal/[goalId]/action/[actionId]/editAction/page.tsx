@@ -20,6 +20,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       viewers: action.goal.roadmap.viewers,
       editGroups: action.goal.roadmap.editGroups,
       viewGroups: action.goal.roadmap.viewGroups,
+      isPublic: action.goal.roadmap.isPublic
     }
   }
 

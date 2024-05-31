@@ -39,6 +39,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       viewers: goal.roadmap.viewers,
       editGroups: goal.roadmap.editGroups,
       viewGroups: goal.roadmap.viewGroups,
+      isPublic: goal.roadmap.isPublic
     }
     accessLevel = accessChecker(goalAccessData, session.user);
   }
@@ -106,13 +107,13 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         }
       */}
 
-      <section className="margin-y-100" style={{width: 'min(90ch, 100%)'}}>
+      <section className="margin-y-100" style={{ width: 'min(90ch, 100%)' }}>
         <span style={{ color: 'gray' }}>Målbana</span>
         <div className="flex flex-wrap-wrap align-items-center justify-content-space-between gap-100">
           <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
-          { (goal.dataSeries?.id && session.user) ?
+          {(goal.dataSeries?.id && session.user) ?
             <CopyAndScale goal={goal} user={session.user} />
-          : null }
+            : null}
         </div>
         {(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
           <div className="flex flex-wrap-wrap align-items-center gap-100 margin-y-100">

@@ -102,7 +102,7 @@ const getCachedNames = unstable_cache(
               { viewers: { some: { id: session.user.id } } },
               { editGroups: { some: { users: { some: { id: session.user.id } } } } },
               { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-              { viewGroups: { some: { name: 'Public' } } }
+              { isPublic: true }
             ]
           },
           select: {
@@ -116,7 +116,7 @@ const getCachedNames = unstable_cache(
                   { viewers: { some: { id: session.user.id } } },
                   { editGroups: { some: { users: { some: { id: session.user.id } } } } },
                   { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
+                  { isPublic: true }
                 ]
               },
               select: {
@@ -157,15 +157,13 @@ const getCachedNames = unstable_cache(
     // If user is not logged in, get all public roadmaps
     try {
       names = await prisma.metaRoadmap.findMany({
-        where: { viewGroups: { some: { name: 'Public' } } },
+        where: { isPublic: true },
         select: {
           name: true,
           id: true,
           roadmapVersions: {
             where: {
-              OR: [
-                { viewGroups: { some: { name: 'Public' } } }
-              ]
+              isPublic: true,
             },
             select: {
               version: true,
