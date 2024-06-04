@@ -156,7 +156,12 @@ export default function MetaRoadmapForm({
                   Fyll i vilka grupper eller personer som ska kunna se denna färdplan.
                 </p>
               </div>
-              <ViewUsers groupOptions={userGroups} /> {/*TODO: other params? */}
+              <ViewUsers
+                groupOptions={userGroups}
+                existingUsers={currentAccess?.viewers.map((user) => user.username)}
+                existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })}
+                isPublic={currentAccess?.isPublic ?? false}
+              />
             </fieldset>
           }
 
@@ -169,7 +174,11 @@ export default function MetaRoadmapForm({
                   Fyll i vilka grupper eller personer som ska kunna redigera denna färdplan.
                 </p>
               </div>
-              <EditUsers groupOptions={userGroups} /> {/*TODO: other params? */}
+              <EditUsers
+                groupOptions={userGroups}
+                existingUsers={currentAccess?.editors.map((user) => user.username)}
+                existingGroups={currentAccess?.editGroups.map((group) => { return group.name })}
+              />
             </fieldset>
           }
 
