@@ -125,6 +125,9 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           </div>
         }
         <p>{goal.description}</p>
+        {goal.dataSeries?.scale &&
+          <h3>Alla värden i målbanan använder följande skala: {`"${goal.dataSeries?.scale}"`}</h3>
+        }
       </section>
 
       { /* Only allow scaling the values if the user has edit access to the goal
