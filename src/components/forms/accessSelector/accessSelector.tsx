@@ -134,7 +134,7 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
           <input style={{ marginTop: '.25rem' }} type="text" name="editUsers" ref={editorRef} id="newEditUser" onKeyDown={(event) => handleKeyDown(event, editUsers, setEditUsers)} />
         </label>
 
-        <button style={{ fontSize: '1rem' }} onClick={() => { addUser(editorRef.current?.value, editUsers, setEditUsers); if (editorRef.current) editorRef.current.value = '' }}>Lägg till användare</button>
+        <button type="button" style={{ fontSize: '1rem' }} onClick={() => { addUser(editorRef.current?.value, editUsers, setEditUsers); if (editorRef.current) editorRef.current.value = '' }}>Lägg till användare</button>
       </div>
 
       <section style={{ maxHeight: '300px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
@@ -198,7 +198,7 @@ export function ViewUsers({ existingUsers, groupOptions, existingGroups, isPubli
           <input style={{ marginTop: '.25rem' }} type="text" name="viewUsers" id="newViewUser" ref={viewRef} onKeyDown={(event) => handleKeyDown(event, viewUsers, setViewUsers)} />
         </label>
 
-        <button style={{ fontSize: '1rem' }} onClick={() => { addUser(viewRef.current?.value, viewUsers, setViewUsers); if (viewRef.current) viewRef.current.value = '' }}>Lägg till användare</button>
+        <button type="button" style={{ fontSize: '1rem' }} onClick={() => { addUser(viewRef.current?.value, viewUsers, setViewUsers); if (viewRef.current) viewRef.current.value = '' }}>Lägg till användare</button>
       </div>
 
       <section style={{ maxHeight: '300px', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
