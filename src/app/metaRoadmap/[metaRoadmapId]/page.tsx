@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import RoadmapTable from "@/components/tables/roadmapTable";
+import MetaRoadmapDeleter from "@/components/buttons/metaRoadmapDeleter";
 
 export default async function Page({ params }: { params: { metaRoadmapId: string } }) {
   const [session, metaRoadmap] = await Promise.all([
@@ -33,6 +34,13 @@ export default async function Page({ params }: { params: { metaRoadmapId: string
         {`${metaRoadmap.name}`}
       </h1>
       <span>Metadata för en färdplan</span>
+      {
+        // Only show the delete button if the user is admin or author of the roadmap
+        <>
+          <br />
+          <MetaRoadmapDeleter metaRoadmap={metaRoadmap} />
+        </>
+      }
       <RoadmapTable user={session.user} metaRoadmap={metaRoadmap} />
     </>
   )
