@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import { actionSorter } from "@/lib/sorters";
 import prisma from "@/prismaClient";
 import { AccessControlled } from "@/types";
@@ -19,7 +19,7 @@ import { cookies } from "next/headers";
  * @returns Goal object with actions
  */
 export default async function getGoalByIndicator(roadmapId: string, indicatorParameter: string, unit?: string) {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedGoal(roadmapId, indicatorParameter, unit, session.user?.id ?? '')
 }
 
@@ -32,7 +32,7 @@ export default async function getGoalByIndicator(roadmapId: string, indicatorPar
  */
 const getCachedGoal = unstable_cache(
   async (roadmapId: string, indicatorParameter: string, unit: string | undefined, userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let goal: Goal & {
       _count: { actions: number }
@@ -81,6 +81,7 @@ const getCachedGoal = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
                 viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                isPublic: true,
               },
             },
             links: true,
@@ -118,7 +119,7 @@ const getCachedGoal = unstable_cache(
                 { viewers: { some: { id: userId } } },
                 { editGroups: { some: { users: { some: { id: userId } } } } },
                 { viewGroups: { some: { users: { some: { id: userId } } } } },
-                { viewGroups: { some: { name: 'Public' } } }
+                { isPublic: true }
               ]
             }
           },
@@ -147,6 +148,7 @@ const getCachedGoal = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
                 viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+                isPublic: true,
               },
             },
             links: true,
@@ -177,7 +179,7 @@ const getCachedGoal = unstable_cache(
           ...(unit ? { dataSeries: { unit: unit } } : {}),
           roadmap: {
             id: roadmapId,
-            viewGroups: { some: { name: 'Public' } }
+            isPublic: true,
           }
         },
         include: {
@@ -205,6 +207,7 @@ const getCachedGoal = unstable_cache(
               viewers: { select: { id: true, username: true } },
               editGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
               viewGroups: { select: { id: true, name: true, users: { select: { id: true, username: true } } } },
+              isPublic: true,
             },
           },
           links: true,

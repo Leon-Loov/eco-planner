@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Tooltip from "@/lib/tooltipWrapper";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
 import Goals from "@/components/tables/goals";
@@ -12,7 +12,7 @@ import ThumbnailGraph from "@/components/graphs/mainGraphs/thumbnailGraph";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
   const [session, roadmap] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneRoadmap(params.roadmapId)
   ]);
 

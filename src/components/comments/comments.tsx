@@ -41,7 +41,7 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
   const [editedContent, setEditedContent] = useState('');
   const handleInput = (event: ChangeEvent<HTMLSpanElement>) => {
     setEditedContent(event.target.innerText);
-  }; 
+  };
 
   const spanRef = useRef<HTMLSpanElement>(null);
   const removeText = () => {
@@ -67,7 +67,7 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
       <section className="container-text margin-y-300">
         <h2>{comments?.length} Kommentarer</h2>
         <form onSubmit={handleSubmit}>
-          <span className={styles.textarea} role="textbox" id="comment-text" contentEditable aria-placeholder="Skriv Kommentar" onInput={handleInput} onBlur={handleInput} ref={spanRef}></span>
+          <span className={styles.textarea} role="textbox" id="comment-text" contentEditable aria-label="Skriv Kommentar" aria-placeholder="Skriv Kommentar" onInput={handleInput} onBlur={handleInput} ref={spanRef}></span>
           <input type="hidden" name="comment" id="comment" value={editedContent} />
           <div className="display-flex justify-content-flex-end gap-50 padding-y-50">
             <button type="button" disabled={!editedContent} className={`${styles.button} ${styles.cancel}`} onClick={removeText}>Avbryt</button>
@@ -76,19 +76,19 @@ export default function Comments({ comments, objectId }: { comments?: (Comment &
         </form>
         {comments?.map((comment) => (
           <div key={comment.id}>
-            <p className="flex align-items-center gap-50" style={{marginBottom: '0'}}>
+            <p className="flex align-items-center gap-50" style={{ marginBottom: '0' }}>
               <a className={styles.commentAuthor} href={`/user/${comment.author.username}`}>{comment.author.username}</a>
-              <span style={{color: 'gray', fontWeight: '300', fontSize: '.75rem'}}>{`${timeSince(new Date(comment.createdAt))} sedan`}</span>
+              <span style={{ color: 'gray', fontWeight: '300', fontSize: '.75rem' }}>{`${timeSince(new Date(comment.createdAt))} sedan`}</span>
             </p>
-            <p className="margin-0" style={{wordBreak: 'break-word',}}>
+            <p className="margin-0" style={{ wordBreak: 'break-word', }}>
               {expandedComments.includes(comment.id) ? comment.commentText : comment.commentText.length > 300 ? `${comment.commentText.substring(0, 300)}...` : comment.commentText}
-            </p>  
-            {comment.commentText.length > 300 ? 
-              <button className={`margin-y-25 ${styles.readMoreButton}`} onClick={() => expandComment(comment.id)}>  
+            </p>
+            {comment.commentText.length > 300 ?
+              <button className={`margin-y-25 ${styles.readMoreButton}`} onClick={() => expandComment(comment.id)}>
                 {expandedComments.includes(comment.id) ? 'Visa mindre' : 'Visa mer'}
               </button>
-            :  null}
-          </div> 
+              : null}
+          </div>
         ))}
       </section>
     </>

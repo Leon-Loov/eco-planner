@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
@@ -12,7 +12,7 @@ import { cookies } from "next/headers";
  * @returns Nested array of meta roadmaps, roadmaps, goals, and actions (just ids and names, plus indicator parameter for goals, and a version rather than name for roadmaps)
  */
 export default async function getNames() {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedNames(session.user?.id ?? '');
 }
 
@@ -23,7 +23,7 @@ export default async function getNames() {
  */
 const getCachedNames = unstable_cache(
   async (userId: string) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let names: {
       name: string,
@@ -102,7 +102,7 @@ const getCachedNames = unstable_cache(
               { viewers: { some: { id: session.user.id } } },
               { editGroups: { some: { users: { some: { id: session.user.id } } } } },
               { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-              { viewGroups: { some: { name: 'Public' } } }
+              { isPublic: true }
             ]
           },
           select: {
@@ -116,7 +116,7 @@ const getCachedNames = unstable_cache(
                   { viewers: { some: { id: session.user.id } } },
                   { editGroups: { some: { users: { some: { id: session.user.id } } } } },
                   { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
+                  { isPublic: true }
                 ]
               },
               select: {
@@ -157,15 +157,13 @@ const getCachedNames = unstable_cache(
     // If user is not logged in, get all public roadmaps
     try {
       names = await prisma.metaRoadmap.findMany({
-        where: { viewGroups: { some: { name: 'Public' } } },
+        where: { isPublic: true },
         select: {
           name: true,
           id: true,
           roadmapVersions: {
             where: {
-              OR: [
-                { viewGroups: { some: { name: 'Public' } } }
-              ]
+              isPublic: true,
             },
             select: {
               version: true,

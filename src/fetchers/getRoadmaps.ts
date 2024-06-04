@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { roadmapSorter } from "@/lib/sorters";
 import { MetaRoadmap, Roadmap } from "@prisma/client";
@@ -14,7 +14,7 @@ import { cookies } from "next/headers";
  * @returns Array of roadmaps
  */
 export default async function getRoadmaps() {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedRoadmaps(session.user?.id ?? '');
 }
 
@@ -25,7 +25,7 @@ export default async function getRoadmaps() {
  */
 const getCachedRoadmaps = unstable_cache(
   async (userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let roadmaps: (
       Roadmap & {
@@ -79,7 +79,7 @@ const getCachedRoadmaps = unstable_cache(
               { viewers: { some: { id: session.user.id } } },
               { editGroups: { some: { users: { some: { id: session.user.id } } } } },
               { viewGroups: { some: { users: { some: { id: session.user.id } } } } },
-              { viewGroups: { some: { name: 'Public' } } }
+              { isPublic: true }
             ]
           },
           include: {
@@ -110,7 +110,7 @@ const getCachedRoadmaps = unstable_cache(
     try {
       roadmaps = await prisma.roadmap.findMany({
         where: {
-          viewGroups: { some: { name: 'Public' } }
+          isPublic: true
         },
         include: {
           _count: {

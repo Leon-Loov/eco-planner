@@ -11,6 +11,7 @@ export interface AccessControlled {
   viewers: { id: string, username: string }[],
   editGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
   viewGroups: { id: string, name: string, users: { id: string, username: string }[] }[],
+  isPublic: boolean,
 };
 
 /** Enum for the different access levels returned by the accessChecker function. */

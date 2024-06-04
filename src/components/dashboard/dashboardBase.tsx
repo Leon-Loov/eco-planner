@@ -1,6 +1,6 @@
 import getOneGoal from "@/fetchers/getOneGoal";
 import getRoadmapSubset from "@/fetchers/getRoadmapSubset";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import GoalTable from "../tables/goalTables/goalTable";
 import { Action } from "@prisma/client";
@@ -9,7 +9,7 @@ import ActionTable from "../tables/actions";
 
 export default async function DashboardBase({ actor }: { actor: string }) {
   let [session, roadmaps] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getRoadmapSubset(actor)
   ]);
 

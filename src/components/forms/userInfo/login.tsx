@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useState } from "react";
 import styles from '../forms.module.css'
 
-function handleSubmit(event: any) {
+function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
   event.preventDefault()
 
   const form = event.target
   const formJSON = JSON.stringify({
-    username: form.username.value,
-    password: form.password.value,
+    username: form.username?.value,
+    password: form.password?.value,
+    remember: (form.remember as HTMLInputElement | null)?.checked,
   })
 
   // Try to login, redirect away if successful.
@@ -64,7 +65,12 @@ export default function Login() {
           </div>
         </label>
 
-        <button role="submit" className="block margin-y-50 font-weight-bold seagreen color-purewhite">Logga In</button>
+        <label className="flex align-items-center gap-50">
+          <input type="checkbox" name="remember" id="remember" />
+          Kom ihåg inlogg
+        </label>
+
+        <button role="submit" className="block margin-y-100 font-weight-bold seagreen color-purewhite">Logga In</button>
         <p className="padding-y-50" style={{ borderTop: '1px solid var(--gray-90)' }}>
           <small>Har du inget konto? <Link href='/signup'>Skapa konto</Link></small>
         </p>

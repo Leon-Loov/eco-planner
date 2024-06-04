@@ -1,7 +1,7 @@
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import accessChecker from "@/lib/accessChecker";
 import { AccessLevel } from "@/types";
@@ -15,7 +15,7 @@ export default async function Layout({
   }) {
 
     const [session, roadmap] = await Promise.all([
-        getSessionData(cookies()),
+        getSession(cookies()),
         getOneRoadmap(params.roadmapId),
     ]);
 

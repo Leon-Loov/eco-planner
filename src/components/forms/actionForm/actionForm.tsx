@@ -59,7 +59,7 @@ export default function ActionForm({
 
         <label className="block margin-y-75">
           Beskrivning av åtgärden: 
-          <input className="margin-y-25" type="text" name="actionDescription" id="actionDescription" defaultValue={currentAction?.description ?? undefined} />
+          <textarea className="margin-y-25" name="actionDescription" id="actionDescription" defaultValue={currentAction?.description ?? undefined} ></textarea>
         </label>
 
         <label className="block margin-y-75">
@@ -68,8 +68,8 @@ export default function ActionForm({
         </label>
 
         <label className="block margin-y-75">
-          Förväntat resultat: 
-          <input className="margin-y-25" type="text" name="expectedOutcome" id="expectedOutcome" defaultValue={currentAction?.expectedOutcome ?? undefined} />
+          Beskriv förväntat resultat: 
+          <textarea className="margin-y-25" name="expectedOutcome" id="expectedOutcome" defaultValue={currentAction?.expectedOutcome ?? undefined} />
         </label>
         
         <label className="block margin-y-75">

@@ -1,19 +1,24 @@
 import { NextRequest } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession, options } from "@/lib/session"
 import prisma from "@/prismaClient";
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const response = new Response();
-  const session = await getSession(request, response);
+  const { username, password, remember }: { username: string, password: string, remember?: boolean } = await request.json();
 
-  let { username, password }: { username: string, password: string } = await request.json();
+  // Create session, set maxAge if user toggled remember me
+  const session = await getSession(cookies(), remember ? {
+    ...options,
+    cookieOptions: {
+      ...options.cookieOptions,
+      maxAge: 365 * 24 * 60 * 60, // Standard year in seconds
+    }
+  } : options);
 
   // Validate request body
   if (!username || !password) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Username and password are required' }),
+    return Response.json({ message: 'Username and password are required' },
       { status: 400 }
     );
   }
@@ -40,9 +45,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (e) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'User not found' }),
+    return Response.json({ message: 'User not found' },
       { status: 400 }
     );
   }
@@ -51,9 +54,7 @@ export async function POST(request: NextRequest) {
   const passwordMatches = await bcrypt.compare(password, user.password);
 
   if (!passwordMatches) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Incorrect password' }),
+    return Response.json({ message: 'Incorrect password' },
       { status: 400 }
     );
   }
@@ -69,9 +70,19 @@ export async function POST(request: NextRequest) {
 
   await session.save();
 
-  return createResponse(
-    response,
-    JSON.stringify({ message: 'Login successful' }),
+  // if (remember) {
+  //   console.log(typeof session.updateConfig);
+  //   session.updateConfig({
+  //     ...options,
+  //     cookieOptions: {
+  //       ...options.cookieOptions,
+  //       maxAge: 14 * 24 * 60 * 60, // 14 days in seconds
+  //     }
+  //   });
+  //   session.save();
+  // }
+
+  return Response.json({ message: 'Login successful' },
     { status: 200 }
   );
 }

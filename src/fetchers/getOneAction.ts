@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { AccessControlled } from "@/types";
 import { Action, Link, Note, Comment } from "@prisma/client";
@@ -15,7 +15,7 @@ import { cookies } from "next/headers";
  * @returns Action object
  */
 export default async function getOneAction(id: string) {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedAction(id, session.user?.id ?? '')
 }
 
@@ -27,7 +27,7 @@ export default async function getOneAction(id: string) {
  */
 const getCachedAction = unstable_cache(
   async (id, userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let action: Action & {
       notes: Note[],
@@ -59,6 +59,7 @@ const getCachedAction = unstable_cache(
                     viewers: { select: { id: true, username: true } },
                     editGroups: { include: { users: { select: { id: true, username: true } } } },
                     viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                    isPublic: true,
                   }
                 }
               }
@@ -89,7 +90,7 @@ const getCachedAction = unstable_cache(
                   { viewers: { some: { id: userId } } },
                   { editGroups: { some: { users: { some: { id: userId } } } } },
                   { viewGroups: { some: { users: { some: { id: userId } } } } },
-                  { viewGroups: { some: { name: 'Public' } } }
+                  { isPublic: true }
                 ]
               }
             }
@@ -115,6 +116,7 @@ const getCachedAction = unstable_cache(
                     viewers: { select: { id: true, username: true } },
                     editGroups: { include: { users: { select: { id: true, username: true } } } },
                     viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                    isPublic: true,
                   }
                 }
               }
@@ -136,7 +138,7 @@ const getCachedAction = unstable_cache(
       action = await prisma.action.findUnique({
         where: {
           id,
-          goal: { roadmap: { viewGroups: { some: { name: 'Public' } } } }
+          goal: { roadmap: { isPublic: true } }
         },
         include: {
           notes: true,
@@ -159,6 +161,7 @@ const getCachedAction = unstable_cache(
                   viewers: { select: { id: true, username: true } },
                   editGroups: { include: { users: { select: { id: true, username: true } } } },
                   viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                  isPublic: true,
                 }
               }
             }

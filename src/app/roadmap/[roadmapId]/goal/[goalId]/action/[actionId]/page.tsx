@@ -1,5 +1,5 @@
 import getOneAction from "@/fetchers/getOneAction";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,7 +11,7 @@ import Comments from "@/components/comments/comments";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string, actionId: string } }) {
   const [session, action] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneAction(params.actionId)
   ]);
 
@@ -23,6 +23,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       viewers: action.goal.roadmap.viewers,
       editGroups: action.goal.roadmap.editGroups,
       viewGroups: action.goal.roadmap.viewGroups,
+      isPublic: action.goal.roadmap.isPublic
     }
     accessLevel = accessChecker(actionAccessData, session.user);
   }
@@ -32,19 +33,27 @@ export default async function Page({ params }: { params: { roadmapId: string, go
     return notFound();
   }
 
-  return (
+  return ( // TODO: Make sure optional stuff from form renders conditionally
     <>
-      <h1 className="display-flex align-items-center gap-25 flex-wrap-wrap">
-        { // Only show the edit link if the user has edit access to the roadmap
-          (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-          <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`}>
-            <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${action.name}`} />
-          </Link>
-        }
-        {action.name}
-      </h1>
-      <span>Åtgärd</span>
-      {action.links.length > 0 &&
+      <section className="margin-y-100" style={{ width: 'min(90ch, 100%)' }}>
+        <span style={{ color: 'gray' }}>Åtgärd</span>
+        <h1 style={{ margin: '0' }}>{action.name}</h1>
+        <p style={{ fontSize: '1.25rem', margin: '0' }}>{action.startYear} - {action.endYear}</p>
+        {(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) ?
+          <div className="margin-y-100">
+            <Link href={`/roadmap/${params.roadmapId}/goal/${params.goalId}/action/${params.actionId}/editAction`} className="flex align-items-center gap-50 padding-50 smooth button transparent" style={{ width: 'fit-content', fontWeight: '500' }}>
+              Redigera åtgärd
+              <Image src="/icons/edit.svg" width={24} height={24} alt={`Redigera åtgärd: ${action.name}`} />
+            </Link>
+          </div>
+          : null}
+      </section>
+
+      {action.description ?
+        <p>{action.description}</p>
+        : null}
+
+      {action.links.length > 0 ?
         <>
           <h2>Länkar</h2>
           {action.links.map((link) => (
@@ -53,35 +62,36 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             </Fragment>
           ))}
         </>
-      }
-      <h2>Detaljer</h2>
-      {action.description && <p>Beskrivning: {action.description}</p>}
-      {(action.startYear || action.endYear) &&
-        <>
-          <p>
-            {"Aktiv period: "}
-            {action.startYear && action.startYear}
-            {action.startYear && action.endYear && ' - '}
-            {action.endYear && action.endYear}
-          </p>
-        </>
-      }
-      {action.costEfficiency && <p>Kostnadseffektivitet: {action.costEfficiency}</p>}
-      {action.expectedOutcome && <p>Förväntad effekt: {action.expectedOutcome}</p>}
-      {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel == AccessLevel.Admin)) &&
-        <p>Projektledare: {action.projectManager}</p>
-      }
-      {action.relevantActors && <p>Relevanta aktörer: {action.relevantActors}</p>}
-      {(action.isEfficiency || action.isSufficiency || action.isRenewables) &&
+        : null}
+
+      <h2>Förväntad effekt</h2>
+      {action.expectedOutcome ?
+        <p>{action.expectedOutcome}</p>
+        : null}
+
+      <h2>Kostnadseffektivitet</h2>
+      {action.costEfficiency ?
+        <p>{action.costEfficiency}</p>
+        : null}
+
+      <h2>Projektledare</h2>
+      {(action.projectManager && (accessLevel == AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel == AccessLevel.Admin)) ?
+        <p>{action.projectManager}</p>
+        : null}
+
+      <h2>Relevanta Aktörer</h2>
+      {action.relevantActors ?
+        <p>{action.relevantActors}</p>
+        : null}
+
+      <h2>Kategorier</h2>
+      {(action.isEfficiency || action.isSufficiency || action.isRenewables) ?
         <p>
-          Kategorier:
-          <span className="margin-x-100">
-            {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables))}
-            {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables)}
-            {action.isRenewables && 'Renewables'}
-          </span>
+          {action.isEfficiency && 'Efficiency'} {(action.isEfficiency && (action.isSufficiency || action.isRenewables))}
+          {action.isSufficiency && 'Sufficiency'} {(action.isSufficiency && action.isRenewables)}
+          {action.isRenewables && 'Renewables'}
         </p>
-      }
+        : null}
       <Comments comments={action.comments} objectId={action.id} />
     </>
   )

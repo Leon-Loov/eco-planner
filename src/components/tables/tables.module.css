@@ -29,6 +29,10 @@
     color: black;
 }
 
+.list {
+    margin-top: 0;
+}
+
 .list, .list li ul {
     padding-inline-start: 40px;
     margin-left: 5px;
@@ -183,4 +187,43 @@
     -webkit-line-clamp: 1; /* number of lines to show */
     line-clamp: 1; 
     -webkit-box-orient: vertical;
+}
+
+/* Table Settings */
+
+.settings {
+    position: relative;
+    display: grid;
+    transition: background-color .2s ease;
+    padding: .25rem;
+    border-radius: 9999px;
+}
+
+.settings:hover {
+    background-color: var(--gray-90);
+}
+
+.settings:has(input[type="checkbox"]:active) {
+    transform: scale(.95);
+}
+
+.settings > input[type="checkbox"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.settingsContainer {
+    display: none;
+    padding: 1rem;
+    background-color: var(--gray-90);
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+}
+
+.tableNav:has(input[type="checkbox"]:checked) ~ .settingsContainer {
+    display: block;
 }

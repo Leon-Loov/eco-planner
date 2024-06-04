@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSession, createResponse } from "@/lib/session"
+import { getSession } from "@/lib/session"
 import prisma from "@/prismaClient";
 import { AccessControlled, AccessLevel, ClientError, GoalInput, RoadmapInput } from "@/types";
 import roadmapGoalCreator from "./roadmapGoalCreator";
@@ -8,31 +8,27 @@ import { revalidateTag } from "next/cache";
 import goalInputFromGoalArray from "@/functions/goalInputFromGoalArray";
 import getOneGoal from "@/fetchers/getOneGoal";
 import pruneOrphans from "@/functions/pruneOrphans";
+import { cookies } from "next/headers";
 
 /**
  * Handles POST requests to the roadmap API
  */
 export async function POST(request: NextRequest) {
-  const response = new Response();
   const [session, roadmap] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<RoadmapInput & { goals?: GoalInput[] }>,
   ]);
 
   // Validate request body
   if (!roadmap.metaRoadmapId) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -73,6 +69,7 @@ export async function POST(request: NextRequest) {
       viewers: metaRoadmap.viewers,
       editGroups: metaRoadmap.editGroups,
       viewGroups: metaRoadmap.viewGroups,
+      isPublic: metaRoadmap.isPublic,
     }
     const accessLevel = accessChecker(accessFields, session.user);
     if (accessLevel === AccessLevel.None || accessLevel === AccessLevel.View) {
@@ -82,24 +79,18 @@ export async function POST(request: NextRequest) {
     if (e instanceof Error) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
-        await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        session.destroy();
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.IllegalParent }),
+      return Response.json({ message: ClientError.IllegalParent },
         { status: 403 }
       );
     } else {
       // If non-error is thrown, log it and return a generic error message
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -115,9 +106,7 @@ export async function POST(request: NextRequest) {
       }
     } catch (e) {
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to fetch roadmap to inherit from' }),
+      return Response.json({ message: 'Failed to fetch roadmap to inherit from' },
         { status: 400 }
       );
     }
@@ -131,9 +120,7 @@ export async function POST(request: NextRequest) {
       _max: { version: true },
     }))._max.version || 0;
   } catch {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Failed to fetch latest roadmap version' }),
+    return Response.json({ message: 'Failed to fetch latest roadmap version' },
       { status: 500 }
     );
   }
@@ -171,6 +158,7 @@ export async function POST(request: NextRequest) {
         viewers: { connect: viewers },
         editGroups: { connect: editGroups },
         viewGroups: { connect: viewGroups },
+        isPublic: roadmap.isPublic,
         metaRoadmap: { connect: { id: roadmap.metaRoadmapId } },
         goals: {
           create: roadmapGoalCreator(roadmap, session.user.id),
@@ -181,33 +169,25 @@ export async function POST(request: NextRequest) {
     // Invalidate old cache
     revalidateTag('roadmap');
     // Return the new roadmap's ID if successful
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Roadmap created", id: newRoadmap.id }),
+    return Response.json({ message: "Roadmap created", id: newRoadmap.id },
       { status: 201, headers: { 'Location': `/roadmap/${newRoadmap.id}` } }
     );
   } catch (e: any) {
     // Custom error if there are errors in the nested goal creation
     if (e instanceof Error) {
       if (e.cause == 'nestedGoalCreation') {
-        return createResponse(
-          response,
-          JSON.stringify({ message: e.message }),
+        return Response.json({ message: e.message },
           { status: 400 }
         );
       }
     }
     if (e?.code == 'P2025') {
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+      return Response.json({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' },
         { status: 400 }
       );
     }
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }
@@ -217,27 +197,22 @@ export async function POST(request: NextRequest) {
  * Handles PUT requests to the roadmap API
  */
 export async function PUT(request: NextRequest) {
-  const response = new Response();
   const [session, roadmap] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     // The version number is not allowed to be changed
     request.json() as Promise<Omit<RoadmapInput, 'version'> & { goals?: GoalInput[], roadmapId: string, timestamp?: number }>,
   ]);
 
   // Validate request body
   if (!roadmap.metaRoadmapId) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -258,6 +233,7 @@ export async function PUT(request: NextRequest) {
           viewers: { select: { id: true, username: true } },
           editGroups: { include: { users: { select: { id: true, username: true } } } },
           viewGroups: { include: { users: { select: { id: true, username: true } } } },
+          isPublic: true,
         }
       })
     ]);
@@ -281,30 +257,22 @@ export async function PUT(request: NextRequest) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
         await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
       if (e.message == ClientError.StaleData) {
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.StaleData }),
+        return Response.json({ message: ClientError.StaleData },
           { status: 409 }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.AccessDenied }),
+      return Response.json({ message: ClientError.AccessDenied },
         { status: 403 }
       );
     } else {
       // If non-error is thrown, log it and return a generic error message
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -343,6 +311,7 @@ export async function PUT(request: NextRequest) {
         viewers: { set: viewers },
         editGroups: { set: editGroups },
         viewGroups: { set: viewGroups },
+        isPublic: roadmap.isPublic,
         goals: {
           create: roadmapGoalCreator(roadmap, session.user!.id),
         }
@@ -354,9 +323,7 @@ export async function PUT(request: NextRequest) {
     // Invalidate old cache
     revalidateTag('roadmap');
     // Return the new roadmap's ID if successful
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Roadmap updated", id: updatedRoadmap.id }),
+    return Response.json({ message: "Roadmap updated", id: updatedRoadmap.id },
       { status: 200, headers: { 'Location': `/roadmap/${updatedRoadmap.id}` } }
     );
   } catch (e: any) {
@@ -365,23 +332,17 @@ export async function PUT(request: NextRequest) {
     if (e instanceof Error) {
       e = e as Error
       if (e.cause == 'nestedGoalCreation') {
-        return createResponse(
-          response,
-          JSON.stringify({ message: e.message }),
+        return Response.json({ message: e.message },
           { status: 400 }
         );
       }
     }
     if (e?.code == 'P2025') {
-      return createResponse(
-        response,
-        JSON.stringify({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' }),
+      return Response.json({ message: 'Failed to connect records. Probably invalid editor, viewer, editGroup, and/or viewGroup name(s)' },
         { status: 400 }
       );
     }
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }
@@ -391,26 +352,21 @@ export async function PUT(request: NextRequest) {
  * Handles DELETE requests to the roadmap API
  */
 export async function DELETE(request: NextRequest) {
-  const response = new Response();
   const [session, roadmap] = await Promise.all([
-    getSession(request, response),
+    getSession(cookies()),
     request.json() as Promise<{ id: string }>
   ]);
 
   // Validate request body
   if (!roadmap.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Missing required input parameters' }),
+    return Response.json({ message: 'Missing required input parameters' },
       { status: 400 }
     );
   }
 
   // Validate session
   if (!session.user?.id) {
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Unauthorized' }),
+    return Response.json({ message: 'Unauthorized' },
       { status: 401, headers: { 'Location': '/login' } }
     );
   }
@@ -448,22 +404,16 @@ export async function DELETE(request: NextRequest) {
       if (e.message == ClientError.BadSession) {
         // Remove session to log out. The client should redirect to login page.
         await session.destroy();
-        return createResponse(
-          response,
-          JSON.stringify({ message: ClientError.BadSession }),
+        return Response.json({ message: ClientError.BadSession },
           { status: 400, headers: { 'Location': '/login' } }
         );
       }
-      return createResponse(
-        response,
-        JSON.stringify({ message: ClientError.AccessDenied }),
+      return Response.json({ message: ClientError.AccessDenied },
         { status: 403 }
       );
     } else {
       console.log(e);
-      return createResponse(
-        response,
-        JSON.stringify({ message: "Unknown internal server error" }),
+      return Response.json({ message: "Unknown internal server error" },
         { status: 500 }
       );
     }
@@ -484,17 +434,13 @@ export async function DELETE(request: NextRequest) {
     await pruneOrphans();
     // Invalidate old cache
     revalidateTag('roadmap');
-    return createResponse(
-      response,
-      JSON.stringify({ message: 'Roadmap deleted', id: deletedRoadmap.id }),
+    return Response.json({ message: 'Roadmap deleted', id: deletedRoadmap.id },
       // Redirect to the parent meta roadmap
       { status: 200, headers: { 'Location': `/metaRoadmap/${deletedRoadmap.metaRoadmapId}` } }
     );
   } catch (e) {
     console.log(e);
-    return createResponse(
-      response,
-      JSON.stringify({ message: "Internal server error" }),
+    return Response.json({ message: "Internal server error" },
       { status: 500 }
     );
   }

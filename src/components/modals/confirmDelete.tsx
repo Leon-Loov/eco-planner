@@ -20,7 +20,7 @@ export default function ConfirmDelete({
 
   function handleDelete() {
     // Check if the input matches the target name
-    if ((document.getElementById("delete-name-input") as HTMLInputElement)?.value !== targetName || !(document.getElementById("delete-name-input") as HTMLInputElement)?.value) {
+    if ((document.getElementById(`delete-name-input-${targetId}`) as HTMLInputElement)?.value !== targetName || !(document.getElementById(`delete-name-input-${targetId}`) as HTMLInputElement)?.value) {
       return;
     }
     setIsLoading(true);
@@ -38,7 +38,7 @@ export default function ConfirmDelete({
         </p>
         <label className="block margin-y-75">
           Skriv <strong>{targetName}</strong> för att bekräfta
-          <input className="margin-y-25" type="text" placeholder={targetName} id="delete-name-input" required pattern={targetName} />
+          <input className="margin-y-25" type="text" placeholder={targetName} id={`delete-name-input-${targetId}`} required pattern={targetName} />
         </label>
         <div className="display-flex justify-content-flex-end margin-top-75 gap-50">
           <button type="button" style={{ fontWeight: 500 }} onClick={() => closeModal(modalRef)}>Avbryt</button>

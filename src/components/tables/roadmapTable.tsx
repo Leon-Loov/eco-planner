@@ -1,4 +1,4 @@
-import { Data } from '@/lib/session';
+import { LoginData } from '@/lib/session';
 import styles from './tables.module.css' with { type: "css" };
 import { MetaRoadmap } from "@prisma/client";
 import { TableMenu } from './tableMenu/tableMenu';
@@ -6,7 +6,7 @@ import { AccessControlled, AccessLevel } from '@/types';
 import accessChecker from '@/lib/accessChecker';
 
 interface RoadmapTableCommonProps {
-  user: Data['user'],
+  user: LoginData['user'],
 }
 
 interface RoadmapTableWithMetaRoadmap extends RoadmapTableCommonProps {
@@ -48,6 +48,7 @@ export default function RoadmapTable({
         viewers: version.viewers,
         editGroups: version.editGroups,
         viewGroups: version.viewGroups,
+        isPublic: version.isPublic,
       }
     })
     // Set the creation link to create a new roadmap version for the specified meta roadmap instead

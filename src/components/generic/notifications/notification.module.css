@@ -1,0 +1,17 @@
+.link {
+    text-decoration: unset;
+    color: black;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem;
+    border-radius: .5rem;
+    outline: 0;
+    transition: background-color .1s ease;
+    white-space: nowrap;
+  }
+    
+  .link:hover {
+    background-color: var(--gray-90);
+  }

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import getOneRoadmap from "@/fetchers/getOneRoadmap";
 import { cookies } from "next/headers";
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import accessChecker from "@/lib/accessChecker";
 import { AccessControlled, AccessLevel } from "@/types";
 import CombinedGraph from "@/components/graphs/combinedGraph";
@@ -17,12 +17,16 @@ import styles from './page.module.css'
 import getGoalByIndicator from "@/fetchers/getGoalByIndicator";
 import getRoadmapByVersion from "@/fetchers/getRoadmapByVersion";
 import prisma from "@/prismaClient";
-import DataSeriesScaler from "@/components/modals/dataSeriesScaler";
 import CopyAndScale from "@/components/modals/copyAndScale";
+import { getTableContent } from "@/lib/pxWeb/getTableContent";
+import filterTableContentKeys from "@/lib/pxWeb/filterTableContentKeys";
+import { PxWebApiV2TableContent } from "@/lib/pxWeb/pxWebApiV2Types";
+import QueryBuilder from "@/components/forms/pxWeb/queryBuilder";
+import GraphCookie from "@/components/cookies/graphCookie";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, roadmap, goal] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneRoadmap(params.roadmapId),
     getOneGoal(params.goalId)
   ]);
@@ -35,6 +39,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       viewers: goal.roadmap.viewers,
       editGroups: goal.roadmap.editGroups,
       viewGroups: goal.roadmap.viewGroups,
+      isPublic: goal.roadmap.isPublic
     }
     accessLevel = accessChecker(goalAccessData, session.user);
   }
@@ -42,6 +47,11 @@ export default async function Page({ params }: { params: { roadmapId: string, go
   // 404 if the goal doesn't exist or if the user doesn't have access to it
   if (!goal || !accessLevel || !roadmap) {
     return notFound();
+  }
+
+  let externalData: PxWebApiV2TableContent | null = null;
+  if (goal.externalDataset && goal.externalTableId && goal.externalSelection) {
+    externalData = await getTableContent(goal.externalTableId, JSON.parse(goal.externalSelection), goal.externalDataset).then(data => filterTableContentKeys(data));
   }
 
   // Fetch parent goal
@@ -97,36 +107,37 @@ export default async function Page({ params }: { params: { roadmapId: string, go
         }
       */}
 
-      <section className="display-flex justify-content-space-between flex-wrap-wrap margin-y-100">
-        <section>
-          <span style={{ color: 'gray' }}>Målbana</span>
+      <section className="margin-y-100" style={{ width: 'min(90ch, 100%)' }}>
+        <span style={{ color: 'gray' }}>Målbana</span>
+        <div className="flex flex-wrap-wrap align-items-center justify-content-space-between gap-100">
           <h2 style={{ fontSize: '2.5rem', margin: '0' }}>{goal.name}</h2>
-          <p>{goal.description}</p>
-        </section>
-        <aside>
-          { // Only show the edit link if the user has edit access to the roadmap
-            (accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
-            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`} className="display-flex align-items-center gap-50 justify-content-flex-end color-pureblack" style={{textDecoration: 'none', fontWeight: '500'}} >
+          {(goal.dataSeries?.id && session.user) ?
+            <CopyAndScale goal={goal} user={session.user} />
+            : null}
+        </div>
+        {(accessLevel === AccessLevel.Edit || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Admin) &&
+          <div className="flex flex-wrap-wrap align-items-center gap-100 margin-y-100">
+            <Link href={`/roadmap/${roadmap.id}/goal/${goal.id}/editGoal`} className="display-flex align-items-center gap-50 padding-50 color-pureblack button smooth transparent" style={{ textDecoration: 'none', fontWeight: '500' }} >
               Redigera Målbana
               <Image src="/icons/edit.svg" width={24} height={24} alt={`Edit roadmap: ${goal.name}`} />
             </Link>
-          } <br/>
-          { // TODO: Maybe show button even if no data series is attached?
-            goal.dataSeries?.id &&
-            <CopyAndScale goal={goal} user={session.user} />
-          }
-        </aside>
+            <QueryBuilder goal={goal} user={session.user} />
+          </div>
+        }
+        <p>{goal.description}</p>
+        {goal.dataSeries?.scale &&
+          <h3>Alla värden i målbanan använder följande skala: {`"${goal.dataSeries?.scale}"`}</h3>
+        }
       </section>
 
-        
-        
       { /* Only allow scaling the values if the user has edit access to the goal
         (accessLevel === AccessLevel.Admin || accessLevel === AccessLevel.Author || accessLevel === AccessLevel.Edit) && goal.dataSeries?.id &&
         <DataSeriesScaler dataSeriesId={goal.dataSeries.id} />
       */ }
 
+      <GraphCookie />
       <section className={styles.graphLayout}>
-        <GraphGraph goal={goal} nationalGoal={parentGoal} />
+        <GraphGraph goal={goal} nationalGoal={parentGoal} historicalData={externalData} />
         <CombinedGraph roadmap={roadmap} goal={goal} />
       </section>
 
@@ -179,7 +190,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
           </section>
         </section>
         */}
-                
+
         <Actions goal={goal} accessLevel={accessLevel} />
       </section>
       <Comments comments={goal.comments} objectId={goal.id} />

@@ -62,6 +62,8 @@ model MetaRoadmap {
   viewers    User[]      @relation("meta_roadmap_viewers")
   // Groups of users who are allowed to view this meta roadmap
   viewGroups UserGroup[] @relation("meta_roadmap_view_groups")
+  // Whether or not the meta roadmap is public
+  isPublic   Boolean     @default(false) @map("is_public")
 
   @@map("meta_roadmap")
 }
@@ -103,6 +105,8 @@ model Roadmap {
   viewers    User[]      @relation("roadmap_viewers")
   // Groups of users who are allowed to view this roadmap
   viewGroups UserGroup[] @relation("roadmap_view_groups")
+  // Whether or not the roadmap is public
+  isPublic   Boolean     @default(false) @map("is_public")
 
   // Two roadmaps may not have the same meta roadmap AND version
   // Also allows for querying a roadmap by meta roadmap and version
@@ -128,6 +132,14 @@ model Goal {
 
   // The graphs of featured Goals' DataSeries will be shown as thumbnails on the roadmap page
   isFeatured Boolean @default(false) @map("is_featured")
+
+  // Connections to external datasets
+  // Name of the external dataset (should match one of the available datasets defined in an enum)
+  externalDataset   String? @map("external_dataset")
+  // Table ID in the external dataset
+  externalTableId   String? @map("external_id")
+  // JSON string containing the selection for the external dataset. Is sent in the body of the request to the external API
+  externalSelection String? @map("external_selection") @db.Text
 
   // A series of datapoints for the goal
   dataSeries DataSeries? @relation("data_series")

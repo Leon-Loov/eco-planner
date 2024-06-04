@@ -1,5 +1,5 @@
 import { AccessControlled, AccessLevel } from "@/types";
-import { Data } from "./session";
+import { LoginData } from "./session";
 
 /**
  * Checks if the user has access to an item and returns their access level. An empty string means no access.
@@ -7,13 +7,13 @@ import { Data } from "./session";
  * @param user The user object from the session
  * @returns A string representing the user's access level to the item; "", "VIEW", "EDIT", or "ADMIN", based on the `AccessLevel` enum
  */
-export default function accessChecker(item: AccessControlled | null | undefined, user: Data["user"]): AccessLevel {
+export default function accessChecker(item: AccessControlled | null | undefined, user: LoginData["user"]): AccessLevel {
   // If the item is null or undefined, return no access
   if (!item) return AccessLevel.None;
 
   // User is not signed in
   if (!user) {
-    if (item.viewGroups?.map(group => group.name).includes("Public")) return AccessLevel.View;
+    if (item.isPublic) return AccessLevel.View;
     return AccessLevel.None;
   }
 
@@ -29,9 +29,9 @@ export default function accessChecker(item: AccessControlled | null | undefined,
   if (item.editGroups?.map(group => group.name).some(name => user.userGroups?.includes(name))) return AccessLevel.Edit;
 
   // User is viewer
+  if (item.isPublic) return AccessLevel.View;
   if (item.viewers?.map(viewer => viewer.id).includes(user.id)) return AccessLevel.View;
   if (item.viewGroups?.map(group => group.name).some(name => user.userGroups?.includes(name))) return AccessLevel.View;
-  if (item.viewGroups?.map(group => group.name).includes("Public")) return AccessLevel.View;
 
   // User does not have access
   return AccessLevel.None;

@@ -1,7 +1,7 @@
 'use client'
 
 import countiesAndMunicipalities from "@/lib/countiesAndMunicipalities.json" with { type: "json" }
-import { Data } from "@/lib/session";
+import { LoginData } from "@/lib/session";
 import { AccessControlled, MetaRoadmapInput } from "@/types";
 import { MetaRoadmap, RoadmapType } from "@prisma/client";
 import { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ export default function MetaRoadmapForm({
   parentRoadmapOptions,
   currentRoadmap,
 }: {
-  user: Data['user'],
+  user: LoginData['user'],
   userGroups: string[],
   parentRoadmapOptions?: MetaRoadmap[],
   currentRoadmap?: MetaRoadmap & AccessControlled,
@@ -51,6 +51,7 @@ export default function MetaRoadmapForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      isPublic: (form.namedItem("isPublic") as HTMLInputElement)?.checked || false,
       links,
       parentRoadmapId: (form.namedItem("parentRoadmap") as HTMLSelectElement)?.value || undefined,
       id: currentRoadmap?.id || undefined,
@@ -63,7 +64,7 @@ export default function MetaRoadmapForm({
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  
+
   const timestamp = Date.now()
 
   const customRoadmapTypes = {
@@ -82,6 +83,7 @@ export default function MetaRoadmapForm({
       viewers: currentRoadmap.viewers,
       editGroups: currentRoadmap.editGroups,
       viewGroups: currentRoadmap.viewGroups,
+      isPublic: currentRoadmap.isPublic,
     }
   }
 
@@ -93,28 +95,28 @@ export default function MetaRoadmapForm({
         <input type="submit" disabled={true} style={{ display: 'none' }} aria-hidden={true} />
 
         <FormWrapper>
-          <fieldset className="width-100" data-transform="0">
+          <fieldset className="width-100">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Beskriv din färdplan</h2>
               <p style={{ marginTop: '.25rem' }}>Ge din färdplan ett namn och en beskrivning.</p>
             </div>
-            <label className="block margin-y-75">
+            <label className="block margin-y-100">
               Namn för den nya färdplanen
               <input id="metaRoadmapName" name="metaRoadmapName" className="margin-y-25" type="text" defaultValue={currentRoadmap?.name ?? undefined} required />
             </label>
 
-            <label className="block margin-y-75">
+            <label className="block margin-y-100">
               Beskrivning av färdplanen
               <textarea className="block smooth margin-y-25" name="description" id="description" defaultValue={currentRoadmap?.description ?? undefined} required></textarea>
             </label>
           </fieldset>
 
-          <fieldset className="width-100" data-transform="0">
+          <fieldset className="width-100">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Vem ansvarar för den här färdplanen?</h2>
               <p style={{ marginTop: '.25rem' }}>Beskriv vem som ansvarar för färdplanen genom att välja en typ och en aktör. </p>
             </div>
-            <label className="block margin-y-75">
+            <label className="block margin-y-100">
               Typ av färdplan
               <select className="block margin-y-25" name="type" id="type" defaultValue={currentRoadmap?.type ?? ""} required>
                 <option value="">Välj en typ</option>
@@ -129,13 +131,13 @@ export default function MetaRoadmapForm({
               </select>
             </label>
 
-            <label className="block margin-y-75">
+            <label className="block margin-y-100">
               Aktör för färdplanen
               <input className="margin-y-25" list="actors" id="actor" name="actor" type="text" defaultValue={currentRoadmap?.actor ?? undefined} />
             </label>
           </fieldset>
 
-          <fieldset className="width-100" data-transform="0">
+          <fieldset className="width-100">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Är färdplanen beroende av några externa resurser?</h2>
               <p style={{ marginTop: '.25rem' }}>
@@ -147,38 +149,47 @@ export default function MetaRoadmapForm({
           </fieldset>
 
           {(!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
-            <fieldset data-transform="0">
+            <fieldset className="width-100">
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h2 style={{ marginBottom: '0' }}>Vem ska kunna se denna färdplan?</h2>
                 <p style={{ marginTop: '.25rem' }}>
                   Fyll i vilka grupper eller personer som ska kunna se denna färdplan.
                 </p>
               </div>
-              <ViewUsers groupOptions={userGroups} /> {/*TODO: other params? */}
+              <ViewUsers
+                groupOptions={userGroups}
+                existingUsers={currentAccess?.viewers.map((user) => user.username)}
+                existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })}
+                isPublic={currentAccess?.isPublic ?? false}
+              />
             </fieldset>
-          }     
+          }
 
-                    
+
           {(!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
-            <fieldset data-transform="0">
+            <fieldset className="width-100">
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <h2 style={{ marginBottom: '0' }}>Vem ska kunna se redigera färdplan?</h2>
+                <h2 style={{ marginBottom: '0' }}>Vem ska kunna redigera färdplanen?</h2>
                 <p style={{ marginTop: '.25rem' }}>
                   Fyll i vilka grupper eller personer som ska kunna redigera denna färdplan.
                 </p>
               </div>
-              <EditUsers groupOptions={userGroups} /> {/*TODO: other params? */}
+              <EditUsers
+                groupOptions={userGroups}
+                existingUsers={currentAccess?.editors.map((user) => user.username)}
+                existingGroups={currentAccess?.editGroups.map((group) => { return group.name })}
+              />
             </fieldset>
-          }     
+          }
 
-          <fieldset className="width-100" data-transform="0">
+          <fieldset className="width-100">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 style={{ marginBottom: '0' }}>Jobbar denna färdplan mot en annan färdplan?</h2>
               <p style={{ marginTop: '.25rem' }}>
                 Fyll om denna färdplan jobbar mot en annan färdplan.
               </p>
             </div>
-            <label className="block margin-y-75">
+            <label className="block margin-y-100">
               Förälder
               <select name="parentRoadmap" id="parentRoadmap" className="block margin-y-25" defaultValue={currentRoadmap?.parentRoadmapId ?? ""}>
                 <option value="">Ingen förälder vald</option>

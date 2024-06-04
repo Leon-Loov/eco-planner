@@ -1,4 +1,4 @@
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import ActionForm from "@/components/forms/actionForm/actionForm";
 import { notFound } from "next/navigation";
@@ -8,7 +8,7 @@ import { AccessControlled, AccessLevel } from "@/types";
 
 export default async function Page({ params }: { params: { roadmapId: string, goalId: string } }) {
   const [session, goal] = await Promise.all([
-    getSessionData(cookies()),
+    getSession(cookies()),
     getOneGoal(params.goalId)
   ]);
 
@@ -20,6 +20,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
       viewers: goal.roadmap.viewers,
       editGroups: goal.roadmap.editGroups,
       viewGroups: goal.roadmap.viewGroups,
+      isPublic: goal.roadmap.isPublic
     }
   }
   // User must be signed in and have edit access to the goal, and the goal must exist
@@ -29,7 +30,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
 
   return (
     <>
-      <div className="container-text" style={{marginInline: 'auto'}}>
+      <div className="container-text" style={{ marginInline: 'auto' }}>
         <h1>Skapa ny åtgärd under målbana: {`${goal?.name || goal.indicatorParameter}`}</h1>
         <ActionForm roadmapId={params.roadmapId} goalId={params.goalId} />
       </div>

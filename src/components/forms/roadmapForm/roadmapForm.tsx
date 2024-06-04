@@ -4,7 +4,7 @@ import AccessSelector, { getAccessData } from "@/components/forms/accessSelector
 import getOneRoadmap from "@/fetchers/getOneRoadmap"
 import formSubmitter from "@/functions/formSubmitter"
 import parseCsv, { csvToGoalList } from "@/functions/parseCsv"
-import { Data } from "@/lib/session"
+import { LoginData } from "@/lib/session"
 import { AccessControlled, GoalInput, RoadmapInput } from "@/types"
 import { Goal, MetaRoadmap, Roadmap } from "@prisma/client"
 import Link from "next/link"
@@ -17,7 +17,7 @@ export default function RoadmapForm({
   metaRoadmapAlternatives,
   currentRoadmap,
 }: {
-  user: Data['user'],
+  user: LoginData['user'],
   userGroups: string[],
   metaRoadmapAlternatives?: (MetaRoadmap & {
     roadmapVersions: { id: string, version: number }[],
@@ -65,6 +65,7 @@ export default function RoadmapForm({
       viewers: viewUsers,
       editGroups,
       viewGroups,
+      isPublic: (form.namedItem("isPublic") as HTMLInputElement)?.checked || false,
       roadmapId: currentRoadmap?.id || undefined,
       goals: goals,
       metaRoadmapId,
@@ -91,6 +92,7 @@ export default function RoadmapForm({
       viewers: currentRoadmap.viewers,
       editGroups: currentRoadmap.editGroups,
       viewGroups: currentRoadmap.viewGroups,
+      isPublic: currentRoadmap.isPublic,
     }
   }
 
@@ -191,12 +193,12 @@ export default function RoadmapForm({
           </>
         )}
 
-        <label className="block margin-y-75"> 
-          Om du har en CSV-fil med målbanor kan du ladda upp den här. <br /> 
+        <label className="block margin-y-75">
+          Om du har en CSV-fil med målbanor kan du ladda upp den här. <br />
           Notera att det här skapar nya målbanor även om det redan finns några.
           <input className="margin-y-25" type="file" name="csvUpload" id="csvUpload" accept=".csv" onChange={(e) => e.target.files ? setCurrentFile(e.target.files[0]) : setCurrentFile(null)} />
         </label>
-        
+
         { // Only show the access selector if a new roadmap is being created, the user is an admin, or the user has edit access to the roadmap
           (!currentRoadmap || user?.isAdmin || user?.id === currentRoadmap.authorId) &&
           <>

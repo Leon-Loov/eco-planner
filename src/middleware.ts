@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { getSession } from '@/lib/session'
+import { cookies } from 'next/headers'
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const session = await getSession(req, res)
+  const session = await getSession(cookies())
 
   // Redirect away from login page if already logged in
   if (req.nextUrl.pathname.startsWith('/login')) {
@@ -34,5 +34,5 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  return res
+  return NextResponse.next()
 }

@@ -1,0 +1,60 @@
+.dialog select { 
+    width: 100%;
+    max-width: 100%;
+}
+
+/* For selecting tables when choosin a specific data source */
+.tableSelect {
+    position: relative;
+    padding: .5rem;
+    border-radius: .25rem;
+    transition: background-color .1s ease;
+    font-weight: 500;
+}
+
+.tableSelect:has(input[type="radio"]:checked) {
+    background-color: var(--blue-20);
+    color: white;
+}
+
+.tableSelect:not(:has(input[type="radio"]:checked)):hover {
+    background-color: var(--gray-90);
+}
+
+.tableSelect > input[type="radio"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+/* Temp */
+
+.temporary {
+    max-height: 300px;
+    overflow-y: scroll;
+    padding-right: .25rem;
+}
+
+/* width */
+.temporary::-webkit-scrollbar {
+    width: .5rem;
+}
+  
+/* Track */
+.temporary::-webkit-scrollbar-track {
+    border-radius: 9999px;
+}
+   
+/* Handle */
+.temporary::-webkit-scrollbar-thumb {
+    background: var(--gray-90); 
+    border-radius: 9999px;
+}
+  
+/* Handle on hover */
+.temporary::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-70); 
+}

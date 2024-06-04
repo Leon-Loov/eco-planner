@@ -1,8 +1,8 @@
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import { cookies } from "next/headers";
 
 export default async function Page({ params }: { params: { roadmapId: string } }) {
-  const session = await getSessionData(cookies())
+  const session = await getSession(cookies())
 
   return <>
     <h1>{session.user?.username}</h1>

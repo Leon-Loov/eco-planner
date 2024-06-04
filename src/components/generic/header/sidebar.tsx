@@ -1,18 +1,19 @@
 import styles from './header.module.css' with { type: "css" }
 import LogoutButton from '@/components/buttons/logoutButton'
-import { getSessionData } from '@/lib/session'
+import { getSession } from '@/lib/session'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import Image from 'next/image'
+import Notifications from '../notifications/notification'
 
 export default async function Sidebar() {
-  const { user } = await getSessionData(cookies())
+  const { user } = await getSession(cookies())
   return <>
     <aside className={styles.container}>
-      <div className={styles.menuToggleContainer}>
+      <label className={styles.menuToggleContainer}>
         <input type="checkbox" className={styles.menuToggle} />
         <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
-      </div>
+      </label>
       <aside className={`${styles.aside} flex-grow-100`}>
         <nav className={styles.nav}>
           <div>
@@ -25,10 +26,13 @@ export default async function Sidebar() {
             }
             { // Link to user if logged in
               user?.isLoggedIn &&
-              <Link href={`/user/${user.username}`} className={styles.link}>
-                <Image src='/icons/user.svg' alt='' width={24} height={24} />
-                Mitt Konto
-              </Link>
+              <div>
+                <Link href={`/user/${user.username}`} className={styles.link}>
+                  <Image src='/icons/user.svg' alt='' width={24} height={24} />
+                  Mitt Konto
+                </Link>
+                {/*<Notifications amount={} /> */}
+              </div>
             }
           </div>
           <div className='flex-grow-100'>
@@ -38,7 +42,7 @@ export default async function Sidebar() {
             </Link>
             <Link href="/info" className={styles.link}>
               <Image src='/icons/info.svg' alt='' width={24} height={24} />
-              Information
+              Om verktyget
             </Link>
           </div>
           <div>

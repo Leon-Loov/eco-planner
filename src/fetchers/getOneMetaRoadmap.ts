@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionData } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import prisma from "@/prismaClient";
 import { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
@@ -9,11 +9,11 @@ import { cookies } from "next/headers";
 /**
  * Gets specified meta roadmap and all versions for that meta roadmap.
  * 
- * Returns null if metaq roadmap is not found or user does not have access to it. Also returns null on error.
+ * Returns null if meta roadmap is not found or user does not have access to it. Also returns null on error.
  * @returns Meta roadmap object with roadmap versions
  */
 export default async function getOneMetaRoadmap(id: string) {
-  const session = await getSessionData(cookies());
+  const session = await getSession(cookies());
   return getCachedMetaRoadmap(id, session.user?.id ?? '');
 }
 
@@ -24,7 +24,7 @@ export default async function getOneMetaRoadmap(id: string) {
  */
 const getCachedMetaRoadmap = unstable_cache(
   async (id: string, userId) => {
-    const session = await getSessionData(cookies());
+    const session = await getSession(cookies());
 
     let metaRoadmap: Prisma.MetaRoadmapGetPayload<{
       include: {
@@ -39,6 +39,7 @@ const getCachedMetaRoadmap = unstable_cache(
             viewers: { select: { id: true, username: true } },
             editGroups: { include: { users: { select: { id: true, username: true } } } },
             viewGroups: { include: { users: { select: { id: true, username: true } } } },
+            isPublic: boolean,
           }
         },
         comments: {
@@ -72,6 +73,7 @@ const getCachedMetaRoadmap = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { include: { users: { select: { id: true, username: true } } } },
                 viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                isPublic: true,
               }
             },
             comments: {
@@ -108,6 +110,7 @@ const getCachedMetaRoadmap = unstable_cache(
               { viewers: { some: { id: userId } } },
               { editGroups: { some: { users: { some: { id: userId } } } } },
               { viewGroups: { some: { users: { some: { id: userId } } } } },
+              { isPublic: true }
             ]
           },
           include: {
@@ -119,6 +122,7 @@ const getCachedMetaRoadmap = unstable_cache(
                   { viewers: { some: { id: userId } } },
                   { editGroups: { some: { users: { some: { id: userId } } } } },
                   { viewGroups: { some: { users: { some: { id: userId } } } } },
+                  { isPublic: true }
                 ]
               },
               select: {
@@ -131,6 +135,7 @@ const getCachedMetaRoadmap = unstable_cache(
                 viewers: { select: { id: true, username: true } },
                 editGroups: { include: { users: { select: { id: true, username: true } } } },
                 viewGroups: { include: { users: { select: { id: true, username: true } } } },
+                isPublic: true,
               },
             },
             comments: {
@@ -160,12 +165,12 @@ const getCachedMetaRoadmap = unstable_cache(
       metaRoadmap = await prisma.metaRoadmap.findUnique({
         where: {
           id,
-          viewGroups: { some: { name: 'Public' } }
+          isPublic: true
         },
         include: {
           roadmapVersions: {
             where: {
-              viewGroups: { some: { name: 'Public' } }
+              isPublic: true
             },
             select: {
               version: true,
@@ -177,6 +182,7 @@ const getCachedMetaRoadmap = unstable_cache(
               viewers: { select: { id: true, username: true } },
               editGroups: { include: { users: { select: { id: true, username: true } } } },
               viewGroups: { include: { users: { select: { id: true, username: true } } } },
+              isPublic: true,
             },
           },
           comments: {

@@ -51,7 +51,6 @@ export default function FormWrapper({
     const currentTransformIndex = transformIndex + (options?.reverse ? -1 : 1)
 
     if (sections) {
-      console.log(currentTransformIndex, sections.length, options?.reverse)
       if ((currentTransformIndex >= sections.length && !options?.reverse) || (currentTransformIndex < 0 && options?.reverse)) {
         return
       }
