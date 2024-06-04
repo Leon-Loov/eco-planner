@@ -10,15 +10,11 @@ export default function AccessSelector({ groupOptions, currentAccess }: { groupO
     <>
       <p>För att lägga till en användare/grupp, skriv in namnet och tryck på enter.</p>
       <div className="margin-y-75">
-        <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
+        <ViewUsers groupOptions={groupOptions} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} isPublic={currentAccess?.isPublic} />
       </div>
       <div className="margin-y-75">
-        <ViewUsers groupOptions={groupOptions} existingGroups={currentAccess?.viewGroups.map((group) => { return group.name })} />
+        <EditUsers existingUsers={currentAccess?.editors.map((editor) => { return editor.username })} groupOptions={groupOptions} existingGroups={currentAccess?.editGroups.map((group) => { return group.name })} />
       </div>
-      <label className="display-flex align-items-center gap-50 margin-y-50">
-        <input type="checkbox" name="isPublic" id="isPublic" defaultChecked={currentAccess?.isPublic} />
-        Ska alla användare kunna se detta inlägg?
-      </label>
     </>
   )
 }
@@ -165,7 +161,7 @@ export function EditUsers({ existingUsers, groupOptions, existingGroups }: { exi
   )
 }
 
-export function ViewUsers({ existingUsers, groupOptions, existingGroups }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[] }) {
+export function ViewUsers({ existingUsers, groupOptions, existingGroups, isPublic }: { existingUsers?: string[], groupOptions: string[], existingGroups?: string[], isPublic?: boolean }) {
   // The users that have viewing access to the item
   const [viewUsers, setViewUsers] = useState<string[]>(existingUsers ?? []);
 
@@ -179,7 +175,12 @@ export function ViewUsers({ existingUsers, groupOptions, existingGroups }: { exi
   return (
     <div style={{ marginBottom: '3rem' }} >
 
-      <p><strong>Grupper med läsbehörighet</strong></p>
+      <label className="display-flex align-items-center gap-50 margin-y-50">
+        <input type="checkbox" name="isPublic" id="isPublic" defaultChecked={isPublic} />
+        <strong>Visa inlägg publikt</strong>
+      </label>
+
+      <p style={{ marginTop: '3rem' }}><strong>Grupper med läsbehörighet</strong></p>
       {groups.map((group) => (
         <Fragment key={'viewGroup' + group}>
           <label className="display-flex align-items-center gap-50 margin-y-50">
