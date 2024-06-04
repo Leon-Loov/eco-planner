@@ -130,14 +130,14 @@ export function TableMenu(
   return (
     <>
       <div className={`${styles.actionButton} display-flex`}>
-        <button onClick={openMenu} className={styles.button}>
-          <Image src='/icons/dotsVertical.svg' width={24} height={24} alt=""></Image>
+        <button onClick={openMenu} className={styles.button} aria-label={`meny för ${object.name || object.metaRoadmap?.name || "Namn saknas"}`}>
+          <Image src='/icons/dotsVertical.svg' width={24} height={24} alt="meny"></Image>
         </button>
         <dialog className={styles.menu} id={`${object.id}-menu`} onBlur={closeMenu} ref={menu} onKeyUp={closeMenu}>
           <div className={`display-flex flex-direction-row-reverse align-items-center justify-content-space-between ${styles.menuHeading}`}>
             {/* Button to close menu */}
             <button onClick={closeMenu} className={styles.button} autoFocus >
-              <Image src='/icons/close.svg' alt="" width={18} height={18} />
+              <Image src='/icons/close.svg' alt="stäng" width={18} height={18} />
             </button>
             {/* Link to the object */}
             <Link href={selfLink} className={styles.menuHeadingTitle}>{object.name || object.metaRoadmap?.name}</Link>
@@ -159,7 +159,7 @@ export function TableMenu(
                 Radera inlägg
                 <Image src='/icons/delete.svg' alt="" width={24} height={24} className={styles.actionImage} />
               </button>
-              <ConfirmDelete modalRef={deletionRef} targetUrl={deleteLink} targetName={object.name || object.metaRoadmap?.name || "Namn sasknas"} targetId={object.id} />
+              <ConfirmDelete modalRef={deletionRef} targetUrl={deleteLink} targetName={object.name || object.metaRoadmap?.name || "Namn saknas"} targetId={object.id} />
             </>
           }
         </dialog>

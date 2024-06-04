@@ -10,10 +10,10 @@ export default async function Sidebar() {
   const { user } = await getSession(cookies())
   return <>
     <aside className={styles.container}>
-      <div className={styles.menuToggleContainer}>
+      <label className={styles.menuToggleContainer}>
         <input type="checkbox" className={styles.menuToggle} />
         <Image src='/icons/menu.svg' alt='Toggle menu' width='24' height='24' />
-      </div>
+      </label>
       <aside className={`${styles.aside} flex-grow-100`}>
         <nav className={styles.nav}>
           <div>
