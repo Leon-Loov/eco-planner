@@ -1,7 +1,8 @@
 {
   "scripts": {
+    "predev": "node --loader ts-node/esm ./src/scripts/getBuildInfo.ts",
     "dev": "next dev",
-    "prebuild": "node --loader ts-node/esm ./src/scripts/generateLeapList.ts && node --loader ts-node/esm ./src/scripts/getDataSeriesValueFieldNames.ts",
+    "prebuild": "node --loader ts-node/esm ./src/scripts/generateLeapList.ts && node --loader ts-node/esm ./src/scripts/getDataSeriesValueFieldNames.ts && node --loader ts-node/esm ./src/scripts/getBuildInfo.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

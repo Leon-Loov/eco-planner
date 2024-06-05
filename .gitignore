@@ -131,3 +131,6 @@ dist
 
 # Cypress tests
 /cypress/screenshots
+
+# JSON file containing git commit hash
+/src/lib/version.json
