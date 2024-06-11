@@ -1,16 +1,20 @@
 import version from "@/lib/version.json" with { type: "json" };
 
 export default function Page() {
-  let parsedVersion: string | null = null
   let remoteURL: URL | null = null
-  if (typeof version.shortHash === "string") {
-    parsedVersion = version.shortHash
-  }
+  let parsedVersion: string | null = null
+  let commitURL: URL | null = null
   try {
     if (typeof version.remoteURL === "string") {
-      remoteURL = new URL(`commit/${parsedVersion}`, (version.remoteURL.endsWith("/") ? version.remoteURL : version.remoteURL + "/"))
+      remoteURL = new URL(version.remoteURL.endsWith("/") ? version.remoteURL : version.remoteURL + "/")
     }
   } catch (e) { /* Silently fail */ }
+  if (typeof version.shortHash === "string") {
+    parsedVersion = version.shortHash
+    if (remoteURL) {
+      commitURL = new URL(`commit/${version.shortHash}`, remoteURL)
+    }
+  }
 
   return (
     <>
@@ -23,9 +27,17 @@ export default function Page() {
         På lokal nivå kan också olika aktörer samarbeta kring åtgärder.
       </p>
       { // Display as much build info as possible
+        remoteURL
+          ? <p>Remote: <a href={remoteURL.href} target="_blank" >
+            {/* Gets the repository name from a github-like url with a trailing slash, with hostname as fallback */}
+            {remoteURL.pathname.split("/")[remoteURL.pathname.split("/").length - 2] || remoteURL.hostname}
+          </a></p>
+          : null
+      }
+      {
         parsedVersion
-          ? remoteURL
-            ? <p>Build: <a href={remoteURL.href} target="_blank" >
+          ? commitURL
+            ? <p>Build: <a href={commitURL.href} target="_blank" >
               {parsedVersion}
             </a></p>
             :
