@@ -10,7 +10,7 @@ export default async function Page() {
         <div className={`${styles.image} position-relative width-100 rounded overflow-hidden`}>
           <AttributedImage src="/images/windturbines.jpg" alt="">
             <div className="width-100 padding-100">
-              Photo by <a className="color-purewhite" href="https://unsplash.com/@nrdoherty?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Nicholas Doherty</a> on <a className="color-purewhite" href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+              Photo by <a className="color-purewhite" href="https://unsplash.com/@nrdoherty?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank">Nicholas Doherty</a> on <a className="color-purewhite" href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank">Unsplash</a>
             </div>
           </AttributedImage>
         </div>

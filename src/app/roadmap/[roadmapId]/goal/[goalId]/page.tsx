@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: { roadmapId: string, go
             <h2>Länkar</h2>
             {goal.links.map((link) => (
               <Fragment key={link.id}>
-                <a href={link.url}>{link.description || link.url}</a>
+                <a href={link.url} target="_blank">{link.description || link.url}</a>
               </Fragment>
             ))}
           </>

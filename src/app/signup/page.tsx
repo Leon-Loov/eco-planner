@@ -10,7 +10,7 @@ export default async function Page() {
         <div className={`${styles.image} position-relative width-100 rounded overflow-hidden`}>
           <AttributedImage src="/images/hydroelectric.jpg" alt="">
             <div className="width-100 padding-100">
-              Photo by <a className="color-purewhite" href="https://unsplash.com/@dmey503?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Dan Meyers</a> on <a className="color-purewhite" href="https://unsplash.com/photos/aerial-photography-of-body-of-water-w6X7XaolqA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+              Photo by <a className="color-purewhite" href="https://unsplash.com/@dmey503?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank">Dan Meyers</a> on <a className="color-purewhite" href="https://unsplash.com/photos/aerial-photography-of-body-of-water-w6X7XaolqA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank">Unsplash</a>
             </div>
           </AttributedImage>
         </div>
