@@ -4,25 +4,25 @@ A tool intended to help planning actions to achieve local environmental goals
 ## Setup
 This tool requires the following environment variables to be set:
 - `IRON_SESSION_PASSWORD`: Should be a string at least 32 characters long. This is used to encrypt the session cookie from the Iron Session library.
-- `DATABASE_URL`: Should be a connection string to a database. This is used by Prisma to connect to the database. The default configuration expects a MySQL database but this can be changed in the `prisma/schema.prisma` file.
+- `DATABASE_URL`: Should be a connection string to a database. This is used by Prisma to connect to the database. The default configuration expects a MySQL/MariaDB database but this can be changed in the `prisma/schema.prisma` file.
+
+If you want to target a different type of database, you might want to remove the existing `prisma/migrations` folder and start from scratch with `yarn prisma migrate dev --create-only` to generate new migration files after changing the `provider` field in the prisma schema file.
 
 1. Install dependencies with `yarn install`
-2. Depending on which database you're connecting to, do one of the following:
-    - If you're working against the dev database, run `yarn prisma migrate dev` to apply the migrations to the database.
-    - If you're working against the production database, run `yarn prisma migrate deploy` to apply the migrations to the database. (This should be done as part of the deployment process.)
+2. If you're setting up the database for the first time (for example, a clean development database), run `yarn prisma migrate deploy` to apply the existing migrations to the database, or `yarn prisma migrate dev` if you do not have any migration files.
 
 Now you should be able to run the app with `yarn dev` and access it at http://localhost:3000 or build it with `yarn build` and run it with `yarn start`.
 
 Please run `git update-index --skip-worktree src/lib/LEAPList.json` and `git update-index --skip-worktree src/lib/dataSeriesDataFieldNames.json` to prevent git from tracking changes to the LEAPList.json and dataSeriesDataFieldNames.json file as these files are locally regenerated at build time.
 If you for some reason need to update the default version of either file, run `git update-index --no-skip-worktree FILEPATH` to allow git to track changes to the file again.
 
-The current server also skips tracking changes to the `next.config.mjs` file, so if you need to change the config, run `git update-index --no-skip-worktree next.config.mjs` on the server or update the file there manually.
+Our current server also skips tracking changes to the `next.config.mjs` file, so if you need to change the config, run `git update-index --no-skip-worktree next.config.mjs` on the server or update the file there manually.
 
 ## Backend notes
 We use the function unstable_cache from Next.js, which currently returns cached `Date`s in stringified form (See this [GitHub issue](https://github.com/vercel/next.js/issues/51613)). Remember to always create a `new Date()` from the date value whenever you use one, until this problem is fixed.
 
 ## Database structure
-See image, or refer to [schema.prisma](/prisma/schema.prisma) for full schema.
+See image, or refer to [schema.prisma](/prisma/schema.prisma) for the full, up-to-date schema.
 ![Database Schema](/public/images/eco-planner.png "Database Schema")
 
 ## Components
