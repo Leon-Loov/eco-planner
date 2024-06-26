@@ -4,6 +4,7 @@ import { allowedDomains } from "@/lib/allowedDomains";
 import prisma from "@/prismaClient"
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
+import mailClient from "@/mailClient";
 
 export async function POST(request: NextRequest) {
   const { username, email, password, remember }: { username: string; email: string; password: string; remember?: string; } = await request.json();
@@ -62,6 +63,22 @@ export async function POST(request: NextRequest) {
   // Hash password
   const saltRounds: number = 11;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  try {
+    await mailClient.verify().catch(e => {console.log("failed verify"); throw e;});
+    await mailClient.sendMail({
+      from: process.env.MAIL_USER,
+      to: lowercaseEmail,
+      subject: 'Welcome to Eco Planner',
+      text: 'Welcome to Eco Planner! Your account has been successfully created.',
+    });
+    console.log('Verification email sent to ' + lowercaseEmail);
+  } catch (e) {
+    console.log(e);
+    return Response.json({ message: 'Problem sending verification email' },
+      { status: 500 }
+    );
+  }
 
   // Create user
   try {

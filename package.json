@@ -14,6 +14,7 @@
     "bcrypt": "^5.1.0",
     "iron-session": "^8.0.1",
     "next": "^14.1.4",
+    "nodemailer": "^6.9.14",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
@@ -31,6 +32,7 @@
   "type": "module",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/nodemailer": "^6.4.15",
     "@types/react": "18.2.14",
     "cypress": "^13.7.2",
     "eslint": "8.45.0",
